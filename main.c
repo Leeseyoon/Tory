@@ -242,25 +242,22 @@ int main()
     BI_New(&a3, 6);
 
     word arr1[5] = { 0x00, };
-    arr1[0] = 0x1111111111111112;
-    arr1[1] = 0x2222222211111134;
-    arr1[2] = 0x2222222233333311;
-    arr1[3] = 0x11111111eeeeeeef;
-    arr1[4] = 0xffffffffffffff1e;
+    arr1[0] = 0x12;
+    arr1[1] = 0x34;
+    arr1[2] = 0x22;
+    arr1[3] = 0x11;
+    arr1[4] = 0x1e;
 
     BI_Set_By_Array(&a1, NON_NEGATIVE, arr1, 5);
 
     word arr2[5] = { 0x00, };
-    arr2[0] = 0xf1f1f1f111111156;
-    arr2[1] = 0x2222222211111178;
-    arr2[2] = 0x22222222111111ff;
-    arr2[3] = 0x22222222eeeefffe;
-    arr2[4] = 0xffffffffffffffdf;
+    arr2[0] = 0x56;
+    arr2[1] = 0x78;
+    arr2[2] = 0xff;
+    arr2[3] = 0xfe;
+    arr2[4] = 0xdf;
 
-    BI_Set_By_Array(&a2, NON_NEGATIVE, arr2, 5);
-
-    a1->sign = NON_NEGATIVE;
-    a2->sign = NON_NEGATIVE;
+    BI_Set_By_Array(&a2, NEGATIVE, arr2, 5);
 
     //int c = 0;
     //c = ADD_ABc(&a1, &a2, &a3, c, 0);
@@ -276,17 +273,17 @@ int main()
     printf("a1's sign = %d\n", (a1->sign));
     printf("a1's wordlen = %d\n", (a1->wordlen));
     for (i = 0; i < a1->wordlen; i++)
-        printf("a1[%d] = %llx\n", i, (a1->a[i]));
+        printf("a1[%d] = %02x\n", i, (a1->a[i]));
     
     printf("a2's sign = %d\n", (a2->sign));
     printf("a2's wordlen = %d\n", (a2->wordlen));
     for (i = 0; i < a2->wordlen; i++)
-        printf("a2[%d] = %llx\n", i, (a2->a[i]));
+        printf("a2[%d] = %02x\n", i, (a2->a[i]));
 
     printf("a3's sign = %d\n", (a3->sign));
     printf("a3's wordlen = %d\n", (a3->wordlen));
     for (i = 0; i < a3->wordlen; i++)
-        printf("a3[%d] = %llx\n", i, (a3->a[i]));
+        printf("a3[%d] = %02x\n", i, (a3->a[i]));
 
     return 0;
 }

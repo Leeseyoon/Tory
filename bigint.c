@@ -594,7 +594,7 @@ bigint* ADD(bigint** A, bigint** B)
 		Assign_BI(&temp, *B);
 
         Flip_Sign(temp);
-        return SUB_BI(A, temp); // SUB 함수 B의 부호를 바꿔주고 출력하면 B가 부호가 바뀐 상태로 남아있음
+        return SUB_BI(A, &temp); // SUB 함수 B의 부호를 바꿔주고 출력하면 B가 부호가 바뀐 상태로 남아있음
     }
 
     if ((A_sign == NEGATIVE) && (B_sign == NON_NEGATIVE))
@@ -604,7 +604,7 @@ bigint* ADD(bigint** A, bigint** B)
 		Assign_BI(&temp, *A);
 
         Flip_Sign(temp);
-        return SUB_BI(B, temp); // SUB 함수
+        return SUB_BI(B, &temp); // SUB 함수
     }
 
     // A, B가 동일한 부호일 때
