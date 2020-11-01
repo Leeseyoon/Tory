@@ -134,6 +134,10 @@ void BI_Show(bigint* x, int base)
 
     else if (base == 16) // 16진수일 때
     {
+        if (x->sign == 0)
+            printf(" + ");
+        else
+            printf(" - ");
         printf("0x");
         for (i = x->wordlen - 1; i >= 0; i--)
         {
@@ -219,9 +223,9 @@ void array_rand(word* dst, int wordlen)
 }
 
 // Chapter 2.6 Get Word Length / Bit Length / j-th Bit of Big-Int
-void Get_Word_Length(int* len, bigint* x)
+void Get_Word_Length(int* len, bigint** x)
 {
-    *len = x->wordlen; // Big Integer x의 wordlen를 대입
+    *len = (*x)->wordlen; // Big Integer x의 wordlen를 대입
 }
 void Bit_Length(int* len, bigint* x)
 {
@@ -328,30 +332,53 @@ int Compare_BI(bigint** x, bigint** y)
     int i = 0;
     int len_x, len_y = 0;
     int len = 0;
-    if ((*x)->sign < (*y)->sign)
+    if ((*x)->sign < (*y)->sign) // A가 양수, B가 음수면 당연히 A가 크므로
         return 1;
-    else if ((*x)->sign > (*y)->sign)
+    else if ((*x)->sign > (*y)->sign) // A가 음수, B가 양수면 당연히 B가 크므로
         return -1;
-    // 부호 비교
-    else
+    else // A, B 부호가 같을 때
     {
-        Get_Word_Length(&len_x, *x);
-        Get_Word_Length(&len_y, *y);
-        if (len_x > len_y)
-            return 1;
-        else if (len_x < len_y)
-            return -1;
-        else
+        if ((*x)->sign > 0) // A, B 부호가 양수일 때 (부호가 서로 같으므로, if 문을 통해 하나만 비교)
         {
-            for (i = (int)len_x - 1; i >= 0; i--)
+            Get_Word_Length(&len_x, x);
+            Get_Word_Length(&len_y, y);
+            if (len_x > len_y)
+                return 1;
+            else if (len_x < len_y)
+                return -1;
+            else
             {
-                if ((*x)->a[i] > (*y)->a[i])
-                    return 1;
-                else if ((*x)->a[i] < (*y)->a[i])
-                    return -1;
+                for (i = (int)len_x - 1; i >= 0; i--)
+                {
+                    if ((*x)->a[i] > (*y)->a[i])
+                        return 1;
+                    else if ((*x)->a[i] < (*y)->a[i])
+                        return -1;
+                }
+                return 0;
             }
-            return 0;
         }
+        else // A, B 부호가 음수일 때
+        {
+            Get_Word_Length(&len_x, x);
+            Get_Word_Length(&len_y, y);
+            if (len_x > len_y)
+                return -1;
+            else if (len_x < len_y)
+                return 1;
+            else
+            {
+                for (i = (int)len_x - 1; i >= 0; i--)
+                {
+                    if ((*x)->a[i] > (*y)->a[i])
+                        return 1;
+                    else if ((*x)->a[i] < (*y)->a[i])
+                        return -1;
+                }
+                return 0;
+            }
+        }
+        
     }
 }
 
@@ -486,6 +513,7 @@ void Reduction_BI(bigint** x, int r)
 
 }
 
+//Chapter 3 Addition
 // c: 받은 carry, carry: return 값 carry
 int ADD_ABc(bigint** A, bigint** B, bigint** C, int c, int i)
 {
@@ -537,7 +565,7 @@ bigint* ADDC(bigint** A, bigint** B, int sign)
         C->sign = 0;
     else
         C->sign = 1;
-    
+
     return C;
 }
 
@@ -558,13 +586,18 @@ bigint* ADD(bigint** A, bigint** B)
         return *A;
 
     if ((A_sign == NON_NEGATIVE) && (B_sign == NEGATIVE))
-        return 0; // SUB 함수
+    {
+        Flip_Sign(*B);
+        return SUB_BI(A, B); // SUB 함수 B의 부호를 바꿔주고 출력하면 B가 부호가 바뀐 상태로 남아있음
+    }
 
     if ((A_sign == NEGATIVE) && (B_sign == NON_NEGATIVE))
-        return 0; // SUB 함수
-
-    Get_Word_Length(&A_Len, *A);
-    Get_Word_Length(&B_Len, *B);
+    {
+        Flip_Sign(*A);
+        return SUB_BI(B, A); // SUB 함수
+    }
+    Get_Word_Length(&A_Len, A);
+    Get_Word_Length(&B_Len, B);
 
     // A, B가 동일한 부호일 때
     if (A_Len >= B_Len)
@@ -573,21 +606,125 @@ bigint* ADD(bigint** A, bigint** B)
         return ADDC(B, A, A_sign);
 }
 
-void SUBC_BI(int* borrow, int i, bigint** c, bigint** a, bigint** b)
+bigint* SUB_BI(bigint** a, bigint** b)
 {
-    if (i == 0)
-        *borrow = 0;
-
-    (*c)->a[i] = (*a)->a[i] - (*borrow);
-    (*c)->a[i] = (*c)->a[i] % ((1 << WORD_BIT_LEN) - 1);
-    if ((*a)->a[i] < *borrow)
-        *borrow = 1;
+    int len1, len2 = 0;
+    int borrow = 0;
+    
+    bigint* d = NULL; //
+    bigint* temp = NULL;
+    
+    Get_Word_Length(&len1, a);
+    Get_Word_Length(&len2, b);
+    if (len1 >= len2)
+        BI_New(&d, len1);
+        
     else
+        BI_New(&d, len2); // 뺄셈해서 대입할 BI의 길이 정하기
+        
+    
+    if (Is_Zero(a) == 0)
     {
-        *borrow = 0;
-        if ((*c)->a[i] < (*b)->a[i])
-            *borrow = *borrow + 1;
+        Assign_BI(&d, *b);
+        Flip_Sign(d);
+        return d;
+    } // line 1~2
+
+    if (Is_Zero(b) == 0)
+    {
+        Assign_BI(&d, *a);
+        return d;
+    } // line 4~5
+
+
+    if (((*a)->sign ^ (*b)->sign) == 0) // A, B 부호가 같을 때
+    {
+        if (((*a)->sign & (*b)->sign) == 0) // A, B의 부호가 모두 양수일 때
+        {
+            if (Compare_BI(a, b) < 0) // A, B를 비교해서 A < B일 때. Compare_BI(A, B)의 return : -1
+            {
+                SUBC_BI(&borrow, &d, b, a);
+                Flip_Sign(d);
+                return d;
+            }
+            else if (Compare_BI(a, b) == 0)
+                return d; 
+            else // A, B 를 비교해서 A >= B일 때. Compare_BI(A, B)'s return : 0, 1
+            {
+                SUBC_BI(&borrow, &d, a, b);
+                return d;
+            }
+        }
+        
+        else // A, B의 부호가 모두 음수일 때
+        {
+            Flip_Sign(*a);
+            Flip_Sign(*b);
+            if (Compare_BI(a, b) < 0)
+            {
+                SUBC_BI(&borrow, &d, b, a);
+                Flip_Sign(*a); // 부호 원위치
+                Flip_Sign(*b); // 부호 원위치
+                return d;
+            }
+            else
+            {
+                SUBC_BI(&borrow, &d, a, b);
+                Flip_Sign(d);
+                Flip_Sign(*a); // 부호 원위치
+                Flip_Sign(*b); // 부호 원위치
+                return d;
+            }
+        }
     }
-    (*c)->a[i] -= (*b)->a[i];
-    (*c)->a[i] = (*c)->a[i] % ((1 << WORD_BIT_LEN) - 1);
+    
+    else // A,B 부호가 다를 때 때
+    {
+        if ((*a)->sign == 0)
+        {
+            Flip_Sign(*b);
+            d = ADD(a, b);
+            Flip_Sign(*b);
+            return d;
+        }
+        else
+        {
+            Flip_Sign(*a);
+            d = ADD(a, b);
+            Flip_Sign(d); // -ADD(|A|,B)
+            Flip_Sign(*a); // 부호 원위치
+            return d;
+        }
+    }
+}
+
+void SUBC_BI(int* borrow, bigint** c, bigint** a, bigint** b)
+{
+    int len, i = 0;
+    bigint* temp = NULL; // a와 b의 길이가 다를 때 -> bigint** b의 길이를 바꿀 수 없으므로 temp를 만들어줌
+    
+    Get_Word_Length(&len, a); // b보다 큰 a의 길이를 구하자
+    BI_New(&temp, len);  // a의 워드 길이와 같게 temp 를 생성
+    for (i = 0; i < (*b)->wordlen; i++)
+        temp->a[i] = (*b)->a[i]; // b와 같은 값을 가지고 있어야하고, 더 길게 생성됐을 때는 0이 들어가있어야함.
+    // a가 b보다 길 때 b의 길이를 맞춰줘야하는데 b를 건들이면 b가 바뀌기 때문에 temp를 이용
+        
+    for (i = 0; i < len; i++) 
+    {
+        if (i == 0)
+            *borrow = 0;
+
+        (*c)->a[i] = (*a)->a[i] - (*borrow); // A - b의 값을 C 에 대입
+        (*c)->a[i] = (*c)->a[i] & ((1 << WORD_BIT_LEN) - 1); // mod 2 ^ (WORD_BIT_LEN)
+        if ((*a)->a[i] < *borrow) // borrow 될 때
+            *borrow = 1;
+        else // borrow 안될 때
+        {
+            *borrow = 0;
+            if ((*c)->a[i] < temp->a[i])
+                *borrow = *borrow + 1;
+        }
+        (*c)->a[i] -= temp->a[i]; // temp에 넣어놓은 b와 뺄셈 연산
+        (*c)->a[i] = (*c)->a[i] & ((1 << WORD_BIT_LEN) - 1); // mod 2 ^ (WORD_BIT_LEN)
+    }
 }
