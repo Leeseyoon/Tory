@@ -28,8 +28,8 @@ void BI_New(bigint** x, int wordlen)
         BI_Delete(x);
 
     *x = (bigint*)malloc(sizeof(bigint));
+    (*x)->sign = NON_NEGATIVE;
     (*x)->wordlen = wordlen;
-    (*x)->sign = NULL;
     (*x)->a = (word*)calloc(wordlen, sizeof(word));
 }
 
@@ -47,6 +47,8 @@ void BI_Set_By_Array(bigint** x, int sign, word* a, int wordlen)
 void BI_Set_By_String(bigint** x, int sign, char* str, word base, int size)
 {
     char* hex;
+    int i, j, k;
+
     hex = (char*)malloc(size * sizeof(word));
     Ascii_To_Hex(str, hex);
 
@@ -54,21 +56,21 @@ void BI_Set_By_String(bigint** x, int sign, char* str, word base, int size)
     {
         if ((strlen(str) % WORD_BIT_LEN) != 0)
         {
-            for (int i = 0; i < (strlen(str) / WORD_BIT_LEN); i++)
+            for (i = 0; i < (int)(strlen(str) / WORD_BIT_LEN); i++)
             {
-                for (int j = 0; j < WORD_BIT_LEN; j++)
+                for (j = 0; j < WORD_BIT_LEN; j++)
                     (*x)->a[i] |= (hex[strlen(str) - 1 - WORD_BIT_LEN * i - j] << j);
             }
 
-            for (int k = 0; k < (strlen(str) % WORD_BIT_LEN); k++)
+            for (k = 0; k < (int)(strlen(str) % WORD_BIT_LEN); k++)
                 (*x)->a[(strlen(str) / WORD_BIT_LEN)] |= (hex[k] << ((strlen(str) % WORD_BIT_LEN) - k - 1));
         }
 
         else
         {
-            for (int i = 0; i < (strlen(str) / WORD_BIT_LEN); i++)
+            for (i = 0; i < (int)(strlen(str) / WORD_BIT_LEN); i++)
             {
-                for (int j = 0; j < WORD_BIT_LEN; j++)
+                for (j = 0; j < WORD_BIT_LEN; j++)
                     (*x)->a[i] |= (hex[strlen(str) - 1 - WORD_BIT_LEN * i - j] << j);
             }
         }
@@ -82,19 +84,19 @@ void BI_Set_By_String(bigint** x, int sign, char* str, word base, int size)
     {
         if ((strlen(str)) % (WORD_BIT_LEN / 4) != 0) // 2개가 1 byte니까
         {
-            for (int i = 0; i < (strlen(str) / (WORD_BIT_LEN / 4)); i++)
+            for (int i = 0; i < (int)(strlen(str) / (WORD_BIT_LEN / 4)); i++)
             {
                 for (int j = 0; j < WORD_BIT_LEN / 4; j++)
                     (*x)->a[i] |= hex[strlen(str) - 1 - (WORD_BIT_LEN / 4) * i - j] << (4 * j);
             }
 
-            for (int k = 0; k < (strlen(str) % (WORD_BIT_LEN / 4)); k++)
+            for (int k = 0; k < (int)(strlen(str) % (WORD_BIT_LEN / 4)); k++)
                 (*x)->a[strlen(str) / (WORD_BIT_LEN / 4)] |= (hex[(strlen(str) % (WORD_BIT_LEN / 4)) - 1 + k] << (4 * k));
         }
 
         else
         {
-            for (int i = 0; i < (strlen(str) / (WORD_BIT_LEN / 4)); i++)
+            for (int i = 0; i < (int)(strlen(str) / (WORD_BIT_LEN / 4)); i++)
             {
                 for (int j = 0; j < WORD_BIT_LEN / 4; j++)
                     (*x)->a[i] |= hex[strlen(str) - 1 - (WORD_BIT_LEN / 4) * i - j] << (4 * j);
@@ -171,20 +173,29 @@ void BI_Show(bigint* x, int base)
 //Chapter 2.3
 void bi_refine(bigint* x)
 {
+    word* temp;
+
     if (x == NULL)
         return;
+
     int new_wordlen = x->wordlen;
+
     while (new_wordlen > 1) // at least one word needed
     {
         if (x->a[new_wordlen - 1] != 0)
             break;
         new_wordlen--;
     }
+
     if (x->wordlen != new_wordlen)
     {
         x->wordlen = new_wordlen;
-        x->a = (word*)realloc(x->a, sizeof(word) * new_wordlen);
+        temp = (word*)realloc(x->a, sizeof(word) * new_wordlen);
+
+        if (temp != NULL)
+            x->a = temp;
     }
+
     if ((x->wordlen == 1) && (x->a[0] == 0x0))
         x->sign = NON_NEGATIVE;
 }
@@ -394,6 +405,7 @@ void Left_Shift(bigint* x, int len)
     int wn = 0;
     int count = 0;
     int r = 0;
+    word* temp;
 
     bigint* cp = NULL;
     Assign_BI(&cp, x);
@@ -407,7 +419,10 @@ void Left_Shift(bigint* x, int len)
 
     new_wordlen = add_len + x->wordlen;
 
-    x->a = (word*)realloc(x->a, sizeof(word) * new_wordlen);
+    temp = (word*)realloc(x->a, sizeof(word) * new_wordlen);
+    if (temp != NULL)
+        x->a = temp;
+
     x->wordlen = new_wordlen;
 
     for (i = 0; i < add_len; i++)
@@ -514,7 +529,7 @@ void Reduction_BI(bigint** x, int r)
 }
 
 //Chapter 3 Addition
-// c: 받은 carry, carry: return 값 carry
+// 캐리 포함한 단일 덧셈
 int ADD_ABc(bigint** A, bigint** B, bigint** C, int c, int i)
 {
     int carry = 0;
@@ -579,6 +594,9 @@ bigint* ADD(bigint** A, bigint** B)
     A_sign = Get_Sign(*A);
     B_sign = Get_Sign(*B);
 
+	Get_Word_Length(&A_Len, A);
+	Get_Word_Length(&B_Len, B);
+
     if (Is_Zero(A) == 0) // A is zero
         return *B;
 
@@ -587,17 +605,23 @@ bigint* ADD(bigint** A, bigint** B)
 
     if ((A_sign == NON_NEGATIVE) && (B_sign == NEGATIVE))
     {
-        Flip_Sign(*B);
-        return SUB_BI(A, B); // SUB 함수 B의 부호를 바꿔주고 출력하면 B가 부호가 바뀐 상태로 남아있음
+		bigint* temp = NULL;
+		BI_New(&temp, B_Len);
+		Assign_BI(&temp, *B);
+
+        Flip_Sign(temp);
+        return SUB_BI(A, &temp); // SUB 함수
     }
 
     if ((A_sign == NEGATIVE) && (B_sign == NON_NEGATIVE))
     {
-        Flip_Sign(*A);
-        return SUB_BI(B, A); // SUB 함수
+		bigint* temp = NULL;
+		BI_New(&temp, A_Len);
+		Assign_BI(&temp, *A);
+
+        Flip_Sign(temp);
+        return SUB_BI(B, &temp); // SUB 함수
     }
-    Get_Word_Length(&A_Len, A);
-    Get_Word_Length(&B_Len, B);
 
     // A, B가 동일한 부호일 때
     if (A_Len >= B_Len)
