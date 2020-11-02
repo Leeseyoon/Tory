@@ -4,7 +4,7 @@
 #define NON_NEGATIVE   0
 #define NEGATIVE   1
 #define ERROR   -1
-#define WORD_BIT_LEN   32   // 8 or 32 or 64
+#define WORD_BIT_LEN   8   // 8 or 32 or 64
 
 #if WORD_BIT_LEN == 8
 typedef unsigned char word;

@@ -1,12 +1,22 @@
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#define DEBUG_NEW new(_NORMAL_BLOCK, THIS_FILE, __LINE__ )
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include "bigint.h"
 
-#define _CRT_SECURE_NO_WARNINGS
+#ifndef _DEBUG
+#define new new(_CLIENT_BLOCK, __FILE__, __LINE)
+#define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
+#endif
+
 
 int main()
 {
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
     /*
     int i = 0;
     int len;
@@ -284,6 +294,12 @@ int main()
     printf("a3's wordlen = %d\n", (a3->wordlen));
     for (i = 0; i < a3->wordlen; i++)
         printf("a3[%d] = %02x\n", i, (a3->a[i]));
+
+    BI_Delete(&a1);
+    BI_Delete(&a2);
+    BI_Delete(&a3);
+
+    _CrtDumpMemoryLeaks();
 
     return 0;
 }
