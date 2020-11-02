@@ -514,6 +514,7 @@ void Reduction_BI(bigint** x, int r)
 }
 
 //Chapter 3 Addition
+// c: 받은 carry, carry: return 값 carry
 int ADD_ABc(bigint** A, bigint** B, bigint** C, int c, int i)
 {
     int carry = 0;
@@ -578,9 +579,6 @@ bigint* ADD(bigint** A, bigint** B)
     A_sign = Get_Sign(*A);
     B_sign = Get_Sign(*B);
 
-	Get_Word_Length(&A_Len, A);
-	Get_Word_Length(&B_Len, B);
-
     if (Is_Zero(A) == 0) // A is zero
         return *B;
 
@@ -589,23 +587,17 @@ bigint* ADD(bigint** A, bigint** B)
 
     if ((A_sign == NON_NEGATIVE) && (B_sign == NEGATIVE))
     {
-		bigint* temp = NULL;
-		BI_New(&temp, B_Len);
-		Assign_BI(&temp, *B);
-
-        Flip_Sign(temp);
-        return SUB_BI(A, &temp); // SUB 함수 B의 부호를 바꿔주고 출력하면 B가 부호가 바뀐 상태로 남아있음
+        Flip_Sign(*B);
+        return SUB_BI(A, B); // SUB 함수 B의 부호를 바꿔주고 출력하면 B가 부호가 바뀐 상태로 남아있음
     }
 
     if ((A_sign == NEGATIVE) && (B_sign == NON_NEGATIVE))
     {
-		bigint* temp = NULL;
-		BI_New(&temp, A_Len);
-		Assign_BI(&temp, *A);
-
-        Flip_Sign(temp);
-        return SUB_BI(B, &temp); // SUB 함수
+        Flip_Sign(*A);
+        return SUB_BI(B, A); // SUB 함수
     }
+    Get_Word_Length(&A_Len, A);
+    Get_Word_Length(&B_Len, B);
 
     // A, B가 동일한 부호일 때
     if (A_Len >= B_Len)
