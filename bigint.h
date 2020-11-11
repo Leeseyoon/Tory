@@ -4,14 +4,14 @@
 #define NON_NEGATIVE   0
 #define NEGATIVE   1
 #define ERROR   -1
-#define WORD_BIT_LEN   8   // 8 or 32 or 64
-
+#define WORD_BIT_LEN   32   // 8 or 32 or 64
+ 
 #if WORD_BIT_LEN == 8
-typedef unsigned char word;
+    typedef unsigned char word;
 #elif WORD_BIT_LEN == 32
-typedef unsigned int word;
+    typedef unsigned int word;
 #else
-typedef unsigned long long word;
+    typedef unsigned long long word;
 #endif
 
 typedef struct {
@@ -68,12 +68,21 @@ void Right_Shift(bigint* x, int r);
 void Reduction_BI(bigint** x, int r);
 
 // Chapter 3 Additon
-int ADD_ABc(bigint** A, bigint** B, bigint** C, int c, int i);
-bigint* ADDC(bigint** A, bigint** B, int sign);
-bigint* ADD(bigint** A, bigint** B);
+int ADD_ABc(bigint** C, bigint** A, bigint** B, int c, int i);
+void ADDC(bigint** C, bigint** A, bigint** B, int sign);
+void ADD(bigint** C, bigint** A, bigint** B);
+void ADD_BI_test(bigint** C, bigint** A, bigint** B);
+int Compare_WordLen(bigint* A, bigint* B);
 
 // Chapter 4 Subtraction
-void SUBC_BI(int* borrow, bigint** c, bigint** a, bigint** b);
+bigint* SUBC_BI(int* borrow, bigint** c, bigint** a, bigint** b);
+bigint* SUBC_BI_test(int* borrow, bigint** c, bigint** a, bigint** b);
 bigint* SUB_BI(bigint** a, bigint** b);
+void SUB_BI_test(bigint** c, bigint* a, bigint* b);
+
+// Chapter 5 Multiplication
+void MUL_Test(word** c, word* a, word* b);
+void MUL_BI(bigint** a, bigint** b);
+void MUL_MUL(bigint** result, bigint* a, bigint* b);
 
 #endif
