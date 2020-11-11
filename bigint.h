@@ -8,10 +8,12 @@
  
 #if WORD_BIT_LEN == 8
     typedef unsigned char word;
+    
 #elif WORD_BIT_LEN == 32
     typedef unsigned int word;
 #else
-    typedef unsigned long long word;
+typedef unsigned long long word;
+
 #endif
 
 typedef struct {
@@ -76,13 +78,14 @@ int Compare_WordLen(bigint* A, bigint* B);
 
 // Chapter 4 Subtraction
 bigint* SUBC_BI(int* borrow, bigint** c, bigint** a, bigint** b);
-bigint* SUBC_BI_test(int* borrow, bigint** c, bigint** a, bigint** b);
-bigint* SUB_BI(bigint** a, bigint** b);
-void SUB_BI_test(bigint** c, bigint* a, bigint* b);
+void SUB_BI_test(bigint** c, bigint* a, bigint* b); // print
+void SUB_BI(bigint** c, bigint* a, bigint* b); // no print
 
 // Chapter 5 Multiplication
-void MUL_Test(word** c, word* a, word* b);
+void MUL_Test(word* c, word* a, word* b);
 void MUL_BI(bigint** a, bigint** b);
 void MUL_MUL(bigint** result, bigint* a, bigint* b);
 
+//Karatsuba test
+void Kara(bigint** result, bigint* a, bigint* b);
 #endif
