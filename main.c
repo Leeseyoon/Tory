@@ -12,58 +12,90 @@
 #define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
 #endif
 
+
 int main()
 {
     srand((unsigned)time(NULL));
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     //_crtBreakAlloc = 74;
-    
-    int i = 0;
-    int len = 0;
+    int i, j = 0;
+    int size, size1, size2 = 0;
     bigint* bi_1 = NULL;
     bigint* bi_2 = NULL;
     bigint* bi_re = NULL;
 
-    for (i = 0; i < 20; i++) //20π¯ µ°º¿ ø¨ªÍ«œ±‚
+    // Karatsuba Ïó∞ÏÇ∞ÌïòÍ∏∞
+    //for (i = 0; i < 1; i++)
+    //{
+    //    size1 = 2;
+    //    size2 = 2;
+    //    BI_New(&bi_1, size1);
+    //    BI_New(&bi_2, size2);
+
+    //    bi_1->sign = 0;
+    //    bi_2->sign = 0;
+
+    //    for (j = 0; j < size1; j++)
+    //        bi_1->a[j] = rand() & 0xff; //((rand() * rand() * rand() * rand()) & 0xffffffff);
+    //    for (j = 0; j < size2; j++)
+    //        bi_2->a[j] = rand() & 0xff; //((rand() * rand() * rand() * rand()) & 0xffffffff);
+
+    //    Kara(&bi_re, bi_1, bi_2);
+
+    //    printf("\n");
+    //    BI_Delete(&bi_1);
+    //    BI_Delete(&bi_2);
+    //    BI_Delete(&bi_re);
+    //}
+    
+    printf("print(\"Addition\")\n");
+    
+    //nÎ≤à ÎçßÏÖà Ïó∞ÏÇ∞ÌïòÍ∏∞
+    for (i = 0; i < 20; i++)
     {
-        //printf("i = %d\n", i);
-        BI_New(&bi_1, 2);
-        BI_New(&bi_2, 3);
-        len = Compare_WordLen(bi_1, bi_2);
-        BI_New(&bi_re, len + 1);
+        size1 = (rand() & 7) + 1;
+        size2 = (rand() & 7) + 1;
 
-        bi_1->sign = 0;
-        bi_2->sign = 1;
+        BI_New(&bi_1, size1);
+        BI_New(&bi_2, size2);
+        size = Compare_WordLen(bi_1, bi_2);
+        BI_New(&bi_re, size + 1);
+        bi_1->sign = rand() & 1;
+        bi_2->sign = rand() & 1;
 
-        bi_1->a[0] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
-        bi_1->a[1] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
-        bi_2->a[0] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
-        bi_2->a[1] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
-        bi_2->a[2] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        for (j = 0; j < size1; j++)
+            bi_1->a[j] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        for (j = 0; j < size2; j++)
+            bi_2->a[j] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+
 
         ADD_BI_test(&bi_re, &bi_1, &bi_2);
         printf("\n");
-
         BI_Delete(&bi_1);
         BI_Delete(&bi_2);
         BI_Delete(&bi_re);
     }
-
     
-    /*
-    for (i = 0; i < 20; i++) //10π¯ ª¨º¿ ø¨ªÍ«œ±‚
+    printf("print(\"Subtraction\")\n");
+    //nÎ≤à Î∫ÑÏÖà Ïó∞ÏÇ∞ÌïòÍ∏∞
+    for (i = 0; i < 20; i++) 
     {
-        BI_New(&bi_1, 2);
-        BI_New(&bi_2, 2);
-        BI_New(&bi_re, 2);
+        size1 = (rand() & 7) + 1;
+        size2 = (rand() & 7) + 1;
+        
+        size = (size1 > size2) ? size1 : size2;
+        BI_New(&bi_1, size1);
+        BI_New(&bi_2, size2);
+        BI_New(&bi_re, size + 1);
         
         bi_1->sign = rand() & 1;
         bi_2->sign = rand() & 1;
-        
-        bi_1->a[0] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
-        bi_1->a[1] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
-        bi_2->a[0] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
-        bi_2->a[1] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+
+        for (j = 0; j < size1; j++)
+            bi_1->a[j] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        for (j = 0; j < size2; j++)
+            bi_2->a[j] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+     
        
         SUB_BI_test(&bi_re, bi_1, bi_2);
         printf("\n");
@@ -71,20 +103,23 @@ int main()
         BI_Delete(&bi_2);
         BI_Delete(&bi_re);
     }
-
-    for (i = 0; i < 20; i++) //10π¯ ª¨º¿ ø¨ªÍ«œ±‚
+    
+    printf("print(\"Schoolbook Multiplication\")\n");
+    for (i = 0; i < 20; i++) //nÎ≤à Í≥±ÏÖà Ïó∞ÏÇ∞ÌïòÍ∏∞
     {
-        BI_New(&bi_1, 1);
-        BI_New(&bi_2, 1);
-        BI_New(&bi_re, 2);
+        size1 = 2;// (rand() & 7) + 1;
+        size2 = 2;// (rand() & 7) + 1;
 
+        BI_New(&bi_1, size1);
+        BI_New(&bi_2, size2);
+        BI_New(&bi_re, size1 + size2);
         bi_1->sign = rand() & 1;
         bi_2->sign = rand() & 1;
 
-        bi_1->a[0] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
-        //bi_1->a[1] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
-        bi_2->a[0] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
-        //bi_2->a[1] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        for (j = 0; j < size1; j++)
+            bi_1->a[j] = ((rand() * rand() * rand() * rand()) & 0xffffffff); //rand() & (char)0xff; //
+        for (j = 0; j < size2; j++)
+            bi_2->a[j] = ((rand() * rand() * rand() * rand()) & 0xffffffff); //rand() & (char)0xff; //
 
         MUL_MUL(&bi_re, bi_1, bi_2);
         printf("\n");
@@ -92,8 +127,7 @@ int main()
         BI_Delete(&bi_2);
         BI_Delete(&bi_re);
     }
-    */
-
+    
     _CrtDumpMemoryLeaks();
 
     return 0;
