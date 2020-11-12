@@ -12,45 +12,53 @@
 #define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
 #endif
 
-
 int main()
 {
     srand((unsigned)time(NULL));
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     //_crtBreakAlloc = 74;
-    int i, j = 0;
+    
+    int i = 0;
+    int j = 0;
+    int len = 0;
+    int Len_1 = 0;
+    int Len_2 = 0;
     int size, size1, size2 = 0;
+
     bigint* bi_1 = NULL;
     bigint* bi_2 = NULL;
     bigint* bi_re = NULL;
 
-    // Karatsuba Ïó∞ÏÇ∞ÌïòÍ∏∞
-    //for (i = 0; i < 1; i++)
-    //{
-    //    size1 = 2;
-    //    size2 = 2;
-    //    BI_New(&bi_1, size1);
-    //    BI_New(&bi_2, size2);
 
-    //    bi_1->sign = 0;
-    //    bi_2->sign = 0;
+    /*
+    for (i = 0; i < 20; i++) //20π¯ µ°º¿ ø¨ªÍ«œ±‚
+    {
+        //printf("i = %d\n", i);
+        BI_New(&bi_1, 2);
+        BI_New(&bi_2, 3);
+        len = Compare_WordLen(bi_1, bi_2);
+        BI_New(&bi_re, len + 1);
 
-    //    for (j = 0; j < size1; j++)
-    //        bi_1->a[j] = rand() & 0xff; //((rand() * rand() * rand() * rand()) & 0xffffffff);
-    //    for (j = 0; j < size2; j++)
-    //        bi_2->a[j] = rand() & 0xff; //((rand() * rand() * rand() * rand()) & 0xffffffff);
+        bi_1->sign = rand() & 1;
+        bi_2->sign = rand() & 1;
 
-    //    Kara(&bi_re, bi_1, bi_2);
+        bi_1->a[0] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        bi_1->a[1] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        bi_2->a[0] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        bi_2->a[1] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        bi_2->a[2] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
 
-    //    printf("\n");
-    //    BI_Delete(&bi_1);
-    //    BI_Delete(&bi_2);
-    //    BI_Delete(&bi_re);
-    //}
-    
+        ADD_BI_test(&bi_re, &bi_1, &bi_2);
+        printf("\n");
+
+        BI_Delete(&bi_1);
+        BI_Delete(&bi_2);
+        BI_Delete(&bi_re);
+    } */
+
     printf("print(\"Addition\")\n");
-    
-    //nÎ≤à ÎçßÏÖà Ïó∞ÏÇ∞ÌïòÍ∏∞
+
+    //nπ¯ µ°º¿ ø¨ªÍ«œ±‚
     for (i = 0; i < 20; i++)
     {
         size1 = (rand() & 7) + 1;
@@ -75,19 +83,19 @@ int main()
         BI_Delete(&bi_2);
         BI_Delete(&bi_re);
     }
-    
+
     printf("print(\"Subtraction\")\n");
-    //nÎ≤à Î∫ÑÏÖà Ïó∞ÏÇ∞ÌïòÍ∏∞
-    for (i = 0; i < 20; i++) 
+    //nπ¯ ª¨º¿ ø¨ªÍ«œ±‚
+    for (i = 0; i < 20; i++)
     {
         size1 = (rand() & 7) + 1;
         size2 = (rand() & 7) + 1;
-        
+
         size = (size1 > size2) ? size1 : size2;
         BI_New(&bi_1, size1);
         BI_New(&bi_2, size2);
         BI_New(&bi_re, size + 1);
-        
+
         bi_1->sign = rand() & 1;
         bi_2->sign = rand() & 1;
 
@@ -95,17 +103,17 @@ int main()
             bi_1->a[j] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
         for (j = 0; j < size2; j++)
             bi_2->a[j] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
-     
-       
+
+
         SUB_BI_test(&bi_re, bi_1, bi_2);
         printf("\n");
         BI_Delete(&bi_1);
         BI_Delete(&bi_2);
         BI_Delete(&bi_re);
     }
-    
+    /*
     printf("print(\"Schoolbook Multiplication\")\n");
-    for (i = 0; i < 20; i++) //nÎ≤à Í≥±ÏÖà Ïó∞ÏÇ∞ÌïòÍ∏∞
+    for (i = 0; i < 20; i++) //nπ¯ ∞ˆº¿ ø¨ªÍ«œ±‚
     {
         size1 = 2;// (rand() & 7) + 1;
         size2 = 2;// (rand() & 7) + 1;
@@ -128,6 +136,38 @@ int main()
         BI_Delete(&bi_re);
     }
     
+    printf("print(\"Karatsuba Multiplication\")\n");
+    for (i = 0; i < 20; i++) //20π¯ ƒ´∂Û√ﬂπŸ ∞ˆº¿ ø¨ªÍ«œ±‚
+    {
+        printf("i = %d\n", i);
+        BI_New(&bi_1, 5);
+        BI_New(&bi_2, 4);
+        
+        Get_Word_Length(&Len_1, &bi_1);
+        Get_Word_Length(&Len_2, &bi_2);
+        BI_New(&bi_re, Len_1 + Len_2);
+
+        bi_1->sign = rand() & 1;
+        bi_2->sign = rand() & 1;
+
+        bi_1->a[0] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        bi_1->a[1] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        bi_1->a[2] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        bi_1->a[3] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        bi_1->a[4] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        bi_2->a[0] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        bi_2->a[1] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        bi_2->a[2] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+        bi_2->a[3] = ((rand() * rand() * rand() * rand()) & 0xffffffff);
+
+        Karatsuba(&bi_re, bi_1, bi_2);
+        printf("\n");
+
+        BI_Delete(&bi_1);
+        BI_Delete(&bi_2);
+        BI_Delete(&bi_re);
+    }
+    */
     _CrtDumpMemoryLeaks();
 
     return 0;
