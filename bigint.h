@@ -8,13 +8,17 @@
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
- 
+
 #if WORD_BIT_LEN == 8
     typedef unsigned char word;
+    //typedef unsigned char masking;
 #elif WORD_BIT_LEN == 32
-    typedef unsigned int word;
+typedef unsigned int word;
+//typedef unsigned int masking;
+
 #else
-    typedef unsigned long long word;
+typedef unsigned long long word;
+//typedef unsigned long long masking;
 #endif
 
 typedef struct {
@@ -83,11 +87,9 @@ void SUB_BI_test(bigint** c, bigint* a, bigint* b); // print
 void SUB_BI(bigint** c, bigint* a, bigint* b); // no print
 
 // Chapter 5 Multiplication
-// Chapter 5 Multiplication
 void MUL_Test(word* c, word* a, word* b);
-void MUL_BI(bigint** a, bigint** b);
 void MUL_MUL(bigint** result, bigint* a, bigint* b);
 
-void Karatsuba(bigint** result, bigint* A, bigint* B);
-
+//Karatsuba test
+void Karatsuba(bigint** result, bigint* a, bigint* b);
 #endif
