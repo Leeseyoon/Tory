@@ -10,15 +10,17 @@
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
 #if WORD_BIT_LEN == 8
-    typedef unsigned char word;
-    //typedef unsigned char masking;
+typedef unsigned char word;
+#define word_mask 0xff
+
 #elif WORD_BIT_LEN == 32
 typedef unsigned int word;
-//typedef unsigned int masking;
-
+#define word_mask 0xffffffff
+ 
 #else
 typedef unsigned long long word;
-//typedef unsigned long long masking;
+#define word_mask 0xffffffffffffffff
+
 #endif
 
 typedef struct {
@@ -78,13 +80,13 @@ void Reduction_BI(bigint** x, int r);
 int ADD_ABc(bigint** C, bigint** A, bigint** B, int c, int i);
 void ADDC(bigint** C, bigint** A, bigint** B, int sign);
 void ADD(bigint** C, bigint** A, bigint** B);
-void ADD_BI_test(bigint** C, bigint** A, bigint** B);
+
 int Compare_WordLen(bigint* A, bigint* B);
 
 // Chapter 4 Subtraction
 bigint* SUBC_BI(int* borrow, bigint** c, bigint** a, bigint** b);
-void SUB_BI_test(bigint** c, bigint* a, bigint* b); // print
-void SUB_BI(bigint** c, bigint* a, bigint* b); // no print
+void SUB(bigint** c, bigint* a, bigint* b); // print
+
 
 // Chapter 5 Multiplication
 void MUL_Test(word* c, word* a, word* b);
