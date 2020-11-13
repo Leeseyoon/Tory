@@ -518,9 +518,9 @@ void Reduction_BI(bigint** x, int r)
     {
         count = r / WORD_BIT_LEN;
         for (i = 0; i < count; i++)
-            (*x)->a[i] = (*x)->a[i] & (((unsigned long long)1 << WORD_BIT_LEN) - 1);
+            (*x)->a[i] = (*x)->a[i] & word_mask;
         r = r % WORD_BIT_LEN;
-        (*x)->a[i] = (*x)->a[i] & (((unsigned long long)1 << r) - 1);
+        (*x)->a[i] = (*x)->a[i] & word_mask;
         for (i = count + 1; i < (*x)->wordlen; i++)
             (*x)->a[i] = 0;
     }
@@ -629,7 +629,7 @@ void ADD(bigint** C, bigint** A, bigint** B) // no print
         Assign_BI(&temp, *B);
 
         Flip_Sign(temp);
-        SUB_BI_test(C, *A, temp); // SUB 함수
+        SUB(C, *A, temp); // SUB 함수
         //bi_refine(C);
 
         BI_Delete(&temp);
@@ -644,7 +644,7 @@ void ADD(bigint** C, bigint** A, bigint** B) // no print
         Assign_BI(&temp, *A);
 
         Flip_Sign(temp);
-        SUB_BI_test(C, *B, temp); // SUB 함수
+        SUB(C, *B, temp); // SUB 함수
         //bi_refine(C);
 
         BI_Delete(&temp);
@@ -666,122 +666,6 @@ void ADD(bigint** C, bigint** A, bigint** B) // no print
 
 }
 
-void ADD_BI_test(bigint** C, bigint** A, bigint** B)
-{
-    int A_Len = 0;
-    int B_Len = 0;
-    int A_sign;
-    int B_sign;
-
-    A_sign = Get_Sign(*A);
-    B_sign = Get_Sign(*B);
-
-    Get_Word_Length(&A_Len, A);
-    Get_Word_Length(&B_Len, B);
-
-    if (Is_Zero(A) == 0) // A is zero
-    {
-        Assign_BI(C, *B);
-        bi_refine(C);
-
-        printf("A = ");
-        BI_Show(*A, 16);
-        printf("B = ");
-        BI_Show(*B, 16);
-        printf("A + B == ");
-        BI_Show(*C, 16);
-
-        return;
-    }
-
-    if (Is_Zero(B) == 0) // B is zero
-    {
-        Assign_BI(C, *A);
-        bi_refine(C);
-
-        printf("A = ");
-        BI_Show(*A, 16);
-        printf("B = ");
-        BI_Show(*B, 16);
-        printf("A + B == ");
-        BI_Show(*C, 16);
-
-        return;
-    }
-
-    if ((A_sign == NON_NEGATIVE) && (B_sign == NEGATIVE))
-    {
-        bigint* temp = NULL;
-        BI_New(&temp, B_Len);
-        Assign_BI(&temp, *B);
-
-        Flip_Sign(temp);
-        SUB_BI_test(C, *A, temp); // SUB 함수
-        bi_refine(C);
-
-        printf("A = ");
-        BI_Show(*A, 16);
-        printf("B = ");
-        BI_Show(*B, 16);
-        printf("A + B == ");
-        BI_Show(*C, 16);
-
-        BI_Delete(&temp);
-
-        return;
-    }
-
-    if ((A_sign == NEGATIVE) && (B_sign == NON_NEGATIVE))
-    {
-        bigint* temp = NULL;
-        BI_New(&temp, A_Len);
-        Assign_BI(&temp, *A);
-
-        Flip_Sign(temp);
-        SUB_BI_test(C, *B, temp); // SUB 함수
-        bi_refine(C);
-
-        printf("A = ");
-        BI_Show(*A, 16);
-        printf("B = ");
-        BI_Show(*B, 16);
-        printf("A + B == ");
-        BI_Show(*C, 16);
-
-        BI_Delete(&temp);
-
-        return;
-    }
-
-    // A, B가 동일한 부호일 때
-    if (A_Len >= B_Len)
-    {
-        ADDC(C, A, B, A_sign);
-
-        printf("A = ");
-        BI_Show(*A, 16);
-        printf("B = ");
-        BI_Show(*B, 16);
-        printf("A + B == ");
-        BI_Show(*C, 16);
-
-        return;
-    }
-    else
-    {
-        ADDC(C, B, A, A_sign);
-
-        printf("A = ");
-        BI_Show(*A, 16);
-        printf("B = ");
-        BI_Show(*B, 16);
-        printf("A + B == ");
-        BI_Show(*C, 16);
-
-        return;
-    }
-
-}
 
 int Compare_WordLen(bigint* A, bigint* B) // return wordlen 큰 사이즈
 {
@@ -796,107 +680,8 @@ int Compare_WordLen(bigint* A, bigint* B) // return wordlen 큰 사이즈
         return B_Len;
 }
 
-void SUB_BI(bigint** c, bigint* a, bigint* b) // no print
-{
-    int borrow = 0;
-    int len = 0;
-    bigint* d = NULL;
 
-    Get_Word_Length(&len, &a);
-    Get_Word_Length(&borrow, &b);
-    /*if (len > borrow)
-        BI_New(c, len);
-    else
-    {
-        BI_New(c, borrow);
-        len = borrow;
-    }*/
-
-    if (Is_Zero(&a) == 0)
-    {
-        Assign_BI(c, b);
-        return; // memory leackege X
-    } // line 1~2
-
-    if (Is_Zero(&b) == 0)
-    {
-        Assign_BI(c, a);
-        return;// memory leackege X
-    } // line 4~5
-
-
-    if ((a->sign ^ b->sign) == 0) // A, B 부호가 같을 때
-    {
-        if ((a->sign & b->sign) == 0) // A, B의 부호가 모두 양수일 때
-        {
-            if (Compare_BI(&a, &b) < 0) // A, B를 비교해서 A < B일 때. Compare_BI(A, B)의 return : -1
-            {
-
-                SUBC_BI(&borrow, c, &b, &a);
-                Flip_Sign(&c);
-
-                return;// memory leackege X
-            }
-            else if (Compare_BI(&a, &b) == 0)
-            {
-                return;// memory leackege X
-            }
-            else // A, B 를 비교해서 A >= B일 때. Compare_BI(A, B)'s return : 0, 1
-            {
-                SUBC_BI(&borrow, c, &a, &b);
-
-                return;// memory leackege X
-            }
-        }
-
-        else // A, B의 부호가 모두 음수일 때
-        {
-            Flip_Sign(a);
-            Flip_Sign(b);
-            if (Compare_BI(&a, &b) < 0)
-            {
-                SUBC_BI(&borrow, c, &b, &a);
-                Flip_Sign(a); // 부호 원위치
-                Flip_Sign(b); // 부호 원위치
-               
-                return;// memory leackege X
-            }
-            else
-            {
-                SUBC_BI(&borrow, c, &a, &b);
-                Flip_Sign(*c);
-                Flip_Sign(a); // 부호 원위치
-                Flip_Sign(b); // 부호 원위치
-                
-                return;// memory leackege X
-            }
-        }
-    }
-
-    else // A,B 부호가 다를 때 때
-    {
-        if (a->sign == 0)
-        {
-            Flip_Sign(b);
-            ADD_BI_test(c, &a, &b); //수정하면 바꿀 곳
-            Flip_Sign(b);
-        
-            return;
-        }
-        else
-        {
-            Flip_Sign(a);
-            ADD(c, &a, &b); //수정하면 바꿀 곳
-            //Flip_Sign(d); // -ADD(|A|,B)
-            Flip_Sign(a); // 부호 원위치
-            Flip_Sign(*c);
-            
-            return;
-        }
-    }
-}
-
-void SUB_BI_test(bigint** c, bigint* a, bigint* b)
+void SUB(bigint** c, bigint* a, bigint* b)
 {
     int borrow = 0;
     int len = 0;
@@ -915,24 +700,14 @@ void SUB_BI_test(bigint** c, bigint* a, bigint* b)
     if (Is_Zero(&a) == 0)
     {
         Assign_BI(c, b);
-        printf("A = ");
-        BI_Show(a, 16);
-        printf("B = ");
-        BI_Show(b, 16);
-        printf("A - B == ");
-        BI_Show(*c, 16);
+        
         return; // memory leackege X
     } // line 1~2
 
     if (Is_Zero(&b) == 0)
     {
         Assign_BI(c, a);
-        printf("A = ");
-        BI_Show(a, 16);
-        printf("B = ");
-        BI_Show(b, 16);
-        printf("A - B == ");
-        BI_Show(*c, 16);
+        
         return;// memory leackege X
     } // line 4~5
 
@@ -946,37 +721,18 @@ void SUB_BI_test(bigint** c, bigint* a, bigint* b)
 
                 SUBC_BI(&borrow, c, &b, &a);
                 Flip_Sign(&c);
-                printf("A = ");
-                BI_Show(a, 16);
-                printf("B = ");
-                BI_Show(b, 16);
                 Flip_Sign(*c);
-                printf("A - B == ");
-                BI_Show(*c, 16);
-        
+                        
                 return;// memory leackege X
             }
             else if (Compare_BI(&a, &b) == 0)
             {
-                printf("A = ");
-                BI_Show(a, 16);
-                printf("B = ");
-                BI_Show(b, 16);
-                printf("A - B == ");
-                BI_Show(*c, 16);
-            
-                return ;// memory leackege X
+                    return ;// memory leackege X
             }
             else // A, B 를 비교해서 A >= B일 때. Compare_BI(A, B)'s return : 0, 1
             {
                 SUBC_BI(&borrow, c, &a, &b);
-                printf("A = ");
-                BI_Show(a, 16);
-                printf("B = ");
-                BI_Show(b, 16);
-                printf("A - B == ");
-                BI_Show(*c, 16);
-                
+                                
                 return;// memory leackege X
             }
         }
@@ -990,13 +746,7 @@ void SUB_BI_test(bigint** c, bigint* a, bigint* b)
                 SUBC_BI(&borrow, c, &b, &a);
                 Flip_Sign(a); // 부호 원위치
                 Flip_Sign(b); // 부호 원위치
-                printf("A = ");
-                BI_Show(a, 16);
-                printf("B = ");
-                BI_Show(b, 16);
-                printf("A - B == ");
-                BI_Show(*c, 16);
-
+                
                 return;// memory leackege X
             }
             else
@@ -1005,13 +755,7 @@ void SUB_BI_test(bigint** c, bigint* a, bigint* b)
                 Flip_Sign(*c);
                 Flip_Sign(a); // 부호 원위치
                 Flip_Sign(b); // 부호 원위치
-                printf("A = ");
-                BI_Show(a, 16);
-                printf("B = ");
-                BI_Show(b, 16);
-                printf("A - B == ");
-                BI_Show(*c, 16);
-                
+                                
                 return;// memory leackege X
             }
         }
@@ -1024,13 +768,7 @@ void SUB_BI_test(bigint** c, bigint* a, bigint* b)
             Flip_Sign(b);
             ADD(c, &a, &b); //수정하면 바꿀 곳
             Flip_Sign(b);
-            printf("A = ");
-            BI_Show(a, 16);
-            printf("B = ");
-            BI_Show(b, 16);
-            printf("A - B == ");
-            BI_Show(*c, 16);
-            
+                        
             return;
         }
         else
@@ -1040,15 +778,7 @@ void SUB_BI_test(bigint** c, bigint* a, bigint* b)
             
             Flip_Sign(a); // 부호 원위치
             Flip_Sign(*c); // 부호 원위치
-            printf("A = ");
-            BI_Show(a, 16);
-            printf("B = ");
-            BI_Show(b, 16);
-            
-            printf("A - B == ");
-            BI_Show(*c, 16);
-            //BI_Delete(&d);
-            
+                       
             return;
         }
     }
@@ -1071,7 +801,7 @@ bigint* SUBC_BI(int* borrow, bigint** c, bigint** a, bigint** b)
             *borrow = 0;
 
         (*c)->a[i] = (*a)->a[i] - (*borrow); // A - b의 값을 C 에 대입
-        (*c)->a[i] = (*c)->a[i] & ((1 << WORD_BIT_LEN) - 1); // mod 2 ^ (WORD_BIT_LEN)
+        (*c)->a[i] = (*c)->a[i] & word_mask; // mod 2 ^ (WORD_BIT_LEN)
         if ((*a)->a[i] < *borrow) // borrow 될 때
             *borrow = 1;
         else // borrow 안될 때
@@ -1081,7 +811,7 @@ bigint* SUBC_BI(int* borrow, bigint** c, bigint** a, bigint** b)
                 *borrow = *borrow + 1;
         }
         (*c)->a[i] -= temp->a[i]; // temp에 넣어놓은 b와 뺄셈 연산
-        (*c)->a[i] = (*c)->a[i] & ((1 << WORD_BIT_LEN) - 1); // mod 2 ^ (WORD_BIT_LEN)
+        (*c)->a[i] = (*c)->a[i] & word_mask; // mod 2 ^ (WORD_BIT_LEN)
     }
     BI_Delete(&temp);
 }
@@ -1138,14 +868,8 @@ void MUL_MUL(bigint** result, bigint* a, bigint* b)
         }
     }
     BI_Delete(&d);
-    printf("A = ");
-    BI_Show(a, 16);
-    printf("B = ");
-    BI_Show(b, 16);
     (*result)->sign = a->sign ^ b->sign;
-    printf("A * B == ");
     bi_refine(*result);
-    BI_Show(*result, 16);
 }
 
 void Karatsuba(bigint** result, bigint* A, bigint* B)
@@ -1159,8 +883,8 @@ void Karatsuba(bigint** result, bigint* A, bigint* B)
     bigint* B1 = NULL;
     bigint* B0 = NULL;
 
-    Get_Word_Length(&A_Len, A);
-    Get_Word_Length(&B_Len, B);
+    Get_Word_Length(&A_Len, &A);
+    Get_Word_Length(&B_Len, &B);
 
     if (flag >= MIN(A_Len, B_Len))
     {
@@ -1197,6 +921,7 @@ void Karatsuba(bigint** result, bigint* A, bigint* B)
     Assign_BI(&temp2, A);
     Assign_BI(&temp3, B);
     Assign_BI(&temp4, B);
+    BI_Delete(&temp1);
 
     Right_Shift(temp1, len);
     Reduction_BI(&temp2, len);
@@ -1244,8 +969,8 @@ void Karatsuba(bigint** result, bigint* A, bigint* B)
     memcpy(&(R->a[len * 2]), &(T1->a[len * 2]), len * 2);
     memcpy(&(R->a[0]), &(T0->a[0]), len * 2);
 
-    SUB_BI_test(&S1, A0, A1);
-    SUB_BI_test(&S0, B1, B0);
+    SUB(&S1, A0, A1);
+    SUB(&S0, B1, B0);
 
     if (S1->sign == S0->sign)
     {
