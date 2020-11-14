@@ -33,8 +33,11 @@ int main()
 
     //A = -0x ff7e8c00 b257d8c8
     //B = 0x b30ba8e8 bc301ea8 a38b4600
-    //A * B = -0x b2b1 1ee7 d31b 6129 543e 30fd eac4 a8be 11de b000
+    //A * B = -0x b2b11ee7 d31b6129 543e30fd eac4a8be 11deb000
     //할당해 준 인덱스보다 더 사용해서 heap corruption 에러가 나는 듯...
+
+    //A = -0x594f8a00aaacfce0
+    //B = 0x7e0f118bdc660e5c1e63908c
 
     BI_Set_By_Array(&bi_1, NEGATIVE, arr1_a, 2);
     BI_Set_By_Array(&bi_2, NON_NEGATIVE, arr1_b, 3);
@@ -48,6 +51,10 @@ int main()
 
     printf("A * B == ");
     BI_Show(bi_re, 16);
+
+    BI_Delete(&bi_1);
+    BI_Delete(&bi_2);
+    BI_Delete(&bi_re);
 
     /*
     printf("print(\"Addition\")\n");
@@ -152,7 +159,7 @@ int main()
         BI_Delete(&bi_2);
         BI_Delete(&bi_re);
     }
-
+    
     printf("print(\"Karatsuba Multiplication\")\n");
     for (i = 0; i < 20; i++) //20번 카라추바 곱셈 연산하기
     {
@@ -175,12 +182,12 @@ int main()
         for (j = 0; j < size2; j++)
             bi_2->a[j] = ((rand() * rand() * rand() * rand()) & 0xffffffff); //rand() & (char)0xff; //
 
-        Karatsuba(&bi_re, bi_1, bi_2);
-
         printf("A = ");
         BI_Show(bi_1, 16);
         printf("B = ");
         BI_Show(bi_2, 16);
+
+        Karatsuba(&bi_re, bi_1, bi_2);
 
         printf("A * B == ");
         BI_Show(bi_re, 16);

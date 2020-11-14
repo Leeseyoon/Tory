@@ -52,7 +52,7 @@ void BI_Set_By_String(bigint** x, int sign, char* str, word base, int size)
     hex = (char*)malloc(size * sizeof(word));
     Ascii_To_Hex(str, hex);
 
-    if (base == 2) // 11 01101010 10101111 -> 3 byte ë°©ì— a[2] a[1] a[0]
+    if (base == 2) // 11 01101010 10101111 -> 3 byte ¹æ¿¡ a[2] a[1] a[0]
     {
         if ((strlen(str) % WORD_BIT_LEN) != 0)
         {
@@ -78,11 +78,11 @@ void BI_Set_By_String(bigint** x, int sign, char* str, word base, int size)
 
 
     else if (base == 10)
-        printf("hello\n"); // ì¶”í›„ì— êµ¬í˜„í•  ê²ƒ
+        printf("hello\n"); // ÃßÈÄ¿¡ ±¸ÇöÇÒ °Í
 
     else if (base == 16) // "123456789" -> {0x89, 0x67, 0x45, 0x23, 0x01} / {0x6789, 0x2345, 0x0001}
     {
-        if ((strlen(str)) % (WORD_BIT_LEN / 4) != 0) // 2ê°œê°€ 1 byteë‹ˆê¹Œ
+        if ((strlen(str)) % (WORD_BIT_LEN / 4) != 0) // 2°³°¡ 1 byte´Ï±î
         {
             for (int i = 0; i < (int)(strlen(str) / (WORD_BIT_LEN / 4)); i++)
             {
@@ -125,7 +125,7 @@ void BI_Show(bigint* x, int base)
     int j = 0;
     int k = 0;
 
-    if (base == 10) // 10ì§„ìˆ˜ì¼ ë•Œ
+    if (base == 10) // 10Áø¼öÀÏ ¶§
     {
         printf("%d", x->a[0]);
         for (i = 1; i < x->wordlen; i++)
@@ -134,7 +134,7 @@ void BI_Show(bigint* x, int base)
         }
     }
 
-    else if (base == 16) // 16ì§„ìˆ˜ì¼ ë•Œ
+    else if (base == 16) // 16Áø¼öÀÏ ¶§
     {
         if (x->sign == 1)
             printf("-");
@@ -154,7 +154,7 @@ void BI_Show(bigint* x, int base)
         }
     }
 
-    else if (base == 2) // 2ì§„ìˆ˜ì¼ ë•Œ
+    else if (base == 2) // 2Áø¼öÀÏ ¶§
     {
         printf("0b");
         for (i = x->wordlen - 1; i >= 0; i--)
@@ -235,7 +235,7 @@ void array_rand(word* dst, int wordlen)
 // Chapter 2.6 Get Word Length / Bit Length / j-th Bit of Big-Int
 void Get_Word_Length(int* len, bigint** x)
 {
-    *len = (*x)->wordlen; // Big Integer xì˜ wordlenë¥¼ ëŒ€ì…
+    *len = (*x)->wordlen; // Big Integer xÀÇ wordlen¸¦ ´ëÀÔ
 }
 void Bit_Length(int* len, bigint* x)
 {
@@ -342,13 +342,13 @@ int Compare_BI(bigint** x, bigint** y)
     int i = 0;
     int len_x, len_y = 0;
     int len = 0;
-    if ((*x)->sign < (*y)->sign) // Aê°€ ì–‘ìˆ˜, Bê°€ ìŒìˆ˜ë©´ ë‹¹ì—°íˆ Aê°€ í¬ë¯€ë¡œ
+    if ((*x)->sign < (*y)->sign) // A°¡ ¾ç¼ö, B°¡ À½¼ö¸é ´ç¿¬È÷ A°¡ Å©¹Ç·Î
         return 1;
-    else if ((*x)->sign > (*y)->sign) // Aê°€ ìŒìˆ˜, Bê°€ ì–‘ìˆ˜ë©´ ë‹¹ì—°íˆ Bê°€ í¬ë¯€ë¡œ
+    else if ((*x)->sign > (*y)->sign) // A°¡ À½¼ö, B°¡ ¾ç¼ö¸é ´ç¿¬È÷ B°¡ Å©¹Ç·Î
         return -1;
-    else // A, B ë¶€í˜¸ê°€ ê°™ì„ ë•Œ
+    else // A, B ºÎÈ£°¡ °°À» ¶§
     {
-        if ((*x)->sign == 0) // A, B ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¼ ë•Œ (ë¶€í˜¸ê°€ ì„œë¡œ ê°™ìœ¼ë¯€ë¡œ, if ë¬¸ì„ í†µí•´ í•˜ë‚˜ë§Œ ë¹„êµ)
+        if ((*x)->sign == 0) // A, B ºÎÈ£°¡ ¾ç¼öÀÏ ¶§ (ºÎÈ£°¡ ¼­·Î °°À¸¹Ç·Î, if ¹®À» ÅëÇØ ÇÏ³ª¸¸ ºñ±³)
         {
             Get_Word_Length(&len_x, x);
             Get_Word_Length(&len_y, y);
@@ -368,7 +368,7 @@ int Compare_BI(bigint** x, bigint** y)
                 return 0;
             }
         }
-        else // A, B ë¶€í˜¸ê°€ ìŒìˆ˜ì¼ ë•Œ
+        else // A, B ºÎÈ£°¡ À½¼öÀÏ ¶§
         {
             Get_Word_Length(&len_x, x);
             Get_Word_Length(&len_y, y);
@@ -528,7 +528,7 @@ void Reduction_BI(bigint** x, int r)
 }
 
 //Chapter 3 Addition
-// ìºë¦¬ í¬í•¨í•œ ë‹¨ì¼ ë§ì…ˆ
+// Ä³¸® Æ÷ÇÔÇÑ ´ÜÀÏ µ¡¼À
 int ADD_ABc(bigint** C, bigint** A, bigint** B, int c, int i)
 {
     int carry = 0;
@@ -595,7 +595,7 @@ void ADD(bigint** C, bigint** A, bigint** B) // no print
     int B_Len = 0;
     int A_sign;
     int B_sign;
-    int i; 
+    int i;
     A_sign = Get_Sign(*A);
     B_sign = Get_Sign(*B);
 
@@ -629,7 +629,7 @@ void ADD(bigint** C, bigint** A, bigint** B) // no print
         Assign_BI(&temp, *B);
 
         Flip_Sign(temp);
-        SUB(C, *A, temp); // SUB í•¨ìˆ˜
+        SUB(C, *A, temp); // SUB ÇÔ¼ö
         //bi_refine(C);
 
         BI_Delete(&temp);
@@ -644,7 +644,7 @@ void ADD(bigint** C, bigint** A, bigint** B) // no print
         Assign_BI(&temp, *A);
 
         Flip_Sign(temp);
-        SUB(C, *B, temp); // SUB í•¨ìˆ˜
+        SUB(C, *B, temp); // SUB ÇÔ¼ö
         //bi_refine(C);
 
         BI_Delete(&temp);
@@ -652,7 +652,7 @@ void ADD(bigint** C, bigint** A, bigint** B) // no print
         return;
     }
 
-    // A, Bê°€ ë™ì¼í•œ ë¶€í˜¸ì¼ ë•Œ
+    // A, B°¡ µ¿ÀÏÇÑ ºÎÈ£ÀÏ ¶§
     if (A_Len >= B_Len)
     {
         ADDC(C, A, B, A_sign);
@@ -667,7 +667,7 @@ void ADD(bigint** C, bigint** A, bigint** B) // no print
 }
 
 
-int Compare_WordLen(bigint* A, bigint* B) // return wordlen í° ì‚¬ì´ì¦ˆ
+int Compare_WordLen(bigint* A, bigint* B) // return wordlen Å« »çÀÌÁî
 {
     int A_Len, B_Len;
 
@@ -696,89 +696,89 @@ void SUB(bigint** c, bigint* a, bigint* b)
         BI_New(c, borrow);
         len = borrow;
     }*/
-    
+
     if (Is_Zero(&a) == 0)
     {
         Assign_BI(c, b);
-        
+
         return; // memory leackege X
     } // line 1~2
 
     if (Is_Zero(&b) == 0)
     {
         Assign_BI(c, a);
-        
+
         return;// memory leackege X
     } // line 4~5
 
 
-    if ((a->sign ^ b->sign) == 0) // A, B ë¶€í˜¸ê°€ ê°™ì„ ë•Œ
+    if ((a->sign ^ b->sign) == 0) // A, B ºÎÈ£°¡ °°À» ¶§
     {
-        if ((a->sign & b->sign) == 0) // A, Bì˜ ë¶€í˜¸ê°€ ëª¨ë‘ ì–‘ìˆ˜ì¼ ë•Œ
+        if ((a->sign & b->sign) == 0) // A, BÀÇ ºÎÈ£°¡ ¸ğµÎ ¾ç¼öÀÏ ¶§
         {
-            if (Compare_BI(&a, &b) < 0) // A, Bë¥¼ ë¹„êµí•´ì„œ A < Bì¼ ë•Œ. Compare_BI(A, B)ì˜ return : -1
+            if (Compare_BI(&a, &b) < 0) // A, B¸¦ ºñ±³ÇØ¼­ A < BÀÏ ¶§. Compare_BI(A, B)ÀÇ return : -1
             {
 
                 SUBC_BI(&borrow, c, &b, &a);
                 Flip_Sign(&c);
                 Flip_Sign(*c);
-                        
+
                 return;// memory leackege X
             }
             else if (Compare_BI(&a, &b) == 0)
             {
-                    return ;// memory leackege X
+                return;// memory leackege X
             }
-            else // A, B ë¥¼ ë¹„êµí•´ì„œ A >= Bì¼ ë•Œ. Compare_BI(A, B)'s return : 0, 1
+            else // A, B ¸¦ ºñ±³ÇØ¼­ A >= BÀÏ ¶§. Compare_BI(A, B)'s return : 0, 1
             {
                 SUBC_BI(&borrow, c, &a, &b);
-                                
+
                 return;// memory leackege X
             }
         }
 
-        else // A, Bì˜ ë¶€í˜¸ê°€ ëª¨ë‘ ìŒìˆ˜ì¼ ë•Œ
+        else // A, BÀÇ ºÎÈ£°¡ ¸ğµÎ À½¼öÀÏ ¶§
         {
             Flip_Sign(a);
             Flip_Sign(b);
             if (Compare_BI(&a, &b) < 0)
             {
                 SUBC_BI(&borrow, c, &b, &a);
-                Flip_Sign(a); // ë¶€í˜¸ ì›ìœ„ì¹˜
-                Flip_Sign(b); // ë¶€í˜¸ ì›ìœ„ì¹˜
-                
+                Flip_Sign(a); // ºÎÈ£ ¿øÀ§Ä¡
+                Flip_Sign(b); // ºÎÈ£ ¿øÀ§Ä¡
+
                 return;// memory leackege X
             }
             else
             {
                 SUBC_BI(&borrow, c, &a, &b);
                 Flip_Sign(*c);
-                Flip_Sign(a); // ë¶€í˜¸ ì›ìœ„ì¹˜
-                Flip_Sign(b); // ë¶€í˜¸ ì›ìœ„ì¹˜
-                                
+                Flip_Sign(a); // ºÎÈ£ ¿øÀ§Ä¡
+                Flip_Sign(b); // ºÎÈ£ ¿øÀ§Ä¡
+
                 return;// memory leackege X
             }
         }
     }
 
-    else // A,B ë¶€í˜¸ê°€ ë‹¤ë¥¼ ë•Œ ë•Œ
+    else // A,B ºÎÈ£°¡ ´Ù¸¦ ¶§ ¶§
     {
         if (a->sign == 0)
         {
             Flip_Sign(b);
-            ADD(c, &a, &b); //ìˆ˜ì •í•˜ë©´ ë°”ê¿€ ê³³
+            ADD(c, &a, &b); //¼öÁ¤ÇÏ¸é ¹Ù²Ü °÷
             Flip_Sign(b);
-                        
+
             return;
         }
         else
         {
             Flip_Sign(a);
-            ADD(c, &a, &b); 
-            
-            Flip_Sign(a); // ë¶€í˜¸ ì›ìœ„ì¹˜
-            Flip_Sign(*c); // ë¶€í˜¸ ì›ìœ„ì¹˜
-                       
+            ADD(c, &a, &b);
+
+            Flip_Sign(a); // ºÎÈ£ ¿øÀ§Ä¡
+            Flip_Sign(*c); // ºÎÈ£ ¿øÀ§Ä¡
+
             return;
         }
     }
@@ -787,30 +787,30 @@ void SUB(bigint** c, bigint* a, bigint* b)
 bigint* SUBC_BI(int* borrow, bigint** c, bigint** a, bigint** b)
 {
     int len, i = 0;
-    bigint* temp = NULL; // aì™€ bì˜ ê¸¸ì´ê°€ ë‹¤ë¥¼ ë•Œ -> bigint** bì˜ ê¸¸ì´ë¥¼ ë°”ê¿€ ìˆ˜ ì—†ìœ¼ë¯€ë¡œ tempë¥¼ ë§Œë“¤ì–´ì¤Œ
+    bigint* temp = NULL; // a¿Í bÀÇ ±æÀÌ°¡ ´Ù¸¦ ¶§ -> bigint** bÀÇ ±æÀÌ¸¦ ¹Ù²Ü ¼ö ¾øÀ¸¹Ç·Î temp¸¦ ¸¸µé¾îÁÜ
 
-    Get_Word_Length(&len, a); // bë³´ë‹¤ í° aì˜ ê¸¸ì´ë¥¼ êµ¬í•˜ì
-    BI_New(&temp, len);  // aì˜ ì›Œë“œ ê¸¸ì´ì™€ ê°™ê²Œ temp ë¥¼ ìƒì„±
+    Get_Word_Length(&len, a); // bº¸´Ù Å« aÀÇ ±æÀÌ¸¦ ±¸ÇÏÀÚ
+    BI_New(&temp, len);  // aÀÇ ¿öµå ±æÀÌ¿Í °°°Ô temp ¸¦ »ı¼º
     for (i = 0; i < (*b)->wordlen; i++)
-        temp->a[i] = (*b)->a[i]; // bì™€ ê°™ì€ ê°’ì„ ê°€ì§€ê³  ìˆì–´ì•¼í•˜ê³ , ë” ê¸¸ê²Œ ìƒì„±ëì„ ë•ŒëŠ” 0ì´ ë“¤ì–´ê°€ìˆì–´ì•¼í•¨.
-    // aê°€ bë³´ë‹¤ ê¸¸ ë•Œ bì˜ ê¸¸ì´ë¥¼ ë§ì¶°ì¤˜ì•¼í•˜ëŠ”ë° bë¥¼ ê±´ë“¤ì´ë©´ bê°€ ë°”ë€Œê¸° ë•Œë¬¸ì— tempë¥¼ ì´ìš©
+        temp->a[i] = (*b)->a[i]; // b¿Í °°Àº °ªÀ» °¡Áö°í ÀÖ¾î¾ßÇÏ°í, ´õ ±æ°Ô »ı¼ºµÆÀ» ¶§´Â 0ÀÌ µé¾î°¡ÀÖ¾î¾ßÇÔ.
+    // a°¡ bº¸´Ù ±æ ¶§ bÀÇ ±æÀÌ¸¦ ¸ÂÃçÁà¾ßÇÏ´Âµ¥ b¸¦ °ÇµéÀÌ¸é b°¡ ¹Ù²î±â ¶§¹®¿¡ temp¸¦ ÀÌ¿ë
 
     for (i = 0; i < len; i++)
     {
         if (i == 0)
             *borrow = 0;
 
-        (*c)->a[i] = (*a)->a[i] - (*borrow); // A - bì˜ ê°’ì„ C ì— ëŒ€ì…
+        (*c)->a[i] = (*a)->a[i] - (*borrow); // A - bÀÇ °ªÀ» C ¿¡ ´ëÀÔ
         (*c)->a[i] = (*c)->a[i] & word_mask; // mod 2 ^ (WORD_BIT_LEN)
-        if ((*a)->a[i] < *borrow) // borrow ë  ë•Œ
+        if ((*a)->a[i] < *borrow) // borrow µÉ ¶§
             *borrow = 1;
-        else // borrow ì•ˆë  ë•Œ
+        else // borrow ¾ÈµÉ ¶§
         {
             *borrow = 0;
             if ((*c)->a[i] < temp->a[i])
                 *borrow = *borrow + 1;
         }
-        (*c)->a[i] -= temp->a[i]; // tempì— ë„£ì–´ë†“ì€ bì™€ ëº„ì…ˆ ì—°ì‚°
+        (*c)->a[i] -= temp->a[i]; // temp¿¡ ³Ö¾î³õÀº b¿Í »¬¼À ¿¬»ê
         (*c)->a[i] = (*c)->a[i] & word_mask; // mod 2 ^ (WORD_BIT_LEN)
     }
     BI_Delete(&temp);
@@ -819,7 +819,7 @@ bigint* SUBC_BI(int* borrow, bigint** c, bigint** a, bigint** b)
 void MUL_Test(word* c, word* a, word* b)
 {
     int len = 0, i = 0, carry0 = 0, carry1 = 0;
-    
+
     word sum1 = 0, sum2 = 0, mul0 = 0, mul1 = 0, a1, b1, a0 = 0, b0 = 0;
 
     a1 = ((*a) >> (WORD_BIT_LEN >> 1));
@@ -833,13 +833,13 @@ void MUL_Test(word* c, word* a, word* b)
     if (sum1 < a0 * b1)
         carry1 += 1;
     sum2 = (sum1 & (word)((1 << (WORD_BIT_LEN >> 1)) - 1));
-    sum2 = sum2 << (WORD_BIT_LEN >> 1); //sum1ì˜ ë’·ë¶€ë¶„
-    sum1 = sum1 >> (WORD_BIT_LEN >> 1); // sum1ì˜ ì•ë¶€ë¶„
+    sum2 = sum2 << (WORD_BIT_LEN >> 1); //sum1ÀÇ µŞºÎºĞ
+    sum1 = sum1 >> (WORD_BIT_LEN >> 1); // sum1ÀÇ ¾ÕºÎºĞ
     mul0 = sum2 + mul0;
     if (mul0 < sum2)
         carry0 += 1;
     mul1 = sum1 + mul1 + carry0 + (carry1 << (WORD_BIT_LEN >> 1));
-    
+
     *c = mul0;
     *(c + 1) = mul1;
 }
@@ -854,15 +854,15 @@ void MUL_MUL(bigint** result, bigint* a, bigint* b)
 
     bigint* d = NULL;
     bigint* result2 = NULL;
-    
-    BI_New(&d, (*result)->wordlen); // ë‹¨ì¼ ì›Œë“œ ê³±ì…ˆ ì—°ì‚°ì˜ ê²°ê³¼ë¥¼ ì €ì¥í•  big integer d
-    
+
+    BI_New(&d, (*result)->wordlen); // ´ÜÀÏ ¿öµå °ö¼À ¿¬»êÀÇ °á°ú¸¦ ÀúÀåÇÒ big integer d
+
     for (i = 0; i < b->wordlen; i++)
     {
         for (j = 0; j < a->wordlen; j++)
         {
             MUL_Test(&d->a[i + j], &a->a[j], &b->a[i]);
-            ADDC(result, result, &d, 0); 
+            ADDC(result, result, &d, 0);
             d->a[i + j] = 0;
             d->a[i + j + 1] = 0;
         }
@@ -876,12 +876,7 @@ void Karatsuba(bigint** result, bigint* A, bigint* B)
 {
     int i, j = 0;
     int len, total_len, A_Len, B_Len;
-    int flag = 3; // flag ì •í•˜ê¸°
-
-    bigint* A1 = NULL;
-    bigint* A0 = NULL;
-    bigint* B1 = NULL;
-    bigint* B0 = NULL;
+    int flag = 1; // flag Á¤ÇÏ±â
 
     Get_Word_Length(&A_Len, &A);
     Get_Word_Length(&B_Len, &B);
@@ -892,60 +887,39 @@ void Karatsuba(bigint** result, bigint* A, bigint* B)
         return;
     }
 
-    printf("A = ");
-    BI_Show(A, 16);
-    printf("B = ");
-    BI_Show(B, 16);
-
     len = (MAX(A_Len, B_Len) + 1) >> 1;
-    total_len = A_Len + B_Len; // ìµœëŒ€ Aì˜ ì›Œë“œì—´ì˜ ê°œìˆ˜ + Bì˜ ì›Œë“œì—´ì˜ ê°œìˆ˜
-    BI_New(result, total_len); // ìµœëŒ€ Aì˜ ì›Œë“œì—´ì˜ ê°œìˆ˜ + Bì˜ ì›Œë“œì—´ì˜ ê°œìˆ˜
+    //printf("len = %d\n", len);
+    total_len = A_Len + B_Len; // ÃÖ´ë AÀÇ ¿öµå¿­ÀÇ °³¼ö + BÀÇ ¿öµå¿­ÀÇ °³¼ö
+    //BI_New(result, total_len); // ÃÖ´ë AÀÇ ¿öµå¿­ÀÇ °³¼ö + BÀÇ ¿öµå¿­ÀÇ °³¼ö
 
-    // Aj, BjëŠ” lenê°œì˜ ì›Œë“œì—´
-    BI_New(&A0, len); // A0ë¥¼ ë‹´ì„ bigint ìƒì„±
-    BI_New(&A1, len); // A1ë¥¼ ë‹´ì„ bigint ìƒì„±
-    BI_New(&B0, len); // B0ë¥¼ ë‹´ì„ bigint ìƒì„±
-    BI_New(&B1, len); // B1ë¥¼ ë‹´ì„ bigint ìƒì„±
+    bigint* A1 = NULL;
+    bigint* A0 = NULL;
+    bigint* B1 = NULL;
+    bigint* B0 = NULL;
 
-    bigint* temp1 = NULL;
-    bigint* temp2 = NULL;
-    bigint* temp3 = NULL;
-    bigint* temp4 = NULL;
+    Assign_BI(&A1, A);
+    Assign_BI(&A0, A);
+    Assign_BI(&B1, B);
+    Assign_BI(&B0, B);
 
-    BI_New(&temp1, A_Len); // A ë‹´ì„ temp1
-    BI_New(&temp2, A_Len); // A ë‹´ì„ temp2
-    BI_New(&temp3, B_Len); // B ë‹´ì„ temp3
-    BI_New(&temp4, B_Len); // B ë‹´ì„ temp4
+    Right_Shift(A1, len * WORD_BIT_LEN);
+    Reduction_BI(&A0, len * WORD_BIT_LEN);
+    Right_Shift(B1, len * WORD_BIT_LEN);
+    Reduction_BI(&B0, len * WORD_BIT_LEN);
 
-    Assign_BI(&temp1, A);
-    Assign_BI(&temp2, A);
-    Assign_BI(&temp3, B);
-    Assign_BI(&temp4, B);
-    BI_Delete(&temp1);
+    bi_refine(A1);
+    bi_refine(A0);
+    bi_refine(B1);
+    bi_refine(B0);
 
-    Right_Shift(temp1, len);
-    Reduction_BI(&temp2, len);
-    Right_Shift(temp3, len);
-    Reduction_BI(&temp4, len);
-
-    bi_refine(temp1);
-    bi_refine(temp2);
-    bi_refine(temp3);
-    bi_refine(temp4);
-
-    for (i = 0; i < len; i++)
-    {
-        A1->a[i] = temp1->a[i]; // A1 = A >> (len * w)
-        A0->a[i] = temp2->a[i]; // A0 = A mod 2^(len * w)
-
-        B1->a[i] = temp3->a[i]; // B1 = B >> (len * w)
-        B0->a[i] = temp4->a[i]; // B0 = B mod 2^(len * w)
-    }
-
-    BI_Delete(&temp1);
-    BI_Delete(&temp2);
-    BI_Delete(&temp3);
-    BI_Delete(&temp4);
+    printf("A1 = ");
+    BI_Show(A1, 16);
+    printf("A0 = ");
+    BI_Show(A0, 16);
+    printf("B1 = ");
+    BI_Show(B1, 16);
+    printf("B0 = ");
+    BI_Show(B0, 16);
 
     bigint* T0 = NULL;
     bigint* T1 = NULL;
@@ -956,18 +930,46 @@ void Karatsuba(bigint** result, bigint* A, bigint* B)
 
     BI_New(&T0, len * 2);
     BI_New(&T1, len * 2);
-    BI_New(&S0, len * 2);
-    BI_New(&S1, len * 2);
+    BI_New(&S0, Compare_WordLen(B0, B1));
+    BI_New(&S1, Compare_WordLen(A0, A1));
     BI_New(&R, len * 4);
     BI_New(&S, len * 2);
 
     Karatsuba(&T1, A1, B1);
-    Karatsuba(&T0, A0, B0);
+    Karatsuba(&T0, A0, B0); // bbd0 f523 e5c6 7bbd eac4 a8be 11de b000 ³ª¿Í¾ß ÇÏ´Âµ¥ 0xbbd0f52199214442f919423e11deb000 ³ª¿È
 
-    Left_Shift(T1, 2 * len);
+    printf("T1 = ");
+    BI_Show(T1, 16);
+    printf("T0 = ");
+    BI_Show(T0, 16);
+
+    printf("T1 len = %d\n", T1->wordlen);
+    printf("T0 len = %d\n", T0->wordlen);
+
+    bigint* T1_tmp = NULL;
+    Assign_BI(&T1_tmp, T1);
+    Left_Shift(T1_tmp, 2 * WORD_BIT_LEN * len);
+    //Left_Shift(T1, 2 * WORD_BIT_LEN * len);
     //ADD(result, &T1, &T0);
-    memcpy(&(R->a[len * 2]), &(T1->a[len * 2]), len * 2);
-    memcpy(&(R->a[0]), &(T0->a[0]), len * 2);
+    printf("Left Shift T1 = ");
+    BI_Show(T1_tmp, 16);
+    
+    printf("Left shift T1 len = %d\n", T1_tmp->wordlen);
+   
+    //memcpy(&(R->a[len * 2]), &(T1->a[len * 2]), len * 2);
+    //memcpy(R->a, T0->a, T0->wordlen);
+    //memcpy(&((*result)->a[len * 2]), &(T1->a[len * 2]), len * 2);
+    //memcpy(&((*result)->a[0]), &(T0->a[0]), len * 2);
+
+    for (i = 0; i < T1->wordlen; i++)
+        R->a[len * 2 + i] = T1_tmp->a[T1_tmp->wordlen - T1->wordlen + i];
+    for (i = 0; i < T0->wordlen; i++)
+        R->a[i] = T0->a[i];
+
+    //bi_refine(R);
+    printf("len = %d\n", len);
+    printf("R = ");
+    BI_Show(R, 16);
 
     SUB(&S1, A0, A1);
     SUB(&S0, B1, B0);
@@ -993,10 +995,24 @@ void Karatsuba(bigint** result, bigint* A, bigint* B)
     }
 
     Karatsuba(&S, S1, S0);
-    ADD(&S, &S, &T1);
-    ADD(&S, &S, &T0);
-    Left_Shift(S, len);
-    ADD(result, &R, &S);
+
+    bigint* ADD_result1 = NULL;
+    BI_New(&ADD_result1, len * 2 + 1);
+
+    bigint* ADD_result2 = NULL;
+    BI_New(&ADD_result2, len * 2 + 1);
+
+    //ADD(&S, &S, &T1);
+    //ADD(&S, &S, &T0);
+    ADD(&ADD_result1, &S, &T1);
+    bi_refine(ADD_result1);
+    ADD(&ADD_result2, &ADD_result1, &T0);
+    bi_refine(ADD_result2);
+    //Left_Shift(S, len * WORD_BIT_LEN);
+    //ADD(result, &R, &S);
+    Left_Shift(ADD_result2, len * WORD_BIT_LEN);
+    ADD(result, &R, &ADD_result2);
+    //ADD(result, result, &S);
 
     BI_Delete(&A0);
     BI_Delete(&A1);
@@ -1010,7 +1026,8 @@ void Karatsuba(bigint** result, bigint* A, bigint* B)
     BI_Delete(&R);
     BI_Delete(&S);
 
+    BI_Delete(&ADD_result1);
+    BI_Delete(&ADD_result2);
+
     bi_refine(*result);
-    printf("A * B == ");
-    BI_Show(*result, 16);
 }
