@@ -16,7 +16,7 @@ typedef unsigned char word;
 #elif WORD_BIT_LEN == 32
 typedef unsigned int word;
 #define word_mask 0xffffffff
- 
+
 #else
 typedef unsigned long long word;
 #define word_mask 0xffffffffffffffff
@@ -27,7 +27,7 @@ typedef struct {
     int sign;
     int wordlen;
     word* a;
-}bigint;
+} bigint;
 
 void array_init(word* a, int len);
 
@@ -80,6 +80,8 @@ void Reduction_BI(bigint** x, int r);
 int ADD_ABc(bigint** C, bigint** A, bigint** B, int c, int i);
 void ADDC(bigint** C, bigint** A, bigint** B, int sign);
 void ADD(bigint** C, bigint** A, bigint** B);
+void ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign);
+void ADD_AAB(bigint** C, bigint** A, bigint** B);
 
 int Compare_WordLen(bigint* A, bigint* B);
 
@@ -87,11 +89,11 @@ int Compare_WordLen(bigint* A, bigint* B);
 bigint* SUBC_BI(int* borrow, bigint** c, bigint** a, bigint** b);
 void SUB(bigint** c, bigint* a, bigint* b); // print
 
-
 // Chapter 5 Multiplication
 void MUL_Test(word* c, word* a, word* b);
 void MUL_MUL(bigint** result, bigint* a, bigint* b);
 
 //Karatsuba test
-void Karatsuba(bigint** result, bigint* a, bigint* b);
+void Karatsuba(bigint** C, bigint* A, bigint* B);
+bigint* Kara(bigint* A, bigint* B);
 #endif

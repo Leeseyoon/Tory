@@ -577,11 +577,44 @@ void ADDC(bigint** C, bigint** A, bigint** B, int sign)
 
     if (carry == 1)
         (*C)->a[A_Len] = 1;
-    //else
-        //(*C)->a[A_Len] = 0;
+    else
+        (*C)->a[A_Len] = 0;
 
-    //bi_refine(*B);
-    //bi_refine(*C);
+    bi_refine(*C);
+
+    if (sign == 0)
+        (*C)->sign = 0;
+    else
+        (*C)->sign = 1;
+}
+
+void ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign)
+{
+    int A_Len;
+    int B_Len;
+    int i;
+    int carry;
+
+    A_Len = (*A)->wordlen;
+    B_Len = (*B)->wordlen;
+
+    word* temp;
+
+    (*B)->wordlen = A_Len;
+    temp = (word*)realloc((*B)->a, sizeof(word) * A_Len);
+    if (temp != NULL)
+        (*B)->a = temp;
+
+    for (i = B_Len; i < A_Len; i++)
+        (*B)->a[i] = 0;
+
+    carry = 0;
+
+    for (i = 0; i < A_Len; i++)
+        carry = ADD_ABc(C, A, B, carry, i);
+
+    if (carry == 1)
+        (*C)->a[A_Len] = 1;;
 
     if (sign == 0)
         (*C)->sign = 0;
@@ -630,7 +663,7 @@ void ADD(bigint** C, bigint** A, bigint** B) // no print
 
         Flip_Sign(temp);
         SUB(C, *A, temp); // SUB 함수
-        //bi_refine(C);
+        bi_refine(*C);
 
         BI_Delete(&temp);
 
@@ -645,7 +678,7 @@ void ADD(bigint** C, bigint** A, bigint** B) // no print
 
         Flip_Sign(temp);
         SUB(C, *B, temp); // SUB 함수
-        //bi_refine(C);
+        bi_refine(*C);
 
         BI_Delete(&temp);
 
@@ -665,6 +698,82 @@ void ADD(bigint** C, bigint** A, bigint** B) // no print
     }
 
 }
+
+void ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
+{
+    int A_Len = 0;
+    int B_Len = 0;
+    int A_sign;
+    int B_sign;
+    int i;
+    A_sign = Get_Sign(*A);
+    B_sign = Get_Sign(*B);
+
+    Get_Word_Length(&A_Len, A);
+    Get_Word_Length(&B_Len, B);
+
+    if (Is_Zero(A) == 0) // A is zero
+    {
+        (*C)->sign = (*B)->sign;
+        (*C)->wordlen = (*B)->wordlen;
+        for (i = 0; i < (*C)->wordlen; i++)
+            (*C)->a[i] = (*B)->a[i];
+
+        return;
+    }
+
+    if (Is_Zero(B) == 0) // B is zero
+    {
+        (*C)->sign = (*A)->sign;
+        (*C)->wordlen = (*A)->wordlen;
+        for (i = 0; i < (*C)->wordlen; i++)
+            (*C)->a[i] = (*A)->a[i];
+
+        return;
+    }
+
+    if ((A_sign == NON_NEGATIVE) && (B_sign == NEGATIVE))
+    {
+        bigint* temp = NULL;
+        BI_New(&temp, B_Len);
+        Assign_BI(&temp, *B);
+
+        Flip_Sign(temp);
+        SUB(C, *A, temp); // SUB 함수
+
+        BI_Delete(&temp);
+
+        return;
+    }
+
+    if ((A_sign == NEGATIVE) && (B_sign == NON_NEGATIVE))
+    {
+        bigint* temp = NULL;
+        BI_New(&temp, A_Len);
+        Assign_BI(&temp, *A);
+
+        Flip_Sign(temp);
+        SUB(C, *B, temp); // SUB 함수
+ 
+        BI_Delete(&temp);
+
+        return;
+    }
+
+    // A, B가 동일한 부호일 때
+    if (A_Len >= B_Len)
+    {
+        ADDC_AAB(C, A, B, A_sign);
+        return;
+    }
+    else
+    {
+        ADDC_AAB(C, B, A, A_sign);
+        return;
+    }
+
+}
+
 
 
 int Compare_WordLen(bigint* A, bigint* B) // return wordlen 큰 사이즈
@@ -862,7 +971,7 @@ void MUL_MUL(bigint** result, bigint* a, bigint* b)
         for (j = 0; j < a->wordlen; j++)
         {
             MUL_Test(&d->a[i + j], &a->a[j], &b->a[i]);
-            ADDC(result, result, &d, 0);
+            ADDC_AAB(result, result, &d, 0);
             d->a[i + j] = 0;
             d->a[i + j + 1] = 0;
         }
@@ -872,7 +981,7 @@ void MUL_MUL(bigint** result, bigint* a, bigint* b)
     bi_refine(*result);
 }
 
-void Karatsuba(bigint** result, bigint* A, bigint* B)
+void Karatsuba(bigint** C, bigint* A, bigint* B)
 {
     int i, j = 0;
     int len, total_len, A_Len, B_Len;
@@ -883,29 +992,37 @@ void Karatsuba(bigint** result, bigint* A, bigint* B)
 
     if (flag >= MIN(A_Len, B_Len))
     {
-        MUL_MUL(result, A, B);
+        MUL_MUL(C, A, B);
         return;
     }
 
     len = (MAX(A_Len, B_Len) + 1) >> 1;
-    //printf("len = %d\n", len);
     total_len = A_Len + B_Len; // 최대 A의 워드열의 개수 + B의 워드열의 개수
-    //BI_New(result, total_len); // 최대 A의 워드열의 개수 + B의 워드열의 개수
 
     bigint* A1 = NULL;
     bigint* A0 = NULL;
     bigint* B1 = NULL;
     bigint* B0 = NULL;
 
+    bigint* T0 = NULL;
+    bigint* T1 = NULL;
+    bigint* S0 = NULL;
+    bigint* S1 = NULL;
+    bigint* R = NULL;
+    bigint* S = NULL;
+
+    bigint* ADD_result1 = NULL;
+    bigint* ADD_result2 = NULL;
+
     Assign_BI(&A1, A);
     Assign_BI(&A0, A);
     Assign_BI(&B1, B);
     Assign_BI(&B0, B);
 
-    Right_Shift(A1, len * WORD_BIT_LEN);
-    Reduction_BI(&A0, len * WORD_BIT_LEN);
-    Right_Shift(B1, len * WORD_BIT_LEN);
-    Reduction_BI(&B0, len * WORD_BIT_LEN);
+    Right_Shift(A1, len * WORD_BIT_LEN); // A1 = A >> len word (A를 len 워드만큼 오른쪽으로 이동)
+    Reduction_BI(&A0, len * WORD_BIT_LEN); // A0 = A mod (2^(len * wordlen)) (A를 len 워드만큼 modular 연산 수행)
+    Right_Shift(B1, len * WORD_BIT_LEN); // B1 = A >> len word (A를 len 워드만큼 오른쪽으로 이동)
+    Reduction_BI(&B0, len * WORD_BIT_LEN); // B0 = A mod (2^(len * wordlen)) (A를 len 워드만큼 modular 연산 수행)
 
     bi_refine(A1);
     bi_refine(A0);
@@ -921,64 +1038,52 @@ void Karatsuba(bigint** result, bigint* A, bigint* B)
     printf("B0 = ");
     BI_Show(B0, 16);
 
-    bigint* T0 = NULL;
-    bigint* T1 = NULL;
-    bigint* S0 = NULL;
-    bigint* S1 = NULL;
-    bigint* R = NULL;
-    bigint* S = NULL;
-
     BI_New(&T0, len * 2);
     BI_New(&T1, len * 2);
-    BI_New(&S0, Compare_WordLen(B0, B1));
-    BI_New(&S1, Compare_WordLen(A0, A1));
+    BI_New(&S0, Compare_WordLen(B0, B1)); // S0 = B1 - B0이니까 B1과 B0 중 더 큰 워드 길이만큼 bigint 생성
+    BI_New(&S1, Compare_WordLen(A0, A1)); // S1 = A0 - A1이니까 A0과 A1 중 더 큰 워드 길이만큼 bigint 생성
     BI_New(&R, len * 4);
     BI_New(&S, len * 2);
 
-    Karatsuba(&T1, A1, B1);
-    Karatsuba(&T0, A0, B0); // bbd0 f523 e5c6 7bbd eac4 a8be 11de b000 나와야 하는데 0xbbd0f52199214442f919423e11deb000 나옴
+    Karatsuba(&T1, A1, B1); // T1 = A1 * B1
+    Karatsuba(&T0, A0, B0); // T0 = A0 * B0
 
     printf("T1 = ");
     BI_Show(T1, 16);
     printf("T0 = ");
     BI_Show(T0, 16);
 
-    printf("T1 len = %d\n", T1->wordlen);
-    printf("T0 len = %d\n", T0->wordlen);
-
     bigint* T1_tmp = NULL;
     Assign_BI(&T1_tmp, T1);
-    Left_Shift(T1_tmp, 2 * WORD_BIT_LEN * len);
-    //Left_Shift(T1, 2 * WORD_BIT_LEN * len);
-    //ADD(result, &T1, &T0);
-    printf("Left Shift T1 = ");
-    BI_Show(T1_tmp, 16);
-    
-    printf("Left shift T1 len = %d\n", T1_tmp->wordlen);
-   
-    //memcpy(&(R->a[len * 2]), &(T1->a[len * 2]), len * 2);
-    //memcpy(R->a, T0->a, T0->wordlen);
-    //memcpy(&((*result)->a[len * 2]), &(T1->a[len * 2]), len * 2);
-    //memcpy(&((*result)->a[0]), &(T0->a[0]), len * 2);
+    Left_Shift(T1_tmp, 2 * WORD_BIT_LEN * len); // T1_tmp = T1을 2 * len 워드만큼 오른쪽으로 이동
 
+    // R = T1 || T0
     for (i = 0; i < T1->wordlen; i++)
         R->a[len * 2 + i] = T1_tmp->a[T1_tmp->wordlen - T1->wordlen + i];
     for (i = 0; i < T0->wordlen; i++)
         R->a[i] = T0->a[i];
 
-    //bi_refine(R);
-    printf("len = %d\n", len);
+    bi_refine(R);
+
     printf("R = ");
     BI_Show(R, 16);
 
-    SUB(&S1, A0, A1);
-    SUB(&S0, B1, B0);
+    SUB(&S1, A0, A1); // S1 = A0 - A1
+    SUB(&S0, B1, B0); // S0 = B1 - B0
 
-    if (S1->sign == S0->sign)
+    printf("S1 = ");
+    BI_Show(S1, 16);
+    printf("S0 = ");
+    BI_Show(S0, 16);
+
+    int S0_sign, S1_sign;
+    S0_sign = Get_Sign(S0);
+    S1_sign = Get_Sign(S1);
+
+    //S0, S1은 음수일 수 있으므로 절댓값 취해 주기
+    if (S1_sign == S0_sign)
     {
-        S->sign = NON_NEGATIVE;
-
-        if (S1->sign == NEGATIVE)
+        if (S1_sign == NEGATIVE)
         {
             Flip_Sign(S1);
             Flip_Sign(S0);
@@ -986,33 +1091,34 @@ void Karatsuba(bigint** result, bigint* A, bigint* B)
     }
     else
     {
-        S->sign = NEGATIVE;
-
-        if (S1->sign == NEGATIVE)
+        if (S1_sign == NEGATIVE)
             Flip_Sign(S1);
         else
             Flip_Sign(S0);
     }
 
-    Karatsuba(&S, S1, S0);
+    Karatsuba(&S, S1, S0); // S = S1 * S0
 
-    bigint* ADD_result1 = NULL;
+    // S 부호 정해 주기
+    if (S1_sign ^ S0_sign)
+    {
+        S->sign = NEGATIVE;
+    }
+    else
+    {
+        S->sign = NON_NEGATIVE;
+    }
+
+    printf("S = ");
+    BI_Show(S, 16);
+
     BI_New(&ADD_result1, len * 2 + 1);
-
-    bigint* ADD_result2 = NULL;
     BI_New(&ADD_result2, len * 2 + 1);
 
-    //ADD(&S, &S, &T1);
-    //ADD(&S, &S, &T0);
-    ADD(&ADD_result1, &S, &T1);
-    bi_refine(ADD_result1);
-    ADD(&ADD_result2, &ADD_result1, &T0);
-    bi_refine(ADD_result2);
-    //Left_Shift(S, len * WORD_BIT_LEN);
-    //ADD(result, &R, &S);
+    ADD(&ADD_result1, &S, &T1); // ADD_result1 = S + T1
+    ADD(&ADD_result2, &ADD_result1, &T0); // ADD_result2 = ADD_result1 + T0 = S + T1 + T0
     Left_Shift(ADD_result2, len * WORD_BIT_LEN);
-    ADD(result, &R, &ADD_result2);
-    //ADD(result, result, &S);
+    ADD_AAB(C, &R, &ADD_result2);
 
     BI_Delete(&A0);
     BI_Delete(&A1);
@@ -1028,6 +1134,136 @@ void Karatsuba(bigint** result, bigint* A, bigint* B)
 
     BI_Delete(&ADD_result1);
     BI_Delete(&ADD_result2);
+}
 
-    bi_refine(*result);
+bigint* Kara(bigint* A, bigint* B)
+{
+    int i, j = 0;
+    int len, total_len, A_Len, B_Len;
+    int flag = 1; // flag 정하기
+
+    bigint* A1 = NULL;
+    bigint* A0 = NULL;
+    bigint* B1 = NULL;
+    bigint* B0 = NULL;
+
+    bigint* T0 = NULL;
+    bigint* T1 = NULL;
+    bigint* S0 = NULL;
+    bigint* S1 = NULL;
+    bigint* R = NULL;
+    bigint* S = NULL;
+
+    bigint* ADD_result1 = NULL;
+    bigint* ADD_result2 = NULL;
+
+    Get_Word_Length(&A_Len, &A);
+    Get_Word_Length(&B_Len, &B);
+
+    len = (MAX(A_Len, B_Len) + 1) >> 1;
+    total_len = A_Len + B_Len; // 최대 A의 워드열의 개수 + B의 워드열의 개수
+
+    BI_New(&R, len * 4);
+
+    if (flag >= MIN(A_Len, B_Len))
+    {
+        MUL_MUL(&R, A, B);
+        return R;
+    }
+
+    Assign_BI(&A1, A);
+    Assign_BI(&A0, A);
+    Assign_BI(&B1, B);
+    Assign_BI(&B0, B);
+
+    Right_Shift(A1, len * WORD_BIT_LEN); // A1 = A >> len word (A를 len 워드만큼 오른쪽으로 이동)
+    Reduction_BI(&A0, len * WORD_BIT_LEN); // A0 = A mod (2^(len * wordlen)) (A를 len 워드만큼 modular 연산 수행)
+    Right_Shift(B1, len * WORD_BIT_LEN); // B1 = A >> len word (A를 len 워드만큼 오른쪽으로 이동)
+    Reduction_BI(&B0, len * WORD_BIT_LEN); // B0 = A mod (2^(len * wordlen)) (A를 len 워드만큼 modular 연산 수행)
+
+    bi_refine(A1);
+    bi_refine(A0);
+    bi_refine(B1);
+    bi_refine(B0);
+
+    BI_New(&T0, len * 2);
+    BI_New(&T1, len * 2);
+    BI_New(&S0, Compare_WordLen(B0, B1)); // S0 = B1 - B0이니까 B1과 B0 중 더 큰 워드 길이만큼 bigint 생성
+    BI_New(&S1, Compare_WordLen(A0, A1)); // S1 = A0 - A1이니까 A0과 A1 중 더 큰 워드 길이만큼 bigint 생성
+    BI_New(&S, len * 2);
+
+    T1 = Kara(A1, B1); // T1 = A1 * B1
+    T0 = Kara(A0, B0); // T0 = A0 * B0
+
+    bigint* T1_tmp = NULL;
+    Assign_BI(&T1_tmp, T1);
+    Left_Shift(T1_tmp, 2 * WORD_BIT_LEN * len); // T1_tmp = T1을 2 * len 워드만큼 오른쪽으로 이동
+
+    // R = T1 || T0
+    for (i = 0; i < T1->wordlen; i++)
+        R->a[len * 2 + i] = T1_tmp->a[T1_tmp->wordlen - T1->wordlen + i];
+    for (i = 0; i < T0->wordlen; i++)
+        R->a[i] = T0->a[i];
+
+    SUB(&S1, A0, A1); // S1 = A0 - A1
+    SUB(&S0, B1, B0); // S0 = B1 - B0
+
+    int S0_sign, S1_sign;
+    S0_sign = Get_Sign(S0);
+    S1_sign = Get_Sign(S1);
+
+    //S0, S1은 음수일 수 있으므로 절댓값 취해 주기
+    if (S1_sign == S0_sign)
+    {
+        if (S1->sign == NEGATIVE)
+        {
+            Flip_Sign(S1);
+            Flip_Sign(S0);
+        }
+    }
+    else
+    {
+        if (S1->sign == NEGATIVE)
+            Flip_Sign(S1);
+        else
+            Flip_Sign(S0);
+    }
+
+    S = Kara(S1, S0); // S = S1 * S0
+
+    // S 부호 정해 주기
+    if (S1_sign ^ S0_sign)
+    {
+        S->sign = NEGATIVE;
+    }
+    else
+    {
+        S->sign = NON_NEGATIVE;
+    }
+
+    BI_New(&ADD_result1, len * 2 + 1);
+    BI_New(&ADD_result2, len * 2 + 1);
+
+    ADD(&ADD_result1, &S, &T1); // ADD_result1 = S + T1
+    ADD(&ADD_result2, &ADD_result1, &T0); // ADD_result2 = ADD_result1 + T0 = S + T1 + T0
+    Left_Shift(ADD_result2, len * WORD_BIT_LEN);
+    ADD_AAB(&R, &R, &ADD_result2);
+    bi_refine(&R);
+
+    BI_Delete(&A0);
+    BI_Delete(&A1);
+    BI_Delete(&B0);
+    BI_Delete(&B1);
+
+    BI_Delete(&T0);
+    BI_Delete(&T1);
+    BI_Delete(&S0);
+    BI_Delete(&S1);
+    //BI_Delete(&R);
+    BI_Delete(&S);
+
+    BI_Delete(&ADD_result1);
+    BI_Delete(&ADD_result2);
+
+    return R;
 }
