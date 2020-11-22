@@ -99,4 +99,9 @@ void Karatsuba(bigint** C, bigint* A, bigint* B);
 void Single_Squaring_1(bigint* C, bigint* A, int j);
 void Single_Squaring(bigint* C, bigint* A);
 void Multi_Squaring(bigint* C, bigint* A);
+
+// Binary Division
+void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B);
+void ADDC_DIV(bigint** C, bigint** A, bigint** B, int sign);
+void ADD_DIV(bigint** C, bigint** A, bigint** B);
 #endif
