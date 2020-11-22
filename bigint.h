@@ -95,5 +95,8 @@ void MUL_MUL(bigint** result, bigint* a, bigint* b);
 
 //Karatsuba test
 void Karatsuba(bigint** C, bigint* A, bigint* B);
-bigint* Kara(bigint* A, bigint* B);
+
+void Single_Squaring_1(bigint* C, bigint* A, int j);
+void Single_Squaring(bigint* C, bigint* A);
+void Multi_Squaring(bigint* C, bigint* A);
 #endif
