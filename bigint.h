@@ -93,10 +93,10 @@ void SUB(bigint** c, bigint* a, bigint* b); // print
 void MUL_Test(word* c, word* a, word* b);
 void MUL_MUL(bigint** result, bigint* a, bigint* b);
 
-//Karatsuba test
+// Karatsuba test
 void Karatsuba(bigint** C, bigint* A, bigint* B);
 
-void Single_Squaring_1(bigint* C, bigint* A, int j);
+// Squaring
 void Single_Squaring(bigint* C, bigint* A);
 void Multi_Squaring(bigint* C, bigint* A);
 

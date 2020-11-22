@@ -26,78 +26,78 @@ int main()
     bigint* bi_2 = NULL;
     bigint* bi_re = NULL;
     bigint* bi_q = NULL;
-	 
-	printf("print(\"Binary Long Division\")\n");
 
-	for (i = 0; i < 20; i++)
-	{
-		size2 = (rand() & 3) + 1; // size2 : 1~4
-		size1 = size2 + (rand() & 3) + 1; // size1ì€ size2 ë³´ë‹¤ ê¸¸ì´ ë” ê¸¸ê²Œ
+    printf("print(\"Binary Long Division\")\n");
+
+    for (i = 0; i < 20; i++)
+    {
+        size2 = (rand() & 3) + 1; // size2 : 1~4
+        size1 = size2 + (rand() & 3) + 1; // size1Àº size2 º¸´Ù ±æÀÌ ´õ ±æ°Ô
 
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
-		BI_New(&bi_2, size2); // size2 ê¸¸ì´ì¸ big integerì¸ bi_2 ìƒì„±
+        BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
+        BI_New(&bi_2, size2); // size2 ±æÀÌÀÎ big integerÀÎ bi_2 »ı¼º
 
-		bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		bi_gen_rand(&bi_2, 0, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		
-		size = Compare_BI(&bi_1, &bi_2); // size1 ê³¼ size2 ë¹„êµ
-		if (size == -1)
-		{
-			printf("print(\"B is larger than A\")\n");
-			BI_Delete(&bi_1);
-			BI_Delete(&bi_2);
-		}
-		else
-		{
+        bi_gen_rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_2, 0, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
-			Binary_Long_Div(&bi_q, &bi_re, bi_1, bi_2);
-			// ì¶œë ¥ ë¶€ë¶„
-			printf("A = ");
-			BI_Show(bi_1, 16);
-			printf("B = ");
-			BI_Show(bi_2, 16);
-			printf("Q = ");
-			BI_Show(bi_q, 16);
-			printf("R = ");
-			BI_Show(bi_re, 16);
-			printf("A == B * Q + R");
-			printf("\n");
-			// ë©”ëª¨ë¦¬ free
-			BI_Delete(&bi_1);
-			BI_Delete(&bi_2);
-			BI_Delete(&bi_re);
-			BI_Delete(&bi_q);
-		}
-	}
+        size = Compare_BI(&bi_1, &bi_2); // size1 °ú size2 ºñ±³
+        if (size == -1)
+        {
+            printf("print(\"B is larger than A\")\n");
+            BI_Delete(&bi_1);
+            BI_Delete(&bi_2);
+        }
+        else
+        {
+
+            Binary_Long_Div(&bi_q, &bi_re, bi_1, bi_2);
+            // Ãâ·Â ºÎºĞ
+            printf("A = ");
+            BI_Show(bi_1, 16);
+            printf("B = ");
+            BI_Show(bi_2, 16);
+            printf("Q = ");
+            BI_Show(bi_q, 16);
+            printf("R = ");
+            BI_Show(bi_re, 16);
+            printf("A == B * Q + R");
+            printf("\n");
+            // ¸Ş¸ğ¸® free
+            BI_Delete(&bi_1);
+            BI_Delete(&bi_2);
+            BI_Delete(&bi_re);
+            BI_Delete(&bi_q);
+        }
+    }
 
     /*
     printf("print(\"Addition\")\n");
-    //në²ˆ ë§ì…ˆ ì—°ì‚°í•˜ê¸°
-    for (i = 0; i < 20; i++) // nì— 20 ëŒ€ì…
+    //n¹ø µ¡¼À ¿¬»êÇÏ±â
+    for (i = 0; i < 20; i++) // n¿¡ 20 ´ëÀÔ
     {
         size1 = (rand() & 0xf) + 1; // size1 : 1~16
         size2 = (rand() & 0xf) + 1; // size2 : 1~16
 
-        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
         size = MAX(bi_1->wordlen, bi_2->wordlen);
-        //BI_New(&bi_re, size + 1); // ë” ê¸´ ê¸¸ì´ì¸ sizeë¡œ ë§ì…ˆ ì—°ì‚° ê²°ê³¼ì¸ big integer ìƒì„±
+        //BI_New(&bi_re, size + 1); // ´õ ±ä ±æÀÌÀÎ size·Î µ¡¼À ¿¬»ê °á°úÀÎ big integer »ı¼º
 
-        // ì¶œë ¥ ë¶€ë¶„
+        // Ãâ·Â ºÎºĞ
         printf("A = ");
         BI_Show(bi_1, 16);
         printf("B = ");
         BI_Show(bi_2, 16);
 
-        ADD(&bi_re, &bi_1, &bi_2); // ADDí•¨ìˆ˜ì— ë§ì…ˆ ê²°ê³¼ì¸ bi_re , í”¼ì—°ì‚°1ì¸ bi_1, í”¼ì—°ì‚°ì2ì¸ bi_2
+        ADD(&bi_re, &bi_1, &bi_2); // ADDÇÔ¼ö¿¡ µ¡¼À °á°úÀÎ bi_re , ÇÇ¿¬»ê1ÀÎ bi_1, ÇÇ¿¬»êÀÚ2ÀÎ bi_2
 
         printf("A + B == ");
         BI_Show(bi_re, 16);
         BI_Show(bi_1, 16);
         printf("\n");
-        // ë©”ëª¨ë¦¬ free
+        // ¸Ş¸ğ¸® free
         BI_Delete(&bi_1);
         BI_Delete(&bi_2);
         //BI_Delete(&bi_re);
@@ -105,16 +105,16 @@ int main()
     */
     /*
     printf("print(\"Subtraction\")\n");
-    //në²ˆ ëº„ì…ˆ ì—°ì‚°í•˜ê¸°
-    for (i = 0; i < 20; i++) // nì— 20 ëŒ€ì…
+    //n¹ø »¬¼À ¿¬»êÇÏ±â
+    for (i = 0; i < 20; i++) // n¿¡ 20 ´ëÀÔ
     {
         size1 = (rand() & 0xf) + 1; // size1 : 1~16
         size2 = (rand() & 0xf) + 1; // size2 : 1~16
 
-        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
-        size = (size1 > size2) ? size1 : size2; // size1 ê³¼ size2 ë¹„êµí•´ì„œ size ë³€ìˆ˜ì— ëŒ€ì…
+        size = (size1 > size2) ? size1 : size2; // size1 °ú size2 ºñ±³ÇØ¼­ size º¯¼ö¿¡ ´ëÀÔ
         BI_New(&bi_re, size + 1); //size + 1?
 
         printf("A = ");
@@ -131,16 +131,16 @@ int main()
         BI_Delete(&bi_2);
         BI_Delete(&bi_re);
     }
-    
-    
+
+
     printf("print(\"Schoolbook Multiplication\")\n");
-    for (i = 0; i < 20; i++) //në²ˆ ê³±ì…ˆ ì—°ì‚°í•˜ê¸°
+    for (i = 0; i < 20; i++) //n¹ø °ö¼À ¿¬»êÇÏ±â
     {
         size1 = (rand() & 0xf) + 1; // size1 : 1~16
         size2 = (rand() & 0xf) + 1; // size2 : 1~16
 
-        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
         BI_New(&bi_re, size1 + size2);
 
@@ -159,17 +159,18 @@ int main()
         BI_Delete(&bi_re);
     }
     */
-    // ************************ ë©”ëª¨ë¦¬ ë¦­ ì•„ì£¼ ë§ì´ ë‚¨ ã…ã… *********************
-    
+    // ************************ ¸Ş¸ğ¸® ¸¯ ¾ÆÁÖ ¸¹ÀÌ ³² ¤¾¤¾ *********************
+
+    /*
     printf("print(\"Karatsuba Multiplication\")\n");
- 
-    for (i = 0; i < 20; i++) //20ë²ˆ ì¹´ë¼ì¶”ë°” ê³±ì…ˆ ì—°ì‚°í•˜ê¸°
+
+    for (i = 0; i < 20; i++) //20¹ø Ä«¶óÃß¹Ù °ö¼À ¿¬»êÇÏ±â
     {
         size1 = (rand() & 0xf) + 1;
         size2 = (rand() & 0xf) + 1;
 
-        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±      
+        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
         printf("A = ");
         BI_Show(bi_1, 16);
@@ -211,72 +212,16 @@ int main()
         BI_Delete(&bi_1);
         BI_Delete(&bi_2);
         BI_Delete(&bi_re);
-    } 
-    
-    /*
-    BI_New(&bi_1, 2);
-    BI_New(&bi_2, 3);
-
-    len = (MAX(bi_1->wordlen, bi_2->wordlen) + 1) >> 1;
-    len = 4 * len + 1;
-    BI_New(&bi_re, len);
-
-    word arr1_a[2] = { 0xb257d8c8, 0xff7e8c00 };
-    word arr1_b[3] = { 0xa38b4600, 0xbc301ea8, 0xb30ba8e8 };
-
-    //A = -0x ff7e8c00 b257d8c8
-    //B = 0x b30ba8e8 bc301ea8 a38b4600
-    //A * B = -0x b2b11ee7 d31b6129 543e30fd eac4a8be 11deb000
-
-   // word arr1_a[7] = { 0x4165dc75, 0x4b41fa33, 0xc9fd207d, 0x65e6d02e,
-   //                    0x6c672b95, 0x82d0061b, 0x95573f26 };
-   //word arr1_b[7] = { 0x6c0f5d51, 0xea50f227, 0xf95b9a2e, 0x0ecf51ae,
-   //                    0x321ace5a, 0xa8e90526, 0xd0e2ef58 };
-
-    //í‹€ë¦¬ëŠ” ê±°
-    //A = 0x95573f26 82d0061b 6c672b95 65e6d02e c9fd207d 4b41fa33 4165dc75
-    //B = -0xd0e2ef58 a8e90526 321ace5a 0ecf51ae f95b9a2e ea50f227 6c0f5d51
-
-    BI_Set_By_Array(&bi_1, NEGATIVE, arr1_a, 2);
-    BI_Set_By_Array(&bi_2, NON_NEGATIVE, arr1_b, 3);
-
-    printf("A = ");
-    BI_Show(bi_1, 16);
-    printf("B = ");
-    BI_Show(bi_2, 16);
-
-    sign_bi_1 = Get_Sign(bi_1);
-    sign_bi_2 = Get_Sign(bi_2);
-
-    if (sign_bi_1 == NEGATIVE)
-        Flip_Sign(bi_1);
-    if (sign_bi_2 == NEGATIVE)
-        Flip_Sign(bi_2);
-
-    Karatsuba(&bi_re, bi_1, bi_2);
-    bi_refine(bi_re);
-
-    if ((sign_bi_1 ^ sign_bi_2) == 1)
-        bi_re->sign = NEGATIVE;
-    else
-        bi_re->sign = NON_NEGATIVE;
-
-    printf("A * B == ");
-    BI_Show(bi_re, 16);
-
-    BI_Delete(&bi_1);
-    BI_Delete(&bi_2);
-    BI_Delete(&bi_re);
+    }
     */
-
     printf("print(\"Squaring\")\n");
     /*
-    for (i = 0; i < 1; i++) //20ë²ˆ ì¹´ë¼ì¶”ë°” ê³±ì…ˆ ì—°ì‚°í•˜ê¸°
+    for (i = 0; i < 1; i++) //20¹ø Ä«¶óÃß¹Ù °ö¼À ¿¬»êÇÏ±â
     {
         //size1 = (rand() & 0xf) + 1;
         //size1 = 1;
         size1 = 3;
-        //bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+        //bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
         BI_New(&bi_1, size1);
         //bi_1->a[0] = 0x74b3979d;
