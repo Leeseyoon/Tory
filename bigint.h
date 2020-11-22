@@ -87,11 +87,11 @@ int Compare_WordLen(bigint* A, bigint* B);
 
 // Chapter 4 Subtraction
 bigint* SUBC_BI(int* borrow, bigint** c, bigint** a, bigint** b);
-void SUB(bigint** c, bigint* a, bigint* b); // print
+void SUB(bigint** c, bigint* a, bigint* b);
 
 // Chapter 5 Multiplication
 void MUL_Test(word* c, word* a, word* b);
-void MUL_MUL(bigint** result, bigint* a, bigint* b);
+void MUL_MUL(bigint** result, bigint* A, bigint* B);
 
 // Karatsuba test
 void Karatsuba(bigint** C, bigint* A, bigint* B);
