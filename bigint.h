@@ -77,7 +77,7 @@ void Right_Shift(bigint* x, int r);
 void Reduction_BI(bigint** x, int r);
 
 // Chapter 3 Additon
-int ADD_ABc(bigint** C, bigint** A, bigint** B, int c, int i);
+unsigned int ADD_ABc(bigint** C, bigint** A, bigint** B, unsigned int c, int i);
 void ADDC(bigint** C, bigint** A, bigint** B, int sign);
 void ADD(bigint** C, bigint** A, bigint** B);
 void ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign);
@@ -86,7 +86,7 @@ void ADD_AAB(bigint** C, bigint** A, bigint** B);
 int Compare_WordLen(bigint* A, bigint* B);
 
 // Chapter 4 Subtraction
-bigint* SUBC_BI(int* borrow, bigint** c, bigint** a, bigint** b);
+void SUBC_BI(unsigned int* borrow, bigint** c, bigint** a, bigint** b);
 void SUB(bigint** c, bigint* a, bigint* b);
 
 // Chapter 5 Multiplication
