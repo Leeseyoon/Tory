@@ -181,7 +181,7 @@ void BI_Show(bigint* x, int base)
 }
 
 //Chapter 2.3
-void bi_refine(bigint* x)
+void BI_Refine(bigint* x)
 {
 	word* temp;
 
@@ -232,7 +232,7 @@ void bi_gen_rand(bigint** x, int sign, int wordlen)
 	(*x)->sign = sign; // 부호 결정
 	array_rand((*x)->a, wordlen); // random으로 배열 설정
 
-	bi_refine(*x); // 앞쪽 0으로 채워진 부분 자르기
+	BI_Refine(*x); // 앞쪽 0으로 채워진 부분 자르기
 }
 
 void array_rand(word* dst, int wordlen)
@@ -472,7 +472,7 @@ void Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 		x->a[x->wordlen - 1] = cp->a[cp->wordlen - 1] >> (WORD_BIT_LEN - r); // 마지막 배열 = An-1 >> (WORD_BIT_LEN - r)
 	}
 	BI_Delete(&cp);
-	bi_refine(x);
+	BI_Refine(x);
 }
 
 void Right_Shift(bigint* x, int len)
@@ -513,7 +513,7 @@ void Right_Shift(bigint* x, int len)
 		x->a[x->wordlen - 1] = cp->a[cp->wordlen - 1] >> r; // 나머지만큼 이동
 	}
 	BI_Delete(&cp);
-	bi_refine(x);
+	BI_Refine(x);
 }
 
 // Chapter 2.11 Reduction
@@ -549,7 +549,7 @@ void Reduction_BI(bigint** x, int r)
 			(*x)->a[i] = 0;
 	}
 
-	bi_refine(*x); // 추가
+	BI_Refine(*x); // 추가
 }
 
 //Chapter 3 Addition
@@ -604,7 +604,7 @@ void ADDC(bigint** C, bigint** A, bigint** B, int sign)
 	else // 마지막 carry가 0이면
 		(*C)->a[A_Len] = 0; // 결과값의 MSB에 0 설정
 
-	bi_refine(*C);
+	BI_Refine(*C);
 
 	// 부호 설정
 	if (sign == 0)
@@ -691,7 +691,7 @@ void ADD(bigint** C, bigint** A, bigint** B)
 
 		Flip_Sign(temp); // temp = |B|
 		SUB(C, *A, temp); // C = A - |B|
-		bi_refine(*C);
+		BI_Refine(*C);
 
 		BI_Delete(&temp);
 
@@ -706,7 +706,7 @@ void ADD(bigint** C, bigint** A, bigint** B)
 
 		Flip_Sign(temp); // temp = |A|
 		SUB(C, *B, temp); // C = B - |A|
-		bi_refine(*C);
+		BI_Refine(*C);
 
 		BI_Delete(&temp);
 
@@ -820,6 +820,7 @@ void SUB(bigint** C, bigint* A, bigint* B)
 {
 	unsigned int borrow = 0;
 	int len = 0;
+	int i = 0;
 	bigint* d = NULL;
 
 	Get_Word_Length(&len, &A);   // A->wordlen을 len에 대입
@@ -833,11 +834,20 @@ void SUB(bigint** C, bigint* A, bigint* B)
 		return; // memory leackege X
 	}
 
-	if (Is_Zero(&B) == 0) // A-0 --> A
+	if (Is_Zero(&B) == 0) // A - 0 --> A
 	{
-		Assign_BI(C, A); // A의 값 그대로
-
-		return;// memory leackege X
+		if (&A == C) // 1st arg == 2nd arg(AAB)인 경우
+			return; // 이미 1st arg = 2nd arg 이므로 return으로 종료.
+		Assign_BI(C, A); // 1st arg != 2nd arg(AAB)인 경우 C에 A를 assign
+		return;
+		//Assign_BI(C, A); // A의 값 그대로
+		//if (A == C)
+		//	BI_New(A, borrow);
+		//(*C)->sign = A->sign;
+		//(*C)->wordlen = A->wordlen;
+		//for (i = 0; i < (*C)->wordlen; i++)
+		//	(*C)->a[i] = A->a[i];
+		//return;// memory leackege X
 	}
 
 
@@ -848,20 +858,24 @@ void SUB(bigint** C, bigint* A, bigint* B)
 			if (Compare_BI(&A, &B) < 0) // A, B를 비교해서 A < B일 때. (Compare_BI(A, B)의 return : -1)
 			{
 				SUBC_BI(&borrow, C, &B, &A); // B - A 를 하고
-				Flip_Sign(*C); // 부호를 바꿔주기
+				Flip_Sign(*C); // 뺄셈 연산이 종료되었으므로 원래대로 부호 바꿔주기
 
-				return;// memory leACkege X
+				return;
 			}
-			else if (Compare_BI(&A, &B) == 0)
+			else if (Compare_BI(&A, &B) == 0) // A = B일 때, C의 값은 0이 되어야한다.
 			{
-				bi_refine(*C); // A와 B가 동일하면 0이 나오므로, 기존에 생성한 C가 그대로 나오면 됨. 그래서 바로 return
-				return;// memory leACkege X
+				// BI_Set_Zero(C); 로 바꾸는게 어떨까?
+				for (i = 0; i < (*C)->wordlen; i++) // C의 길이만큼
+					(*C)->a[i] = 0;  // 0을 대입
+				(*C)->sign = 0; // C의 부호도 NON-NEGATIVE로 변경
+				
+				return;
 			}
 			else // A, B 를 비교해서 A >= B일 때. Compare_BI(A, B)'s return : 0, 1
 			{
 				SUBC_BI(&borrow, C, &A, &B); // A - B 연산
 
-				return;// memory leACkege X
+				return;
 			}
 		}
 
@@ -872,8 +886,8 @@ void SUB(bigint** C, bigint* A, bigint* B)
 			if (Compare_BI(&A, &B) < 0)
 			{
 				SUBC_BI(&borrow, C, &B, &A);
-				Flip_Sign(A); // 부호 원위치
-				Flip_Sign(B); // 부호 원위치
+				Flip_Sign(A); // 뺄셈 연산이 종료되었으므로 원래대로 부호 원위치
+				Flip_Sign(B); // 뺄셈 연산이 종료되었으므로 원래대로 부호 원위치
 
 				return;// memory leACkege X
 			}
@@ -915,22 +929,40 @@ void SUB(bigint** C, bigint* A, bigint* B)
 void SUBC_BI(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
 {
 	int len, i = 0;
+	int result = 0;
 	bigint* temp = NULL; // A와 b의 길이가 다를 때 -> bigint** b의 길이를 바꿀 수 없으므로 temp를 만들어줌
-
+	bigint* temp3 = NULL; // C랑 A랑 같을 때를 대비하여
 	Get_Word_Length(&len, A); // b보다 큰 A의 길이를 구하자
 	BI_New(&temp, len);  // A의 워드 길이와 같게 temp 를 생성
+	result = Compare_BI(A, B);
+	if (result >= 0)
+		(*C)->sign = 0; // 매개변수 C에 이미 부호가 들어가있을 때 바꿔주는 게 없어서
+	if (result < 0)
+		(*C)->sign = 1;
+	if ((*C)->wordlen < len) // Binary Long Division에서 C의 길이가 1이고, A, B의 길이가 2일 때가 있어서. //A = 0x40bd
+	{
+		bigint* temp2 = NULL;
+		BI_New(&temp2, len);
+		for (i = 0; i < (*C)->wordlen; i++)
+			temp2->a[i] = (*C)->a[i];
+		Assign_BI(C, temp2);
+		BI_Delete(&temp2);
+	}
 	for (i = 0; i < (*B)->wordlen; i++)
 		temp->a[i] = (*B)->a[i]; // b와 같은 값을 가지고 있어야하고, 더 길게 생성됐을 때는 0이 들어가있어야함.
 	// A가 b보다 길 때 b의 길이를 맞춰줘야하는데 b를 건들이면 b가 바뀌기 때문에 temp를 이용
-
+	
 	for (i = 0; i < len; i++)
 	{
+		
+		BI_New(&temp3, len); // A의 wordlen과 같은 len의 길이로 temp3 생성
+		Assign_BI(&temp3, *A); // 이후 A와 동일하게
 		if (i == 0)
 			*borrow = 0;
 
-		(*C)->a[i] = (*A)->a[i] - (*borrow); // A - b의 값을 C 에 대입
+		(*C)->a[i] = temp3->a[i] - (*borrow);//(*C)->a[i] = (*A)->a[i] - (*borrow); // A - b의 값을 C 에 대입
 		(*C)->a[i] = (*C)->a[i] & word_mask; // mod 2 ^ (WORD_BIT_LEN)
-		if ((*A)->a[i] < *borrow) // borrow 될 때
+		if(temp3->a[i] < *borrow)//if ((*A)->a[i] < *borrow) // borrow 될 때
 			*borrow = 1;
 		else // borrow 안될 때
 		{
@@ -941,9 +973,9 @@ void SUBC_BI(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
 		(*C)->a[i] -= temp->a[i]; // temp에 넣어놓은 b와 뺄셈 연산
 		(*C)->a[i] = (*C)->a[i] & word_mask; // mod 2 ^ (WORD_BIT_LEN)
 	}
-
+	BI_Delete(&temp3);
 	BI_Delete(&temp);
-	bi_refine(*C);
+	BI_Refine(*C);
 }
 
 void MUL_Test(word* C, word* A, word* B) // 단일 워드 곱셈
@@ -964,8 +996,8 @@ void MUL_Test(word* C, word* A, word* B) // 단일 워드 곱셈
 
 	A1 = ((*A) >> (WORD_BIT_LEN >> 1)); // A의 최상위비트부터 중간비트까지
 	B1 = ((*B) >> (WORD_BIT_LEN >> 1)); // B의 최상위비트부터 중간비트까지
-	A0 = (*A) & (word)((1 << (WORD_BIT_LEN >> 1)) - 1); // A의 중간비트부터 최하위 비트까지
-	B0 = (*B) & (word)((1 << (WORD_BIT_LEN >> 1)) - 1); // B의 중간비트부터 최하위 비트까지
+	A0 = (*A) & (((word)1 << (WORD_BIT_LEN >> 1)) - 1); // A의 중간비트부터 최하위 비트까지
+	B0 = (*B) & (((word)1 << (WORD_BIT_LEN >> 1)) - 1); // B의 중간비트부터 최하위 비트까지
 
 	mul1 = A1 * B1;
 	mul0 = A0 * B0;
@@ -973,13 +1005,13 @@ void MUL_Test(word* C, word* A, word* B) // 단일 워드 곱셈
 	sum1 += A0 * B1;
 	if (sum1 < A0 * B1)
 		carry1 += 1;
-	sum2 = (sum1 & (word)((1 << (WORD_BIT_LEN >> 1)) - 1));
+	sum2 = (sum1 & (((word)1 << (WORD_BIT_LEN >> 1)) - 1));
 	sum2 = sum2 << (WORD_BIT_LEN >> 1); //sum1의 뒷부분
 	sum1 = sum1 >> (WORD_BIT_LEN >> 1); // sum1의 앞부분
 	mul0 = sum2 + mul0;
 	if (mul0 < sum2)
 		carry0 += 1;
-	mul1 = sum1 + mul1 + carry0 + (carry1 << (WORD_BIT_LEN >> 1));
+	mul1 = sum1 + mul1 + carry0 + ((word)carry1 << (WORD_BIT_LEN >> 1));
 
 	*C = mul0;
 	*(C + 1) = mul1;
@@ -1010,7 +1042,7 @@ void MUL_MUL(bigint** result, bigint* A, bigint* B)
 	}
 	BI_Delete(&D);
 	(*result)->sign = A->sign ^ B->sign;
-	bi_refine(*result);
+	BI_Refine(*result);
 }
 
 void Karatsuba(bigint** C, bigint* A, bigint* B)
@@ -1066,8 +1098,8 @@ void Karatsuba(bigint** C, bigint* A, bigint* B)
 	Karatsuba(&T1, A1, B1); // T1 = A1 * B1
 	Karatsuba(&T0, A0, B0); // T0 = A0 * B0
 
-	bi_refine(T1);
-	bi_refine(T0);
+	BI_Refine(T1);
+	BI_Refine(T0);
 
 	bigint* T1_tmp = NULL;
 	Assign_BI(&T1_tmp, T1);
@@ -1079,7 +1111,7 @@ void Karatsuba(bigint** C, bigint* A, bigint* B)
 	for (i = 0; i < T0->wordlen; i++)
 		R->a[i] = T0->a[i];
 
-	bi_refine(R);
+	BI_Refine(R);
 
 	SUB(&S1, A0, A1); // S1 = A0 - A1
 	SUB(&S0, B1, B0); // S0 = B1 - B0
@@ -1105,7 +1137,7 @@ void Karatsuba(bigint** C, bigint* A, bigint* B)
 	}
 
 	Karatsuba(&S, S1, S0); // S = S1 * S0
-	bi_refine(S);
+	BI_Refine(S);
 
 	// S 부호 정해 주기
 	if (S1_sign ^ S0_sign)
@@ -1139,7 +1171,9 @@ void Karatsuba(bigint** C, bigint* A, bigint* B)
 
 	BI_Delete(&ADD_result1);
 	BI_Delete(&ADD_result2);
-}
+
+	BI_Delete(&T1_tmp);
+}//
 
 void Single_Squaring(bigint* C, bigint* A)
 {
@@ -1259,7 +1293,7 @@ void Multi_Squaring(bigint* C, bigint* A)
 				C2->a[m] = 0; // 늘어난 길이만큼 0으로 초기화
 
 			ADD_AAB(&C2, &C2, &temp2);
-			bi_refine(C2);
+			BI_Refine(C2);
 
 			array_init(T2->a, T2->wordlen);
 			BI_Delete(&temp2);
@@ -1274,13 +1308,18 @@ void Multi_Squaring(bigint* C, bigint* A)
 	BI_Delete(&T2);
 	BI_Delete(&A_i);
 	BI_Delete(&A_j);
+	BI_Delete(&temp1);
+	BI_Delete(&temp2);
 }
 
+/*
+	[Binary_Long_Division] pseudo code
 
+*/
 void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 {
 	int i = 0;
-	int temp = 0;
+	word temp = 0;
 	int size = 0;
 	int len = 0;
 	int result = 0;
@@ -1304,20 +1343,20 @@ void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 
 		Left_Shift(*R, 1); // 2R
 		ADD_DIV(R, R, &T); // 2R + a{j}
-		result = Compare_BI(&B, R); // B >= R
-		if (result == -1) // B >= R인지 비교
+		result = Compare_BI(&B, R); // R >= B --> 0, -1
+		if (result < 1) // R >= B인지 비교
 		{
 			len = (int)(i / WORD_BIT_LEN) + 1;
 			BI_New(&U, len);
 
-			U->a[len - 1] = 1 << (i % WORD_BIT_LEN);
+			U->a[len - 1] = (word)1 << (i % WORD_BIT_LEN);
 			ADD_DIV(Q, Q, &U); // Q + 2 ^ j
 			SUB(R, *R, B); // R - B
-			bi_refine(*R);
-			BI_Delete(&U);
+			BI_Delete(&U); // 덧셈해준 빅넘버 U(2 ^ j)는 delete 해준다.
 
 		}
 	}
+	BI_Refine(*Q);
 	BI_Delete(&T);
 }
 
@@ -1351,8 +1390,8 @@ void ADDC_DIV(bigint** C, bigint** A, bigint** B, int sign)
 	//else
 	   //(*C)->a[A_Len] = 0;
 
-	bi_refine(*B);
-	//bi_refine(*C);
+	BI_Refine(*B);
+	//BI_Refine(*C);
 
 	if (sign == 0)
 		(*C)->sign = 0;
@@ -1376,12 +1415,13 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 	if (Is_Zero(A) == 0) // A is zero
 	{
 		if (A == C)
-			BI_New(A, B_Len);
+			BI_New(C, B_Len); // Binary Long Divison에서 필요
+			
 		(*C)->sign = (*B)->sign;
 		(*C)->wordlen = (*B)->wordlen;
 		for (i = 0; i < (*C)->wordlen; i++)
 			(*C)->a[i] = (*B)->a[i];
-
+		
 		return;
 	}
 
@@ -1403,7 +1443,7 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 
 		Flip_Sign(temp);
 		SUB(C, *A, temp); // SUB 함수
-		//bi_refine(C);
+		//BI_Refine(C);
 
 		BI_Delete(&temp);
 
@@ -1418,7 +1458,7 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 
 		Flip_Sign(temp);
 		SUB(C, *B, temp); // SUB 함수
-		//bi_refine(C);
+		//BI_Refine(C);
 
 		BI_Delete(&temp);
 
@@ -1437,3 +1477,168 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 		return;
 	}
 }
+
+/*
+	Long Division Algorithm (Multi-precision version)
+*/
+void DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorithm(Multi-precision version)에서 DIV(A, B) fucntion.
+{
+	int i = 0; // for 반복문에서 사용할 변수 i.
+	int len = 0; // 변수 len은 빅넘버 A의 size를 담을 변수
+	int result = 0; // Compare_BI(&A, &B)의 결과를 담을 변수
+	bigint* Temp = NULL; // A의 j번째 워드( A_{j} )를 담을 빅넘버 Temp 초기화
+	bigint* Word = NULL; // Q의 i번째 워드( Q_{i} )를 담을 빅넘버 Word 초기화
+
+	BI_Set_Zero(R); // 길이가 1이고 값이 0인 빅넘버 *R 생성
+	BI_Set_Zero(&Word); // 길이가 1이고 값이 0인 빅넘버 Word 생성. BI_New(&Word, 1)도 가능.
+
+	Get_Word_Length(&len, &A);
+	BI_New(Q, len);
+	if (B->sign & 1) // line 1.
+		return; // return INVALID.
+	result = Compare_BI(&A, &B);
+	if (result < 0) // line 4. B > A 일 경우, Compare(&A, &B)의 return : -1
+	{
+		Assign_BI(R, A);
+		return;
+	}
+
+	for (i = len - 1; i >= 0; i--) // line 8.
+	{
+		BI_New(&Temp, 1); // A의 j번째 워드(A_{j})를 담는 빅넘버 Temp를 워드 길이가 1로 생성. 
+		Temp->a[0] = A->a[i]; // Temp에 A_{j}를 대입.
+		Left_Shift(*R, WORD_BIT_LEN); // R을 왼쪽으로 W만큼 shift ==> R * W
+		ADD_DIV(R, R, &Temp); // R * W에 A_{j}를 덧셈 연산 수행. // line 9.
+		DIVC(&Word, R, *R, B); //빅넘버 Word는 Q_{i}를 저장하는 변수. 
+		BI_Delete(&Temp); // 반복문 내에서 생성한 빅넘버 Temp delete.
+		(*Q)->a[i] = Word->a[0]; // Q에 Q_{i}를 대입. //line 10.
+	}
+	BI_Delete(&Word); // 빅넘버 Word delete
+	BI_Refine(*Q);
+	//BI_Refine(*R);
+}
+
+void DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
+{
+	int result = 0; // A, B 대소비교값을 담을 변수 result
+	int i = 0; // 반복문에 사용할 변수 i
+	int k = 0; // line 4와 관련된 변수 k
+	int len = 0; // B의 wordlen을 저장해줄 변수 len
+	bigint* AP = NULL; // A를 left shift 해서 보관할 빅넘버 A'(AP, A Prime)
+	bigint* BP = NULL; // B를 left shift 해서 보관할 빅넘버 B'(BP, B Prime)
+
+	result = Compare_BI(&A, &B);
+	if (result == -1) // A < B 보다 클 때
+	{
+		return;
+		// return (Q, R) = (0, A)을 해줘야하는데
+		// DIV에서의 2번째 arg와 3번째 arg를 같은 R로 대입했으므로
+		// R은 A가 되었고, Q는 DIV 함수내에서 0이다. 
+	}
+	Assign_BI(&AP, A); // 빅넘버 A' 에 빅넘버 A assing
+	Assign_BI(&BP, B); // 빅넘버 B' 에 빅넘버 B assing
+	// line 4. Compute k.
+	Get_Word_Length(&len, &B);
+	bigint* comp = NULL; // k를 compute하기 위한 빅넘버 comp 선언 및 초기화
+	BI_New(&comp, 1); // 빅넘버 comp의 길이 1로 생성
+	comp->a[0] = B->a[len - 1]; //comp에 B_{m - 1} 대입
+	while (1)
+	{
+		Left_Shift(comp, 1); // comp를 left shift ==> comp * 2
+		k++; // comp * 2^k 하도록.
+		if (comp->wordlen == 2) // 2^w을 넘어가면,
+		{
+			k--; // 넘어갔으니 하나 줄여주고
+			break; // break;
+		}
+	}
+	Left_Shift(AP, k); // AP = AP << k 
+	Left_Shift(BP, k); // BP = BP << k //line 5. 
+	DIVCC(Q, R, AP, BP); // line 6.
+	Right_Shift(*R, k); // line 7. (Q' == Q)
+	BI_Delete(&AP); // 선언해준 빅넘버 AP delete.
+	BI_Delete(&BP); // 선언해준 빅넘버 BP delete.
+	BI_Delete(&comp); // 선언해준 빅넘버 comp delete.
+}
+
+void DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B) // 7.2.3 DIVCC(A, B)
+{
+	int n = 0; // 변수 n은 A의 size
+	int m = 0; // 변수 m은 B의 size
+	word A_msw = 0; // 빅넘버 A의 최상위 비트를 저장할 워드단위 변수
+	word B_msw = 0; // 빅넘버 B의 최상위 비트를 저장할 워드단위 변수
+	// (msw == Most Significant Word)
+	bigint* BQ = NULL; // 빅넘버 B와 빅넘버 Q를 곱한 값을 저장할 빅넘버 BQ를 선언 및 초기화.
+	bigint* one = NULL; // 워드길이가 1이고 값이 1로 사용할 빅넘버 one를 선언 및 초기화.
+
+	BI_Set_One(&one); // 값이 1이고 워드길이가 1이 되도록 BI_Set_One() 사용
+	Get_Word_Length(&n, &A); // 변수 n에 A의 size 대입
+	Get_Word_Length(&m, &B); // 변수 m에 B의 size 대입
+
+
+	A_msw = A->a[n - 1]; // 빅넘버 A의 최상위 워드를 A_msw에 대입
+	B_msw = B->a[m - 1]; // 빅넘버 B의 최상위 워드를 B_msw에 대입
+
+	if (n == m) // DIVCC 에서 if(n == m) 일 때 // line 1.
+	{
+		DIVCC_n_m(Q, A, B, m); // line 2.
+	}
+	else if (n == m + 1) // DIVCC 에서 if(n == m + 1) 일 때 //line 4.
+	{
+		if (A_msw == B_msw) // line 5.
+			(*Q)->a[0] = word_mask; // Q에 W-1을 대입해야하므로 word_mask 대입.
+		else // line 7.
+			DIVCC_n_m1(Q, A, B, m); // line 8.
+	}
+	BI_New(&BQ, n + m); // 빅넘버 B와 빅넘버 Q를 곱한 값을 저장할 빅넘버 BQ를 B와 Q의 곱셈연산이 가능한 길이인 n + m 로 생성.
+	MUL_MUL(&BQ, *Q, B); // B와 Q를 곱셈 연산해 빅넘버 BQ에 대입 (이 때 Karatsuba로 변경도 가능 --> 속도 비교 가능!!)
+	SUB(R, A, BQ);// R = A - B * Q // line 11.
+	while ((*R)->sign & 1) // R의 부호가 음수일 때 1 & 1 = 1 // line 12. 
+	{
+		SUB(Q, *Q, one); // Q = Q - 1.
+		ADD_AAB(R, R, &B); // R = R + B. 1st arg, 2nd arg가 같으므로 ADD_AAB 함수 사용
+	}
+	BI_Delete(&one); // 선언해준 빅넘버 one delete.
+	BI_Delete(&BQ); // 선언해준 빅넘버 BQ delete.
+	
+}
+
+void DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m) // DIVCC 에서 if(n == m) 일 때
+{
+	bigint* Temp1 = NULL;
+	bigint* Temp2 = NULL;
+	bigint* Trash = NULL;
+
+	BI_New(&Temp1, 1);
+	BI_New(&Temp2, 1);
+	BI_New(&Trash, 1);
+	Temp1->a[0] = A->a[m - 1];
+	Temp2->a[0] = B->a[m - 1];
+
+	Binary_Long_Div(Q, &Trash, Temp1, Temp2);
+
+	BI_Delete(&Temp1);
+	BI_Delete(&Temp2);
+	BI_Delete(&Trash);
+}
+
+void DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m) // DIVCC 에서 if(n == m + 1) 일 때
+{
+	bigint* Temp1 = NULL; // A_{m} * W + A_{m - 1}을 대입할 빅넘버 Temp1 선언 및 초기화
+	bigint* Temp2 = NULL; // B_{m}을 대입할 빅넘버 Temp2 선언 및 초기화
+	bigint* Trash = NULL; // 나눗셈 함수에서 나머지 매개변수로 쓰일 빅넘버 Trash 선언 및 초기화
+
+	BI_New(&Temp1, 2); // 빅넘버 Temp1의 길이는 2로 생성
+	BI_New(&Temp2, 1); // 빅넘버 Temp2의 길이는 1로 생성
+	BI_New(&Trash, 1); // 빅넘버 Trash의 길이는 1로 생성
+
+	Temp1->a[1] = A->a[m]; // A_{m}을 대입 --> A_{m} * W
+	Temp1->a[0] = A->a[m - 1]; // A_{m - 1}을 대입
+	Temp2->a[0] = B->a[m - 1]; // B_{m - 1}을 대입
+
+	Binary_Long_Div(Q, &Trash, Temp1, Temp2); // DIVCC()의 line 8
+
+	BI_Delete(&Temp1); // 선언해준 빅넘버 Temp1 delete.
+	BI_Delete(&Temp2); // 선언해준 빅넘버 Temp2 delete.
+	BI_Delete(&Trash); // 선언해준 빅넘버 Trash delete.
+} 
