@@ -4,7 +4,7 @@
 #define NON_NEGATIVE   0
 #define NEGATIVE   1
 #define ERROR   -1
-#define WORD_BIT_LEN   32   // 8 or 32 or 64
+#define WORD_BIT_LEN    32   // 8 or 32 or 64
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
@@ -42,7 +42,7 @@ void Ascii_To_Hex(char* str, char* hex);
 void BI_Show(bigint* x, int base);
 
 // Chapter 2.3  Refine BigInt
-void bi_refine(bigint* x);
+void BI_Refine(bigint* x);
 
 // Chapter 2.4 Assign BigInt
 void Assign_BI(bigint** y, bigint* x);
@@ -104,4 +104,12 @@ void Multi_Squaring(bigint* C, bigint* A);
 void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B);
 void ADDC_DIV(bigint** C, bigint** A, bigint** B, int sign);
 void ADD_DIV(bigint** C, bigint** A, bigint** B);
+
+// Multi Division
+void DIV(bigint** Q, bigint** R, bigint* A, bigint* B);
+void DIVC(bigint** Q, bigint** R, bigint* A, bigint* B);
+void DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B);
+void DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m);
+void DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m);
+
 #endif
