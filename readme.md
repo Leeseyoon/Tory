@@ -69,7 +69,7 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 #### Chapter 2.1
 ##### Create Big_Integer
 ```c
-void BI_New() // Create Big_Integer
+void BI_New() // Create Big Integer function
 
     input : bigint** x, int wordlen
     1st arg : 새로 선언할 Big_Integer
@@ -81,7 +81,7 @@ void BI_New() // Create Big_Integer
 3. 워드열의 부호에 NON_NEGATIVE를 대입해 준다.
 4. 워드열의 길이에 맞춰 워드열을 동적 메모리 할당해 준다.
 ***
-##### Delete Big_Integer
+##### Delete Big_Integer function
 ```c
 void BI_Delete(bigint** x) // Delete Big_Integer
       
@@ -106,7 +106,7 @@ void array_init() // Zerorize
  1. 가리키고 있는 워드의 값을 0으로 memset한다
 ---
 #### Chapter 2.2
-##### Set Array --> Big integer
+##### Array --> Big integer
 ```c
 void BI_Set_By_Array()  // Set Array -> Big_Integer
    input : bigint** x, int sign, word* a, int wordlen
@@ -119,7 +119,7 @@ void BI_Set_By_Array()  // Set Array -> Big_Integer
  1. 배열의 부호 및 길이를 Big_Integer 구조체 내부의 sign, wordlen 변수에 대입한다.
  2. wordlen 길이만큼 넘겨 받은 word* a의 배열 값을 Big_Integer 구조체 워드열에 대입한다.
 ***
-##### Set String --> Big Integer
+##### String --> Big Integer
 ```c
 void BI_Set_By_String() // Set String -> Big_Integer
    input : bigint** x, int sign, char* str, word base, int size
@@ -165,7 +165,7 @@ void BI_Show() // Show Big_Integer
 (WORD_BIT_LEN에 따른 마스킹 작업이 달라서 조건문을 사용해 다르게 출력.)
 ---
 #### Chapter 2.3
-##### Re define Big Integer
+##### Re define Big Integer function
 ```c
 void bi_refine() // re define Big_Integer
    input : bigint* x
@@ -176,7 +176,7 @@ void bi_refine() // re define Big_Integer
 2. 1번에서 최상위 워드열이 0인 경우, 최상위 워드열부터 0으로 채워진 워드열의 크기만큼 줄여 워드열의 크기를 재설정해 준다.
 ---
 #### Chpater 2.4
-##### Assign Big Integer
+##### Assign Big Integer function
 ```c
 void Assign_BI() // Assign Big_Integer
    input : bigint** y, bigint* x
@@ -190,7 +190,7 @@ void Assign_BI() // Assign Big_Integer
  4. 반복문을 사용해 x의 워드열에서 워드 단위 별로 최하위 워드부터 대입한다.
 ---
 #### Chpater 2.5
-##### Generate Random number
+##### Generate Random number function
 ```c
 void bi_gen_rand() // generate random number
    input : bigint** x, int sign, int wordlen
@@ -203,7 +203,7 @@ void bi_gen_rand() // generate random number
  2. sign 값 대입한 뒤, array_rand 함수를 통해 구조체의 워드열에 random number를 대입한다.
  3. bi_refine 함수를 이용하여 0으로 되어 있는 최상위 워드열을 잘라낸다.
 ***
-##### Set Random Number
+##### Set Random Number function
 ```c
 void array_rand() // set random number
    input : word* dst, int wordlen
@@ -215,7 +215,7 @@ void array_rand() // set random number
  2. rand() 함수를 이용하여 cnt(word length * sizeof(word))만큼 random number를 생성하여 워드열에 대입한다.
 ---
 #### Chpater 2.6
-##### Get Word Length of Big Integer
+##### Get Word Length of Big Integer function
 ```c
 void Get_Word_Length() // Get Word Length of Big_Integer
    input : int *len, bigint* x
@@ -226,7 +226,7 @@ void Get_Word_Length() // Get Word Length of Big_Integer
 - 동작 순서
  1. x->wordlen을 *len에 대입한다.
 ***
-##### Get Bit Length of Big Integer
+##### Get Bit Length of Big Integer function
 ```c
 void Bit_Length() // Get Bit Length of Big_Integer
    input : int *len, bigint* x
@@ -239,7 +239,7 @@ void Bit_Length() // Get Bit Length of Big_Integer
  3. 최상위 워드의 최상위 비트부터 최하위 비트까지 처음으로 1이 나올 때를 확인(마스킹을 이용)
  4. 1이 나온 비트의 길이와 i를 더해 Big_Int의 비트 길이를 알아낸다.
 ***
-##### j-th Bit of Big Integer
+##### Find j-th Bit of Big Integer function
 ```c
 void j_th_Bit_of_BI() // j-th Bit of Big_Integer
    input : int j, bigint* x
@@ -255,7 +255,7 @@ void j_th_Bit_of_BI() // j-th Bit of Big_Integer
  5. 이 후 두 값을 비교해 같으면 1, 다르면 0을 출력하도록 한다.
 ---
 #### Chpater 2.7
-##### Get Sign
+##### Get Sign function
 ```c
 int Get_Sign() // Get Sign
    input : bigint* x
@@ -265,7 +265,7 @@ int Get_Sign() // Get Sign
 - 동작 순서
  1. Big_Integer의 구조체의 sign 멤버를 이용하여 부호를 판별한다.
 ***
-##### Flip Sign
+##### Flip Sign function
 ```c
 void Flip_Sign() // Flip Sign
    input : bigint* x
@@ -275,7 +275,7 @@ void Flip_Sign() // Flip Sign
  1. Big_Integer의 구조체의 sign 멤버를 바꿔 준다.
 ---
 #### Chpater 2.8
-##### Set Big Integer
+##### Set Big Integer function
 ```c
 void BI_Set_One (); // Set Big_Integer 1
    input : bigint** x
@@ -297,7 +297,7 @@ void BI_Set_Zero(); //Set Big_Integer 0
  2. 부호를 나타내는 sign에 NON_NEGATIVE 대입한다.
  3. 워드에 0 대입한다.
 ***
-##### Determine If one or not
+##### Is 1 ?
 ```c
 int Is_One() // Determine if one or not
    input : bigint** x
@@ -308,7 +308,7 @@ int Is_One() // Determine if one or not
  1. sign이 음수이거나 최하위 워드열이 1이 아니면 False를 return 한다.
  2. 최상위 워드열에서 1번째 워드열까지 전부 0인지 확인한다.
 ***
-##### Determine if zero or not
+##### Is 0 ?
 ```c
 int Is_Zero() // Determine if zero or not
    input : bigint** x
