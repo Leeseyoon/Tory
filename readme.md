@@ -67,9 +67,9 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 ```
 ---
 #### Chapter 2.1
-##### Create Big_Integer
+##### Create Big Integer function
 ```c
-void BI_New() // Create Big Integer function
+void BI_New() // Create Big_Integer
 
     input : bigint** x, int wordlen
     1st arg : 새로 선언할 Big_Integer
