@@ -1,6 +1,6 @@
 
 # __Tory__ (cryp<u>to</u> libra<u>ry</u>)
-Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
+Advanced Application Programming : Tory(cryp**to** libra**ry**)
 ## Se-yoon Lee, Seo-Woo Jung
 
 ## The library to implemented 'Big integer function' which used to 'Public-key cryptography'.
