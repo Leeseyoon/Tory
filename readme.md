@@ -64,6 +64,7 @@
 #define ERROR : 오류 발생 시 반환값
 #define WORD_BIT_LEN : 워드 단위에 대한 값(8, 32, 64-bit)
 ```
+---
 - Chapter 2.1
 ```c
 void BI_New() // Create Big_Integer
@@ -77,7 +78,7 @@ void BI_New() // Create Big_Integer
 2. 워드열의 길이에 wordlen을 대입해 준다.
 3. 워드열의 부호에 NON_NEGATIVE를 대입해 준다.
 4. 워드열의 길이에 맞춰 워드열을 동적 메모리 할당해 준다.
----
+***
 
 ```c
 void BI_Delete(bigint** x) // Delete Big_Integer
@@ -91,7 +92,7 @@ void BI_Delete(bigint** x) // Delete Big_Integer
  3. bigint 구조체 내부의 워드의 포인터를 free 해 준다.
  4. bigint 구조체 포인터를 free 해 준다.
  5. free 해 준 구조체 포인터를 NULL로 바꿔 준다.
-
+***
 ```c
 void array_init() // Zerorize
    input : word* a, int len
@@ -100,7 +101,7 @@ void array_init() // Zerorize
 ```
 - 동작 순서
  1. 가리키고 있는 워드의 값을 0으로 memset한다
-
+---
 - Chapter 2.2
 ```c
 void BI_Set_By_Array()  // Set Array -> Big_Integer
@@ -113,7 +114,7 @@ void BI_Set_By_Array()  // Set Array -> Big_Integer
 - 동작 순서
  1. 배열의 부호 및 길이를 Big_Integer 구조체 내부의 sign, wordlen 변수에 대입한다.
  2. wordlen 길이만큼 넘겨 받은 word* a의 배열 값을 Big_Integer 구조체 워드열에 대입한다.
-
+***
 ```c
 void BI_Set_By_String() // Set String -> Big_Integer
    input : bigint** x, int sign, char* str, word base, int size
@@ -129,7 +130,7 @@ void BI_Set_By_String() // Set String -> Big_Integer
    ex) word: 8 - "110110101010101111"을 입력받았을 때 3 byte의 배열에 a[0] = 10101111(af), a[1] = 01101010(6a), a[2] = 11(03)이 들어가도록
    base = 16) 문자열의 오른쪽부터 word 단위로 잘라 하위 배열부터 shift를 이용하여 16진수로 변환한 값을 넣는다.
    ex) word: 8 - "123456789" -> {0x89, 0x67, 0x45, 0x23, 0x01}
-
+***
 ```c
 void Ascii_To_Hex() // Ascii -> Hex
    input : char* str, char *hex
@@ -138,7 +139,7 @@ void Ascii_To_Hex() // Ascii -> Hex
 ```
 - 동작 순서
  1. 입력받은 게 0부터 9까지의 숫자면 -0x30, A부터 F까지의 문자면 -0x31을 해 준다.
-
+***
 ```c
 void BI_Show() // Show Big_Integer
    input : bigint* x, int base
@@ -155,7 +156,7 @@ void BI_Show() // Show Big_Integer
    ex) bigint* a1에 a1->a[0] = 250 a1->a[1] = 2을 대입했을 시
    BI_Show(a1, 16) 호출시 0x02fa가 출력된다.
 (WORD_BIT_LEN에 따른 마스킹 작업이 달라서 조건문을 사용해 다르게 출력.)
-
+---
 - Chapter 2.3
 ```c
 void bi_refine() // re define Big_Integer
@@ -165,7 +166,7 @@ void bi_refine() // re define Big_Integer
 - 동작 순서
 1. Big_Integer의 최상위 워드열이 0인지 확인한다.
 2. 1번에서 최상위 워드열이 0인 경우, 최상위 워드열부터 0으로 채워진 워드열의 크기만큼 줄여 워드열의 크기를 재설정해 준다.
-
+---
 - Chpater 2.4
 ```c
 void Assign_BI() // Assign Big_Integer
@@ -178,7 +179,7 @@ void Assign_BI() // Assign Big_Integer
  2. x의 워드열 길이만큼의 Big_Integer를 BI_New()를 이용해 생성한다.
  3. x의 부호를 y에 대입한다.
  4. 반복문을 사용해 x의 워드열에서 워드 단위 별로 최하위 워드부터 대입한다.
-
+---
 - Chpater 2.5
 ```c
 void bi_gen_rand() // generate random number
@@ -191,8 +192,8 @@ void bi_gen_rand() // generate random number
  1. Big_Integer 구조체를 생성한다.
  2. sign 값 대입한 뒤, array_rand 함수를 통해 구조체의 워드열에 random number를 대입한다.
  3. bi_refine 함수를 이용하여 0으로 되어 있는 최상위 워드열을 잘라낸다.
-
- ```c
+***
+```c
 void array_rand() // set random number
    input : word* dst, int wordlen
    1st arg : random number를 담을 워드열의 포인터
@@ -201,7 +202,7 @@ void array_rand() // set random number
 - 동작 순서
  1. rand() 함수는 15 bit 출력값을 가지므로 포인터가 워드 단위가 아닌 바이트 단위로 넘어가도록 캐스팅해 준다.
  2. rand() 함수를 이용하여 cnt(word length * sizeof(word))만큼 random number를 생성하여 워드열에 대입한다.
-
+---
 - Chpater 2.6
 ```c
 void Get_Word_Length() // Get Word Length of Big_Integer
@@ -212,7 +213,7 @@ void Get_Word_Length() // Get Word Length of Big_Integer
 ```
 - 동작 순서
  1. x->wordlen을 *len에 대입한다.
-
+***
 ```c
 void Bit_Length() // Get Bit Length of Big_Integer
    input : int *len, bigint* x
@@ -224,7 +225,7 @@ void Bit_Length() // Get Bit Length of Big_Integer
  2. i를 비트 단위로 표현하기 위해 WORD_BIT_LEN을 곱해준다.
  3. 최상위 워드의 최상위 비트부터 최하위 비트까지 처음으로 1이 나올 때를 확인(마스킹을 이용)
  4. 1이 나온 비트의 길이와 i를 더해 Big_Int의 비트 길이를 알아낸다.
-
+***
 ```c
 void j_th_Bit_of_BI() // j-th Bit of Big_Integer
    input : int j, bigint* x
@@ -238,7 +239,7 @@ void j_th_Bit_of_BI() // j-th Bit of Big_Integer
  3. 해당하는 워드의 비트의 값을 확인하기 위해(마스킹 작업) 새로운 변수를 선언한다.
  4. 새로운 변수를 해당 비트에만 1이 채워지도록 1을 shift 연산처리한다. ex)  2번쨰 워드의 최상위 비트를 만들기 위해 1<<WORD_BIT_LEN
  5. 이 후 두 값을 비교해 같으면 1, 다르면 0을 출력하도록 한다.
-
+---
 - Chpater 2.7
 ```c
 int Get_Sign() // Get Sign
@@ -248,15 +249,15 @@ int Get_Sign() // Get Sign
 ```
 - 동작 순서
  1. Big_Integer의 구조체의 sign 멤버를 이용하여 부호를 판별한다.
-
- ```c
+***
+```c
 void Flip_Sign() // Flip Sign
    input : bigint* x
    1st arg : 부호를 뒤집을 Big_Integer의 포인터
 ```
 - 동작 순서
  1. Big_Integer의 구조체의 sign 멤버를 바꿔 준다.
-
+---
 - Chpater 2.8
 ```c
 void BI_Set_One (); // Set Big_Integer 1
@@ -267,7 +268,7 @@ void BI_Set_One (); // Set Big_Integer 1
  1. 워드열의 길이가 1인 워드열을 생성한다.
  2. 부호를 나타내는 sign에 NON_NEGATIVE 대입한다.
  3. 워드에 1 대입한다.
-
+***
 ```c
 void BI_Set_Zero(); //Set Big_Integer 0
    input : bigint** x
@@ -277,7 +278,7 @@ void BI_Set_Zero(); //Set Big_Integer 0
  1. 워드열의 길이가 1인 워드열을 생성한다.
  2. 부호를 나타내는 sign에 NON_NEGATIVE 대입한다.
  3. 워드에 0 대입한다.
-
+***
 ```c
 int Is_One() // Determine if one or not
    input : bigint** x
@@ -287,7 +288,7 @@ int Is_One() // Determine if one or not
 - 동작 순서
  1. sign이 음수이거나 최하위 워드열이 1이 아니면 False를 return 한다.
  2. 최상위 워드열에서 1번째 워드열까지 전부 0인지 확인한다.
-
+***
 ```c
 int Is_Zero() // Determine if zero or not
    input : bigint** x
@@ -297,7 +298,7 @@ int Is_Zero() // Determine if zero or not
 - 동작 순서
  1. sign이 음수이거나 최하위 워드열이 0이 아니면 False를 return 한다.
  2. 최상위 워드열에서 1번째 워드열까지 전부 0인지 확인한다.
-
+---
 - Chpater 2.9
 ```c
 int Compare_BI(); //Compare Big_Integer
@@ -310,7 +311,7 @@ int Compare_BI(); //Compare Big_Integer
  1. *x와 *y의 sign 변수인 부호를 비교한다.
  2. 부호가 서로 같을 때 각각 워드열의 길이를 구해 비교한다.
  3. 워드열의 길이마저 같을 경우, 최상위 워드열부터 최하위 워드열까지 각각 비교한다.
-
+---
 - Chpater 2.10
 ```c
 void Left_Shift()
@@ -323,7 +324,7 @@ void Left_Shift()
  2. 추가적으로 필요한 워드열의 크기를 계산하여 워드열의 크기를 realloc으로 재할당한 뒤, 늘어난 배열을 0으로 초기화시킨다.
  3. shift 시킬 비트위 길이가 WORD_LEN_BIT의 배수인지 아닌지 판단하여 shift를 해 준다. 
  4. 최상위 비트가 0으로 되어 있는 경우를 대비하여 bi_refine 함수로 배열을 재설정해 준다.
-
+***
 ```c
 void Right_Shift()
    input : bigint* x, int len
@@ -334,7 +335,7 @@ void Right_Shift()
  1. shift 시킬 비트의 길이가 wn(WORD_BIT_LEN * wordlen)보다 큰지 작은지 비교한다.
  2. shift 시킬 비트의 길이가 wn보다 큰 경우, 전부 0으로 바꿔 준다.
  3. shift 시킬 비트의 길이가 wn보다 작은 경우, WORD_LEN_BIT의 배수인지 아닌지 판단하여 shift를 해 준다.
-
+---
 - Chpater 2.11
 ```c
 void Reduction_BI() //Reduction Integer
@@ -347,7 +348,7 @@ void Reduction_BI() //Reduction Integer
  2. mod 연산 하고자 하는 길이(r)가 워드열보다 짧으면서 WORD_BIT_LEN의 배수일 때, 나누는 수보다 작은 워드열은 그대로 두고, 큰 워드열은 0으로 초기화시켜준다.
  3. 모두 아닌 경우, 나누는 수보다 작은 워드열은 그대로 두고, 그 다음 상위 열에 대한 mod 연산을 해준다.
  4. 그 이후 상위 워드열은 그대로 둔다.
-
+---
 - Chapter 4 Subtraction
 ```c
 void SUBC_BI(int* borrow, bigint** c, bigint** a, bigint** b);
@@ -360,8 +361,8 @@ void SUBC_BI(int* borrow, bigint** c, bigint** a, bigint** b);
 - 동작 순서
  1. 단일 워드에 대해서 뺄셈 연산을 수행 (첫번째일 때는 borrow = 0)
  2. 단일 워드에 대해서 뺄셈 연산 후 borrow 값과 c에 대입
-
- ```c
+***
+```c
 bigint* SUB_BI(bigint** a, bigint** b);
     input : bigint** a, bigint** b
     argv[0] : 뺄셈 연산할 때 A - B 에서 A인 bigint형 더블 포인터
