@@ -1,61 +1,63 @@
 
-# TORY(cryp'TO' libar'RY') // Se-yoon Lee, Seo-Woo Jung
+# TORY(cryp'TO' libar'RY') 
 
-The library to implemented 'Big integer function' which used to 'Public-key cryptography'.
 
-Table of Contents:
+## The library to implemented 'Big integer function' which used to 'Public-key cryptography'.
+## Se-yoon Lee, Seo-Woo Jung
 
-    [0] Development environmnet
-    [1] Description of Tory.
-    [2] Getting Tory.
-    [3] Compiling Tory.
-    [4] Description of Tory's function.
+### Table of Contents:
 
-─────────────────────────────────────────────────────
-
-    [0] Development environment
-
-    < 1 >
-        OS : Window 10
-        Compiler : Visual studio
-
-    < 2 >
-        OS : Ubuntu 18.04
-        Compiler : gcc
+[0] Development environmnet
+[1] Description of Tory.
+[2] Getting Tory.
+[3] Compiling Tory.
+[4] Description of Tory's function.
 
 ─────────────────────────────────────────────────────
 
-    [1] Description of Tory.
+### [0] Development environment
 
-    이 문서는 토리(크립'토' + 라이브러'리') 팀이 작성한 Readme.txt 파일이다.
+< 1 >
+    OS : Window 10
+    Compiler : Visual studio
 
-    - main.c --> 빅넘버 연산 함수들을 테스트 해볼 수 있는 테스트 벡터들을 생성
-    - bigint.h --> 빅넘버 관련 연산 함수들의 헤더 파일
-    - bigint.c --> 빅넘버 관련 연산 함수들이 구현
-
-─────────────────────────────────────────────────────
-
-    [2] Getting Tory.
-
-    1. Tory is available via Git at https://github.com/Leeseyoon/Tory .
-
-    2. To obatin Tory enter into the your prefered folder and write the following syntax :
-
-        $ git clone https://github.com/Leeseyoon/Tory.git
+< 2 >
+    OS : Ubuntu 18.04
+    Compiler : gcc
 
 ─────────────────────────────────────────────────────
 
-    [3] Compiling Tory.
+### [1] Description of Tory.
 
-    1. Use 'visual studio' Compiler
+이 문서는 토리(크립'토' + 라이브러'리') 팀이 작성한 Readme.txt 파일이다.
 
-    2. Use gcc Compiler in linux
+- main.c --> 빅넘버 연산 함수들을 테스트 해볼 수 있는 테스트 벡터들을 생성
+- bigint.h --> 빅넘버 관련 연산 함수들의 헤더 파일
+- bigint.c --> 빅넘버 관련 연산 함수들이 구현
+
+─────────────────────────────────────────────────────
+
+### [2] Getting Tory.
+
+1. Tory is available via Git at https://github.com/Leeseyoon/Tory .
+
+2. To obatin Tory enter into the your prefered folder and write the following syntax :
+
+    $ git clone https://github.com/Leeseyoon/Tory.git
+
+─────────────────────────────────────────────────────
+
+### [3] Compiling Tory.
+
+1. Use 'visual studio' Compiler
+
+2. Use gcc Compiler in linux
 
                     1st      2nd     3rd      4th     <-- arg
-        $ gcc -o [filename] main.c bigint.c bigint.h
+    $ gcc -o [filename] main.c bigint.c bigint.h
 
 ─────────────────────────────────────────────────────
-    [4] Description of Tory's function.
+### [4] Description of Tory's function.
 
 In 'bigint.h'
 
