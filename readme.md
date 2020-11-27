@@ -6,11 +6,11 @@
 
 ### Table of Contents:
 
-    0. Development environmnet
-    1. Description of Tory.
-    2. Getting Tory.
-    3. Compiling Tory.
-    4. Description of Tory's function.
+ 0. Development environmnet
+ 1. Description of Tory.
+ 2. Getting Tory.
+ 3. Compiling Tory.
+ 4. Description of Tory's function.
 
 ─────────────────────────────────────────────────────
 
