@@ -6,23 +6,23 @@
 
 ### Table of Contents:
 
-0. Development environmnet
-1. Description of Tory.
-2. Getting Tory.
-3. Compiling Tory.
-4. Description of Tory's function.
+    0. Development environmnet
+    1. Description of Tory.
+    2. Getting Tory.
+    3. Compiling Tory.
+    4. Description of Tory's function.
 
 ─────────────────────────────────────────────────────
 
 ### [0] Development environment
 
 1.
-    *OS : Window 10
-    *Compiler : Visual studio
+    - OS : Window 10
+    - Compiler : Visual studio
 
 2.
-    *OS : Ubuntu 18.04
-    *Compiler : gcc
+    - OS : Ubuntu 18.04
+    - Compiler : gcc
 
 ─────────────────────────────────────────────────────
 
