@@ -67,3 +67,11 @@
 ```c
 void BI_New() // Create Big_Integer
 ```
+`input : bigint** x, int wordlen
+      1st arg : 새로 선언할 Big_Integer
+      2nd arg : 새로 선언할 Big_Integer의 길이`
+[동작 순서]
+1. 생성하고자 하는 bigint형 포인터 x가 nullptr이 아닐 시 BI_Delete를 이용해 제거한다.
+2. 워드열의 길이에 wordlen을 대입해 준다.
+3. 워드열의 부호에 NON_NEGATIVE를 대입해 준다.
+4. 워드열의 길이에 맞춰 워드열을 동적 메모리 할당해 준다.
