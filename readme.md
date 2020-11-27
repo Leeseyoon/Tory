@@ -36,11 +36,11 @@
 
 ### [2] Getting Tory.
 
-1. Tory is available via Git at https://github.com/Leeseyoon/Tory .
+1. Tory is available via Git at [link](https://github.com/Leeseyoon/Tory)
 
 2. To obatin Tory enter into the your prefered folder and write the following syntax :
 
-    $ git clone https://github.com/Leeseyoon/Tory.git
+    '$ git clone https://github.com/Leeseyoon/Tory.git'
 
 ─────────────────────────────────────────────────────
 
@@ -49,14 +49,8 @@
 1. Use 'visual studio' Compiler
 
 2. Use gcc Compiler in linux
-    $ gcc -o [filename] main.c bigint.c bigint.h
+
+    '$ gcc -o [filename] main.c bigint.c bigint.h'
 
 ─────────────────────────────────────────────────────
 ### [4] Description of Tory's function.
-
-In 'bigint.h'
-
-#define NEGATIVE : Big_Integer의 부호가 음수일 때 
-#define NON_NEGATIVE : Big_Integer의 부호가 양수일 때 
-#define ERROR : 오류 발생 시 반환값
-#define WORD_BIT_LEN : 워드 단위에 대한 값(8, 32, 64-bit)
