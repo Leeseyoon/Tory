@@ -39,7 +39,9 @@
 1. Tory is available via Git at [link](https://github.com/Leeseyoon/Tory)
 
 2. To obatin Tory enter into the your prefered folder and write the following syntax :
-'$ git clone https://github.com/Leeseyoon/Tory.git'
+
+
+    $ git clone https://github.com/Leeseyoon/Tory.git
 
 ─────────────────────────────────────────────────────
 
@@ -48,7 +50,9 @@
 1. Use 'visual studio' Compiler
 
 2. Use gcc Compiler in linux
-'$ gcc -o [filename] main.c bigint.c bigint.h'
+
+
+    $ gcc -o [ File name ] main.c bigint.c bigint.h
 
 ─────────────────────────────────────────────────────
 ### [4] Description of Tory's function.
