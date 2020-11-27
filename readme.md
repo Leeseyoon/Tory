@@ -1,13 +1,69 @@
-[Readme.txt]
 
- 이 문서는 정서우, 이세윤의 토리(크립'토' + 라이브러'리') 팀이 작성한 Readme.txt 파일이다.
-main.c 에 각 함수들을 테스트해 보도록 구현함
+# TORY(cryp'TO' libar'RY') // Se-yoon Lee, Seo-Woo Jung
 
-//bigint.h
+The library to implemented 'Big integer function' which used to 'Public-key cryptography'.
+
+Table of Contents:
+
+    [0] Development environmnet
+    [1] Description of Tory.
+    [2] Getting Tory.
+    [3] Compiling Tory.
+    [4] Description of Tory's function.
+
+─────────────────────────────────────────────────────
+
+    [0] Development environment
+
+    < 1 >
+        OS : Window 10
+        Compiler : Visual studio
+
+    < 2 >
+        OS : Ubuntu 18.04
+        Compiler : gcc
+
+─────────────────────────────────────────────────────
+
+    [1] Description of Tory.
+
+    이 문서는 토리(크립'토' + 라이브러'리') 팀이 작성한 Readme.txt 파일이다.
+
+    - main.c --> 빅넘버 연산 함수들을 테스트 해볼 수 있는 테스트 벡터들을 생성
+    - bigint.h --> 빅넘버 관련 연산 함수들의 헤더 파일
+    - bigint.c --> 빅넘버 관련 연산 함수들이 구현
+
+─────────────────────────────────────────────────────
+
+    [2] Getting Tory.
+
+    1. Tory is available via Git at https://github.com/Leeseyoon/Tory .
+
+    2. To obatin Tory enter into the your prefered folder and write the following syntax :
+
+        $ git clone https://github.com/Leeseyoon/Tory.git
+
+─────────────────────────────────────────────────────
+
+    [3] Compiling Tory.
+
+    1. Use 'visual studio' Compiler
+
+    2. Use gcc Compiler in linux
+
+                    1st      2nd     3rd      4th     <-- arg
+        $ gcc -o [filename] main.c bigint.c bigint.h
+
+─────────────────────────────────────────────────────
+    [4] Description of Tory's function.
+
+In 'bigint.h'
+
 #define NEGATIVE : Big_Integer의 부호가 음수일 때 
 #define NON_NEGATIVE : Big_Integer의 부호가 양수일 때 
 #define ERROR : 오류 발생 시 반환값
 #define WORD_BIT_LEN : 워드 단위에 대한 값(8, 32, 64-bit)
+
 
 /*-----------------------------------------------------------------------------------------------------*/
 
@@ -168,7 +224,7 @@ void j_th_Bit_of_BI() // j-th Bit of Big_Integer
 1. j 번째 비트의 위치가 워드열보다 크다면 return 해준다.
 2. j 번째 비트가 워드열안에 속한다면, 워드 열 중 몇 번째 워드의 비트인지 확인한다. ex) 2번째 워드의 최상위 비트
 3. 해당하는 워드의 비트의 값을 확인하기 위해(마스킹 작업) 새로운 변수를 선언한다.
-4. 새로운 변수를 해당 비트에만 1이 채워지도록 1을 shift 연산처리한다. ex)  2번 워드의 최상위 비트를 만들기 위해 1<<WORD_BIT_LEN
+4. 새로운 변수를 해당 비트에만 1이 채워지도록 1을 shift 연산처리한다. ex)  2번쨰 워드의 최상위 비트를 만들기 위해 1<<WORD_BIT_LEN
 4. 이 후 두 값을 비교해 같으면 1, 다르면 0을 출력하도록 한다.
 
 /*-----------------------------------------------------------------------------------------------------*/
@@ -265,7 +321,7 @@ void Right_Shift()
 /*-----------------------------------------------------------------------------------------------------*/
 
 // Chpater 2.11
-void Reduction_BI() // Reduction Integer
+void Reduction_BI() //Reduction Integer
    input : bigint **x, int r
    1st arg : reduction 대상인 Big_Integer의 더블 포인터
    2nd arg : 나누고자 하는 수
@@ -275,45 +331,6 @@ void Reduction_BI() // Reduction Integer
 나누는 수보다 작은 워드열은 그대로 두고, 큰 워드열은 0으로 초기화시켜준다.
 3. 모두 아닌 경우, 나누는 수보다 작은 워드열은 그대로 두고, 그 다음 상위 열에 대한 mod 연산을 해준다.
 그 이후 상위 워드열은 그대로 둔다.
-
-/*-----------------------------------------------------------------------------------------------------*/
-
-// Chapter 3 Addition
-
-int ADD_ABc() // 캐리를 포함한 단일 덧셈
-   input : bigint** A, bigint** B, bigint** C, int c, int i
-   output : int carry
-   1st arg : addition을 수행할 Big_Integer의 더블 포인터
-   2nd arg : addition을 수행할 Big_Integer의 더블 포인터
-   3rd arg : 이전 자리수의 carry
-   4th arg : addition을 수행해 줄 배열의 index
-[동작 순서]
-1. A 구조체 내부 배열의 i번째와 B 구조체 내부 배열의 i번째를 더해 준다.
-2. 1번에서 계산한 값이 A 구조채 내부 배열의 i번째 값보다 작은지 비교하여 carry 여부를 판단해 준다.
-
-
-bigint* ADDC() // WordLen(A) >= WordLen(B)
-   input : bigint** A, bigint** B, int sign
-   output : bigint* C (= A + B)
-   1st arg : addition을 수행할 Big_Integer의 더블 포인터
-   2nd arg : addition을 수행할 Big_Integer의 더블 포인터
-   3rd arg : addition을 수행한 결과값 Big_Integer의 부호
-[동작 순서]
-1. addition 결과값을 저장해 줄 (WordLen(A) + 1)만큼의 Big_Integer를 생성해 준다.
-2. 0부터 WordLen(A) - 1 번째까지 A, B 각각의 배열을 단일 덧셈을 이용하여 더해 준다.
-3. 1번에서 생성한 Big_Integer에 input의 sign을 넣어 준다.
-
-
-bigint* ADD()
-   input : bigint** A, bigint** B
-   output : bigint* C (= A + B)
-   1st arg : addition을 수행할 Big_Integer의 더블 포인터
-   2nd arg : addition을 수행할 Big_Integer의 더블 포인터
-[동작 순서]
-1. A가 0이면 A + B = B, B가 0이면 A + B=A를 반환해 준다.
-2. A가 양수이고, B가 음수이면 B에 절댓값을 취한 뒤 A - B를 수행한다.
-3. A가 음수이고, B가 양수이면 A에 절댓값을 취한 뒤 B - A를 수행한다.
-4. A, B가 동일한 부호일 경우, ADDC() 함수를 수행해 준다.
 
 /*-----------------------------------------------------------------------------------------------------*/
 
