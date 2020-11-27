@@ -1,29 +1,29 @@
 
 # TORY(cryp'TO' libar'RY') 
-
+## Se-yoon Lee, Seo-Woo Jung
 
 ## The library to implemented 'Big integer function' which used to 'Public-key cryptography'.
-## Se-yoon Lee, Seo-Woo Jung
+
 
 ### Table of Contents:
 
-[0] Development environmnet
-[1] Description of Tory.
-[2] Getting Tory.
-[3] Compiling Tory.
-[4] Description of Tory's function.
+__0. Development environmnet__
+1. Description of Tory.
+2. Getting Tory.
+3. Compiling Tory.
+4. Description of Tory's function.
 
 ─────────────────────────────────────────────────────
 
 ### [0] Development environment
 
-< 1 >
-    OS : Window 10
-    Compiler : Visual studio
+#### 1
+- OS : Window 10
+- Compiler : Visual studio
 
-< 2 >
-    OS : Ubuntu 18.04
-    Compiler : gcc
+#### 2
+- OS : Ubuntu 18.04
+- Compiler : gcc
 
 ─────────────────────────────────────────────────────
 
@@ -52,8 +52,6 @@
 1. Use 'visual studio' Compiler
 
 2. Use gcc Compiler in linux
-
-                    1st      2nd     3rd      4th     <-- arg
     $ gcc -o [filename] main.c bigint.c bigint.h
 
 ─────────────────────────────────────────────────────
