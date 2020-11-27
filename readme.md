@@ -20,7 +20,7 @@
 1.
     - OS : Window 10
     - Compiler : Visual studio
-
+=
 2.
     - OS : Ubuntu 18.04
     - Compiler : gcc
@@ -136,7 +136,7 @@ void Ascii_To_Hex() // Ascii -> Hex
    2nd arg : Hex 형태로 바뀐 숫자를 가리키는 포인터
 ```
 - 동작 순서
- 1. 입력받은 게 0~9까지의 숫자면 -0x30, A~F까지의 문자면 -0x31을 해 준다.
+ 1. 입력받은 게 0부터 9까지의 숫자면 -0x30, A부터 F까지의 문자면 -0x31을 해 준다.
 
 ```c
 void BI_Show() // Show Big_Integer
