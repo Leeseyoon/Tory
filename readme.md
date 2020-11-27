@@ -1,5 +1,4 @@
-
-# Tory ##(cryp'to' libar'ry') 
+# __Tory__ (cryp'to' libra'ry') 
 ## Se-yoon Lee, Seo-Woo Jung
 
 ## The library to implemented 'Big integer function' which used to 'Public-key cryptography'.
@@ -54,3 +53,10 @@
 
 ─────────────────────────────────────────────────────
 ### [4] Description of Tory's function.
+
+In 'bigint.h'
+
+#define NEGATIVE : Big_Integer의 부호가 음수일 때 
+#define NON_NEGATIVE : Big_Integer의 부호가 양수일 때 
+#define ERROR : 오류 발생 시 반환값
+#define WORD_BIT_LEN : 워드 단위에 대한 값(8, 32, 64-bit)
