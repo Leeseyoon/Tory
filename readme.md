@@ -17,11 +17,11 @@
 
 ### [0] Development environment
 
-1.
+1.  
     - OS : Window 10
     - Compiler : Visual studio
 ---
-2.<br>
+2.  
     - OS : Ubuntu 18.04
     - Compiler : gcc
 
