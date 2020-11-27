@@ -17,11 +17,11 @@
 
 ### [0] Development environment
 
-1.
+1.<br>
     - OS : Window 10
     - Compiler : Visual studio
-=
-2.
+---
+2.<br>
     - OS : Ubuntu 18.04
     - Compiler : gcc
 
@@ -77,7 +77,8 @@ void BI_New() // Create Big_Integer
 2. 워드열의 길이에 wordlen을 대입해 준다.
 3. 워드열의 부호에 NON_NEGATIVE를 대입해 준다.
 4. 워드열의 길이에 맞춰 워드열을 동적 메모리 할당해 준다.
-
+---
+<br>
 ```c
 void BI_Delete(bigint** x) // Delete Big_Integer
       
