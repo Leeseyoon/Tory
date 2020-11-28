@@ -112,4 +112,11 @@ void DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B);
 void DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m);
 void DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m);
 
+// Modular Exponentiation
+void Montgomery_Ladder_mul(bigint** C, bigint* A, int n);
+void Montgomery_Ladder_add(bigint* C, bigint* A, int n);
+
+void Bit_Length_of_number(int num, int* len); // 정수의 비트열의 개수 구하는 함수
+int j_th_Bit_of_number(int j, int num); // 정수의 j번째 비트가 0인지 1인지 판단하는 함수
+
 #endif

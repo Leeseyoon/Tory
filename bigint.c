@@ -1733,3 +1733,168 @@ void DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m) // DIVCC 에서 if(n == m
 	BI_Delete(&Temp2); // 선언해준 빅넘버 Temp2 delete.
 	BI_Delete(&Trash); // 선언해준 빅넘버 Trash delete.
 }
+
+// C = A^n
+void Montgomery_Ladder_mul(bigint** C, bigint* A, int n)
+{
+	int i, bit;
+	int n_bit_len;
+	int t0_len = 0;
+	int t1_len = 0;
+
+	bigint* t0 = NULL;
+	bigint* t1 = NULL;
+	bigint* temp0 = NULL; // t0를 저장할 임시 변수
+	bigint* temp1 = NULL; // t1을 저장할 임시 변수
+
+	Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
+
+	BI_Set_One(&t0); // t0 = 1
+	Assign_BI(&t1, A); // t1 = A
+
+	for (i = n_bit_len - 1; i >= 0; i--)
+	{
+		bit = j_th_Bit_of_number(i, n); // n의 i번째 비트가 1인지 0인지 판별
+
+		if (bit == 1) // n의 i번째 비트가 1일 경우
+		{
+			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+
+			BI_New(&temp0, t0_len + t1_len); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
+			BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
+
+			MUL_MUL(&temp0, t0, t1); // temp0 = t0 * t1
+			BI_Delete(&t0);
+			Assign_BI(&t0, temp0); // t0 = temp0 (t0 갱신)
+			BI_Delete(&temp0);
+
+			SQUC(temp1, t1); // temp1 = t1^2
+			BI_Delete(&t1);
+			Assign_BI(&t1, temp1); // t1 = temp1 (t1 갱신)
+			BI_Delete(&temp1);
+
+		}
+		else if (bit == 0) // n의 i번째 비트가 0일 경우
+		{
+			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+
+			BI_New(&temp0, t0_len * 2 + 1); // temp0(t0) = t0^2을 저장하기 위한 bigint 생성
+			BI_New(&temp1, t0_len + t1_len);  // temp1(t1) = t0 * t1을 저장하기 위한 bigint 생성
+
+			MUL_MUL(&temp1, t0, t1); // temp1 = t0 * t1
+			BI_Delete(&t1);
+			Assign_BI(&t1, temp1); // t1 = temp1 (t1 갱신)
+			BI_Delete(&temp1);
+
+			SQUC(temp0, t0); // temp0 = t0^2
+			BI_Delete(&t0);
+			Assign_BI(&t0, temp0); // t0 = temp0 (t0 갱신)
+			BI_Delete(&temp0);
+		}
+		else // n의 i번째 비트가 1도 0도 아닌 경우
+			return; // 예외 처리
+	}
+
+	Assign_BI(C, t0); // 마지막 t0 값 C에 할당
+
+	BI_Delete(&t0);
+	BI_Delete(&t1);
+}
+
+// C = n * A
+void Montgomery_Ladder_add(bigint* C, bigint* A, int n)
+{
+	int i, bit;
+	int n_bit_len;
+	int t0_len = 0;
+	int t1_len = 0;
+
+	bigint* t0 = NULL;
+	bigint* t1 = NULL;
+	bigint* temp0 = NULL; // t0를 저장할 임시 변수
+	bigint* temp1 = NULL; // t1을 저장할 임시 변수
+
+	Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
+
+	BI_Set_Zero(&t0); // t0 = 0
+	Assign_BI(&t1, A); // t1 = A
+
+	for (i = n_bit_len - 1; i >= 0; i--)
+	{
+		bit = j_th_Bit_of_number(i, n); // n의 i번째 비트가 1인지 0인지 판별
+
+		if (bit == 1) // n의 i번째 비트가 1일 경우
+		{
+			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+
+			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 + t1을 저장하기 위한 bigint 생성
+
+			ADD(&temp0, &t0, &t1); // temp0 = t0 + t1
+			BI_Delete(&t0);
+			Assign_BI(&t0, temp0); // t0 = temp0 (t0 갱신)
+			BI_Delete(&temp0);
+
+			Left_Shift(t1, 1); // t1 = t1 << 2
+
+		}
+		else if (bit == 0) // n의 i번째 비트가 0일 경우
+		{
+			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+
+			BI_New(&temp1, MAX(t0_len, t1_len) + 1);  // temp1(t1) = t0 + t1을 저장하기 위한 bigint 생성
+
+			ADD(&temp1, &t0, &t1); // temp1 = t0 + t1
+			BI_Delete(&t1);
+			Assign_BI(&t1, temp1); // t1 = temp1 (t1 갱신)
+			BI_Delete(&temp1);
+
+			Left_Shift(t0, 1); // t0 = t0 << 2
+		}
+		else // n의 i번째 비트가 1도 0도 아닌 경우
+			return; // 예외 처리
+	}
+
+	Assign_BI(C, t0); // 마지막 t0 값 C에 할당
+
+	BI_Delete(&t0);
+	BI_Delete(&t1);
+}
+
+void Bit_Length_of_number(int num, int* len)
+{
+	//int i = 0;
+	int j = 0;
+
+	for (j = 1; ; j++)
+	{
+		num = num / 2;
+
+		if (num == 0)
+			break;
+	}
+
+	*len = j;
+}
+
+int j_th_Bit_of_number(int j, int num)
+{
+	int i;
+	int len;
+
+	Bit_Length_of_number(num, &len);
+
+	if (j > len)
+		return ERROR;
+
+	i = 1;
+	i = i << j;
+
+	if (i == (num & i))
+		return 1;
+	else
+		return 0;
+}
