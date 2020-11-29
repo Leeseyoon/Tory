@@ -119,7 +119,22 @@ void Montgomery_Exp_add(bigint** C, bigint* A, int n);
 void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M);
 void Montgomery_Mod_Exp_add(bigint** C, bigint* A, int n, bigint* M);
 
-void Bit_Length_of_number(int num, int* len); // Á¤¼öÀÇ ºñÆ®¿­ÀÇ °³¼ö ±¸ÇÏ´Â ÇÔ¼ö
-int j_th_Bit_of_number(int j, int num); // Á¤¼öÀÇ j¹øÂ° ºñÆ®°¡ 0ÀÎÁö 1ÀÎÁö ÆÇ´ÜÇÏ´Â ÇÔ¼ö
+void EXP_LR_MUL(bigint** T, bigint* X, int n, bigint* M);
+void EXP_LR_ADD(bigint** T, bigint* X, int n, bigint* M);
+void EXP_RL_MUL(bigint** T, bigint* X, int n, bigint* M);
+void EXP_RL_ADD(bigint** T, bigint* X, int n, bigint* M);
+
+void MOD_EXP_LR_MUL(bigint** T, bigint* X, int n, bigint* M);
+void MOD_EXP_LR_ADD(bigint** T, bigint* X, int n, bigint* M);
+void MOD_EXP_RL_MUL(bigint** T, bigint* X, int n, bigint* M);
+void MOD_EXP_RL_ADD(bigint** T, bigint* X, int n, bigint* M);
+
+void MOD_EXP_LR_MUL_DIV(bigint** T, bigint* X, int n, bigint* M);
+void MOD_EXP_LR_ADD_DIV(bigint** T, bigint* X, int n, bigint* M);
+void MOD_EXP_RL_MUL_DIV(bigint** T, bigint* X, int n, bigint* M);
+void MOD_EXP_RL_ADD_DIV(bigint** T, bigint* X, int n, bigint* M);
+
+void Bit_Length_of_number(int num, int* len); // ì •ìˆ˜ì˜ ë¹„íŠ¸ì—´ì˜ ê°œìˆ˜ êµ¬í•˜ëŠ” í•¨ìˆ˜
+int j_th_Bit_of_number(int j, int num); // ì •ìˆ˜ì˜ jë²ˆì§¸ ë¹„íŠ¸ê°€ 0ì¸ì§€ 1ì¸ì§€ íŒë‹¨í•˜ëŠ” í•¨ìˆ˜
 
 #endif
