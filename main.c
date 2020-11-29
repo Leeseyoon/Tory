@@ -33,6 +33,18 @@ int main()
     montgomery_ladder_Exponentiation_addtion_test();
     montgomery_ladder_Modular_Exponentiation_multiplication_test();
     montgomery_ladder_Modular_Exponentiation_addtion_test();
+    Left_Right_EXP_ADD_test(); 
+	Left_Right_EXP_MUL_test();
+	Right_Left_EXP_ADD_test();
+	Right_Left_EXP_MUL_test(); // Only Exponentiation
+	Left_Right_EXP_ADD_MOD_test();
+	Left_Right_EXP_MUL_MOD_test();
+	Right_Left_EXP_ADD_MOD_test();
+	Right_Left_EXP_MUL_MOD_test(); // Modular Exponentiaition used Binary Long Division
+	Left_Right_EXP_ADD_MOD_DIV_test();
+	Left_Right_EXP_MUL_MOD_DIV_test();
+	Right_Left_EXP_ADD_MOD_DIV_test();
+	Right_Left_EXP_MUL_MOD_DIV_test(); // Modular Exponentiation used Multi Long Division
 #endif    
     //squaring_karatsuba_test();
     //squaring_test();
