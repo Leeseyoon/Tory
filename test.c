@@ -20,35 +20,35 @@ int addition_test()
 
     printf("print(\"WORD_BIT_LEN == %d\")\n", WORD_BIT_LEN);
 
-    /* n¹ø µ¡¼À ¿¬»êÇÏ±â */ // 8, 32, 64
+    /* në²ˆ ë§ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
 
     printf("\n\n");
     printf("print(\"Addition\")\n");
 
-    for (i = 0; i < 20; i++) // n¿¡ 20 ´ëÀÔ
+    for (i = 0; i < 20; i++) // nì— 20 ëŒ€ì…
     {
         size1 = (rand() & 0x3) + 1; // size1 : 1~16
         size2 = (rand() & 0x3) + 1; // size2 : 1~16
 
-        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
-        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
 
         size = MAX(bi_1->wordlen, bi_2->wordlen);
-        BI_New(&bi_re, size + 1); // ´õ ±ä ±æÀÌÀÎ size·Î µ¡¼À ¿¬»ê °á°úÀÎ big integer »ı¼º
+        BI_New(&bi_re, size + 1); // ë” ê¸´ ê¸¸ì´ì¸ sizeë¡œ ë§ì…ˆ ì—°ì‚° ê²°ê³¼ì¸ big integer ìƒì„±
 
-        // Ãâ·Â ºÎºĞ
+        // ì¶œë ¥ ë¶€ë¶„
         printf("A = ");
         BI_Show(bi_1, 16);
         printf("B = ");
         BI_Show(bi_2, 16);
 
-        ADD(&bi_re, &bi_1, &bi_2); // ADDÇÔ¼ö¿¡ µ¡¼À °á°úÀÎ bi_re , ÇÇ¿¬»êÀÚ 1ÀÎ bi_1, ÇÇ¿¬»êÀÚ 2ÀÎ bi_2
+        ADD(&bi_re, &bi_1, &bi_2); // ADDí•¨ìˆ˜ì— ë§ì…ˆ ê²°ê³¼ì¸ bi_re , í”¼ì—°ì‚°ì 1ì¸ bi_1, í”¼ì—°ì‚°ì 2ì¸ bi_2
 
         printf("A + B == ");
         BI_Show(bi_re, 16);
         printf("\n");
 
-        // ¸Ş¸ğ¸® free
+        // ë©”ëª¨ë¦¬ free
         BI_Delete(&bi_1);
         BI_Delete(&bi_2);
         BI_Delete(&bi_re);
@@ -73,20 +73,20 @@ int subtraction_test()
 
     printf("print(\"WORD_BIT_LEN == %d\")\n", WORD_BIT_LEN);
 
-    /* n¹ø »¬¼À ¿¬»êÇÏ±â */ // 8, 32, 64
+    /* në²ˆ ëº„ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
 
     printf("\n");
     printf("print(\"Subtraction\")\n");
 
-    for (i = 0; i < 20; i++) // n¿¡ 20 ´ëÀÔ
+    for (i = 0; i < 20; i++) // nì— 20 ëŒ€ì…
     {
         size1 = (rand() & 0x7) + 1; // size1 : 1~16
         size2 = (rand() & 0x7) + 1; // size2 : 1~16
 
-        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
-        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
 
-        size = (size1 > size2) ? size1 : size2; // size1 °ú size2 ºñ±³ÇØ¼­ size º¯¼ö¿¡ ´ëÀÔ
+        size = (size1 > size2) ? size1 : size2; // size1 ê³¼ size2 ë¹„êµí•´ì„œ size ë³€ìˆ˜ì— ëŒ€ì…
         BI_New(&bi_re, size + 1); //size + 1?
 
         printf("A = ");
@@ -121,17 +121,17 @@ int schoolbook_multiplication_test()
     bigint* bi_re = NULL;
     bigint* bi_q = NULL;
 
-    /* n¹ø Schoolbook °ö¼À ¿¬»êÇÏ±â */ // 8, 32, 64
+    /* në²ˆ Schoolbook ê³±ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
 
     printf("\n\n");
     printf("print(\"Schoolbook Multiplication\")\n");
-    for (i = 0; i < 20; i++) //n¹ø °ö¼À ¿¬»êÇÏ±â
+    for (i = 0; i < 20; i++) //në²ˆ ê³±ì…ˆ ì—°ì‚°í•˜ê¸°
     {
         size1 = (rand() & 0x7) + 1; // size1 : 1~16
         size2 = (rand() & 0x7) + 1; // size2 : 1~16
 
-        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
-        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
 
         BI_New(&bi_re, size1 + size2);
 
@@ -166,17 +166,17 @@ int karatsuba_multiplication_test()
     bigint* bi_re = NULL;
     bigint* bi_q = NULL;
 
-    /* n¹ø Karatsuba °ö¼À ¿¬»êÇÏ±â */ // 8, 32, 64
+    /* në²ˆ Karatsuba ê³±ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
 
     printf("\n\n");
     printf("print(\"Karatsuba Multiplication\")\n");
-    for (i = 0; i < 1; i++) //20¹ø Ä«¶óÃß¹Ù °ö¼À ¿¬»êÇÏ±â
+    for (i = 0; i < 1; i++) //20ë²ˆ ì¹´ë¼ì¶”ë°” ê³±ì…ˆ ì—°ì‚°í•˜ê¸°
     {
         size1 = (rand() & 0x3) + 100;
         size2 = (rand() & 0x3) + 100;
 
-        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
-        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+        bi_gen_rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
 
         printf("A = ");
         BI_Show(bi_1, 16);
@@ -235,23 +235,23 @@ int binary_long_division_test()
     bigint* bi_re = NULL;
     bigint* bi_q = NULL;
 
-    /* n¹ø Binary Long Division ¿¬»êÇÏ±â */ // 8, 32, 64
+    /* në²ˆ Binary Long Division ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
 
     printf("\n");
-    printf("print(\"Binary Long Division\")\n"); // ¸Ş¸ğ¸® ¸¯ ÀâÀ½
+    printf("print(\"Binary Long Division\")\n"); // ë©”ëª¨ë¦¬ ë¦­ ì¡ìŒ
     for (i = 0; i < 20; i++)
     {
         size2 = (rand() & 3) + 1; // size2 : 1~4
-        size1 = size2 + (rand() & 3) + 1; // size1Àº size2 º¸´Ù ±æÀÌ ´õ ±æ°Ô
+        size1 = size2 + (rand() & 3) + 1; // size1ì€ size2 ë³´ë‹¤ ê¸¸ì´ ë” ê¸¸ê²Œ
 
 
-        BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
-        BI_New(&bi_2, size2); // size2 ±æÀÌÀÎ big integerÀÎ bi_2 »ı¼º
+        BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+        BI_New(&bi_2, size2); // size2 ê¸¸ì´ì¸ big integerì¸ bi_2 ìƒì„±
 
-        bi_gen_rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
-        bi_gen_rand(&bi_2, 0, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+        bi_gen_rand(&bi_2, 0, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
 
-        size = Compare_BI(&bi_1, &bi_2); // size1 °ú size2 ºñ±³
+        size = Compare_BI(&bi_1, &bi_2); // size1 ê³¼ size2 ë¹„êµ
         if (size == -1)
         {
             printf("print(\"B is larger than A\")\n");
@@ -261,7 +261,7 @@ int binary_long_division_test()
         else
         {
             Binary_Long_Div(&bi_q, &bi_re, bi_1, bi_2);
-            // Ãâ·Â ºÎºĞ
+            // ì¶œë ¥ ë¶€ë¶„
             printf("A = ");
             BI_Show(bi_1, 16);
             printf("B = ");
@@ -272,7 +272,7 @@ int binary_long_division_test()
             BI_Show(bi_re, 16);
             printf("A == B * Q + R");
             printf("\n");
-            // ¸Ş¸ğ¸® free
+            // ë©”ëª¨ë¦¬ free
             BI_Delete(&bi_1);
             BI_Delete(&bi_2);
             BI_Delete(&bi_re);
@@ -296,22 +296,22 @@ int multi_long_division_test()
     bigint* bi_re = NULL;
     bigint* bi_q = NULL;
 
-    /* n¹ø Multi Long Division ¿¬»êÇÏ±â */ // 32, 64 (8ÀÌ°í size°¡ Å¬ °æ¿ì ¸î °³ False)
+    /* në²ˆ Multi Long Division ì—°ì‚°í•˜ê¸° */ // 32, 64 (8ì´ê³  sizeê°€ í´ ê²½ìš° ëª‡ ê°œ False)
 
     printf("\n");
     printf("print(\"Multi Long Division\")\n");
     for (i = 0; i < 20; i++)
     {
         size2 = (rand() & 0xf) + 20; // size2 : 1~4
-        size1 = size2 + (rand() & 0xf);//size2 + (rand() & 3) + 1; // size1Àº size2 º¸´Ù ±æÀÌ ´õ ±æ°Ô
+        size1 = size2 + (rand() & 0xf);//size2 + (rand() & 3) + 1; // size1ì€ size2 ë³´ë‹¤ ê¸¸ì´ ë” ê¸¸ê²Œ
 
-        BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
-        BI_New(&bi_2, size2); // size2 ±æÀÌÀÎ big integerÀÎ bi_2 »ı¼º
+        BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+        BI_New(&bi_2, size2); // size2 ê¸¸ì´ì¸ big integerì¸ bi_2 ìƒì„±
 
-        bi_gen_rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
-        bi_gen_rand(&bi_2, 0, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+        bi_gen_rand(&bi_2, 0, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
 
-        size = Compare_BI(&bi_1, &bi_2); // size1 °ú size2 ºñ±³
+        size = Compare_BI(&bi_1, &bi_2); // size1 ê³¼ size2 ë¹„êµ
         if (size == -1)
         {
             printf("print(\"B is larger than A\")\n");
@@ -321,7 +321,7 @@ int multi_long_division_test()
         else
         {
             DIV(&bi_q, &bi_re, bi_1, bi_2);
-            // Ãâ·Â ºÎºĞ
+            // ì¶œë ¥ ë¶€ë¶„
             printf("A = ");
             BI_Show(bi_1, 16);
             printf("B = ");
@@ -332,7 +332,7 @@ int multi_long_division_test()
             BI_Show(bi_re, 16);
             printf("A == B * Q + R");
             printf("\n");
-            // ¸Ş¸ğ¸® free
+            // ë©”ëª¨ë¦¬ free
             BI_Delete(&bi_1);
             BI_Delete(&bi_2);
             BI_Delete(&bi_re);
@@ -356,14 +356,14 @@ int squaring_test()
     bigint* bi_re = NULL;
     bigint* bi_q = NULL;
 
-    /* n¹ø Squaring °ö¼À ¿¬»êÇÏ±â */ // 8, 32, 64
+    /* në²ˆ Squaring ê³±ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
 
     printf("\n");
     printf("print(\"Squaring\")\n");
-    for (i = 0; i < 1; i++) //20¹ø squaring
+    for (i = 0; i < 1; i++) //20ë²ˆ squaring
     {
         size1 = (rand() & 0xf) + 100;
-        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
         printf("A = ");
         BI_Show(bi_1, 16);
 
@@ -397,7 +397,7 @@ int squaring_karatsuba_test()
     bigint* bi_re = NULL;
     bigint* bi_q = NULL;
 
-    /* n¹ø Squaring Karatsuba °ö¼À ¿¬»êÇÏ±â */ // 8, 32, 64 ±æÀÌ 21 ÀÌ»óºÎÅÍ ¾È µÊ
+    /* në²ˆ Squaring Karatsuba ê³±ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64 ê¸¸ì´ 21 ì´ìƒë¶€í„° ì•ˆ ë¨
 
     printf("\n");
     printf("print(\"Squaring Karatsuba\")\n");
@@ -406,7 +406,7 @@ int squaring_karatsuba_test()
         //size1 = (rand() & 0xf) + 100;
         size1 = 22;
 
-        //bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        //bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
         // A = 0xcf55c5
         // A = 0x 02 c1 47 a1 b4 75 d1 b9 8e f6 22 a6 8b 2c 69 69 fa 8d 4e 31 1b e7
         word arr[22] = { 0xe7, 0x1b, 0x31, 0x4e, 0x8d, 0xfa, 0x69, 0x69, 0x2c, 0x8b, 0xa6,
@@ -451,7 +451,7 @@ int montgomery_Exponentiation_multiplication_test()
     bigint* bi_re = NULL;
     bigint* bi_q = NULL;
 
-    /* n¹ø Montgomery Ladder multiplacation ¿¬»êÇÏ±â */
+    /* në²ˆ Montgomery Ladder multiplacation ì—°ì‚°í•˜ê¸° */
     printf("\n");
     printf("print(\"Montgomery Ladder exponentiation multiplacation\")\n");
     for (i = 0; i < 20; i++)
@@ -460,7 +460,7 @@ int montgomery_Exponentiation_multiplication_test()
         size1 = (rand() & 0xf) + 1;
         n = (rand() & 0xf) + 1;
 
-        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
 
         printf("A = ");
         BI_Show(bi_1, 16);
@@ -493,7 +493,7 @@ int montgomery_ladder_Exponentiation_addtion_test()
     bigint* bi_re = NULL;
     bigint* bi_q = NULL;
 
-    /* n¹ø Montgomery Ladder addition ¿¬»êÇÏ±â */
+    /* në²ˆ Montgomery Ladder addition ì—°ì‚°í•˜ê¸° */
     printf("\n");
     printf("print(\"Montgomery Ladder exponentiation addition\")\n");
     for (i = 0; i < 20; i++)
@@ -502,7 +502,7 @@ int montgomery_ladder_Exponentiation_addtion_test()
         //size1 = (rand() & 0xf) + 1;
         n = (rand() & 0xf) + 1;
 
-        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
 
         printf("A = ");
         BI_Show(bi_1, 16);
@@ -534,7 +534,7 @@ int montgomery_ladder_Modular_Exponentiation_multiplication_test()
     bigint* bi_re = NULL;
     bigint* bi_M = NULL;
 
-    /* n¹ø Montgomery Ladder multiplacation ¿¬»êÇÏ±â */
+    /* në²ˆ Montgomery Ladder multiplacation ì—°ì‚°í•˜ê¸° */
     printf("\n");
     printf("print(\"Montgomery Ladder modular exponentiation multiplacation\")\n");
     for (i = 0; i < 20; i++)
@@ -544,8 +544,8 @@ int montgomery_ladder_Modular_Exponentiation_multiplication_test()
         size_M = (rand() & 0xf) + 1;
         n = (rand() & 0xf) + 1;
  
-        bi_gen_rand(&bi_1, NON_NEGATIVE, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
-        bi_gen_rand(&bi_M, NON_NEGATIVE, size_M); // bi_M ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_1, NON_NEGATIVE, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+        bi_gen_rand(&bi_M, NON_NEGATIVE, size_M); // bi_M ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
 
         printf("A = ");
         BI_Show(bi_1, 16);
@@ -580,7 +580,7 @@ int montgomery_ladder_Modular_Exponentiation_addtion_test()
     bigint* bi_re = NULL;
     bigint* bi_M = NULL;
 
-    /* n¹ø Montgomery Ladder addition ¿¬»êÇÏ±â */
+    /* në²ˆ Montgomery Ladder addition ì—°ì‚°í•˜ê¸° */
     printf("\n");
     printf("print(\"Montgomery Ladder odular exponentiation addition\")\n");
     for (i = 0; i < 20; i++)
@@ -590,8 +590,8 @@ int montgomery_ladder_Modular_Exponentiation_addtion_test()
         size_M = (rand() & 0xf) + 1;
         n = (rand() & 0xf) + 1;
 
-        bi_gen_rand(&bi_1, NON_NEGATIVE, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
-        bi_gen_rand(&bi_M, NON_NEGATIVE, size_M); // bi_M ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+        bi_gen_rand(&bi_1, NON_NEGATIVE, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+        bi_gen_rand(&bi_M, NON_NEGATIVE, size_M); // bi_M ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
 
         printf("A = ");
         BI_Show(bi_1, 16);
@@ -612,3 +612,468 @@ int montgomery_ladder_Modular_Exponentiation_addtion_test()
     }
     return 0;
 }
+
+
+void Left_Right_EXP_ADD_test() // Only Exponentiation function L->R add
+{
+	int i = 0;
+	int size1 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"Left to Right EXP ADD test\")\n");
+	for (i = 0; i < 20; i++)
+	{
+		size1 = (rand() & 0x7) + 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+
+		bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+
+		EXP_LR_ADD(&bi_re, bi_1, len, bi_2);
+		printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("%d * A == ", len);
+		BI_Show(bi_re, 16);
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_re);
+	}
+}
+
+void Left_Right_EXP_MUL_test() // Only Exponentiation function L->R mul
+{
+	int i = 0;
+	int size1 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_re = NULL;
+	printf("\n");
+	printf("print(\"Left to Right EXP MUL test\")\n");
+	for (i = 0; i < 20; i++)
+	{
+		
+
+		size1 = (rand() & 0x7) + 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+
+		bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+
+		EXP_LR_MUL(&bi_re, bi_1, len, bi_2);
+		printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("A ^ %d == ", len);
+		BI_Show(bi_re, 16);
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_re);
+	}
+}
+
+void Right_Left_EXP_ADD_test() // Only Exponentiation function R<-L add
+{
+	int i = 0;
+	int size1 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_re = NULL;
+	printf("\n");
+	printf("print(\"Right to Left Exp ADD test\")\n");
+	for (i = 0; i < 3; i++)
+	{
+		
+
+		size1 = (rand() & 0x7) + 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+
+		bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+
+		EXP_RL_ADD(&bi_re, bi_1, len, bi_2);
+		printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("%d * A == ", len);
+		BI_Show(bi_re, 16);
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_re);
+	}
+}
+
+void Right_Left_EXP_MUL_test()  // Only Exponentiation function R<-L mul
+{
+	int i = 0;
+	int size1 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_re = NULL;
+
+
+	printf("\n");
+	printf("print(\"Right to Letf Exp MUL test\")\n");
+	for (i = 0; i < 3; i++)
+	{		
+		size1 = (rand() & 0x7);
+		len = (rand() & 0x7);
+
+		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+
+		bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+
+		EXP_RL_MUL(&bi_re, bi_1, len, bi_2);
+		printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("A^%d == ", len);
+		BI_Show(bi_re, 16);
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_re);
+
+	}
+}
+
+void Left_Right_EXP_ADD_MOD_test() // Modular Exponentiaition used Binary Long Division L->R +
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_re = NULL;
+	printf("\n");
+	printf("print(\"Left to Right modular exp add test\")\n");
+	for (i = 0; i < 3; i++)
+	{
+		size1 = (rand() & 0x7) + 50;
+		size2 = size1 - (rand() & 0x3) - 30;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+		BI_New(&bi_2, size2);
+
+		bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		bi_gen_rand(&bi_2, 0, size2); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+
+		MOD_EXP_LR_ADD(&bi_re, bi_1, len, bi_2);
+		printf("a = ");
+		BI_Show(bi_1, 16);
+		printf("b = ");
+		BI_Show(bi_2, 16);
+		printf("(%d * a) %% b == ", len);
+		BI_Show(bi_re, 16);
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_re);
+	}
+}
+
+void Left_Right_EXP_MUL_MOD_test() // Modular Exponentiaition used Binary Long Division L->R *
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"Left to Right modular exp mul test\")\n");
+	for (i = 0; i < 3; i++)
+	{
+		
+
+		size1 = (rand() & 0x7) + 50;
+		size2 = size1 - (rand() & 0x3) - 30;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+		BI_New(&bi_2, size2);
+
+		bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		bi_gen_rand(&bi_2, 0, size2); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+
+		MOD_EXP_RL_MUL(&bi_re, bi_1, len, bi_2);
+		printf("a = ");
+		BI_Show(bi_1, 16);
+		printf("b = ");
+		BI_Show(bi_2, 16);
+		printf("(a ^ %d) %% b == ", len);
+		BI_Show(bi_re, 16);
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_re);
+	}
+}
+
+void Right_Left_EXP_ADD_MOD_test() // Modular Exponentiaition used Binary Long Division L<-R +
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"Right to Left Modular Exp ADD test\")\n");
+	for (i = 0; i < 3; i++)
+	{
+		size1 = (rand() & 0x7) + 50;
+		size2 = size1 - (rand() & 0x3) - 30;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+		BI_New(&bi_2, size2);
+
+		bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		bi_gen_rand(&bi_2, 0, size2); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+
+		MOD_EXP_RL_ADD(&bi_re, bi_1, len, bi_2);
+		printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("B = ");
+		BI_Show(bi_2, 16);
+		printf("(%d * A) %% B == ", len);
+		BI_Show(bi_re, 16);
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_re);
+	}
+}
+
+void Right_Left_EXP_MUL_MOD_test() // Modular Exponentiaition used Binary Long Division L<-R *
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"Right to Left Modular EXP MUL test\")\n");
+	for (i = 0; i < 3; i++)
+	{
+		size1 = (rand() & 0x7) + 50;
+		size2 = size1 - (rand() & 0x3) - 30;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+		BI_New(&bi_2, size2);
+
+		bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		bi_gen_rand(&bi_2, 0, size2); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+
+		MOD_EXP_RL_MUL(&bi_re, bi_1, len, bi_2);
+		printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("B = ");
+		BI_Show(bi_2, 16);
+		printf("(A ^ %d) %% B == ", len);
+		BI_Show(bi_re, 16);
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_re);
+	}
+}
+
+void Left_Right_EXP_ADD_MOD_DIV_test() // Modular Exponentiation used Multi Long Division L->R +
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"Left to Right modular exp add test (DIV func)\")\n");
+	for (i = 0; i < 3; i++)
+	{
+		size1 = (rand() & 0x7) + 50;
+		size2 = size1 - (rand() & 0x3) - 30;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+		BI_New(&bi_2, size2);
+
+		bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		bi_gen_rand(&bi_2, 0, size2); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+
+		MOD_EXP_LR_ADD_DIV(&bi_re, bi_1, len, bi_2);
+		printf("a = ");
+		BI_Show(bi_1, 16);
+		printf("b = ");
+		BI_Show(bi_2, 16);
+		printf("(%d * a) %% b == ", len);
+		BI_Show(bi_re, 16);
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_re);
+	}
+}
+
+void Left_Right_EXP_MUL_MOD_DIV_test() // Modular Exponentiation used Multi Long Division L->R *
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"left to right modular exp mul test (DIV func)\")\n");
+	for (i = 0; i < 3; i++)
+	{
+
+		size1 = (rand() & 0x7) + 50;
+		size2 = size1 - (rand() & 0x3) - 1;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+		BI_New(&bi_2, size2);
+
+		bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		bi_gen_rand(&bi_2, 0, size2); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+
+		MOD_EXP_RL_MUL_DIV(&bi_re, bi_1, len, bi_2);
+		printf("a = ");
+		BI_Show(bi_1, 16);
+		printf("b = ");
+		BI_Show(bi_2, 16);
+		printf("(a ^ %d) %% b == ", len);
+		BI_Show(bi_re, 16);
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_re);
+	}
+}
+
+void Right_Left_EXP_ADD_MOD_DIV_test() // Modular Exponentiation used Multi Long Division L<-R +
+{	
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_re = NULL;
+	
+	printf("print(\"Right to Left Modular Exp ADD test (DIV func)\")\n");
+	for (i = 0; i < 3; i++)
+	{
+		
+
+		size1 = (rand() & 0x7) + 50;
+		size2 = size1 - (rand() & 0x3) - 30;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+		BI_New(&bi_2, size2);
+
+		bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		bi_gen_rand(&bi_2, 0, size2); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+
+		MOD_EXP_RL_ADD_DIV(&bi_re, bi_1, len, bi_2);
+		printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("B = ");
+		BI_Show(bi_2, 16);
+		printf("(%d * A) %% B == ", len);
+		BI_Show(bi_re, 16);
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_re);
+	}
+}
+
+void Right_Left_EXP_MUL_MOD_DIV_test() // Modular Exponentiation used Multi Long Division L<-R *
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"Right to Left Modular EXP MUL test (DIV func)\")\n");
+	for (i = 0; i < 3; i++)
+	{
+		size1 = (rand() & 0x7) + 50;
+		size2 = size1 - (rand() & 0xf) - 30;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+		BI_New(&bi_2, size2);
+
+		bi_gen_rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		bi_gen_rand(&bi_2, 0, size2); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+
+		MOD_EXP_RL_MUL_DIV(&bi_re, bi_1, len, bi_2);
+		printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("B = ");
+		BI_Show(bi_2, 16);
+		printf("(A ^ %d) %% B == ", len);
+		BI_Show(bi_re, 16);
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_re);
+	}
+}
+
