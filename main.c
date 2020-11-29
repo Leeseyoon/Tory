@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "bigint.h"
+#include "test.h"
 
 #ifndef _DEBUG
 #define new new(_CLIENT_BLOCK, __FILE__, __LINE)
