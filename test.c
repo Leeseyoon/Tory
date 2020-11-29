@@ -308,7 +308,6 @@ int multi_long_division_test()
         BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
         BI_New(&bi_2, size2); // size2 길이인 big integer인 bi_2 생성
 
-
         bi_gen_rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
         bi_gen_rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
@@ -357,22 +356,20 @@ int squaring_test()
     bigint* bi_re = NULL;
     bigint* bi_q = NULL;
 
-    /* n번 Squaring 곱셈 연산하기 */ // 32, 64 (8일 때 메모리 충돌)
+    /* n번 Squaring 곱셈 연산하기 */ // 8, 32, 64
 
     printf("\n");
     printf("print(\"Squaring\")\n");
-    for (i = 0; i < 20; i++) //20번 squaring
+    for (i = 0; i < 1; i++) //20번 squaring
     {
         size1 = (rand() & 0xf) + 100;
-
         bi_gen_rand(&bi_1, rand() & 1, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-
         printf("A = ");
         BI_Show(bi_1, 16);
 
-        BI_New(&bi_re, size1 * 2 + 1);
+        //BI_New(&bi_re, size1 * 2 + 1);
 
-        SQUC(bi_re, bi_1);
+        SQU(&bi_re, bi_1);
         BI_Refine(bi_re);
 
         printf("A * A == ");
@@ -400,11 +397,11 @@ int squaring_karatsuba_test()
     bigint* bi_re = NULL;
     bigint* bi_q = NULL;
 
-    /* n번 Squaring Karatsuba 곱셈 연산하기 */
+    /* n번 Squaring Karatsuba 곱셈 연산하기 */ // 8, 32, 64 길이 21 이상부터 안 됨
 
     printf("\n");
     printf("print(\"Squaring Karatsuba\")\n");
-    for (i = 0; i < 1; i++) // 길이 21일 때부터 안 됨
+    for (i = 0; i < 1; i++)
     {
         //size1 = (rand() & 0xf) + 100;
         size1 = 22;
@@ -440,7 +437,7 @@ int squaring_karatsuba_test()
     return 0;
 }
 
-int montgomery_ladder_multiplication_test()
+int montgomery_Exponentiation_multiplication_test()
 {
     int i = 0;
     int size, size1, size2 = 0;
@@ -456,7 +453,7 @@ int montgomery_ladder_multiplication_test()
 
     /* n번 Montgomery Ladder multiplacation 연산하기 */
     printf("\n");
-    printf("print(\"Montgomery Ladder multiplacation\")\n");
+    printf("print(\"Montgomery Ladder exponentiation multiplacation\")\n");
     for (i = 0; i < 20; i++)
     {
         //size1 = (rand() & 0xf) + 50;
@@ -468,7 +465,7 @@ int montgomery_ladder_multiplication_test()
         printf("A = ");
         BI_Show(bi_1, 16);
 
-        Montgomery_Ladder_mul(&bi_re, bi_1, n);
+        Montgomery_Exp_mul(&bi_re, bi_1, n);
         BI_Refine(bi_re);
 
         printf("A ^ %d == ", n);
@@ -482,7 +479,7 @@ int montgomery_ladder_multiplication_test()
     return 0;
 }
 
-int montgomery_ladder_addtion_test()
+int montgomery_ladder_Exponentiation_addtion_test()
 {
     int i = 0;
     int size, size1, size2 = 0;
@@ -498,7 +495,7 @@ int montgomery_ladder_addtion_test()
 
     /* n번 Montgomery Ladder addition 연산하기 */
     printf("\n");
-    printf("print(\"Montgomery Ladder addition\")\n");
+    printf("print(\"Montgomery Ladder exponentiation addition\")\n");
     for (i = 0; i < 20; i++)
     {
         size1 = (rand() & 0xf) + 100;
@@ -510,10 +507,102 @@ int montgomery_ladder_addtion_test()
         printf("A = ");
         BI_Show(bi_1, 16);
 
-        Montgomery_Ladder_add(&bi_re, bi_1, n);
+        Montgomery_Exp_add(&bi_re, bi_1, n);
         BI_Refine(bi_re);
 
         printf("A * %d == ", n);
+        BI_Show(bi_re, 16);
+
+        printf("\n");
+
+        BI_Delete(&bi_1);
+        BI_Delete(&bi_re);
+    }
+    return 0;
+}
+
+int montgomery_ladder_Modular_Exponentiation_multiplication_test()
+{
+    int i = 0;
+    int size1 = 0;
+    int size_M = 0;
+    int len = 0;
+    int n;
+
+    bigint* bi_1 = NULL;
+    bigint* bi_2 = NULL;
+    bigint* bi_re = NULL;
+    bigint* bi_M = NULL;
+
+    /* n번 Montgomery Ladder multiplacation 연산하기 */
+    printf("\n");
+    printf("print(\"Montgomery Ladder modular exponentiation multiplacation\")\n");
+    for (i = 0; i < 20; i++)
+    {
+        size1 = (rand() & 0xf) + 50;
+        //size1 = (rand() & 0xf) + 1;
+        size_M = (rand() & 0xf) + 1;
+        n = (rand() & 0xf) + 1;
+ 
+        bi_gen_rand(&bi_1, NON_NEGATIVE, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+        bi_gen_rand(&bi_M, NON_NEGATIVE, size_M); // bi_M 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+
+        printf("A = ");
+        BI_Show(bi_1, 16);
+
+        printf("M = ");
+        BI_Show(bi_M, 16);
+
+        Montgomery_Mod_Exp_mul(&bi_re, bi_1, n, bi_M);
+        BI_Refine(bi_re);
+
+        printf("(A ^ %d) %% M == ", n);
+        BI_Show(bi_re, 16);
+
+        printf("\n");
+
+        BI_Delete(&bi_1);
+        BI_Delete(&bi_re);
+    }
+    return 0;
+}
+
+int montgomery_ladder_Modular_Exponentiation_addtion_test()
+{
+    int i = 0;
+    int size1 = 0;
+    int size_M = 0;
+    int len = 0;
+    int n;
+
+    bigint* bi_1 = NULL;
+    bigint* bi_2 = NULL;
+    bigint* bi_re = NULL;
+    bigint* bi_M = NULL;
+
+    /* n번 Montgomery Ladder addition 연산하기 */
+    printf("\n");
+    printf("print(\"Montgomery Ladder odular exponentiation addition\")\n");
+    for (i = 0; i < 20; i++)
+    {
+        size1 = (rand() & 0xf) + 50;
+        //size1 = (rand() & 0xf) + 1;
+        size_M = (rand() & 0xf) + 1;
+        n = (rand() & 0xf) + 1;
+
+        bi_gen_rand(&bi_1, NON_NEGATIVE, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+        bi_gen_rand(&bi_M, NON_NEGATIVE, size_M); // bi_M 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+
+        printf("A = ");
+        BI_Show(bi_1, 16);
+
+        printf("M = ");
+        BI_Show(bi_M, 16);
+
+        Montgomery_Mod_Exp_add(&bi_re, bi_1, n, bi_M);
+        BI_Refine(bi_re);
+
+        printf("(A * %d) %% M == ", n);
         BI_Show(bi_re, 16);
 
         printf("\n");

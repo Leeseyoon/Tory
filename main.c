@@ -20,6 +20,7 @@ int main()
     //_crtBreakAlloc = 94;
     
     /* test */
+#if 0
     addition_test();
     subtraction_test();
     schoolbook_multiplication_test();
@@ -28,9 +29,13 @@ int main()
     multi_long_division_test();
     squaring_test();
     //squaring_karatsuba_test();
-    montgomery_ladder_multiplication_test();
-    montgomery_ladder_addtion_test();
-    
+    montgomery_Exponentiation_multiplication_test();
+    montgomery_ladder_Exponentiation_addtion_test();
+    montgomery_ladder_Modular_Exponentiation_multiplication_test();
+    montgomery_ladder_Modular_Exponentiation_addtion_test();
+#endif    
+    //squaring_karatsuba_test();
+    //squaring_test();
     
     _CrtDumpMemoryLeaks();
     return 0;

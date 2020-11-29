@@ -339,7 +339,7 @@ int Is_One(bigint** x)
 		if ((*x)->a[i] != 0)
 			return -1;
 	}
-	return 0;
+	return 0; // True
 }
 
 int Is_Zero(bigint** x)
@@ -354,7 +354,7 @@ int Is_Zero(bigint** x)
 		if ((*x)->a[i] != 0)
 			return -1;
 	}
-	return 0;
+	return 0; // True
 }
 
 // Chapter 2.9 Compare
@@ -1221,7 +1221,7 @@ void Single_Squaring(bigint* C, bigint* A)
 	BI_Delete(&T);
 }
 
-void SQUC(bigint* C, bigint* A)
+void SQUC(bigint** C, bigint* A)
 {
 	int i, j, k, m;
 	int wordlen_A;
@@ -1248,6 +1248,7 @@ void SQUC(bigint* C, bigint* A)
 
 	Get_Word_Length(&wordlen_A, &A);
 
+	BI_New(C, wordlen_A * 2 + 1);
 	BI_New(&C1, 2 * wordlen_A);
 	BI_New(&C2, 2 * wordlen_A);
 
@@ -1256,8 +1257,6 @@ void SQUC(bigint* C, bigint* A)
 		BI_New(&T1, 2);
 		A_j->a[0] = A->a[j];
 		Single_Squaring(T1, A_j);
-		//printf("T1 = ");
-		//BI_Show(T1, 16);
 		Assign_BI(&temp1, T1);
 		Left_Shift(temp1, (int)(2 * j * WORD_BIT_LEN)); // T1 = T1 << ((2 * j) * WORD_BIT_LEN)
 
@@ -1277,10 +1276,6 @@ void SQUC(bigint* C, bigint* A)
 			}
 		}
 
-		//printf("C1 = ");
-		//BI_Show(C1, 16);
-
-		//array_init(T1->a, T1->wordlen);
 		BI_Delete(&T1);
 
 		for (i = j + 1; i < wordlen_A; i++)
@@ -1288,8 +1283,6 @@ void SQUC(bigint* C, bigint* A)
 			BI_New(&T2, 2);
 			A_i->a[0] = A->a[i];
 			MUL_MUL(&T2, A_j, A_i);
-			//printf("T2 = ");
-			//BI_Show(T2, 16);
 			Assign_BI(&temp2, T2);
 			Left_Shift(temp2, (int)((i + j) * WORD_BIT_LEN));
 
@@ -1305,8 +1298,6 @@ void SQUC(bigint* C, bigint* A)
 
 			ADD_AAB(&C2, &C2, &temp2);
 			BI_Refine(C2);
-			//printf("C2 = ");
-			//BI_Show(C2, 16);
 
 			array_init(T2->a, T2->wordlen);
 			BI_Delete(&temp2);
@@ -1314,23 +1305,58 @@ void SQUC(bigint* C, bigint* A)
 		}
 	}
 	Left_Shift(C2, 1);
-	//printf("Lefted C2 = ");
-	//BI_Show(C2, 16);
-	ADD(&C, &C1, &C2);
-	//printf("C = ");
-	//BI_Show(C, 16);
+	ADD(C, &C1, &C2);
 
 	BI_Delete(&C1);
 	BI_Delete(&C2);
-	//BI_Delete(&T1);
-	//BI_Delete(&T2);
 	BI_Delete(&A_i);
 	BI_Delete(&A_j);
 	BI_Delete(&temp1);
 	BI_Delete(&temp2);
 }
 
-void SQUC_Karatsuba(bigint* C, bigint* A)
+void SQU(bigint** C, bigint* A)
+{
+	int flag0; // A가 0인지 판별하는 flag
+	int flag1; // A가 1인지 판별하는 flag
+	int flag2 = -1; // A가 음수일 때 -1인지 판별하는 flag
+	int sign;
+	
+	bigint* temp = NULL;
+
+	Assign_BI(&temp, A);
+
+	sign = Get_Sign(&A);
+	if (sign == NEGATIVE) // A의 부호가 음수인 경우
+	{
+		Flip_Sign(temp); // 부호 바꾼 뒤
+		flag2 = Is_One(&temp); // 1인지 판별 (즉, -1인지 판별)
+	}
+
+	flag0 = Is_Zero(&A); // A가 0인지 판별
+	flag1 = Is_One(&A); // A가 1인지 판별
+
+	if (flag0 == 0) // A = 0인 경우, A^2 = 0 return
+	{
+		Assign_BI(C, A);
+		return;
+	}
+	if (flag1 == 0) // A = 1인 경우, A^2 = 1 return
+	{
+		Assign_BI(C, A);
+		return;
+	}
+	if (flag2 == 0) // A = -1인 경우, A^2 = 1 return
+	{
+		Assign_BI(C, temp);
+		return;
+	}
+
+	SQUC(C, A); // A = 0. -1, 1이 아닌 경우 SQUC 실행
+	
+}
+
+void SQUC_Karatsuba(bigint** C, bigint* A)
 {
 	int i, j;
 	int flag = 1;
@@ -1392,7 +1418,7 @@ void SQUC_Karatsuba(bigint* C, bigint* A)
 	BI_Refine(S);
 
 	Left_Shift(S, len * WORD_BIT_LEN + 1); // S << len * WORD_BIT_LEN + 1 비트만큼 왼쪽으로 이동
-	ADDC(&C, &R, &S, R->sign); // C = R + S
+	ADDC(C, &R, &S, R->sign); // C = R + S
 
 	BI_Delete(&A0);
 	BI_Delete(&A1);
@@ -1735,7 +1761,7 @@ void DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m) // DIVCC 에서 if(n == m
 }
 
 // C = A^n
-void Montgomery_Ladder_mul(bigint** C, bigint* A, int n)
+void Montgomery_Exp_mul(bigint** C, bigint* A, int n)
 {
 	int i, bit;
 	int n_bit_len;
@@ -1762,14 +1788,14 @@ void Montgomery_Ladder_mul(bigint** C, bigint* A, int n)
 			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 			BI_New(&temp0, t0_len + t1_len); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
-			BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
+			//BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 
 			MUL_MUL(&temp0, t0, t1); // temp0 = t0 * t1
 			BI_Delete(&t0);
 			Assign_BI(&t0, temp0); // t0 = temp0 (t0 갱신)
 			BI_Delete(&temp0);
 
-			SQUC(temp1, t1); // temp1 = t1^2
+			SQU(&temp1, t1); // temp1 = t1^2
 			BI_Delete(&t1);
 			Assign_BI(&t1, temp1); // t1 = temp1 (t1 갱신)
 			BI_Delete(&temp1);
@@ -1780,7 +1806,7 @@ void Montgomery_Ladder_mul(bigint** C, bigint* A, int n)
 			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
 			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
-			BI_New(&temp0, t0_len * 2 + 1); // temp0(t0) = t0^2을 저장하기 위한 bigint 생성
+			//BI_New(&temp0, t0_len * 2 + 1); // temp0(t0) = t0^2을 저장하기 위한 bigint 생성
 			BI_New(&temp1, t0_len + t1_len);  // temp1(t1) = t0 * t1을 저장하기 위한 bigint 생성
 
 			MUL_MUL(&temp1, t0, t1); // temp1 = t0 * t1
@@ -1788,7 +1814,8 @@ void Montgomery_Ladder_mul(bigint** C, bigint* A, int n)
 			Assign_BI(&t1, temp1); // t1 = temp1 (t1 갱신)
 			BI_Delete(&temp1);
 
-			SQUC(temp0, t0); // temp0 = t0^2
+
+			SQU(&temp0, t0); // temp0 = t0^2
 			BI_Delete(&t0);
 			Assign_BI(&t0, temp0); // t0 = temp0 (t0 갱신)
 			BI_Delete(&temp0);
@@ -1804,7 +1831,7 @@ void Montgomery_Ladder_mul(bigint** C, bigint* A, int n)
 }
 
 // C = n * A
-void Montgomery_Ladder_add(bigint* C, bigint* A, int n)
+void Montgomery_Exp_add(bigint** C, bigint* A, int n)
 {
 	int i, bit;
 	int n_bit_len;
@@ -1864,9 +1891,171 @@ void Montgomery_Ladder_add(bigint* C, bigint* A, int n)
 	BI_Delete(&t1);
 }
 
+// C = A^n
+void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M)
+{
+	int i, bit;
+	int n_bit_len;
+	int t0_len = 0;
+	int t1_len = 0;
+
+	bigint* t0 = NULL;
+	bigint* t1 = NULL;
+	bigint* temp0 = NULL; // t0를 저장할 임시 변수
+	bigint* temp1 = NULL; // t1을 저장할 임시 변수
+
+	bigint* Q = NULL;
+	bigint* R = NULL;
+
+	Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
+
+	BI_Set_One(&t0); // t0 = 1
+	Assign_BI(&t1, A); // t1 = A
+
+	for (i = n_bit_len - 1; i >= 0; i--)
+	{
+		bit = j_th_Bit_of_number(i, n); // n의 i번째 비트가 1인지 0인지 판별
+
+		if (bit == 1) // n의 i번째 비트가 1일 경우
+		{
+			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+
+			BI_New(&temp0, t0_len + t1_len); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
+			//BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
+
+			MUL_MUL(&temp0, t0, t1); // temp0 = t0 * t1
+			DIV(&Q, &R, temp0, M); // R = temp0 (mod M)
+			BI_Delete(&t0);
+			Assign_BI(&t0, R); // t0 = R (t0 갱신)
+			BI_Delete(&temp0);
+			BI_Delete(&Q);
+			BI_Delete(&R);
+
+			SQU(&temp1, t1); // temp1 = t1^2
+			DIV(&Q, &R, temp1, M); // R = temp1 (mod M)
+			BI_Delete(&t1);
+			Assign_BI(&t1, R); // t1 = R (t1 갱신)
+			BI_Delete(&temp1);
+			BI_Delete(&Q);
+			BI_Delete(&R);
+
+		}
+		else if (bit == 0) // n의 i번째 비트가 0일 경우
+		{
+			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+
+			//BI_New(&temp0, t0_len * 2 + 1); // temp0(t0) = t0^2을 저장하기 위한 bigint 생성
+			BI_New(&temp1, t0_len + t1_len);  // temp1(t1) = t0 * t1을 저장하기 위한 bigint 생성
+
+			MUL_MUL(&temp1, t0, t1); // temp1 = t0 * t1
+			DIV(&Q, &R, temp1, M); // R = temp1 (mod M)
+			BI_Delete(&t1);
+			Assign_BI(&t1, R); // t1 = R (t1 갱신)
+			BI_Delete(&temp1);
+			BI_Delete(&Q);
+			BI_Delete(&R);
+
+			SQU(&temp0, t0); // temp0 = t0^2
+			DIV(&Q, &R, temp0, M); // R = temp0 (mod M)
+			BI_Delete(&t0);
+			Assign_BI(&t0, R); // t0 = R (t0 갱신)
+			BI_Delete(&temp0);
+			BI_Delete(&Q);
+			BI_Delete(&R);
+		}
+		else // n의 i번째 비트가 1도 0도 아닌 경우
+			return; // 예외 처리
+	}
+
+	Assign_BI(C, t0); // 마지막 t0 값 C에 할당
+
+	BI_Delete(&t0);
+	BI_Delete(&t1);
+}
+
+// C = n * A
+void Montgomery_Mod_Exp_add(bigint** C, bigint* A, int n, bigint* M)
+{
+	int i, bit;
+	int n_bit_len;
+	int t0_len = 0;
+	int t1_len = 0;
+
+	bigint* t0 = NULL;
+	bigint* t1 = NULL;
+	bigint* temp0 = NULL; // t0를 저장할 임시 변수
+	bigint* temp1 = NULL; // t1을 저장할 임시 변수
+
+	bigint* Q = NULL;
+	bigint* R = NULL;
+
+	Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
+
+	BI_Set_Zero(&t0); // t0 = 0
+	Assign_BI(&t1, A); // t1 = A
+
+	for (i = n_bit_len - 1; i >= 0; i--)
+	{
+		bit = j_th_Bit_of_number(i, n); // n의 i번째 비트가 1인지 0인지 판별
+
+		if (bit == 1) // n의 i번째 비트가 1일 경우
+		{
+			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+
+			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 + t1을 저장하기 위한 bigint 생성
+
+			ADD(&temp0, &t0, &t1); // temp0 = t0 + t1
+			DIV(&Q, &R, temp0, M); // R = temp0 (mod M)
+			BI_Delete(&t0);
+			Assign_BI(&t0, R); // t0 = R (t0 갱신)
+			BI_Delete(&temp0);
+			BI_Delete(&Q);
+			BI_Delete(&R);
+
+			Left_Shift(t1, 1); // t1 = t1 << 2
+			DIV(&Q, &R, t1, M); // t1 = t1 (mod M)
+			BI_Delete(&t1);
+			Assign_BI(&t1, R); // t1 = R (t1 갱신)
+			BI_Delete(&Q);
+			BI_Delete(&R);
+		}
+		else if (bit == 0) // n의 i번째 비트가 0일 경우
+		{
+			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+
+			BI_New(&temp1, MAX(t0_len, t1_len) + 1);  // temp1(t1) = t0 + t1을 저장하기 위한 bigint 생성
+
+			ADD(&temp1, &t0, &t1); // temp1 = t0 + t1
+			DIV(&Q, &R, temp1, M); // R = temp1 (mod M)
+			BI_Delete(&t1);
+			Assign_BI(&t1, R); // t1 = R (t1 갱신)
+			BI_Delete(&temp1);
+			BI_Delete(&Q);
+			BI_Delete(&R);
+
+			Left_Shift(t0, 1); // t0 = t0 << 2
+			DIV(&Q, &R, t0, M); // t0 = t0 (mod M)
+			BI_Delete(&t0);
+			Assign_BI(&t0, R); // t0 = R (t0 갱신)
+			BI_Delete(&Q);
+			BI_Delete(&R);
+		}
+		else // n의 i번째 비트가 1도 0도 아닌 경우
+			return; // 예외 처리
+	}
+
+	Assign_BI(C, t0); // 마지막 t0 값 C에 할당
+
+	BI_Delete(&t0);
+	BI_Delete(&t1);
+}
+
 void Bit_Length_of_number(int num, int* len)
 {
-	//int i = 0;
 	int j = 0;
 
 	for (j = 1; ; j++)
