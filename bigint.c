@@ -30,6 +30,8 @@ void BI_New(bigint** x, int wordlen)
 		BI_Delete(x); // BI_Delete()로 초기화
 
 	*x = (bigint*)malloc(sizeof(bigint));
+	if ((*x) == NULL)
+		return;
 	(*x)->sign = NON_NEGATIVE; // 양수이고
 	(*x)->wordlen = wordlen;   // 2번째 매개변수와 같은 길이인
 	(*x)->a = (word*)calloc(wordlen, sizeof(word)); // bigint x 생성
@@ -1326,7 +1328,7 @@ void SQU(bigint** C, bigint* A)
 
 	Assign_BI(&temp, A);
 
-	sign = Get_Sign(&A);
+	sign = Get_Sign(A);
 	if (sign == NEGATIVE) // A의 부호가 음수인 경우
 	{
 		Flip_Sign(temp); // 부호 바꾼 뒤
@@ -1396,8 +1398,8 @@ void SQUC_Karatsuba(bigint** C, bigint* A)
 	Right_Shift(A1, len * (int)(WORD_BIT_LEN)); // A1 = |A| >> WORD_BIT_LEN / 2
 	Reduction_BI(&A0, len * (int)(WORD_BIT_LEN)); // A0 = |A| mod (WORD_BIT_LEN / 2)
 
-	SQUC_Karatsuba(T1, A1);
-	SQUC_Karatsuba(T0, A0);
+	SQUC_Karatsuba(&T1, A1);
+	SQUC_Karatsuba(&T0, A0);
 
 	BI_Refine(T1);
 	BI_Refine(T0);
@@ -1892,7 +1894,7 @@ void Montgomery_Exp_add(bigint** C, bigint* A, int n)
 }
 
 // C = A^n
-void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M)
+void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M) // n bigint로
 {
 	int i, bit;
 	int n_bit_len;

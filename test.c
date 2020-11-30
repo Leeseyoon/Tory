@@ -418,12 +418,12 @@ int squaring_karatsuba_test()
         printf("A = ");
         BI_Show(bi_1, 16);
 
-        len = (bi_1->wordlen + 1) >> 1;
-        len = 4 * len + 1;
+        //len = (bi_1->wordlen + 1) >> 1;
+        //len = 4 * len + 1;
 
-        BI_New(&bi_re, len);
+       // BI_New(&bi_re, len);
 
-        SQUC_Karatsuba(bi_re, bi_1);
+        SQUC_Karatsuba(&bi_re, bi_1);
         BI_Refine(bi_re);
 
         printf("A * A == ");

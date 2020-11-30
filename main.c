@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include "bigint.h"
-#include "test.h"
 
 #ifndef _DEBUG
 #define new new(_CLIENT_BLOCK, __FILE__, __LINE)
@@ -47,7 +46,7 @@ int main()
 	Right_Left_EXP_ADD_MOD_DIV_test();
 	Right_Left_EXP_MUL_MOD_DIV_test(); // Modular Exponentiation used Multi Long Division
 #endif    
-    //squaring_karatsuba_test();
+    squaring_karatsuba_test();
     //squaring_test();
     
     _CrtDumpMemoryLeaks();
