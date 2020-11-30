@@ -651,14 +651,14 @@ void Left_Right_EXP_MUL_test() // Only Exponentiation function L->R mul
 	bigint* bi_re = NULL;
 	printf("\n");
 	printf("print(\"Left to Right EXP MUL test\")\n");
-	for (i = 0; i < 20; i++)
+	for (i = 0; i < 1; i++)
 	{
-		size1 = (rand() & 0x7) + 1;
-		len = (rand() & 0x7) + 1;
+		size1 = 1; // (rand() & 0x7) + 1;
+		len = 2; // (rand() & 0x7) + 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
-
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		bi_1->a[0] = 0x11;
+		//BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
 		EXP_LR_MUL(&bi_re, bi_1, len);
 		printf("A = ");
@@ -912,10 +912,10 @@ void Left_Right_EXP_ADD_MOD_DIV_test() // Modular Exponentiation used Multi Long
 
 	printf("\n");
 	printf("print(\"Left to Right modular exp add test (DIV func)\")\n");
-	for (i = 0; i < 3; i++)
+	for (i = 0; i < 10; i++)
 	{
-		size1 = (rand() & 0x7) + 50;
-		size2 = size1 - (rand() & 0x3) - 30;
+		size1 = (rand() & 0x7) + 1;
+		size2 = size1 - (rand() & 0x3) - 1;
 		if (size2 <= 0)
 			size2 = 1;
 		len = (rand() & 0x7) + 1;
@@ -953,11 +953,11 @@ void Left_Right_EXP_MUL_MOD_DIV_test() // Modular Exponentiation used Multi Long
 
 	printf("\n");
 	printf("print(\"left to right modular exp mul test (DIV func)\")\n");
-	for (i = 0; i < 3; i++)
+	for (i = 0; i < 10; i++)
 	{
 
 		size1 = (rand() & 0x7) + 50;
-		size2 = size1 - (rand() & 0x3) - 1;
+		size2 = size1 - (rand() & 0x3) - 10;
 		if (size2 <= 0)
 			size2 = 1;
 		len = (rand() & 0x7) + 1;
@@ -994,12 +994,12 @@ void Right_Left_EXP_ADD_MOD_DIV_test() // Modular Exponentiation used Multi Long
 	bigint* bi_re = NULL;
 	
 	printf("print(\"Right to Left Modular Exp ADD test (DIV func)\")\n");
-	for (i = 0; i < 3; i++)
+	for (i = 0; i < 10; i++)
 	{
 		
 
 		size1 = (rand() & 0x7) + 50;
-		size2 = size1 - (rand() & 0x3) - 30;
+		size2 = size1 - (rand() & 0x3) - 10;
 		if (size2 <= 0)
 			size2 = 1;
 		len = (rand() & 0x7) + 1;
@@ -1037,7 +1037,7 @@ void Right_Left_EXP_MUL_MOD_DIV_test() // Modular Exponentiation used Multi Long
 
 	printf("\n");
 	printf("print(\"Right to Left Modular EXP MUL test (DIV func)\")\n");
-	for (i = 0; i < 3; i++)
+	for (i = 0; i < 10; i++)
 	{
 		size1 = (rand() & 0x7) + 50;
 		size2 = size1 - (rand() & 0xf) - 30;
