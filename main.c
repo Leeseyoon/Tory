@@ -39,10 +39,10 @@ int main()
 	//Left_Right_EXP_MUL_M3OD_test();
 	Right_Left_EXP_ADD_MOD_test(); // Memory 0
 	Right_Left_EXP_MUL_MOD_test(); // Memory 0
-	//Left_Right_EXP_ADD_MOD_DIV_test();
-	//Left_Right_EXP_MUL_MOD_DIV_test();
-	//Right_Left_EXP_ADD_MOD_DIV_test();
-	//Right_Left_EXP_MUL_MOD_DIV_test();
+	//Left_Right_EXP_ADD_MOD_DIV_test(); // Memory 0
+	//Left_Right_EXP_MUL_MOD_DIV_test(); // Memory 0
+	//Right_Left_EXP_ADD_MOD_DIV_test(); // Memory 0
+	//Right_Left_EXP_MUL_MOD_DIV_test(); // Memory 0
 	
 	_CrtDumpMemoryLeaks();
 	return 0;
