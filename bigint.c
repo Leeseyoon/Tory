@@ -1328,6 +1328,7 @@ void SQU(bigint** C, bigint* A)
 	bigint* temp = NULL;
 
 	BI_Assign(&temp, A);
+	BI_Delete(&temp);
 
 	sign = BI_Get_Sign(A);
 	if (sign == NEGATIVE) // A의 부호가 음수인 경우
@@ -1354,7 +1355,7 @@ void SQU(bigint** C, bigint* A)
 		BI_Assign(C, temp);
 		return;
 	}
-	BI_Delete(&temp);
+	
 	SQUC(C, A); // A = 0. -1, 1이 아닌 경우 SQUC 실행
 
 }
@@ -1609,7 +1610,7 @@ void DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorith
 	bigint* Word = NULL; // Q의 i번째 워드( Q_{i} )를 담을 빅넘버 Word 초기화
 
 	BI_Set_Zero(R); // 길이가 1이고 값이 0인 빅넘버 *R 생성
-	BI_Set_Zero(&Word); // 길이가 1이고 값이 0인 빅넘버 Word 생성. BI_New(&Word, 1)도 가능.
+	//BI_New(&Word, 1); // 길이가 1이고 값이 0인 빅넘버 Word 생성. BI_New(&Word, 1)도 가능. //1201
 
 	BI_Get_Word_Length(&len, &A);
 	BI_New(Q, len);
@@ -1624,6 +1625,7 @@ void DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorith
 
 	for (i = len - 1; i >= 0; i--) // line 8.
 	{
+		BI_Set_Zero(&Word); // 길이가 1이고 값이 0인 빅넘버 Word 생성. BI_New(&Word, 1)도 가능. //1201
 		BI_New(&Temp, 1); // A의 j번째 워드(A_{j})를 담는 빅넘버 Temp를 워드 길이가 1로 생성. 
 		Temp->a[0] = A->a[i]; // Temp에 A_{j}를 대입.
 		Left_Shift(*R, WORD_BIT_LEN); // R을 왼쪽으로 W만큼 shift ==> R * W
@@ -1631,8 +1633,9 @@ void DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorith
 		DIVC(&Word, R, *R, B); //빅넘버 Word는 Q_{i}를 저장하는 변수. 
 		BI_Delete(&Temp); // 반복문 내에서 생성한 빅넘버 Temp delete.
 		(*Q)->a[i] = Word->a[0]; // Q에 Q_{i}를 대입. //line 10.
+		BI_Delete(&Word); // 빅넘버 Word delete
 	}
-	BI_Delete(&Word); // 빅넘버 Word delete
+	
 	BI_Refine(*Q);
 	//BI_Refine(*R);
 }
@@ -2083,6 +2086,7 @@ void EXP_LR_MUL(bigint** T, bigint* X, int n)
 
 		BI_New(&temp0, 2 * t0_len + x_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 		result = j_th_Bit_of_number(i, n);
+		
 		if (result == 1)
 			MUL_Multi(&temp0, temp1, X);
 
@@ -2095,6 +2099,8 @@ void EXP_LR_MUL(bigint** T, bigint* X, int n)
 	}
 	BI_Assign(T, t0);
 	BI_Delete(&t0);
+	BI_Delete(&temp0);
+	BI_Delete(&temp1);
 }
 
 void EXP_LR_ADD(bigint** T, bigint* X, int n)
