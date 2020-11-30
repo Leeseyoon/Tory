@@ -30,7 +30,7 @@ void BI_New(bigint** x, int wordlen)
 		BI_Delete(x); // BI_Delete()로 초기화
 
 	*x = (bigint*)malloc(sizeof(bigint));
-	if ((*x) == NULL)
+	if (*x == NULL)
 		return;
 	(*x)->sign = NON_NEGATIVE; // 양수이고
 	(*x)->wordlen = wordlen;   // 2번째 매개변수와 같은 길이인
@@ -185,7 +185,7 @@ void BI_Show(bigint* x, int base)
 //Chapter 2.3
 void BI_Refine(bigint* x)
 {
-	word* temp;
+	word* temp = NULL;
 
 	if (x == NULL)
 		return;
@@ -213,7 +213,7 @@ void BI_Refine(bigint* x)
 }
 
 // Chapter 2.4 Assign BigInt
-void Assign_BI(bigint** y, bigint* x)
+void BI_Assign(bigint** y, bigint* x)
 {
 	int i = 0;
 	int size = 0; //(추가) x->wordlen을 집어넣을 변수 size
@@ -228,16 +228,16 @@ void Assign_BI(bigint** y, bigint* x)
 }
 
 // Chapter 2.5 Generate Random BigInt
-void bi_gen_rand(bigint** x, int sign, int wordlen)
+void BI_Gen_Rand(bigint** x, int sign, int wordlen)
 {
 	BI_New(x, wordlen); // bigint 구조체 생성
 	(*x)->sign = sign; // 부호 결정
-	array_rand((*x)->a, wordlen); // random으로 배열 설정
+	Array_Rand((*x)->a, wordlen); // random으로 배열 설정
 
 	BI_Refine(*x); // 앞쪽 0으로 채워진 부분 자르기
 }
 
-void array_rand(word* dst, int wordlen)
+void Array_Rand(word* dst, int wordlen)
 {
 	unsigned char* p = (unsigned char*)dst; // rand() 함수의 출력값이 15bit이므로 워드 단위가 아닌 한 바이트 단위로 배열에 랜덤값 설정
 	int cnt = wordlen * sizeof(word);
@@ -250,12 +250,12 @@ void array_rand(word* dst, int wordlen)
 }
 
 // Chapter 2.6 Get Word Length / Bit Length / j-th Bit of Big-Int
-void Get_Word_Length(int* len, bigint** x)
+void BI_Get_Word_Length(int* len, bigint** x)
 {
 	*len = (*x)->wordlen; // Big Integer x의 wordlen를 대입
 }
 
-void Bit_Length(int* len, bigint* x)
+void BI_Bit_Length(int* len, bigint* x)
 {
 	int i = 0;
 	int j = 0;
@@ -273,7 +273,7 @@ void Bit_Length(int* len, bigint* x)
 	*len = j;
 }
 
-void j_th_Bit_of_BI(int j, bigint* x)
+void BI_j_th_Bit_of_BI(int j, bigint* x)
 {
 	char* z = NULL;
 	unsigned long long i = 0;
@@ -296,7 +296,7 @@ void j_th_Bit_of_BI(int j, bigint* x)
 }
 
 // Chapter 2.7 /* negative: 1, non-negative: 0 */
-int Get_Sign(bigint* x)
+int BI_Get_Sign(bigint* x)
 {
 	if ((x->sign) == NON_NEGATIVE) // bigint 구조체의 부호가 NON_NEGATIVE면 NON_NEGATIVE return
 		return NON_NEGATIVE;
@@ -306,7 +306,7 @@ int Get_Sign(bigint* x)
 		return ERROR;
 }
 
-void Flip_Sign(bigint* x)
+void BI_Flip_Sign(bigint* x)
 {
 	if ((x->sign) == NON_NEGATIVE) // bigint 구조체의 부호가 NON_NEGATIVE면 부호를 NEGATIVE로 변경
 		x->sign = NEGATIVE;
@@ -329,7 +329,7 @@ void BI_Set_Zero(bigint** x)
 	(*x)->a[0] = 0x00; // 0을 만들어야하므로
 }
 
-int Is_One(bigint** x)
+int BI_Is_One(bigint** x)
 {
 	int i = 0;
 
@@ -344,7 +344,7 @@ int Is_One(bigint** x)
 	return 0; // True
 }
 
-int Is_Zero(bigint** x)
+int BI_Is_Zero(bigint** x)
 {
 	int i = 0;
 
@@ -360,7 +360,7 @@ int Is_Zero(bigint** x)
 }
 
 // Chapter 2.9 Compare
-int Compare_BI(bigint** x, bigint** y) // return : 1(x > y), 0(x == y), -1(x < y) 
+int BI_Compare(bigint** x, bigint** y) // return : 1(x > y), 0(x == y), -1(x < y) 
 {
 	int i = 0;
 	int len_x, len_y = 0;
@@ -371,8 +371,8 @@ int Compare_BI(bigint** x, bigint** y) // return : 1(x > y), 0(x == y), -1(x < y
 		return -1;
 	else // A, B 부호가 같을 때
 	{
-		Get_Word_Length(&len_x, x); //len_x = x->wordlen
-		Get_Word_Length(&len_y, y); //len_y = y->wordlen
+		BI_Get_Word_Length(&len_x, x); //len_x = x->wordlen
+		BI_Get_Word_Length(&len_y, y); //len_y = y->wordlen
 		if ((*x)->sign == 0) // A, B 부호가 양수일 때 (부호가 서로 같으므로, if 문을 통해 하나만 비교)
 		{
 			if (len_x > len_y) // x의 길이가 y보다 길면
@@ -425,12 +425,12 @@ void Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 	int wn = 0;
 	int count = 0;
 	int r = 0;
-	word* temp;
+	word* temp = NULL;
 
 	length = x->wordlen;
 
 	bigint* cp = NULL;
-	Assign_BI(&cp, x); // bigint x를 bigint cp에 복사
+	BI_Assign(&cp, x); // bigint x를 bigint cp에 복사
 
 	wn = WORD_BIT_LEN * x->wordlen;
 
@@ -490,7 +490,7 @@ void Right_Shift(bigint* x, int len)
 	r = len % WORD_BIT_LEN;
 
 	bigint* cp = NULL;
-	Assign_BI(&cp, x);
+	BI_Assign(&cp, x);
 
 	if (len >= wn) // 오른쪽으로 시프트시킬 길이(len)가 배열의 길이(wn)보다 크면 전부 0으로 설정
 	{
@@ -519,7 +519,7 @@ void Right_Shift(bigint* x, int len)
 }
 
 // Chapter 2.11 Reduction
-void Reduction_BI(bigint** x, int r)
+void BI_Reduction(bigint** x, int r)
 {
 	int i = 0;
 	int wn = 0;
@@ -623,8 +623,8 @@ void ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign)
 	int i;
 	int carry;
 
-	Get_Word_Length(&A_Len, A);
-	Get_Word_Length(&B_Len, B);
+	BI_Get_Word_Length(&A_Len, A);
+	BI_Get_Word_Length(&B_Len, B);
 	//A_Len = (*A)->wordlen;
 	//B_Len = (*B)->wordlen;
 
@@ -659,13 +659,13 @@ void ADD(bigint** C, bigint** A, bigint** B)
 	int A_sign;
 	int B_sign;
 	int i;
-	A_sign = Get_Sign(*A);
-	B_sign = Get_Sign(*B);
+	A_sign = BI_Get_Sign(*A);
+	B_sign = BI_Get_Sign(*B);
 
-	Get_Word_Length(&A_Len, A);
-	Get_Word_Length(&B_Len, B);
+	BI_Get_Word_Length(&A_Len, A);
+	BI_Get_Word_Length(&B_Len, B);
 
-	if (Is_Zero(A) == 0) // A is zero
+	if (BI_Is_Zero(A) == 0) // A is zero
 	{
 		// A + B에서 A가 0이면 B return
 		(*C)->sign = (*B)->sign;
@@ -676,7 +676,7 @@ void ADD(bigint** C, bigint** A, bigint** B)
 		return;
 	}
 
-	if (Is_Zero(B) == 0) // B is zero
+	if (BI_Is_Zero(B) == 0) // B is zero
 	{
 		// A + B에서 B가 0이면 A return
 		(*C)->sign = (*A)->sign;
@@ -691,9 +691,9 @@ void ADD(bigint** C, bigint** A, bigint** B)
 	{
 		bigint* temp = NULL;
 		BI_New(&temp, B_Len);
-		Assign_BI(&temp, *B); // temp = B
+		BI_Assign(&temp, *B); // temp = B
 
-		Flip_Sign(temp); // temp = |B|
+		BI_Flip_Sign(temp); // temp = |B|
 		SUB(C, *A, temp); // C = A - |B|
 		BI_Refine(*C);
 
@@ -706,9 +706,9 @@ void ADD(bigint** C, bigint** A, bigint** B)
 	{
 		bigint* temp = NULL;
 		BI_New(&temp, A_Len);
-		Assign_BI(&temp, *A); // temp = A
+		BI_Assign(&temp, *A); // temp = A
 
-		Flip_Sign(temp); // temp = |A|
+		BI_Flip_Sign(temp); // temp = |A|
 		SUB(C, *B, temp); // C = B - |A|
 		BI_Refine(*C);
 
@@ -739,13 +739,13 @@ void ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 	int A_sign;
 	int B_sign;
 	int i;
-	A_sign = Get_Sign(*A);
-	B_sign = Get_Sign(*B);
+	A_sign = BI_Get_Sign(*A);
+	B_sign = BI_Get_Sign(*B);
 
-	Get_Word_Length(&A_Len, A);
-	Get_Word_Length(&B_Len, B);
+	BI_Get_Word_Length(&A_Len, A);
+	BI_Get_Word_Length(&B_Len, B);
 
-	if (Is_Zero(A) == 0) // A is zero
+	if (BI_Is_Zero(A) == 0) // A is zero
 	{
 		(*C)->sign = (*B)->sign;
 		(*C)->wordlen = (*B)->wordlen;
@@ -755,7 +755,7 @@ void ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 		return;
 	}
 
-	if (Is_Zero(B) == 0) // B is zero
+	if (BI_Is_Zero(B) == 0) // B is zero
 	{
 		(*C)->sign = (*A)->sign;
 		(*C)->wordlen = (*A)->wordlen;
@@ -769,9 +769,9 @@ void ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 	{
 		bigint* temp = NULL;
 		BI_New(&temp, B_Len);
-		Assign_BI(&temp, *B);
+		BI_Assign(&temp, *B);
 
-		Flip_Sign(temp);
+		BI_Flip_Sign(temp);
 		SUB(C, *A, temp); // SUB 함수
 
 		BI_Delete(&temp);
@@ -783,9 +783,9 @@ void ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 	{
 		bigint* temp = NULL;
 		BI_New(&temp, A_Len);
-		Assign_BI(&temp, *A);
+		BI_Assign(&temp, *A);
 
-		Flip_Sign(temp);
+		BI_Flip_Sign(temp);
 		SUB(C, *B, temp); // SUB 함수
 
 		BI_Delete(&temp);
@@ -811,8 +811,8 @@ int Compare_WordLen(bigint* A, bigint* B) // return wordlen 큰 사이즈
 {
 	int A_Len, B_Len;
 
-	Get_Word_Length(&A_Len, &A); // A의 워드열 길이
-	Get_Word_Length(&B_Len, &B); // B의 워드열 길이
+	BI_Get_Word_Length(&A_Len, &A); // A의 워드열 길이
+	BI_Get_Word_Length(&B_Len, &B); // B의 워드열 길이
 
 	if (A_Len > B_Len) // A의 워드열의 길이가 더 길면
 		return A_Len; // A의 워드열 길이 return
@@ -827,24 +827,24 @@ void SUB(bigint** C, bigint* A, bigint* B)
 	int i = 0;
 	bigint* d = NULL;
 
-	Get_Word_Length(&len, &A);   // A->wordlen을 len에 대입
-	Get_Word_Length(&borrow, &B);// B->wordlen을 borrow에 대입 
+	BI_Get_Word_Length(&len, &A);   // A->wordlen을 len에 대입
+	BI_Get_Word_Length(&borrow, &B);// B->wordlen을 borrow에 대입 
 
-	if (Is_Zero(&A) == 0) // 0-B --> -B
+	if (BI_Is_Zero(&A) == 0) // 0-B --> -B
 	{
-		Assign_BI(C, B); // B의 값 그대로
+		BI_Assign(C, B); // B의 값 그대로
 		(*C)->sign = NEGATIVE; // 부호만 반대로
 
 		return; // memory leackege X
 	}
 
-	if (Is_Zero(&B) == 0) // A - 0 --> A
+	if (BI_Is_Zero(&B) == 0) // A - 0 --> A
 	{
 		if (&A == C) // 1st arg == 2nd arg(AAB)인 경우
 			return; // 이미 1st arg = 2nd arg 이므로 return으로 종료.
-		Assign_BI(C, A); // 1st arg != 2nd arg(AAB)인 경우 C에 A를 assign
+		BI_Assign(C, A); // 1st arg != 2nd arg(AAB)인 경우 C에 A를 assign
 		return;
-		//Assign_BI(C, A); // A의 값 그대로
+		//BI_Assign(C, A); // A의 값 그대로
 		//if (A == C)
 		//	BI_New(A, borrow);
 		//(*C)->sign = A->sign;
@@ -859,14 +859,14 @@ void SUB(bigint** C, bigint* A, bigint* B)
 	{
 		if ((A->sign & B->sign) == 0) // A, B의 부호가 모두 양수일 때
 		{
-			if (Compare_BI(&A, &B) < 0) // A, B를 비교해서 A < B일 때. (Compare_BI(A, B)의 return : -1)
+			if (BI_Compare(&A, &B) < 0) // A, B를 비교해서 A < B일 때. (BI_Compare(A, B)의 return : -1)
 			{
-				SUBC_BI(&borrow, C, &B, &A); // B - A 를 하고
-				Flip_Sign(*C); // 뺄셈 연산이 종료되었으므로 원래대로 부호 바꿔주기
+				SUBC(&borrow, C, &B, &A); // B - A 를 하고
+				BI_Flip_Sign(*C); // 뺄셈 연산이 종료되었으므로 원래대로 부호 바꿔주기
 
 				return;
 			}
-			else if (Compare_BI(&A, &B) == 0) // A = B일 때, C의 값은 0이 되어야한다.
+			else if (BI_Compare(&A, &B) == 0) // A = B일 때, C의 값은 0이 되어야한다.
 			{
 				// BI_Set_Zero(C); 로 바꾸는게 어떨까?
 				for (i = 0; i < (*C)->wordlen; i++) // C의 길이만큼
@@ -875,9 +875,9 @@ void SUB(bigint** C, bigint* A, bigint* B)
 
 				return;
 			}
-			else // A, B 를 비교해서 A >= B일 때. Compare_BI(A, B)'s return : 0, 1
+			else // A, B 를 비교해서 A >= B일 때. BI_Compare(A, B)'s return : 0, 1
 			{
-				SUBC_BI(&borrow, C, &A, &B); // A - B 연산
+				SUBC(&borrow, C, &A, &B); // A - B 연산
 
 				return;
 			}
@@ -885,22 +885,22 @@ void SUB(bigint** C, bigint* A, bigint* B)
 
 		else // A, B의 부호가 모두 음수일 때
 		{
-			Flip_Sign(A); // A의 부호가 음수이므로 부호 바꿔주기
-			Flip_Sign(B); // B의 부호가 음수이므로 부호 바꿔주기
-			if (Compare_BI(&A, &B) < 0)
+			BI_Flip_Sign(A); // A의 부호가 음수이므로 부호 바꿔주기
+			BI_Flip_Sign(B); // B의 부호가 음수이므로 부호 바꿔주기
+			if (BI_Compare(&A, &B) < 0)
 			{
-				SUBC_BI(&borrow, C, &B, &A);
-				Flip_Sign(A); // 뺄셈 연산이 종료되었으므로 원래대로 부호 원위치
-				Flip_Sign(B); // 뺄셈 연산이 종료되었으므로 원래대로 부호 원위치
+				SUBC(&borrow, C, &B, &A);
+				BI_Flip_Sign(A); // 뺄셈 연산이 종료되었으므로 원래대로 부호 원위치
+				BI_Flip_Sign(B); // 뺄셈 연산이 종료되었으므로 원래대로 부호 원위치
 
 				return;// memory leACkege X
 			}
 			else
 			{
-				SUBC_BI(&borrow, C, &A, &B);
-				Flip_Sign(*C);
-				Flip_Sign(A); // 부호 원위치
-				Flip_Sign(B); // 부호 원위치
+				SUBC(&borrow, C, &A, &B);
+				BI_Flip_Sign(*C);
+				BI_Flip_Sign(A); // 부호 원위치
+				BI_Flip_Sign(B); // 부호 원위치
 
 				return;// memory leACkege X
 			}
@@ -911,34 +911,35 @@ void SUB(bigint** C, bigint* A, bigint* B)
 	{
 		if (A->sign == 0) // A가 양수, B가 음수
 		{
-			Flip_Sign(B); // B의 부호를 바꿔주고
+			BI_Flip_Sign(B); // B의 부호를 바꿔주고
 			ADD(C, &A, &B);  // ADD 연산
-			Flip_Sign(B); // 부호 원위치
+			BI_Flip_Sign(B); // 부호 원위치
 
 			return;
 		}
 		else
 		{
-			Flip_Sign(A); //
+			BI_Flip_Sign(A); //
 			ADD(C, &A, &B);
 
-			Flip_Sign(A); // 부호 원위치
-			Flip_Sign(*C); // 부호 원위치
+			BI_Flip_Sign(A); // 부호 원위치
+			BI_Flip_Sign(*C); // 부호 원위치
 
 			return;
 		}
 	}
 }
 
-void SUBC_BI(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
+
+void SUBC(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
 {
 	int len, i = 0;
 	int result = 0;
 	bigint* temp = NULL; // A와 b의 길이가 다를 때 -> bigint** b의 길이를 바꿀 수 없으므로 temp를 만들어줌
 	bigint* temp3 = NULL; // C랑 A랑 같을 때를 대비하여
-	Get_Word_Length(&len, A); // b보다 큰 A의 길이를 구하자
+	BI_Get_Word_Length(&len, A); // b보다 큰 A의 길이를 구하자
 	BI_New(&temp, len);  // A의 워드 길이와 같게 temp 를 생성
-	result = Compare_BI(A, B);
+	result = BI_Compare(A, B);
 	if (result >= 0)
 		(*C)->sign = 0; // 매개변수 C에 이미 부호가 들어가있을 때 바꿔주는 게 없어서
 	if (result < 0)
@@ -949,7 +950,7 @@ void SUBC_BI(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
 		BI_New(&temp2, len);
 		for (i = 0; i < (*C)->wordlen; i++)
 			temp2->a[i] = (*C)->a[i];
-		Assign_BI(C, temp2);
+		BI_Assign(C, temp2);
 		BI_Delete(&temp2);
 	}
 	for (i = 0; i < (*B)->wordlen; i++)
@@ -960,7 +961,7 @@ void SUBC_BI(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
 	{
 
 		BI_New(&temp3, len); // A의 wordlen과 같은 len의 길이로 temp3 생성
-		Assign_BI(&temp3, *A); // 이후 A와 동일하게
+		BI_Assign(&temp3, *A); // 이후 A와 동일하게
 		if (i == 0)
 			*borrow = 0;
 
@@ -982,7 +983,7 @@ void SUBC_BI(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
 	BI_Refine(*C);
 }
 
-void MUL_Test(word* C, word* A, word* B) // 단일 워드 곱셈
+void MUL_Word(word* C, word* A, word* B) // 단일 워드 곱셈
 {
 	int len = 0;
 	int i = 0;
@@ -1021,13 +1022,13 @@ void MUL_Test(word* C, word* A, word* B) // 단일 워드 곱셈
 	*(C + 1) = mul1;
 }
 
-void MUL_MUL(bigint** result, bigint* A, bigint* B)
+void MUL_Multi(bigint** result, bigint* A, bigint* B)
 {
 	int i, j, len = 0;
 	int size_a, size_b = 0;
 
-	Get_Word_Length(&size_a, &A);
-	Get_Word_Length(&size_b, &B);
+	BI_Get_Word_Length(&size_a, &A);
+	BI_Get_Word_Length(&size_b, &B);
 
 	bigint* D = NULL;
 	bigint* result2 = NULL;
@@ -1038,7 +1039,7 @@ void MUL_MUL(bigint** result, bigint* A, bigint* B)
 	{
 		for (j = 0; j < A->wordlen; j++)
 		{
-			MUL_Test(&D->a[i + j], &A->a[j], &B->a[i]); // A의 단일워드와 B의 단일워드 연산 후 D의 단일 워드에 대입
+			MUL_Word(&D->a[i + j], &A->a[j], &B->a[i]); // A의 단일워드와 B의 단일워드 연산 후 D의 단일 워드에 대입
 			ADDC_AAB(result, result, &D, 0);
 			D->a[i + j] = 0;
 			D->a[i + j + 1] = 0;
@@ -1056,12 +1057,12 @@ void Karatsuba(bigint** C, bigint* A, bigint* B)
 	int S0_sign, S1_sign;
 	int flag = 3;
 
-	Get_Word_Length(&A_Len, &A); // A_Len = A의 워드열 길이
-	Get_Word_Length(&B_Len, &B); // B_Len = B의 워드열 길이
+	BI_Get_Word_Length(&A_Len, &A); // A_Len = A의 워드열 길이
+	BI_Get_Word_Length(&B_Len, &B); // B_Len = B의 워드열 길이
 
 	if (flag >= MIN(A_Len, B_Len)) // A의 워드열의 길이와 B의 워드열의 길이 중 더 작은 것이 flag보다 작으면
 	{
-		MUL_MUL(C, A, B); // textbook multiplication 실행
+		MUL_Multi(C, A, B); // textbook multiplication 실행
 		return;
 	}
 
@@ -1082,15 +1083,15 @@ void Karatsuba(bigint** C, bigint* A, bigint* B)
 	bigint* ADD_result1 = NULL;
 	bigint* ADD_result2 = NULL;
 
-	Assign_BI(&A1, A);
-	Assign_BI(&A0, A);
-	Assign_BI(&B1, B);
-	Assign_BI(&B0, B);
+	BI_Assign(&A1, A);
+	BI_Assign(&A0, A);
+	BI_Assign(&B1, B);
+	BI_Assign(&B0, B);
 
 	Right_Shift(A1, len * WORD_BIT_LEN); // A1 = A >> len word (A를 len 워드만큼 오른쪽으로 이동)
-	Reduction_BI(&A0, len * WORD_BIT_LEN); // A0 = A mod (2^(len * wordlen)) (A를 len 워드만큼 modular 연산 수행)
+	BI_Reduction(&A0, len * WORD_BIT_LEN); // A0 = A mod (2^(len * wordlen)) (A를 len 워드만큼 modular 연산 수행)
 	Right_Shift(B1, len * WORD_BIT_LEN); // B1 = A >> len word (A를 len 워드만큼 오른쪽으로 이동)
-	Reduction_BI(&B0, len * WORD_BIT_LEN); // B0 = A mod (2^(len * wordlen)) (A를 len 워드만큼 modular 연산 수행)
+	BI_Reduction(&B0, len * WORD_BIT_LEN); // B0 = A mod (2^(len * wordlen)) (A를 len 워드만큼 modular 연산 수행)
 
 	BI_New(&T0, len * 2);
 	BI_New(&T1, len * 2);
@@ -1106,7 +1107,7 @@ void Karatsuba(bigint** C, bigint* A, bigint* B)
 	BI_Refine(T0);
 
 	bigint* T1_tmp = NULL;
-	Assign_BI(&T1_tmp, T1);
+	BI_Assign(&T1_tmp, T1);
 	Left_Shift(T1_tmp, 2 * WORD_BIT_LEN * len); // T1_tmp = T1을 2 * len 워드만큼 오른쪽으로 이동
 
 	// R = T1 || T0
@@ -1120,24 +1121,24 @@ void Karatsuba(bigint** C, bigint* A, bigint* B)
 	SUB(&S1, A0, A1); // S1 = A0 - A1
 	SUB(&S0, B1, B0); // S0 = B1 - B0
 
-	S0_sign = Get_Sign(S0);
-	S1_sign = Get_Sign(S1);
+	S0_sign = BI_Get_Sign(S0);
+	S1_sign = BI_Get_Sign(S1);
 
 	//S0, S1은 음수일 수 있으므로 절댓값 취해 주기
 	if (S1_sign == S0_sign)
 	{
 		if (S1_sign == NEGATIVE)
 		{
-			Flip_Sign(S1);
-			Flip_Sign(S0);
+			BI_Flip_Sign(S1);
+			BI_Flip_Sign(S0);
 		}
 	}
 	else
 	{
 		if (S1_sign == NEGATIVE)
-			Flip_Sign(S1);
+			BI_Flip_Sign(S1);
 		else
-			Flip_Sign(S0);
+			BI_Flip_Sign(S0);
 	}
 
 	Karatsuba(&S, S1, S0); // S = S1 * S0
@@ -1187,8 +1188,8 @@ void Single_Squaring(bigint* C, bigint* A)
 	bigint* C0 = NULL;
 	bigint* T = NULL;
 
-	Assign_BI(&A1, A);
-	Assign_BI(&A0, A);
+	BI_Assign(&A1, A);
+	BI_Assign(&A0, A);
 
 	BI_New(&C1, 1);
 	BI_New(&C0, 1);
@@ -1197,12 +1198,12 @@ void Single_Squaring(bigint* C, bigint* A)
 	// A1 = |A| >> WORD_BIT_LEN / 2, A0 = |A| mod (WORD_BIT_LEN / 2) 를 위한 |A| 처리
 	if (A->sign == NEGATIVE)
 	{
-		Flip_Sign(A1);
-		Flip_Sign(A0);
+		BI_Flip_Sign(A1);
+		BI_Flip_Sign(A0);
 	}
 
 	Right_Shift(A1, (int)(WORD_BIT_LEN / 2)); // A1 = |A| >> WORD_BIT_LEN / 2
-	Reduction_BI(&A0, (int)(WORD_BIT_LEN / 2)); // A0 = |A| mod (WORD_BIT_LEN / 2)
+	BI_Reduction(&A0, (int)(WORD_BIT_LEN / 2)); // A0 = |A| mod (WORD_BIT_LEN / 2)
 
 	C1->a[0] = A1->a[0] * A1->a[0]; // C1 = A1^2
 	C0->a[0] = A0->a[0] * A0->a[0]; // C0 = A0^2
@@ -1211,7 +1212,7 @@ void Single_Squaring(bigint* C, bigint* A)
 	C->a[1] = C1->a[0];
 	C->a[0] = C0->a[0];
 
-	MUL_MUL(&T, A0, A1); // T = A0 * A1
+	MUL_Multi(&T, A0, A1); // T = A0 * A1
 	Left_Shift(T, (WORD_BIT_LEN / 2) + 1); // T = T << ((WORD_BIT_LEN / 2) + 1)
 
 	ADD_AAB(&C, &C, &T); // C = C + T
@@ -1248,7 +1249,7 @@ void SQUC(bigint** C, bigint* A)
 	A_i->sign = A->sign;
 	A_j->sign = A->sign;
 
-	Get_Word_Length(&wordlen_A, &A);
+	BI_Get_Word_Length(&wordlen_A, &A);
 
 	BI_New(C, wordlen_A * 2 + 1);
 	BI_New(&C1, 2 * wordlen_A);
@@ -1259,7 +1260,7 @@ void SQUC(bigint** C, bigint* A)
 		BI_New(&T1, 2);
 		A_j->a[0] = A->a[j];
 		Single_Squaring(T1, A_j);
-		Assign_BI(&temp1, T1);
+		BI_Assign(&temp1, T1);
 		Left_Shift(temp1, (int)(2 * j * WORD_BIT_LEN)); // T1 = T1 << ((2 * j) * WORD_BIT_LEN)
 
 		// C1 = T1 || C1
@@ -1274,7 +1275,7 @@ void SQUC(bigint** C, bigint* A)
 			{
 				//if(temp1->wordlen < C1->wordlen)
 				C1->a[2 * j + k] = temp1->a[2 * j + k]; // 그 다음부터는 T1이 2 워드 단위로 왼쪽으로 시프트 연산한 결과이므로 2 * j번째부터 넣어 주기
-				
+
 			}
 		}
 
@@ -1284,8 +1285,8 @@ void SQUC(bigint** C, bigint* A)
 		{
 			BI_New(&T2, 2);
 			A_i->a[0] = A->a[i];
-			MUL_MUL(&T2, A_j, A_i);
-			Assign_BI(&temp2, T2);
+			MUL_Multi(&T2, A_j, A_i);
+			BI_Assign(&temp2, T2);
 			Left_Shift(temp2, (int)((i + j) * WORD_BIT_LEN));
 
 			c2_len = C2->wordlen;
@@ -1323,48 +1324,48 @@ void SQU(bigint** C, bigint* A)
 	int flag1; // A가 1인지 판별하는 flag
 	int flag2 = -1; // A가 음수일 때 -1인지 판별하는 flag
 	int sign;
-	
+
 	bigint* temp = NULL;
 
-	Assign_BI(&temp, A);
+	BI_Assign(&temp, A);
 
-	sign = Get_Sign(A);
+	sign = BI_Get_Sign(A);
 	if (sign == NEGATIVE) // A의 부호가 음수인 경우
 	{
-		Flip_Sign(temp); // 부호 바꾼 뒤
-		flag2 = Is_One(&temp); // 1인지 판별 (즉, -1인지 판별)
+		BI_Flip_Sign(temp); // 부호 바꾼 뒤
+		flag2 = BI_Is_One(&temp); // 1인지 판별 (즉, -1인지 판별)
 	}
 
-	flag0 = Is_Zero(&A); // A가 0인지 판별
-	flag1 = Is_One(&A); // A가 1인지 판별
+	flag0 = BI_Is_Zero(&A); // A가 0인지 판별
+	flag1 = BI_Is_One(&A); // A가 1인지 판별
 
 	if (flag0 == 0) // A = 0인 경우, A^2 = 0 return
 	{
-		Assign_BI(C, A);
+		BI_Assign(C, A);
 		return;
 	}
 	if (flag1 == 0) // A = 1인 경우, A^2 = 1 return
 	{
-		Assign_BI(C, A);
+		BI_Assign(C, A);
 		return;
 	}
 	if (flag2 == 0) // A = -1인 경우, A^2 = 1 return
 	{
-		Assign_BI(C, temp);
+		BI_Assign(C, temp);
 		return;
 	}
-
+	BI_Delete(&temp);
 	SQUC(C, A); // A = 0. -1, 1이 아닌 경우 SQUC 실행
-	
+
 }
 
 void SQUC_Karatsuba(bigint** C, bigint* A)
 {
-	int i, j;
+	int i;
 	int flag = 1;
 	int len, A_Len;
 
-	Get_Word_Length(&A_Len, &A); // A_Len = A의 워드열 길이
+	BI_Get_Word_Length(&A_Len, &A); // A_Len = A의 워드열 길이
 
 	if (flag >= A_Len) // A의 워드열의 길이와 B의 워드열의 길이 중 더 작은 것이 flag보다 작으면
 	{
@@ -1386,17 +1387,17 @@ void SQUC_Karatsuba(bigint** C, bigint* A)
 	BI_New(&R, len * 4);
 	BI_New(&S, len * 2);
 
-	Assign_BI(&A1, A);
-	Assign_BI(&A0, A);
+	BI_Assign(&A1, A);
+	BI_Assign(&A0, A);
 
 	if (A->sign == NEGATIVE)
 	{
-		Flip_Sign(A1);
-		Flip_Sign(A0);
+		BI_Flip_Sign(A1);
+		BI_Flip_Sign(A0);
 	}
 
 	Right_Shift(A1, len * (int)(WORD_BIT_LEN)); // A1 = |A| >> WORD_BIT_LEN / 2
-	Reduction_BI(&A0, len * (int)(WORD_BIT_LEN)); // A0 = |A| mod (WORD_BIT_LEN / 2)
+	BI_Reduction(&A0, len * (int)(WORD_BIT_LEN)); // A0 = |A| mod (WORD_BIT_LEN / 2)
 
 	SQUC_Karatsuba(&T1, A1);
 	SQUC_Karatsuba(&T0, A0);
@@ -1405,7 +1406,7 @@ void SQUC_Karatsuba(bigint** C, bigint* A)
 	BI_Refine(T0);
 
 	bigint* T1_tmp = NULL;
-	Assign_BI(&T1_tmp, T1);
+	BI_Assign(&T1_tmp, T1);
 	Left_Shift(T1_tmp, 2 * WORD_BIT_LEN * len); // T1_tmp = T1을 2 * len 워드만큼 오른쪽으로 이동
 
 	// R = T1 || T0
@@ -1433,7 +1434,6 @@ void SQUC_Karatsuba(bigint** C, bigint* A)
 
 /*
 	[Binary_Long_Division] pseudo code
-
 */
 void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 {
@@ -1448,7 +1448,7 @@ void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 	BI_Set_Zero(Q);
 	BI_Set_Zero(R);
 
-	Get_Word_Length(&size, &A); // size == bigint A's word length.
+	BI_Get_Word_Length(&size, &A); // size == bigint A's word length.
 
 	size = size * WORD_BIT_LEN; // 변수 size 는 A의 총 비트 길이
 	for (i = size - 1; i >= 0; i--) // 최상위 비트부터
@@ -1458,11 +1458,11 @@ void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 		len = i % WORD_BIT_LEN; // 해당 워드에 몇 번째 비트인지
 		temp = temp >> len; // 해당 비트를 left shift해서 첫번째 비트에 놓이도록
 		temp = temp & 1; // 1과 & 해서 
-		T->a[0] = temp; // 해당 비트의 값을 대입 // j_th_Bit_Length 바꿔서 하기
+		T->a[0] = temp; // 해당 비트의 값을 대입 // j_th_BI_Bit_Length 바꿔서 하기
 
 		Left_Shift(*R, 1); // 2R
 		ADD_DIV(R, R, &T); // 2R + a{j}
-		result = Compare_BI(&B, R); // R >= B --> 0, -1
+		result = BI_Compare(&B, R); // R >= B --> 0, -1
 		if (result < 1) // R >= B인지 비교
 		{
 			len = (int)(i / WORD_BIT_LEN) + 1;
@@ -1525,13 +1525,13 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 	int A_sign;
 	int B_sign;
 	int i;
-	A_sign = Get_Sign(*A);
-	B_sign = Get_Sign(*B);
+	A_sign = BI_Get_Sign(*A);
+	B_sign = BI_Get_Sign(*B);
 
-	Get_Word_Length(&A_Len, A);
-	Get_Word_Length(&B_Len, B);
+	BI_Get_Word_Length(&A_Len, A);
+	BI_Get_Word_Length(&B_Len, B);
 
-	if (Is_Zero(A) == 0) // A is zero
+	if (BI_Is_Zero(A) == 0) // A is zero
 	{
 		if (A == C)
 			BI_New(C, B_Len); // Binary Long Divison에서 필요
@@ -1544,7 +1544,7 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 		return;
 	}
 
-	if (Is_Zero(B) == 0) // B is zero
+	if (BI_Is_Zero(B) == 0) // B is zero
 	{
 		(*C)->sign = (*A)->sign;
 		(*C)->wordlen = (*A)->wordlen;
@@ -1558,9 +1558,9 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 	{
 		bigint* temp = NULL;
 		BI_New(&temp, B_Len);
-		Assign_BI(&temp, *B);
+		BI_Assign(&temp, *B);
 
-		Flip_Sign(temp);
+		BI_Flip_Sign(temp);
 		SUB(C, *A, temp); // SUB 함수
 		//BI_Refine(C);
 
@@ -1573,9 +1573,9 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 	{
 		bigint* temp = NULL;
 		BI_New(&temp, A_Len);
-		Assign_BI(&temp, *A);
+		BI_Assign(&temp, *A);
 
-		Flip_Sign(temp);
+		BI_Flip_Sign(temp);
 		SUB(C, *B, temp); // SUB 함수
 		//BI_Refine(C);
 
@@ -1604,21 +1604,21 @@ void DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorith
 {
 	int i = 0; // for 반복문에서 사용할 변수 i.
 	int len = 0; // 변수 len은 빅넘버 A의 size를 담을 변수
-	int result = 0; // Compare_BI(&A, &B)의 결과를 담을 변수
+	int result = 0; // BI_Compare(&A, &B)의 결과를 담을 변수
 	bigint* Temp = NULL; // A의 j번째 워드( A_{j} )를 담을 빅넘버 Temp 초기화
 	bigint* Word = NULL; // Q의 i번째 워드( Q_{i} )를 담을 빅넘버 Word 초기화
 
 	BI_Set_Zero(R); // 길이가 1이고 값이 0인 빅넘버 *R 생성
 	BI_Set_Zero(&Word); // 길이가 1이고 값이 0인 빅넘버 Word 생성. BI_New(&Word, 1)도 가능.
 
-	Get_Word_Length(&len, &A);
+	BI_Get_Word_Length(&len, &A);
 	BI_New(Q, len);
 	if (B->sign & 1) // line 1.
 		return; // return INVALID.
-	result = Compare_BI(&A, &B);
+	result = BI_Compare(&A, &B);
 	if (result < 0) // line 4. B > A 일 경우, Compare(&A, &B)의 return : -1
 	{
-		Assign_BI(R, A);
+		BI_Assign(R, A);
 		return;
 	}
 
@@ -1646,7 +1646,7 @@ void DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
 	bigint* AP = NULL; // A를 left shift 해서 보관할 빅넘버 A'(AP, A Prime)
 	bigint* BP = NULL; // B를 left shift 해서 보관할 빅넘버 B'(BP, B Prime)
 
-	result = Compare_BI(&A, &B);
+	result = BI_Compare(&A, &B);
 	if (result == -1) // A < B 보다 클 때
 	{
 		return;
@@ -1654,10 +1654,10 @@ void DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
 		// DIV에서의 2번째 arg와 3번째 arg를 같은 R로 대입했으므로
 		// R은 A가 되었고, Q는 DIV 함수내에서 0이다. 
 	}
-	Assign_BI(&AP, A); // 빅넘버 A' 에 빅넘버 A assing
-	Assign_BI(&BP, B); // 빅넘버 B' 에 빅넘버 B assing
+	BI_Assign(&AP, A); // 빅넘버 A' 에 빅넘버 A assing
+	BI_Assign(&BP, B); // 빅넘버 B' 에 빅넘버 B assing
 	// line 4. Compute k.
-	Get_Word_Length(&len, &B);
+	BI_Get_Word_Length(&len, &B);
 	bigint* comp = NULL; // k를 compute하기 위한 빅넘버 comp 선언 및 초기화
 	BI_New(&comp, 1); // 빅넘버 comp의 길이 1로 생성
 	comp->a[0] = B->a[len - 1]; //comp에 B_{m - 1} 대입
@@ -1691,8 +1691,8 @@ void DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B) // 7.2.3 DIVCC(A, B)
 	bigint* one = NULL; // 워드길이가 1이고 값이 1로 사용할 빅넘버 one를 선언 및 초기화.
 
 	BI_Set_One(&one); // 값이 1이고 워드길이가 1이 되도록 BI_Set_One() 사용
-	Get_Word_Length(&n, &A); // 변수 n에 A의 size 대입
-	Get_Word_Length(&m, &B); // 변수 m에 B의 size 대입
+	BI_Get_Word_Length(&n, &A); // 변수 n에 A의 size 대입
+	BI_Get_Word_Length(&m, &B); // 변수 m에 B의 size 대입
 
 
 	A_msw = A->a[n - 1]; // 빅넘버 A의 최상위 워드를 A_msw에 대입
@@ -1710,7 +1710,7 @@ void DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B) // 7.2.3 DIVCC(A, B)
 			DIVCC_n_m1(Q, A, B, m); // line 8.
 	}
 	BI_New(&BQ, n + m); // 빅넘버 B와 빅넘버 Q를 곱한 값을 저장할 빅넘버 BQ를 B와 Q의 곱셈연산이 가능한 길이인 n + m 로 생성.
-	MUL_MUL(&BQ, *Q, B); // B와 Q를 곱셈 연산해 빅넘버 BQ에 대입 (이 때 Karatsuba로 변경도 가능 --> 속도 비교 가능!!)
+	MUL_Multi(&BQ, *Q, B); // B와 Q를 곱셈 연산해 빅넘버 BQ에 대입 (이 때 Karatsuba로 변경도 가능 --> 속도 비교 가능!!)
 	SUB(R, A, BQ);// R = A - B * Q // line 11.
 	while ((*R)->sign & 1) // R의 부호가 음수일 때 1 & 1 = 1 // line 12. 
 	{
@@ -1775,10 +1775,10 @@ void Montgomery_Exp_mul(bigint** C, bigint* A, int n)
 	bigint* temp0 = NULL; // t0를 저장할 임시 변수
 	bigint* temp1 = NULL; // t1을 저장할 임시 변수
 
-	Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
+	BI_Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
 
 	BI_Set_One(&t0); // t0 = 1
-	Assign_BI(&t1, A); // t1 = A
+	BI_Assign(&t1, A); // t1 = A
 
 	for (i = n_bit_len - 1; i >= 0; i--)
 	{
@@ -1786,47 +1786,47 @@ void Montgomery_Exp_mul(bigint** C, bigint* A, int n)
 
 		if (bit == 1) // n의 i번째 비트가 1일 경우
 		{
-			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
-			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+			BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 			BI_New(&temp0, t0_len + t1_len); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
 			//BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 
-			MUL_MUL(&temp0, t0, t1); // temp0 = t0 * t1
+			MUL_Multi(&temp0, t0, t1); // temp0 = t0 * t1
 			BI_Delete(&t0);
-			Assign_BI(&t0, temp0); // t0 = temp0 (t0 갱신)
+			BI_Assign(&t0, temp0); // t0 = temp0 (t0 갱신)
 			BI_Delete(&temp0);
 
 			SQU(&temp1, t1); // temp1 = t1^2
 			BI_Delete(&t1);
-			Assign_BI(&t1, temp1); // t1 = temp1 (t1 갱신)
+			BI_Assign(&t1, temp1); // t1 = temp1 (t1 갱신)
 			BI_Delete(&temp1);
 
 		}
 		else if (bit == 0) // n의 i번째 비트가 0일 경우
 		{
-			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
-			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+			BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 			//BI_New(&temp0, t0_len * 2 + 1); // temp0(t0) = t0^2을 저장하기 위한 bigint 생성
 			BI_New(&temp1, t0_len + t1_len);  // temp1(t1) = t0 * t1을 저장하기 위한 bigint 생성
 
-			MUL_MUL(&temp1, t0, t1); // temp1 = t0 * t1
+			MUL_Multi(&temp1, t0, t1); // temp1 = t0 * t1
 			BI_Delete(&t1);
-			Assign_BI(&t1, temp1); // t1 = temp1 (t1 갱신)
+			BI_Assign(&t1, temp1); // t1 = temp1 (t1 갱신)
 			BI_Delete(&temp1);
 
 
 			SQU(&temp0, t0); // temp0 = t0^2
 			BI_Delete(&t0);
-			Assign_BI(&t0, temp0); // t0 = temp0 (t0 갱신)
+			BI_Assign(&t0, temp0); // t0 = temp0 (t0 갱신)
 			BI_Delete(&temp0);
 		}
 		else // n의 i번째 비트가 1도 0도 아닌 경우
 			return; // 예외 처리
 	}
 
-	Assign_BI(C, t0); // 마지막 t0 값 C에 할당
+	BI_Assign(C, t0); // 마지막 t0 값 C에 할당
 
 	BI_Delete(&t0);
 	BI_Delete(&t1);
@@ -1845,10 +1845,10 @@ void Montgomery_Exp_add(bigint** C, bigint* A, int n)
 	bigint* temp0 = NULL; // t0를 저장할 임시 변수
 	bigint* temp1 = NULL; // t1을 저장할 임시 변수
 
-	Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
+	BI_Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
 
 	BI_Set_Zero(&t0); // t0 = 0
-	Assign_BI(&t1, A); // t1 = A
+	BI_Assign(&t1, A); // t1 = A
 
 	for (i = n_bit_len - 1; i >= 0; i--)
 	{
@@ -1856,14 +1856,14 @@ void Montgomery_Exp_add(bigint** C, bigint* A, int n)
 
 		if (bit == 1) // n의 i번째 비트가 1일 경우
 		{
-			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
-			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+			BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 + t1을 저장하기 위한 bigint 생성
 
 			ADD(&temp0, &t0, &t1); // temp0 = t0 + t1
 			BI_Delete(&t0);
-			Assign_BI(&t0, temp0); // t0 = temp0 (t0 갱신)
+			BI_Assign(&t0, temp0); // t0 = temp0 (t0 갱신)
 			BI_Delete(&temp0);
 
 			Left_Shift(t1, 1); // t1 = t1 << 2
@@ -1871,14 +1871,14 @@ void Montgomery_Exp_add(bigint** C, bigint* A, int n)
 		}
 		else if (bit == 0) // n의 i번째 비트가 0일 경우
 		{
-			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
-			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+			BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 			BI_New(&temp1, MAX(t0_len, t1_len) + 1);  // temp1(t1) = t0 + t1을 저장하기 위한 bigint 생성
 
 			ADD(&temp1, &t0, &t1); // temp1 = t0 + t1
 			BI_Delete(&t1);
-			Assign_BI(&t1, temp1); // t1 = temp1 (t1 갱신)
+			BI_Assign(&t1, temp1); // t1 = temp1 (t1 갱신)
 			BI_Delete(&temp1);
 
 			Left_Shift(t0, 1); // t0 = t0 << 2
@@ -1887,14 +1887,14 @@ void Montgomery_Exp_add(bigint** C, bigint* A, int n)
 			return; // 예외 처리
 	}
 
-	Assign_BI(C, t0); // 마지막 t0 값 C에 할당
+	BI_Assign(C, t0); // 마지막 t0 값 C에 할당
 
 	BI_Delete(&t0);
 	BI_Delete(&t1);
 }
 
 // C = A^n
-void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M) // n bigint로
+void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M)
 {
 	int i, bit;
 	int n_bit_len;
@@ -1909,10 +1909,10 @@ void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M) // n bigint
 	bigint* Q = NULL;
 	bigint* R = NULL;
 
-	Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
+	BI_Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
 
 	BI_Set_One(&t0); // t0 = 1
-	Assign_BI(&t1, A); // t1 = A
+	BI_Assign(&t1, A); // t1 = A
 
 	for (i = n_bit_len - 1; i >= 0; i--)
 	{
@@ -1920,16 +1920,16 @@ void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M) // n bigint
 
 		if (bit == 1) // n의 i번째 비트가 1일 경우
 		{
-			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
-			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+			BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 			BI_New(&temp0, t0_len + t1_len); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
 			//BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 
-			MUL_MUL(&temp0, t0, t1); // temp0 = t0 * t1
+			MUL_Multi(&temp0, t0, t1); // temp0 = t0 * t1
 			DIV(&Q, &R, temp0, M); // R = temp0 (mod M)
 			BI_Delete(&t0);
-			Assign_BI(&t0, R); // t0 = R (t0 갱신)
+			BI_Assign(&t0, R); // t0 = R (t0 갱신)
 			BI_Delete(&temp0);
 			BI_Delete(&Q);
 			BI_Delete(&R);
@@ -1937,7 +1937,7 @@ void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M) // n bigint
 			SQU(&temp1, t1); // temp1 = t1^2
 			DIV(&Q, &R, temp1, M); // R = temp1 (mod M)
 			BI_Delete(&t1);
-			Assign_BI(&t1, R); // t1 = R (t1 갱신)
+			BI_Assign(&t1, R); // t1 = R (t1 갱신)
 			BI_Delete(&temp1);
 			BI_Delete(&Q);
 			BI_Delete(&R);
@@ -1945,16 +1945,16 @@ void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M) // n bigint
 		}
 		else if (bit == 0) // n의 i번째 비트가 0일 경우
 		{
-			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
-			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+			BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 			//BI_New(&temp0, t0_len * 2 + 1); // temp0(t0) = t0^2을 저장하기 위한 bigint 생성
 			BI_New(&temp1, t0_len + t1_len);  // temp1(t1) = t0 * t1을 저장하기 위한 bigint 생성
 
-			MUL_MUL(&temp1, t0, t1); // temp1 = t0 * t1
+			MUL_Multi(&temp1, t0, t1); // temp1 = t0 * t1
 			DIV(&Q, &R, temp1, M); // R = temp1 (mod M)
 			BI_Delete(&t1);
-			Assign_BI(&t1, R); // t1 = R (t1 갱신)
+			BI_Assign(&t1, R); // t1 = R (t1 갱신)
 			BI_Delete(&temp1);
 			BI_Delete(&Q);
 			BI_Delete(&R);
@@ -1962,7 +1962,7 @@ void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M) // n bigint
 			SQU(&temp0, t0); // temp0 = t0^2
 			DIV(&Q, &R, temp0, M); // R = temp0 (mod M)
 			BI_Delete(&t0);
-			Assign_BI(&t0, R); // t0 = R (t0 갱신)
+			BI_Assign(&t0, R); // t0 = R (t0 갱신)
 			BI_Delete(&temp0);
 			BI_Delete(&Q);
 			BI_Delete(&R);
@@ -1971,7 +1971,7 @@ void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M) // n bigint
 			return; // 예외 처리
 	}
 
-	Assign_BI(C, t0); // 마지막 t0 값 C에 할당
+	BI_Assign(C, t0); // 마지막 t0 값 C에 할당
 
 	BI_Delete(&t0);
 	BI_Delete(&t1);
@@ -1993,10 +1993,10 @@ void Montgomery_Mod_Exp_add(bigint** C, bigint* A, int n, bigint* M)
 	bigint* Q = NULL;
 	bigint* R = NULL;
 
-	Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
+	BI_Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
 
 	BI_Set_Zero(&t0); // t0 = 0
-	Assign_BI(&t1, A); // t1 = A
+	BI_Assign(&t1, A); // t1 = A
 
 	for (i = n_bit_len - 1; i >= 0; i--)
 	{
@@ -2004,15 +2004,15 @@ void Montgomery_Mod_Exp_add(bigint** C, bigint* A, int n, bigint* M)
 
 		if (bit == 1) // n의 i번째 비트가 1일 경우
 		{
-			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
-			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+			BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 + t1을 저장하기 위한 bigint 생성
 
 			ADD(&temp0, &t0, &t1); // temp0 = t0 + t1
 			DIV(&Q, &R, temp0, M); // R = temp0 (mod M)
 			BI_Delete(&t0);
-			Assign_BI(&t0, R); // t0 = R (t0 갱신)
+			BI_Assign(&t0, R); // t0 = R (t0 갱신)
 			BI_Delete(&temp0);
 			BI_Delete(&Q);
 			BI_Delete(&R);
@@ -2020,21 +2020,21 @@ void Montgomery_Mod_Exp_add(bigint** C, bigint* A, int n, bigint* M)
 			Left_Shift(t1, 1); // t1 = t1 << 2
 			DIV(&Q, &R, t1, M); // t1 = t1 (mod M)
 			BI_Delete(&t1);
-			Assign_BI(&t1, R); // t1 = R (t1 갱신)
+			BI_Assign(&t1, R); // t1 = R (t1 갱신)
 			BI_Delete(&Q);
 			BI_Delete(&R);
 		}
 		else if (bit == 0) // n의 i번째 비트가 0일 경우
 		{
-			Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
-			Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+			BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 			BI_New(&temp1, MAX(t0_len, t1_len) + 1);  // temp1(t1) = t0 + t1을 저장하기 위한 bigint 생성
 
 			ADD(&temp1, &t0, &t1); // temp1 = t0 + t1
 			DIV(&Q, &R, temp1, M); // R = temp1 (mod M)
 			BI_Delete(&t1);
-			Assign_BI(&t1, R); // t1 = R (t1 갱신)
+			BI_Assign(&t1, R); // t1 = R (t1 갱신)
 			BI_Delete(&temp1);
 			BI_Delete(&Q);
 			BI_Delete(&R);
@@ -2042,7 +2042,7 @@ void Montgomery_Mod_Exp_add(bigint** C, bigint* A, int n, bigint* M)
 			Left_Shift(t0, 1); // t0 = t0 << 2
 			DIV(&Q, &R, t0, M); // t0 = t0 (mod M)
 			BI_Delete(&t0);
-			Assign_BI(&t0, R); // t0 = R (t0 갱신)
+			BI_Assign(&t0, R); // t0 = R (t0 갱신)
 			BI_Delete(&Q);
 			BI_Delete(&R);
 		}
@@ -2050,13 +2050,15 @@ void Montgomery_Mod_Exp_add(bigint** C, bigint* A, int n, bigint* M)
 			return; // 예외 처리
 	}
 
-	Assign_BI(C, t0); // 마지막 t0 값 C에 할당
+	BI_Assign(C, t0); // 마지막 t0 값 C에 할당
 
 	BI_Delete(&t0);
 	BI_Delete(&t1);
 }
 
-void EXP_LR_MUL(bigint** T, bigint* X, int n, bigint* M) // Only Exponentiation function L->R * function
+
+
+void EXP_LR_MUL(bigint** T, bigint* X, int n)
 {
 	int i = 0; // 반복문에 사용될 변수 i
 	int len = 0; // X의 비트 길이를 담을 변수 len
@@ -2070,33 +2072,32 @@ void EXP_LR_MUL(bigint** T, bigint* X, int n, bigint* M) // Only Exponentiation 
 
 	BI_Set_One(&t0);
 
-	Bit_Length_of_number(n, &len);
-
+	BI_Bit_Length_of_number(n, &len);
+	BI_Get_Word_Length(&x_len, &X); 
 	for (i = len - 1; i >= 0; i--)
 	{
-		Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
 		BI_New(&temp1, 2 * t0_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 		SQU(&temp1, t0);
 		BI_Delete(&t0);
 
-		Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
 		BI_New(&temp0, 2 * t0_len + x_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 		result = j_th_Bit_of_number(i, n);
 		if (result == 1)
-			MUL_MUL(&temp0, temp1, X);
+			MUL_Multi(&temp0, temp1, X);
 
 		else
-			Assign_BI(&temp0, temp1);
+			BI_Assign(&temp0, temp1);
 
 		BI_Delete(&temp1);
-		Assign_BI(&t0, temp0);
+		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
 	}
-	Assign_BI(T, t0);
+	BI_Assign(T, t0);
 	BI_Delete(&t0);
 }
 
-void EXP_LR_ADD(bigint** T, bigint* X, int n, bigint* M) // Only Exponentiation function L->R + function
+void EXP_LR_ADD(bigint** T, bigint* X, int n)
 {
 	int i = 0; // 반복문에 사용될 변수 i
 	int len = 0; // X의 비트 길이를 담을 변수 len
@@ -2109,30 +2110,30 @@ void EXP_LR_ADD(bigint** T, bigint* X, int n, bigint* M) // Only Exponentiation 
 
 	BI_Set_Zero(&t0);
 
-	Bit_Length_of_number(n, &len);
+	BI_Bit_Length_of_number(n, &len);
 
 	for (i = len - 1; i >= 0; i--)
 	{
 		Left_Shift(t0, 1);
-		Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
-		Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
 		BI_New(&temp0, t0_len + x_len); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 		result = j_th_Bit_of_number(i, n);
 		if (result == 1)
 			ADD(&temp0, &t0, &X);
 
 		else
-			Assign_BI(&temp0, t0);
+			BI_Assign(&temp0, t0);
 
 		BI_Delete(&t0);
-		Assign_BI(&t0, temp0);
+		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
 	}
-	Assign_BI(T, t0);
+	BI_Assign(T, t0);
 	BI_Delete(&t0);
 }
 
-void EXP_RL_MUL(bigint** T, bigint* X, int n, bigint* M) // Only Exponentiation function L<-R * function
+void EXP_RL_MUL(bigint** T, bigint* X, int n)
 {
 	int i = 0; // 반복문에 사용될 변수 i
 	int len = 0; // X의 비트 길이를 담을 변수 len
@@ -2146,20 +2147,20 @@ void EXP_RL_MUL(bigint** T, bigint* X, int n, bigint* M) // Only Exponentiation 
 	bigint* temp1 = NULL;
 
 	BI_Set_One(&t0);
-	Assign_BI(&t1, X); //line. 1. 
+	BI_Assign(&t1, X); //line. 1. 
 
 	len = n;
 	if (len == 1)
 	{
-		Assign_BI(T, X);
+		BI_Assign(T, X);
 		BI_Delete(&t0);
 		BI_Delete(&t1);
 		return;
 	}
 	while (len >= 1)
 	{
-		Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
-		Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 		BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 
@@ -2168,30 +2169,30 @@ void EXP_RL_MUL(bigint** T, bigint* X, int n, bigint* M) // Only Exponentiation 
 		if (result == 1)
 		{
 			BI_New(&temp0, t0_len + t1_len); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
-			MUL_MUL(&temp0, t0, t1);
+			MUL_Multi(&temp0, t0, t1);
 		}
 		else
 		{
-			Assign_BI(&temp0, t0);
+			BI_Assign(&temp0, t0);
 			BI_Delete(&t0);
 		}
-		Assign_BI(&t0, temp0);
+		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
 
 		SQU(&temp1, t1);
 		BI_Delete(&t1);
-		Assign_BI(&t1, temp1);
+		BI_Assign(&t1, temp1);
 		BI_Delete(&temp1);
 
 		len = len >> 1;
 	}
-	Assign_BI(T, t0);
+	BI_Assign(T, t0);
 	BI_Delete(&t0);
 	BI_Delete(&t1);
 	BI_Refine(*T);
 }
 
-void EXP_RL_ADD(bigint** T, bigint* X, int n, bigint* M) // Only Exponentiation function L<->R + function
+void EXP_RL_ADD(bigint** T, bigint* X, int n)
 {
 	int i = 0; // 반복문에 사용될 변수 i
 	int len = 0; // X의 비트 길이를 담을 변수 len
@@ -2205,20 +2206,20 @@ void EXP_RL_ADD(bigint** T, bigint* X, int n, bigint* M) // Only Exponentiation 
 	bigint* temp1 = NULL;
 
 	BI_Set_Zero(&t0);
-	Assign_BI(&t1, X); //line. 1. 
+	BI_Assign(&t1, X); //line. 1. 
 
 	len = n;
 	if (len == 1)
 	{
-		Assign_BI(T, X);
+		BI_Assign(T, X);
 		BI_Delete(&t0);
 		BI_Delete(&t1);
 		return;
 	}
 	while (len >= 1)
 	{
-		Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
-		Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 		result = len & 1;
 
@@ -2229,23 +2230,23 @@ void EXP_RL_ADD(bigint** T, bigint* X, int n, bigint* M) // Only Exponentiation 
 		}
 		else
 		{
-			Assign_BI(&temp0, t0);
+			BI_Assign(&temp0, t0);
 			BI_Delete(&t0);
 		}
-		Assign_BI(&t0, temp0);
+		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
 
 		Left_Shift(t1, 1);
 
 		len = len >> 1;
 	}
-	Assign_BI(T, t0);
+	BI_Assign(T, t0);
 	BI_Delete(&t0);
 	BI_Delete(&t1);
 	BI_Refine(*T);
 }
 
-void MOD_EXP_LR_MUL(bigint** T, bigint* X, int n, bigint* M) // Modular Exponentiaition used Binary Long Division L->R * function
+void MOD_EXP_LR_MUL(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
 	int len = 0; // X의 비트 길이를 담을 변수 len
@@ -2260,43 +2261,43 @@ void MOD_EXP_LR_MUL(bigint** T, bigint* X, int n, bigint* M) // Modular Exponent
 	bigint* trash_r = NULL;
 	BI_Set_One(&t0);
 
-	Bit_Length_of_number(n, &len);
+	BI_Bit_Length_of_number(n, &len);
 
 	for (i = len - 1; i >= 0; i--)
 	{
-		Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
 		BI_New(&temp1, 2 * t0_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 		SQU(&temp1, t0);
 		BI_Delete(&t0);
 		Binary_Long_Div(&trash_q, &trash_r, temp1, M);
-		Assign_BI(&temp1, trash_r);
+		BI_Assign(&temp1, trash_r);
 		BI_Delete(&trash_r);
 		BI_Delete(&trash_r);
 
-		Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
 		BI_New(&temp0, 2 * t0_len + x_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 		result = j_th_Bit_of_number(i, n);
 		if (result == 1)
 		{
-			MUL_MUL(&temp0, temp1, X);
+			MUL_Multi(&temp0, temp1, X);
 			Binary_Long_Div(&trash_q, &trash_r, temp0, M);
-			Assign_BI(&temp0, trash_r);
+			BI_Assign(&temp0, trash_r);
 			BI_Delete(&trash_r);
 			BI_Delete(&trash_q);
 		}
 
 		else
-			Assign_BI(&temp0, temp1);
+			BI_Assign(&temp0, temp1);
 
 		BI_Delete(&temp1);
-		Assign_BI(&t0, temp0);
+		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
 	}
-	Assign_BI(T, t0);
+	BI_Assign(T, t0);
 	BI_Delete(&t0);
 }
 
-void MOD_EXP_LR_ADD(bigint** T, bigint* X, int n, bigint* M) // Modular Exponentiaition used Binary Long Division L->R + function
+void MOD_EXP_LR_ADD(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
 	int len = 0; // X의 비트 길이를 담을 변수 len
@@ -2310,40 +2311,40 @@ void MOD_EXP_LR_ADD(bigint** T, bigint* X, int n, bigint* M) // Modular Exponent
 	bigint* trash_r = NULL;
 	BI_Set_Zero(&t0);
 
-	Bit_Length_of_number(n, &len);
+	BI_Bit_Length_of_number(n, &len);
 	
 	for (i = len - 1; i >= 0; i--)
 	{
 		Left_Shift(t0, 1);
 		Binary_Long_Div(&trash_q, &trash_r, t0, M);
-		Get_Word_Length(&t0_len, &trash_r); // t1의 워드열 길이 -> t1_len
-		Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &trash_r); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
 		BI_New(&temp0, t0_len + x_len); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 		result = j_th_Bit_of_number(i, n);
 		if (result == 1)
 		{
 			ADD(&temp0, &trash_r, &X);
 			Binary_Long_Div(&trash_q, &trash_r, temp0, M);
-			Assign_BI(&temp0, trash_r);
+			BI_Assign(&temp0, trash_r);
 			BI_Delete(&trash_r);
 		}
 				
 		else
 		{
-			Assign_BI(&temp0, trash_r);
+			BI_Assign(&temp0, trash_r);
 		}
 				
 		BI_Delete(&trash_r);
-		Assign_BI(&t0, temp0);
+		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
 		BI_Delete(&trash_q);
 		BI_Delete(&trash_r);
 	}
-	Assign_BI(T, t0);
+	BI_Assign(T, t0);
 	BI_Delete(&t0);
 }
 
-void MOD_EXP_RL_MUL(bigint** T, bigint* X, int n, bigint* M) // Modular Exponentiaition used Binary Long Division L<-R * function
+void MOD_EXP_RL_MUL(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
 	int len = 0; // X의 비트 길이를 담을 변수 len
@@ -2359,14 +2360,14 @@ void MOD_EXP_RL_MUL(bigint** T, bigint* X, int n, bigint* M) // Modular Exponent
 	bigint* trash_r = NULL;
 
 	BI_Set_One(&t0); 
-	Assign_BI(&t1, X); //line. 1. 
+	BI_Assign(&t1, X); //line. 1. 
 	
 	len = n;
 	if (len == 1)
 	{
-		Assign_BI(T, X);
+		BI_Assign(T, X);
 		Binary_Long_Div(&trash_q, &trash_r, *T, M);
-		Assign_BI(T, trash_r);
+		BI_Assign(T, trash_r);
 		BI_Delete(&trash_q);
 		BI_Delete(&trash_r);
 		BI_Delete(&t0);
@@ -2375,8 +2376,8 @@ void MOD_EXP_RL_MUL(bigint** T, bigint* X, int n, bigint* M) // Modular Exponent
 	}
 	while (len >= 1)
 	{
-		Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
-		Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 		BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 		
@@ -2385,39 +2386,39 @@ void MOD_EXP_RL_MUL(bigint** T, bigint* X, int n, bigint* M) // Modular Exponent
 		if (result == 1)
 		{
 			BI_New(&temp0, t0_len + t1_len); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
-			MUL_MUL(&temp0, t0, t1);
+			MUL_Multi(&temp0, t0, t1);
 		}
 		else
 		{
-			Assign_BI(&temp0, t0);
+			BI_Assign(&temp0, t0);
 			BI_Delete(&t0);
 		}
 		Binary_Long_Div(&trash_q, &trash_r, temp0, M);
-		Assign_BI(&temp0, trash_r);
+		BI_Assign(&temp0, trash_r);
 		BI_Delete(&trash_q);
 		BI_Delete(&trash_r);
 
-		Assign_BI(&t0, temp0);
+		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
 
 		SQU(&temp1, t1);
 		Binary_Long_Div(&trash_q, &trash_r, temp1, M);
-		Assign_BI(&temp1, trash_r);
+		BI_Assign(&temp1, trash_r);
 		BI_Delete(&trash_q);
 		BI_Delete(&trash_r);
 		BI_Delete(&t1);
-		Assign_BI(&t1, temp1);
+		BI_Assign(&t1, temp1);
 		BI_Delete(&temp1);
 		
 		len = len >> 1;
 	}
-	Assign_BI(T, t0);
+	BI_Assign(T, t0);
 	BI_Delete(&t0);
 	BI_Delete(&t1);
 	BI_Refine(*T);
 }
 
-void MOD_EXP_RL_ADD(bigint** T, bigint* X, int n, bigint* M) // Modular Exponentiaition used Binary Long Division L<-R +
+void MOD_EXP_RL_ADD(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
 	int len = 0; // X의 비트 길이를 담을 변수 len
@@ -2433,14 +2434,14 @@ void MOD_EXP_RL_ADD(bigint** T, bigint* X, int n, bigint* M) // Modular Exponent
 	bigint* trash_r = NULL;
 
 	BI_Set_Zero(&t0);
-	Assign_BI(&t1, X); //line. 1. 
+	BI_Assign(&t1, X); //line. 1. 
 
 	len = n;
 	if (len == 1)
 	{
-		Assign_BI(T, X);
+		BI_Assign(T, X);
 		Binary_Long_Div(&trash_q, &trash_r, *T, M);
-		Assign_BI(T, trash_r);
+		BI_Assign(T, trash_r);
 		BI_Delete(&trash_q);
 		BI_Delete(&trash_r);
 		BI_Delete(&t0);
@@ -2449,8 +2450,8 @@ void MOD_EXP_RL_ADD(bigint** T, bigint* X, int n, bigint* M) // Modular Exponent
 	}
 	while (len >= 1)
 	{
-		Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
-		Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 		result = len & 1;
 
@@ -2461,31 +2462,31 @@ void MOD_EXP_RL_ADD(bigint** T, bigint* X, int n, bigint* M) // Modular Exponent
 		}
 		else
 		{
-			Assign_BI(&temp0, t0);
+			BI_Assign(&temp0, t0);
 			BI_Delete(&t0);
 		}
 		Binary_Long_Div(&trash_q, &trash_r, temp0, M);
-		Assign_BI(&temp0, trash_r);
+		BI_Assign(&temp0, trash_r);
 		BI_Delete(&trash_q);
 		BI_Delete(&trash_r);
-		Assign_BI(&t0, temp0);
+		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
 
 		Left_Shift(t1, 1);
 		Binary_Long_Div(&trash_q, &trash_r, t1, M);
-		Assign_BI(&t1, trash_r);
+		BI_Assign(&t1, trash_r);
 		BI_Delete(&trash_q);
 		BI_Delete(&trash_r);
 				
 		len = len >> 1;
 	}
-	Assign_BI(T, t0);
+	BI_Assign(T, t0);
 	BI_Delete(&t0);
 	BI_Delete(&t1);
 	BI_Refine(*T);
 }
 
-void MOD_EXP_LR_MUL_DIV(bigint** T, bigint* X, int n, bigint* M) // Modular Exponentiation used Multi Long Division L->R * functinon
+void MOD_EXP_LR_MUL_DIV(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
 	int len = 0; // X의 비트 길이를 담을 변수 len
@@ -2500,43 +2501,43 @@ void MOD_EXP_LR_MUL_DIV(bigint** T, bigint* X, int n, bigint* M) // Modular Expo
 	bigint* trash_r = NULL;
 	BI_Set_One(&t0);
 
-	Bit_Length_of_number(n, &len);
+	BI_Bit_Length_of_number(n, &len);
 
 	for (i = len - 1; i >= 0; i--)
 	{
-		Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
 		BI_New(&temp1, 2 * t0_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 		SQU(&temp1, t0);
 		BI_Delete(&t0);
 		DIV(&trash_q, &trash_r, temp1, M);
-		Assign_BI(&temp1, trash_r);
+		BI_Assign(&temp1, trash_r);
 		BI_Delete(&trash_r);
 		BI_Delete(&trash_r);
 
-		Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
 		BI_New(&temp0, 2 * t0_len + x_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 		result = j_th_Bit_of_number(i, n);
 		if (result == 1)
 		{
-			MUL_MUL(&temp0, temp1, X);
+			MUL_Multi(&temp0, temp1, X);
 			DIV(&trash_q, &trash_r, temp0, M);
-			Assign_BI(&temp0, trash_r);
+			BI_Assign(&temp0, trash_r);
 			BI_Delete(&trash_r);
 			BI_Delete(&trash_q);
 		}
 
 		else
-			Assign_BI(&temp0, temp1);
+			BI_Assign(&temp0, temp1);
 
 		BI_Delete(&temp1);
-		Assign_BI(&t0, temp0);
+		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
 	}
-	Assign_BI(T, t0);
+	BI_Assign(T, t0);
 	BI_Delete(&t0);
 }
 
-void MOD_EXP_LR_ADD_DIV(bigint** T, bigint* X, int n, bigint* M) // Modular Exponentiation used Multi Long Division L->R + function
+void MOD_EXP_LR_ADD_DIV(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
 	int len = 0; // X의 비트 길이를 담을 변수 len
@@ -2550,39 +2551,40 @@ void MOD_EXP_LR_ADD_DIV(bigint** T, bigint* X, int n, bigint* M) // Modular Expo
 	bigint* trash_r = NULL;
 	BI_Set_Zero(&t0);
 
-	Bit_Length_of_number(n, &len);
+	BI_Bit_Length_of_number(n, &len);
 
 	for (i = len - 1; i >= 0; i--)
 	{
 		Left_Shift(t0, 1);
 		DIV(&trash_q, &trash_r, t0, M);
-		Get_Word_Length(&t0_len, &trash_r); // t1의 워드열 길이 -> t1_len
-		Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &trash_r); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
 		BI_New(&temp0, t0_len + x_len); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 		result = j_th_Bit_of_number(i, n);
 		if (result == 1)
 		{
 			ADD(&temp0, &trash_r, &X);
 			DIV(&trash_q, &trash_r, temp0, M);
-			Assign_BI(&temp0, trash_r);
+			BI_Assign(&temp0, trash_r);
 			BI_Delete(&trash_r);
 		}
 
 		else
 		{
-			Assign_BI(&temp0, trash_r);
+			BI_Assign(&temp0, trash_r);
+			BI_Delete(&trash_r);
 		}
 
-		Assign_BI(&t0, temp0);
+		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
 		BI_Delete(&trash_q);
-		BI_Delete(&trash_r);
+		
 	}
-	Assign_BI(T, t0);
+	BI_Assign(T, t0);
 	BI_Delete(&t0);
 }
 
-void MOD_EXP_RL_MUL_DIV(bigint** T, bigint* X, int n, bigint* M) // Modular Exponentiation used Multi Long Division L<-R *
+void MOD_EXP_RL_MUL_DIV(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
 	int len = 0; // X의 비트 길이를 담을 변수 len
@@ -2598,14 +2600,14 @@ void MOD_EXP_RL_MUL_DIV(bigint** T, bigint* X, int n, bigint* M) // Modular Expo
 	bigint* trash_r = NULL;
 
 	BI_Set_One(&t0);
-	Assign_BI(&t1, X); //line. 1. 
+	BI_Assign(&t1, X); //line. 1. 
 
 	len = n;
 	if (len == 1)
 	{
-		Assign_BI(T, X);
+		BI_Assign(T, X);
 		DIV(&trash_q, &trash_r, *T, M);
-		Assign_BI(T, trash_r);
+		BI_Assign(T, trash_r);
 		BI_Delete(&trash_q);
 		BI_Delete(&trash_r);
 		BI_Delete(&t0);
@@ -2614,8 +2616,8 @@ void MOD_EXP_RL_MUL_DIV(bigint** T, bigint* X, int n, bigint* M) // Modular Expo
 	}
 	while (len >= 1)
 	{
-		Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
-		Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 		BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 
@@ -2624,39 +2626,39 @@ void MOD_EXP_RL_MUL_DIV(bigint** T, bigint* X, int n, bigint* M) // Modular Expo
 		if (result == 1)
 		{
 			BI_New(&temp0, t0_len + t1_len); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
-			MUL_MUL(&temp0, t0, t1);
+			MUL_Multi(&temp0, t0, t1);
 		}
 		else
 		{
-			Assign_BI(&temp0, t0);
+			BI_Assign(&temp0, t0);
 			BI_Delete(&t0);
 		}
 		DIV(&trash_q, &trash_r, temp0, M);
-		Assign_BI(&temp0, trash_r);
+		BI_Assign(&temp0, trash_r);
 		BI_Delete(&trash_q);
 		BI_Delete(&trash_r);
 
-		Assign_BI(&t0, temp0);
+		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
 
 		SQU(&temp1, t1);
 		Binary_Long_Div(&trash_q, &trash_r, temp1, M);
-		Assign_BI(&temp1, trash_r);
+		BI_Assign(&temp1, trash_r);
 		BI_Delete(&trash_q);
 		BI_Delete(&trash_r);
 		BI_Delete(&t1);
-		Assign_BI(&t1, temp1);
+		BI_Assign(&t1, temp1);
 		BI_Delete(&temp1);
 
 		len = len >> 1;
 	}
-	Assign_BI(T, t0);
+	BI_Assign(T, t0);
 	BI_Delete(&t0);
 	BI_Delete(&t1);
 	BI_Refine(*T);
 }
 
-void MOD_EXP_RL_ADD_DIV(bigint** T, bigint* X, int n, bigint* M) // Modular Exponentiation used Multi Long Division L<-R +
+void MOD_EXP_RL_ADD_DIV(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
 	int len = 0; // X의 비트 길이를 담을 변수 len
@@ -2672,14 +2674,14 @@ void MOD_EXP_RL_ADD_DIV(bigint** T, bigint* X, int n, bigint* M) // Modular Expo
 	bigint* trash_r = NULL;
 
 	BI_Set_Zero(&t0);
-	Assign_BI(&t1, X); //line. 1. 
+	BI_Assign(&t1, X); //line. 1. 
 
 	len = n;
 	if (len == 1)
 	{
-		Assign_BI(T, X);
+		BI_Assign(T, X);
 		DIV(&trash_q, &trash_r, *T, M);
-		Assign_BI(T, trash_r);
+		BI_Assign(T, trash_r);
 		BI_Delete(&trash_q);
 		BI_Delete(&trash_r);
 		BI_Delete(&t0);
@@ -2688,8 +2690,8 @@ void MOD_EXP_RL_ADD_DIV(bigint** T, bigint* X, int n, bigint* M) // Modular Expo
 	}
 	while (len >= 1)
 	{
-		Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
-		Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 		result = len & 1;
 
@@ -2700,32 +2702,34 @@ void MOD_EXP_RL_ADD_DIV(bigint** T, bigint* X, int n, bigint* M) // Modular Expo
 		}
 		else
 		{
-			Assign_BI(&temp0, t0);
+			BI_Assign(&temp0, t0);
 			BI_Delete(&t0);
 		}
 		DIV(&trash_q, &trash_r, temp0, M);
-		Assign_BI(&temp0, trash_r);
+		BI_Assign(&temp0, trash_r);
 		BI_Delete(&trash_q);
 		BI_Delete(&trash_r);
-		Assign_BI(&t0, temp0);
+		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
 
 		Left_Shift(t1, 1);
 		Binary_Long_Div(&trash_q, &trash_r, t1, M);
-		Assign_BI(&t1, trash_r);
+		BI_Assign(&t1, trash_r);
 		BI_Delete(&trash_q);
 		BI_Delete(&trash_r);
 
 		len = len >> 1;
 	}
-	Assign_BI(T, t0);
+	BI_Assign(T, t0);
 	BI_Delete(&t0);
 	BI_Delete(&t1);
 	BI_Refine(*T);
 }
 
-void Bit_Length_of_number(int num, int* len)
+
+void BI_Bit_Length_of_number(int num, int* len)
 {
+	//int i = 0;
 	int j = 0;
 
 	for (j = 1; ; j++)
@@ -2744,7 +2748,7 @@ int j_th_Bit_of_number(int j, int num)
 	int i;
 	int len;
 
-	Bit_Length_of_number(num, &len);
+	BI_Bit_Length_of_number(num, &len);
 
 	if (j > len)
 		return ERROR;
