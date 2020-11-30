@@ -30,13 +30,13 @@ int main()
 	montgomery_Exponentiation_multiplication_test(); // Memory 0
 	montgomery_ladder_Exponentiation_addtion_test(); // Memory 0
 	montgomery_ladder_Modular_Exponentiation_multiplication_test(); // Memory 0
-	//montgomery_ladder_Modular_Exponentiation_addtion_test(); 
+	//montgomery_ladder_Modular_Exponentiation_addtion_test(); // Memory 0
 	Left_Right_EXP_ADD_test(); // Memory 0
-	//Left_Right_EXP_MUL_test();
+	//Left_Right_EXP_MUL_test(); // Memory 0
 	Right_Left_EXP_ADD_test(); // Memory 0
 	Right_Left_EXP_MUL_test(); // Memory 0
 	Left_Right_EXP_ADD_MOD_test(); // Memory 0
-	//Left_Right_EXP_MUL_M3OD_test();
+	//Left_Right_EXP_MUL_M3OD_test(); // Memory 0
 	Right_Left_EXP_ADD_MOD_test(); // Memory 0
 	Right_Left_EXP_MUL_MOD_test(); // Memory 0
 	//Left_Right_EXP_ADD_MOD_DIV_test(); // Memory 0
