@@ -22,7 +22,7 @@ int main()
 	addition_test(); // Memory 0
 	subtraction_test(); // Memory 0
 	schoolbook_multiplication_test(); // Memory 0
-	karatsuba_multiplication_test();
+	karatsuba_multiplication_test(); // Memory 0
 	binary_long_division_test(); // Memory 0
 	multi_long_division_test(); // Memory 0
 	squaring_test(); // Memory 0
