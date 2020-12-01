@@ -11,6 +11,22 @@ void array_init(word* a, int len)
 	memset(a, 0, sizeof(word) * len); // 배열의 길이만큼 초기화
 }
 
+/*
+	Delete BigInt function
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_Delete(bigint** x)
 {
 	if (*x == NULL) // bigint 구조체의 주소가 NULL 값이면 삭제할 필요 없기 때문에 return
@@ -24,6 +40,22 @@ void BI_Delete(bigint** x)
 	*x = NULL; // bigint 구조체의 주소값 NULL로 초기화
 }
 
+/*
+	Create BigInt function
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_New(bigint** x, int wordlen)
 {
 	if (*x != NULL) //   x의 주소가 NULL이 아니면
@@ -38,6 +70,22 @@ void BI_New(bigint** x, int wordlen)
 }
 
 // Chapter 2.2 Show BigInt
+/*
+	Set BigInt by Array
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_Set_By_Array(bigint** x, int sign, word* a, int wordlen)
 {
 	int i;
@@ -49,6 +97,22 @@ void BI_Set_By_Array(bigint** x, int sign, word* a, int wordlen)
 		(*x)->a[i] = a[i]; // 워드 단위 배열 a에 있는 값 bigint 구조체 내부의 워드 단위 배열에 대입
 }
 
+/*
+	Set BigInt by String
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_Set_By_String(bigint** x, int sign, char* str, word base, int size)
 {
 	char* hex;
@@ -133,6 +197,22 @@ void Ascii_To_Hex(char* str, char* hex)
 
 }
 
+/*
+	Show BigInteger function
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_Show(bigint* x, int base)
 {
 	int i = 0;
@@ -183,6 +263,22 @@ void BI_Show(bigint* x, int base)
 }
 
 //Chapter 2.3
+/*
+	Refine BigInteger function (Remove Last Zero Words)
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_Refine(bigint* x)
 {
 	word* temp = NULL;
@@ -213,6 +309,22 @@ void BI_Refine(bigint* x)
 }
 
 // Chapter 2.4 Assign BigInt
+/*
+	Assign BigInteger function (Y <- X)
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_Assign(bigint** y, bigint* x)
 {
 	int i = 0;
@@ -228,6 +340,22 @@ void BI_Assign(bigint** y, bigint* x)
 }
 
 // Chapter 2.5 Generate Random BigInt
+/*
+	Generate Random Number BigInteger function
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_Gen_Rand(bigint** x, int sign, int wordlen)
 {
 	BI_New(x, wordlen); // bigint 구조체 생성
@@ -250,11 +378,43 @@ void Array_Rand(word* dst, int wordlen)
 }
 
 // Chapter 2.6 Get Word Length / Bit Length / j-th Bit of Big-Int
+/*
+	Get Word Length function
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_Get_Word_Length(int* len, bigint** x)
 {
 	*len = (*x)->wordlen; // Big Integer x의 wordlen를 대입
 }
 
+/*
+	Get Bit Length function
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_Bit_Length(int* len, bigint* x)
 {
 	int i = 0;
@@ -273,6 +433,22 @@ void BI_Bit_Length(int* len, bigint* x)
 	*len = j;
 }
 
+/*
+	j-th bit of BigInteger function
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_j_th_Bit_of_BI(int j, bigint* x)
 {
 	char* z = NULL;
@@ -296,6 +472,22 @@ void BI_j_th_Bit_of_BI(int j, bigint* x)
 }
 
 // Chapter 2.7 /* negative: 1, non-negative: 0 */
+/*
+	Get Sign of BigInteger function
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 int BI_Get_Sign(bigint* x)
 {
 	if ((x->sign) == NON_NEGATIVE) // bigint 구조체의 부호가 NON_NEGATIVE면 NON_NEGATIVE return
@@ -306,6 +498,22 @@ int BI_Get_Sign(bigint* x)
 		return ERROR;
 }
 
+/*
+	Flip sign of BigInteger function
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_Flip_Sign(bigint* x)
 {
 	if ((x->sign) == NON_NEGATIVE) // bigint 구조체의 부호가 NON_NEGATIVE면 부호를 NEGATIVE로 변경
@@ -315,6 +523,22 @@ void BI_Flip_Sign(bigint* x)
 }
 
 // Chapter2.8 Set One, Set Zero, Is Zero, Is One
+/*
+	Set BigInteger to 1 
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_Set_One(bigint** x)
 {
 	BI_New(x, 1);
@@ -322,6 +546,22 @@ void BI_Set_One(bigint** x)
 	(*x)->a[0] = 0x1; // 0x1
 }
 
+/*
+	Set BigInteger to 0
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_Set_Zero(bigint** x)
 {
 	BI_New(x, 1); // 길이가 1인 bigint x 생성
@@ -329,6 +569,22 @@ void BI_Set_Zero(bigint** x)
 	(*x)->a[0] = 0x00; // 0을 만들어야하므로
 }
 
+/*
+	BigInteger = 1 ?
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 int BI_Is_One(bigint** x)
 {
 	int i = 0;
@@ -344,6 +600,22 @@ int BI_Is_One(bigint** x)
 	return 0; // True
 }
 
+/*
+	BigInteger = 0 ?
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 int BI_Is_Zero(bigint** x)
 {
 	int i = 0;
@@ -360,6 +632,22 @@ int BI_Is_Zero(bigint** x)
 }
 
 // Chapter 2.9 Compare
+/*
+	Compare BigInt A with BigInt B
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 int BI_Compare(bigint** x, bigint** y) // return : 1(x > y), 0(x == y), -1(x < y) 
 {
 	int i = 0;
@@ -415,6 +703,22 @@ int BI_Compare(bigint** x, bigint** y) // return : 1(x > y), 0(x == y), -1(x < y
 }
 
 // Chapter 2.10 Left/Right Shift
+/*
+	BigInt << r
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 {
 	int length = 0;
@@ -477,6 +781,22 @@ void Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 	BI_Refine(x);
 }
 
+/*
+	BigInt >> r
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void Right_Shift(bigint* x, int len)
 {
 	int i = 0;
@@ -519,6 +839,22 @@ void Right_Shift(bigint* x, int len)
 }
 
 // Chapter 2.11 Reduction
+/*
+	Reduction BigInt 
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void BI_Reduction(bigint** x, int r)
 {
 	int i = 0;
@@ -556,6 +892,24 @@ void BI_Reduction(bigint** x, int r)
 
 //Chapter 3 Addition
 // 캐리 포함한 단일 덧셈
+
+/*
+	Addition
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 unsigned int ADD_ABc(bigint** C, bigint** A, bigint** B, unsigned int c, int i)
 {
 	int carry = 0;
@@ -575,6 +929,23 @@ unsigned int ADD_ABc(bigint** C, bigint** A, bigint** B, unsigned int c, int i)
 }
 
 // WordLen(A) >= WordLen(B)
+/*
+	Addition Core
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void ADDC(bigint** C, bigint** A, bigint** B, int sign)
 {
 	int A_Len;
@@ -616,6 +987,23 @@ void ADDC(bigint** C, bigint** A, bigint** B, int sign)
 }
 
 // ADD 함수에서 A = A + B인 경우만 별도로 구현, WordLen(A) >= WordLen(B)
+/*
+	Addition core (if argv[0] == argv[1])
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign)
 {
 	int A_Len;
@@ -652,6 +1040,23 @@ void ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign)
 		(*C)->sign = 1;
 }
 
+/*
+	Addition
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void ADD(bigint** C, bigint** A, bigint** B)
 {
 	int A_Len = 0;
@@ -732,6 +1137,23 @@ void ADD(bigint** C, bigint** A, bigint** B)
 }
 
 // ADD 함수에서 A = A + B인 경우만 별도로 구현
+/*
+	Addition (if argv[0] == argv[1])
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 {
 	int A_Len = 0;
@@ -820,6 +1242,23 @@ int Compare_WordLen(bigint* A, bigint* B) // return wordlen 큰 사이즈
 		return B_Len; // B의 워드열 길이 return
 }
 
+/*
+	Subtraction
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void SUB(bigint** C, bigint* A, bigint* B)
 {
 	unsigned int borrow = 0;
@@ -930,7 +1369,23 @@ void SUB(bigint** C, bigint* A, bigint* B)
 	}
 }
 
+/*
+	Subtraction Core
 
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void SUBC(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
 {
 	int len, i = 0;
@@ -983,6 +1438,23 @@ void SUBC(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
 	BI_Refine(*C);
 }
 
+/*
+	Multiplication in Word
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void MUL_Word(word* C, word* A, word* B) // 단일 워드 곱셈
 {
 	int len = 0;
@@ -1022,6 +1494,23 @@ void MUL_Word(word* C, word* A, word* B) // 단일 워드 곱셈
 	*(C + 1) = mul1;
 }
 
+/*
+	Multliplication in Multi Word
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void MUL_Multi(bigint** result, bigint* A, bigint* B)
 {
 	int i, j, len = 0;
@@ -1050,6 +1539,23 @@ void MUL_Multi(bigint** result, bigint* A, bigint* B)
 	BI_Refine(*result);
 }
 
+/*
+	Karatsuba
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void Karatsuba(bigint** C, bigint* A, bigint* B)
 {
 	int i, j = 0;
@@ -1180,6 +1686,23 @@ void Karatsuba(bigint** C, bigint* A, bigint* B)
 	BI_Delete(&T1_tmp);
 }
 
+/*
+	Single Squaring
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void Single_Squaring(bigint* C, bigint* A)
 {
 	bigint* A1 = NULL;
@@ -1224,6 +1747,23 @@ void Single_Squaring(bigint* C, bigint* A)
 	BI_Delete(&T);
 }
 
+/*
+	Squaring Core
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void SQUC(bigint** C, bigint* A)
 {
 	int i, j, k, m;
@@ -1318,6 +1858,23 @@ void SQUC(bigint** C, bigint* A)
 	BI_Delete(&temp2);
 }
 
+/*
+	Squaring
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void SQU(bigint** C, bigint* A)
 {
 	int flag0; // A가 0인지 판별하는 flag
@@ -1360,6 +1917,23 @@ void SQU(bigint** C, bigint* A)
 
 }
 
+/*
+	Squaring (used Karatsuba)
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void SQUC_Karatsuba(bigint** C, bigint* A)
 {
 	int i;
@@ -1434,7 +2008,21 @@ void SQUC_Karatsuba(bigint** C, bigint* A)
 }
 
 /*
-	[Binary_Long_Division] pseudo code
+	Binary_Long_Division Algorithm 
+	
+	[pseudo code]
+	Input  :
+	Output :
+	
+	1 :
+	2 : 
+	3 : 
+	4 : 
+	5 : 
+	6 : 
+	7 : 
+	8 : 
+	9 : 
 */
 void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 {
@@ -1600,6 +2188,22 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 
 /*
 	Long Division Algorithm (Multi-precision version)
+	
+	[pseudo code]
+	Input  :
+	Output :
+	1 : if B <= 0 then
+	2 :		return INVAILD
+	3 : end if
+	4 : if A < B then
+	5 :		return (0, A)
+	6 : end if
+	7 : (Q, R) <- (0, 0)
+	8 : for n-1 downtown 0 to
+	9 :		R <- RW + A_{i}
+	10:		(Q_{i}, R) <- DIVC(R, B)
+	11: end for
+	12 : return (Q, R)
 */
 void DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorithm(Multi-precision version)에서 DIV(A, B) fucntion.
 {
@@ -1614,10 +2218,10 @@ void DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorith
 
 	BI_Get_Word_Length(&len, &A);
 	BI_New(Q, len);
-	if (B->sign & 1) // line 1.
+	if (B->sign & 1) // [line 1]
 		return; // return INVALID.
 	result = BI_Compare(&A, &B);
-	if (result < 0) // line 4. B > A 일 경우, Compare(&A, &B)의 return : -1
+	if (result < 0) // [line 4] B > A 일 경우, Compare(&A, &B)의 return : -1
 	{
 		BI_Assign(R, A);
 		return;
@@ -1629,10 +2233,10 @@ void DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorith
 		BI_New(&Temp, 1); // A의 j번째 워드(A_{j})를 담는 빅넘버 Temp를 워드 길이가 1로 생성. 
 		Temp->a[0] = A->a[i]; // Temp에 A_{j}를 대입.
 		Left_Shift(*R, WORD_BIT_LEN); // R을 왼쪽으로 W만큼 shift ==> R * W
-		ADD_DIV(R, R, &Temp); // R * W에 A_{j}를 덧셈 연산 수행. // line 9.
+		ADD_DIV(R, R, &Temp); // [line 9] R * W에 A_{j}를 덧셈 연산 수행. 
 		DIVC(&Word, R, *R, B); //빅넘버 Word는 Q_{i}를 저장하는 변수. 
 		BI_Delete(&Temp); // 반복문 내에서 생성한 빅넘버 Temp delete.
-		(*Q)->a[i] = Word->a[0]; // Q에 Q_{i}를 대입. //line 10.
+		(*Q)->a[i] = Word->a[0]; // [line 10] Q에 Q_{i}를 대입. 
 		BI_Delete(&Word); // 빅넘버 Word delete
 	}
 	
@@ -1640,6 +2244,23 @@ void DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorith
 	//BI_Refine(*R);
 }
 
+/*
+	Long Division Algorithm Core function (Multi-precision version)
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 : if A < B then
+	2 :		return (0, A)
+	3 :	end if
+	4 :	Compute k∈Z+ such that 2^k B_{m-1}∈[2^(w-1), 2^w)
+	5 :	A', B' <- 2^k * A, 2^k * B
+	6 :	Q', R' <- DIVCC(A', B')
+	7 : Q, R <- Q', 2^(-k) * R'
+	8 : return (Q, R)
+
+*/
 void DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
 {
 	int result = 0; // A, B 대소비교값을 담을 변수 result
@@ -1676,13 +2297,35 @@ void DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
 	}
 	Left_Shift(AP, k); // AP = AP << k 
 	Left_Shift(BP, k); // BP = BP << k //line 5. 
-	DIVCC(Q, R, AP, BP); // line 6.
-	Right_Shift(*R, k); // line 7. (Q' == Q)
+	DIVCC(Q, R, AP, BP); // [line 6]
+	Right_Shift(*R, k); // [line 7] (Q' == Q)
 	BI_Delete(&AP); // 선언해준 빅넘버 AP delete.
 	BI_Delete(&BP); // 선언해준 빅넘버 BP delete.
 	BI_Delete(&comp); // 선언해준 빅넘버 comp delete.
 }
 
+/*
+	Long Division Algorithm Core's Core function (Multi-precision version)
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 : if n == m then    <-- DIVCC_n_m( )
+	2 :		Q <- Lower Bound(A_{m-1} / B_{m-1})
+	3 : end if
+	4 : if n == m + 1 then <-- DIVCC_n_m1( )
+	5 :		if A_{m} = B_{m-1} then
+	6 :			Q <- W - 1 
+	7 :		else
+	8 :			Q <- Lower Bound(A_{m} * W + A_{m-1} / B_{m-1})
+	9 :		end if
+	10:	end if
+	11: R <- A - BQ
+	12:	while R < 0 do
+	13:		(Q, R) <- (Q - 1, R + B)
+	14:	end while
+	15:	return (Q, R)
+*/
 void DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B) // 7.2.3 DIVCC(A, B)
 {
 	int n = 0; // 변수 n은 A의 size
@@ -1701,21 +2344,21 @@ void DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B) // 7.2.3 DIVCC(A, B)
 	A_msw = A->a[n - 1]; // 빅넘버 A의 최상위 워드를 A_msw에 대입
 	B_msw = B->a[m - 1]; // 빅넘버 B의 최상위 워드를 B_msw에 대입
 
-	if (n == m) // DIVCC 에서 if(n == m) 일 때 // line 1.
+	if (n == m) // DIVCC 에서 if(n == m) 일 때 // [line 1]
 	{
-		DIVCC_n_m(Q, A, B, m); // line 2.
+		DIVCC_n_m(Q, A, B, m); // [line 2]
 	}
-	else if (n == m + 1) // DIVCC 에서 if(n == m + 1) 일 때 //line 4.
+	else if (n == m + 1) // [line 4] DIVCC 에서 if(n == m + 1) 일 때 
 	{
 		if (A_msw == B_msw) // line 5.
 			(*Q)->a[0] = word_mask; // Q에 W-1을 대입해야하므로 word_mask 대입.
-		else // line 7.
-			DIVCC_n_m1(Q, A, B, m); // line 8.
+		else // [line 7]
+			DIVCC_n_m1(Q, A, B, m); // [line 8]
 	}
 	BI_New(&BQ, n + m); // 빅넘버 B와 빅넘버 Q를 곱한 값을 저장할 빅넘버 BQ를 B와 Q의 곱셈연산이 가능한 길이인 n + m 로 생성.
 	MUL_Multi(&BQ, *Q, B); // B와 Q를 곱셈 연산해 빅넘버 BQ에 대입 (이 때 Karatsuba로 변경도 가능 --> 속도 비교 가능!!)
-	SUB(R, A, BQ);// R = A - B * Q // line 11.
-	while ((*R)->sign & 1) // R의 부호가 음수일 때 1 & 1 = 1 // line 12. 
+	SUB(R, A, BQ);// R = A - B * Q // [line 11]
+	while ((*R)->sign & 1) // [line 12] R의 부호가 음수일 때 1 & 1 = 1 
 	{
 		SUB(Q, *Q, one); // Q = Q - 1.
 		ADD_AAB(R, R, &B); // R = R + B. 1st arg, 2nd arg가 같으므로 ADD_AAB 함수 사용
@@ -1725,6 +2368,15 @@ void DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B) // 7.2.3 DIVCC(A, B)
 
 }
 
+/*
+	Long Division Algorithm Core's Core's condition (if n == m) (Multi-precision version)
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 : Q <- A_{m-1} / B_{m-1}
+	2 : Q <- LowerBound(Q)
+*/
 void DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m) // DIVCC 에서 if(n == m) 일 때
 {
 	bigint* Temp1 = NULL;
@@ -1744,6 +2396,15 @@ void DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m) // DIVCC 에서 if(n == 
 	BI_Delete(&Trash);
 }
 
+/*
+	Long Division Algorithm Core's Core's condition (if n == m + 1) (Multi-precision version)
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 : Q <- A_{m} * W + A_{m-1} / B_{m-1}
+	2 : Q <- LowerBound(Q)
+*/
 void DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m) // DIVCC 에서 if(n == m + 1) 일 때
 {
 	bigint* Temp1 = NULL; // A_{m} * W + A_{m - 1}을 대입할 빅넘버 Temp1 선언 및 초기화
@@ -1766,6 +2427,23 @@ void DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m) // DIVCC 에서 if(n ==
 }
 
 // C = A^n
+/*
+	Montgomery Exponentiation MUL function
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void Montgomery_Exp_mul(bigint** C, bigint* A, int n)
 {
 	int i, bit;
@@ -1836,6 +2514,23 @@ void Montgomery_Exp_mul(bigint** C, bigint* A, int n)
 }
 
 // C = n * A
+/*
+	Montgomery Exponentiation ADD function
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void Montgomery_Exp_add(bigint** C, bigint* A, int n)
 {
 	int i, bit;
@@ -1897,6 +2592,23 @@ void Montgomery_Exp_add(bigint** C, bigint* A, int n)
 }
 
 // C = A^n
+/*
+	Montgomery Modular Exponentiation MUL function 
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M)
 {
 	int i, bit;
@@ -1981,6 +2693,23 @@ void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M)
 }
 
 // C = n * A
+/*
+	Montgomery Modular Exponentiation ADD function
+
+	[pseudo code]
+	Input  :
+	Output :
+
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void Montgomery_Mod_Exp_add(bigint** C, bigint* A, int n, bigint* M)
 {
 	int i, bit;
@@ -2059,8 +2788,22 @@ void Montgomery_Mod_Exp_add(bigint** C, bigint* A, int n, bigint* M)
 	BI_Delete(&t1);
 }
 
+/*
+	[Exponentiation] Left to Right MUL function
 
-
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void EXP_LR_MUL(bigint** T, bigint* X, int n)
 {
 	int i = 0; // 반복문에 사용될 변수 i
@@ -2103,6 +2846,22 @@ void EXP_LR_MUL(bigint** T, bigint* X, int n)
 	BI_Delete(&temp1);
 }
 
+/*
+	[Exponentiation] Left to Right ADD function
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void EXP_LR_ADD(bigint** T, bigint* X, int n)
 {
 	int i = 0; // 반복문에 사용될 변수 i
@@ -2139,6 +2898,22 @@ void EXP_LR_ADD(bigint** T, bigint* X, int n)
 	BI_Delete(&t0);
 }
 
+/*
+	[Exponentiation] Right to Left MUL function
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void EXP_RL_MUL(bigint** T, bigint* X, int n)
 {
 	int i = 0; // 반복문에 사용될 변수 i
@@ -2198,6 +2973,22 @@ void EXP_RL_MUL(bigint** T, bigint* X, int n)
 	BI_Refine(*T);
 }
 
+/*
+	[Exponentiation] Right to Left ADD function 
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void EXP_RL_ADD(bigint** T, bigint* X, int n)
 {
 	int i = 0; // 반복문에 사용될 변수 i
@@ -2252,6 +3043,22 @@ void EXP_RL_ADD(bigint** T, bigint* X, int n)
 	BI_Refine(*T);
 }
 
+/*
+	[Modular Exponentiation] Left to Right MUL function (used Binary Long Division)
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void MOD_EXP_LR_MUL(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
@@ -2303,57 +3110,73 @@ void MOD_EXP_LR_MUL(bigint** T, bigint* X, int n, bigint* M)
 	BI_Delete(&t0);
 }
 
-void MOD_EXP_LR_MUL2(bigint** T, bigint* X, bigint* N, bigint* M)
-{
-	int i = 0; // 반복문에 사용될 변수 i
-	int len = 0; // X의 비트 길이를 담을 변수 len
-	int result = 0;
-	int x_len = 0;
-	int t0_len = 0;
+//void MOD_EXP_LR_MUL2(bigint** T, bigint* X, bigint* N, bigint* M)
+//{
+//	int i = 0; // 반복문에 사용될 변수 i
+//	int len = 0; // X의 비트 길이를 담을 변수 len
+//	int result = 0;
+//	int x_len = 0;
+//	int t0_len = 0;
+//
+//	bigint* t0 = NULL;
+//	bigint* temp0 = NULL;
+//	bigint* temp1 = NULL;
+//	bigint* trash_q = NULL;
+//	bigint* trash_r = NULL;
+//	BI_Set_One(&t0);
+//
+//	BI_Bit_Length_of_number(n, &len);
+//
+//	for (i = len - 1; i >= 0; i--)
+//	{
+//		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+//		BI_New(&temp1, 2 * t0_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
+//		SQU(&temp1, t0);
+//		BI_Delete(&t0);
+//		Binary_Long_Div(&trash_q, &trash_r, temp1, M);
+//		BI_Assign(&temp1, trash_r);
+//		BI_Delete(&trash_r);
+//		BI_Delete(&trash_r);
+//
+//		BI_Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
+//		BI_New(&temp0, 2 * t0_len + x_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
+//		result = j_th_Bit_of_number(i, n);
+//		if (result == 1)
+//		{
+//			MUL_Multi(&temp0, temp1, X);
+//			Binary_Long_Div(&trash_q, &trash_r, temp0, M);
+//			BI_Assign(&temp0, trash_r);
+//			BI_Delete(&trash_r);
+//			BI_Delete(&trash_q);
+//		}
+//
+//		else
+//			BI_Assign(&temp0, temp1);
+//
+//		BI_Delete(&temp1);
+//		BI_Assign(&t0, temp0);
+//		BI_Delete(&temp0);
+//	}
+//	BI_Assign(T, t0);
+//	BI_Delete(&t0);
+//}
 
-	bigint* t0 = NULL;
-	bigint* temp0 = NULL;
-	bigint* temp1 = NULL;
-	bigint* trash_q = NULL;
-	bigint* trash_r = NULL;
-	BI_Set_One(&t0);
+/*
+	[Modular Exponentiation] Left to Right ADD function (used Binary Long Division)
 
-	BI_Bit_Length_of_number(n, &len);
-
-	for (i = len - 1; i >= 0; i--)
-	{
-		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
-		BI_New(&temp1, 2 * t0_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
-		SQU(&temp1, t0);
-		BI_Delete(&t0);
-		Binary_Long_Div(&trash_q, &trash_r, temp1, M);
-		BI_Assign(&temp1, trash_r);
-		BI_Delete(&trash_r);
-		BI_Delete(&trash_r);
-
-		BI_Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
-		BI_New(&temp0, 2 * t0_len + x_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
-		result = j_th_Bit_of_number(i, n);
-		if (result == 1)
-		{
-			MUL_Multi(&temp0, temp1, X);
-			Binary_Long_Div(&trash_q, &trash_r, temp0, M);
-			BI_Assign(&temp0, trash_r);
-			BI_Delete(&trash_r);
-			BI_Delete(&trash_q);
-		}
-
-		else
-			BI_Assign(&temp0, temp1);
-
-		BI_Delete(&temp1);
-		BI_Assign(&t0, temp0);
-		BI_Delete(&temp0);
-	}
-	BI_Assign(T, t0);
-	BI_Delete(&t0);
-}
-
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void MOD_EXP_LR_ADD(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
@@ -2401,6 +3224,22 @@ void MOD_EXP_LR_ADD(bigint** T, bigint* X, int n, bigint* M)
 	BI_Delete(&t0);
 }
 
+/*
+	[Modular Exponentiation] Right to Left MUL function (used Binary Long Division)
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void MOD_EXP_RL_MUL(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
@@ -2475,6 +3314,22 @@ void MOD_EXP_RL_MUL(bigint** T, bigint* X, int n, bigint* M)
 	BI_Refine(*T);
 }
 
+/*
+	[Modular Exponentiation] Right to Left ADD function (used Binary Long Division)
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void MOD_EXP_RL_ADD(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
@@ -2543,6 +3398,22 @@ void MOD_EXP_RL_ADD(bigint** T, bigint* X, int n, bigint* M)
 	BI_Refine(*T);
 }
 
+/*
+	[Modular Exponentiation] Left to Right MUL function (used Multi Long Division)
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void MOD_EXP_LR_MUL_DIV(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
@@ -2594,6 +3465,22 @@ void MOD_EXP_LR_MUL_DIV(bigint** T, bigint* X, int n, bigint* M)
 	BI_Delete(&t0);
 }
 
+/*
+	[Modular Exponentiation] Left to Right ADD function (used Multi Long Division)
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void MOD_EXP_LR_ADD_DIV(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
@@ -2641,6 +3528,22 @@ void MOD_EXP_LR_ADD_DIV(bigint** T, bigint* X, int n, bigint* M)
 	BI_Delete(&t0);
 }
 
+/*
+	[Modular Exponentiation] Right to Left MUL function (used Multi Long Division)
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void MOD_EXP_RL_MUL_DIV(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
@@ -2715,6 +3618,22 @@ void MOD_EXP_RL_MUL_DIV(bigint** T, bigint* X, int n, bigint* M)
 	BI_Refine(*T);
 }
 
+/*
+	[Modular Exponentiation] Right to Left ADD function (used Multi Long Division)
+
+	[pseudo code]
+	Input  :
+	Output :
+	1 :
+	2 :
+	3 :
+	4 :
+	5 :
+	6 :
+	7 :
+	8 :
+	9 :
+*/
 void MOD_EXP_RL_ADD_DIV(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
