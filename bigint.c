@@ -1254,9 +1254,9 @@ int Compare_WordLen(bigint* A, bigint* B) // return wordlen 큰 사이즈
 		return B_Len; // B의 워드열 길이 return
 }
 
-/*
-	Subtraction
-
+/**
+* @brief Subtraction
+* @details 
 	[pseudo code]
 	Input  :
 	Output :
@@ -1270,6 +1270,10 @@ int Compare_WordLen(bigint* A, bigint* B) // return wordlen 큰 사이즈
 	7 :
 	8 :
 	9 :
+
+* @param C 뺄셈 연산의(A - B) 결과를 저장할 bigint 형 더블 포인터 변수
+* @param A 뺄셈 연산의(A - B) A에 해당하는 bigint 형 포인터 변수
+* @param B 뺄셈 연산의(A - B) B에 해당하는 bigint 형 포인터 변수
 */
 void SUB(bigint** C, bigint* A, bigint* B)
 {
@@ -1381,9 +1385,9 @@ void SUB(bigint** C, bigint* A, bigint* B)
 	}
 }
 
-/*
-	Subtraction Core
-
+/**
+* @brief Subtraction Core
+* @details
 	[pseudo code]
 	Input  :
 	Output :
@@ -1397,6 +1401,11 @@ void SUB(bigint** C, bigint* A, bigint* B)
 	7 :
 	8 :
 	9 :
+
+* @param borrow 단일 뺄셈 연산에서 return 되는 borrow에 해당하는 unsigned int 형 포인터 변수
+* @param C 단일 뺄셈 연산의(A - B) 결과를 저장할 bigint 형 더블 포인터 변수
+* @param A 단일 뺄셈 연산의(A - B) A에 해당하는 bigint 형 포인터 변수
+* @param B 단일 뺄셈 연산의(A - B) B에 해당하는 bigint 형 포인터 변수
 */
 void SUBC(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
 {
@@ -1450,8 +1459,9 @@ void SUBC(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
 	BI_Refine(*C);
 }
 
-/*
-	Multiplication in Word
+/**
+* @brief Multiplication in Word
+* @details
 
 	[pseudo code]
 	Input  :
@@ -1466,6 +1476,10 @@ void SUBC(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
 	7 :
 	8 :
 	9 :
+
+* @param C 단일 워드 곱셈 연산의 결과를 저장할 word 형 포인터 변수
+* @param A 단일 워드 곱셈 연산의 곱하는 수인 word 형 포인터 변수
+* @param B 단일 워드 곱셈 연산의 곱하는 수인 word 형 포인터 변수
 */
 void MUL_Word(word* C, word* A, word* B) // 단일 워드 곱셈
 {
@@ -1506,8 +1520,9 @@ void MUL_Word(word* C, word* A, word* B) // 단일 워드 곱셈
 	*(C + 1) = mul1;
 }
 
-/*
-	Multliplication in Multi Word
+/**
+* @brief Multliplication in Multi Word
+* @details
 
 	[pseudo code]
 	Input  :
@@ -1522,6 +1537,10 @@ void MUL_Word(word* C, word* A, word* B) // 단일 워드 곱셈
 	7 :
 	8 :
 	9 :
+
+* @param result 다중 워드 곱셈 연산의 결과를 저장할 bigint 형 더블 포인터 변수
+* @param A 다중 워드 곱셈 연산의 곱하는 수인 bigint 형 포인터 변수
+* @param B 다중 워드 곱셈 연산의 곱하는 수인 bigint 형 포인터 변수
 */
 void MUL_Multi(bigint** result, bigint* A, bigint* B)
 {
@@ -2022,9 +2041,9 @@ void SQUC_Karatsuba(bigint** C, bigint* A)
 	BI_Delete(&T1_tmp);
 }
 
-/*
-	Binary_Long_Division Algorithm
-
+/**
+* @brief Binary_Long_Division Algorithm
+* @details
 	[pseudo code]
 	Input  :
 	Output :
@@ -2038,6 +2057,10 @@ void SQUC_Karatsuba(bigint** C, bigint* A)
 	7 :
 	8 :
 	9 :
+* @param Q Binary Long Divsion 연산의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param R Binary Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param A Binary Long Divsion 연산의 나누려는 수인 bigint 형 포인터 변수
+* @param B Binary Long Divsion 연산의 나누는 수인 bigint 형 포인터 변수
 */
 void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 {
@@ -2201,8 +2224,9 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 	}
 }
 
-/*
-	Long Division Algorithm (Multi-precision version)
+/**
+* @brief Long Division Algorithm (Multi-precision version)
+* @details
 
 	[pseudo code]
 	Input  : Q, R, A, B
@@ -2219,6 +2243,10 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 	10:		(Q_{i}, R) <- DIVC(R, B)
 	11: end for
 	12 : return (Q, R)
+* @param Q Multi Long Divsion 연산의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param R Multi Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param A Multi Long Divsion 연산의 나누려는 수인 bigint 형 포인터 변수
+* @param B Multi Long Divsion 연산의 나누는 수인 bigint 형 포인터 변수
 */
 void DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorithm(Multi-precision version)에서 DIV(A, B) fucntion.
 {
