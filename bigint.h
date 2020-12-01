@@ -54,7 +54,7 @@ void Array_Rand(word* dst, int wordlen);
 // Chapter 2.6 Get Word Length / Bit Length / j-th Bit of Bit-Int
 void BI_Get_Word_Length(int* len, bigint** x); // To get word length in Big Integer
 void BI_Bit_Length(int* len, bigint* x); // To get bit length in Big Integer
-void BI_j_th_Bit_of_BI(int j, bigint* x); // To get j(th) bit int Big Integer
+int BI_j_th_Bit_of_BI(int j, bigint* x); // To get j(th) bit int Big Integer
 
 // Chapter 2.7 /* negative: 1, non-negative: 0 */
 int BI_Get_Sign(bigint* x);
