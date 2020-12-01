@@ -4,7 +4,7 @@
 #define NON_NEGATIVE   0
 #define NEGATIVE   1
 #define ERROR   -1
-#define WORD_BIT_LEN    64   // 8 or 32 or 64
+#define WORD_BIT_LEN    8   // 8 or 32 or 64
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
@@ -115,10 +115,10 @@ void DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m);
 void DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m);
 
 // Modular Exponentiation
-void Montgomery_Exp_mul(bigint** C, bigint* A, int n);
-void Montgomery_Exp_add(bigint** C, bigint* A, int n);
-void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M);
-void Montgomery_Mod_Exp_add(bigint** C, bigint* A, int n, bigint* M);
+void Montgomery_Exp_Mul(bigint** C, bigint* A, bigint* n);
+void Montgomery_Exp_Add(bigint** C, bigint* A, bigint* n);
+void Montgomery_Mod_Exp_Mul(bigint** C, bigint* A, bigint* n, bigint* M);
+void Montgomery_Mod_Exp_Add(bigint** C, bigint* A, bigint* n, bigint* M);
 
 void BI_Bit_Length_of_number(int num, int* len); // 정수의 비트열의 개수 구하는 함수
 int j_th_Bit_of_number(int j, int num); // 정수의 j번째 비트가 0인지 1인지 판단하는 함수

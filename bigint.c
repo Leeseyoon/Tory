@@ -1893,7 +1893,6 @@ void SQU(bigint** C, bigint* A)
 	bigint* temp = NULL;
 
 	BI_Assign(&temp, A);
-	BI_Delete(&temp);
 
 	sign = BI_Get_Sign(A);
 	if (sign == NEGATIVE) // A의 부호가 음수인 경우
@@ -1908,19 +1907,23 @@ void SQU(bigint** C, bigint* A)
 	if (flag0 == 0) // A = 0인 경우, A^2 = 0 return
 	{
 		BI_Assign(C, A);
+		BI_Delete(&temp);
 		return;
 	}
 	if (flag1 == 0) // A = 1인 경우, A^2 = 1 return
 	{
 		BI_Assign(C, A);
+		BI_Delete(&temp);
 		return;
 	}
 	if (flag2 == 0) // A = -1인 경우, A^2 = 1 return
 	{
 		BI_Assign(C, temp);
+		BI_Delete(&temp);
 		return;
 	}
 	
+	BI_Delete(&temp);
 	SQUC(C, A); // A = 0. -1, 1이 아닌 경우 SQUC 실행
 
 }
@@ -2452,7 +2455,7 @@ void DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m) // DIVCC 에서 if(n ==
 	8 :
 	9 :
 */
-void Montgomery_Exp_mul(bigint** C, bigint* A, int n)
+void Montgomery_Exp_Mul(bigint** C, bigint* A, bigint* n)
 {
 	int i, bit;
 	int n_bit_len;
@@ -2464,14 +2467,17 @@ void Montgomery_Exp_mul(bigint** C, bigint* A, int n)
 	bigint* temp0 = NULL; // t0를 저장할 임시 변수
 	bigint* temp1 = NULL; // t1을 저장할 임시 변수
 
-	BI_Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
+	if (n->sign == NEGATIVE) // 예외 처리 (지수는 양수만)
+		return;
+
+	BI_Bit_Length(&n_bit_len, n); // n의 비트열 길이 -> n_bit_len
 
 	BI_Set_One(&t0); // t0 = 1
 	BI_Assign(&t1, A); // t1 = A
 
 	for (i = n_bit_len - 1; i >= 0; i--)
 	{
-		bit = j_th_Bit_of_number(i, n); // n의 i번째 비트가 1인지 0인지 판별
+		bit = BI_j_th_Bit_of_BI(i, n); // n의 i번째 비트가 1인지 0인지 판별
 
 		if (bit == 1) // n의 i번째 비트가 1일 경우
 		{
@@ -2539,7 +2545,7 @@ void Montgomery_Exp_mul(bigint** C, bigint* A, int n)
 	8 :
 	9 :
 */
-void Montgomery_Exp_add(bigint** C, bigint* A, int n)
+void Montgomery_Exp_Add(bigint** C, bigint* A, bigint* n)
 {
 	int i, bit;
 	int n_bit_len;
@@ -2551,14 +2557,17 @@ void Montgomery_Exp_add(bigint** C, bigint* A, int n)
 	bigint* temp0 = NULL; // t0를 저장할 임시 변수
 	bigint* temp1 = NULL; // t1을 저장할 임시 변수
 
-	BI_Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
+	if (n->sign == NEGATIVE) // 예외 처리 (양수만)
+		return;
+
+	BI_Bit_Length(&n_bit_len, n); // n의 비트열 길이 -> n_bit_len
 
 	BI_Set_Zero(&t0); // t0 = 0
 	BI_Assign(&t1, A); // t1 = A
 
 	for (i = n_bit_len - 1; i >= 0; i--)
 	{
-		bit = j_th_Bit_of_number(i, n); // n의 i번째 비트가 1인지 0인지 판별
+		bit = BI_j_th_Bit_of_BI(i, n); // n의 i번째 비트가 1인지 0인지 판별
 
 		if (bit == 1) // n의 i번째 비트가 1일 경우
 		{
@@ -2599,7 +2608,7 @@ void Montgomery_Exp_add(bigint** C, bigint* A, int n)
 	BI_Delete(&t1);
 }
 
-// C = A^n
+// C = A^n (mod M)
 /*
 	Montgomery Modular Exponentiation MUL function 
 
@@ -2617,7 +2626,7 @@ void Montgomery_Exp_add(bigint** C, bigint* A, int n)
 	8 :
 	9 :
 */
-void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M)
+void Montgomery_Mod_Exp_Mul(bigint** C, bigint* A, bigint* n, bigint* M)
 {
 	int i, bit;
 	int n_bit_len;
@@ -2632,14 +2641,21 @@ void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M)
 	bigint* Q = NULL;
 	bigint* R = NULL;
 
-	BI_Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
+	if (n->sign == NEGATIVE) // 예외 처리
+		return;
+	if (M->sign == NEGATIVE)
+		return;
+	if (A->sign == NEGATIVE)
+		return;
+
+	BI_Bit_Length(&n_bit_len, n); // n의 비트열 길이 -> n_bit_len
 
 	BI_Set_One(&t0); // t0 = 1
 	BI_Assign(&t1, A); // t1 = A
 
 	for (i = n_bit_len - 1; i >= 0; i--)
 	{
-		bit = j_th_Bit_of_number(i, n); // n의 i번째 비트가 1인지 0인지 판별
+		bit = BI_j_th_Bit_of_BI(i, n); // n의 i번째 비트가 1인지 0인지 판별
 
 		if (bit == 1) // n의 i번째 비트가 1일 경우
 		{
@@ -2700,7 +2716,7 @@ void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M)
 	BI_Delete(&t1);
 }
 
-// C = n * A
+// C = n * A (mod M)
 /*
 	Montgomery Modular Exponentiation ADD function
 
@@ -2718,7 +2734,7 @@ void Montgomery_Mod_Exp_mul(bigint** C, bigint* A, int n, bigint* M)
 	8 :
 	9 :
 */
-void Montgomery_Mod_Exp_add(bigint** C, bigint* A, int n, bigint* M)
+void Montgomery_Mod_Exp_Add(bigint** C, bigint* A, bigint* n, bigint* M)
 {
 	int i, bit;
 	int n_bit_len;
@@ -2733,14 +2749,21 @@ void Montgomery_Mod_Exp_add(bigint** C, bigint* A, int n, bigint* M)
 	bigint* Q = NULL;
 	bigint* R = NULL;
 
-	BI_Bit_Length_of_number(n, &n_bit_len); // n의 비트열 길이 -> n_bit_len
+	if (n->sign == NEGATIVE) // 예외 처리
+		return;
+	if (M->sign == NEGATIVE)
+		return;
+	if (A->sign == NEGATIVE)
+		return;
+
+	BI_Bit_Length(&n_bit_len, n); // n의 비트열 길이 -> n_bit_len
 
 	BI_Set_Zero(&t0); // t0 = 0
 	BI_Assign(&t1, A); // t1 = A
 
 	for (i = n_bit_len - 1; i >= 0; i--)
 	{
-		bit = j_th_Bit_of_number(i, n); // n의 i번째 비트가 1인지 0인지 판별
+		bit = BI_j_th_Bit_of_BI(i, n); // n의 i번째 비트가 1인지 0인지 판별
 
 		if (bit == 1) // n의 i번째 비트가 1일 경우
 		{
