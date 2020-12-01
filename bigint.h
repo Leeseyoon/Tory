@@ -12,14 +12,17 @@
 #if WORD_BIT_LEN == 8
 typedef unsigned char word;
 #define word_mask 0xff
+#define test_size 256
 
 #elif WORD_BIT_LEN == 32
 typedef unsigned int word;
 #define word_mask 0xffffffff
+#define test_size  64
 
 #else
 typedef unsigned long long word;
 #define word_mask 0xffffffffffffffff
+#define test_size  32
 
 #endif
 
@@ -104,38 +107,40 @@ void SQUC_Karatsuba(bigint** C, bigint* A);
 
 // Binary Division
 void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B);
-void ADDC_DIV(bigint** C, bigint** A, bigint** B, int sign);
-void ADD_DIV(bigint** C, bigint** A, bigint** B);
+void ADDC_DIV(bigint** C, bigint** A, bigint** B, int sign); // 프로토타입으로
+void ADD_DIV(bigint** C, bigint** A, bigint** B); // 프로토타입으로
 
 // Multi Division
 void DIV(bigint** Q, bigint** R, bigint* A, bigint* B);
 void DIVC(bigint** Q, bigint** R, bigint* A, bigint* B);
 void DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B);
-void DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m);
-void DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m);
+void DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m); // 프로토타입으로
+void DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m); // 프로토타입으로
 
 // Modular Exponentiation
-void Montgomery_Exp_Mul(bigint** C, bigint* A, bigint* n);
-void Montgomery_Exp_Add(bigint** C, bigint* A, bigint* n);
+void Montgomery_Exp_Mul(bigint** C, bigint* A, bigint* n); // 프로토타입으로
+void Montgomery_Exp_Add(bigint** C, bigint* A, bigint* n); // 프로토타입으로
 void Montgomery_Mod_Exp_Mul(bigint** C, bigint* A, bigint* n, bigint* M);
 void Montgomery_Mod_Exp_Add(bigint** C, bigint* A, bigint* n, bigint* M);
 
 void BI_Bit_Length_of_number(int num, int* len); // 정수의 비트열의 개수 구하는 함수
 int j_th_Bit_of_number(int j, int num); // 정수의 j번째 비트가 0인지 1인지 판단하는 함수
+// 프로토타입으로
 
-void EXP_LR_MUL(bigint** T, bigint* X, int n); // Only Exponentiation function L->R * func
-void EXP_LR_ADD(bigint** T, bigint* X, int n); // Only Exponentiation function L->R + func
-void EXP_RL_MUL(bigint** T, bigint* X, int n); // Only Exponentiation function L<-R * func
-void EXP_RL_ADD(bigint** T, bigint* X, int n); // Only Exponentiation function L<-R + func
+void EXP_LR_MUL(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L->R * func
+void EXP_LR_ADD(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L->R + func
+void EXP_RL_MUL(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L<-R * func
+void EXP_RL_ADD(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L<-R + func
+// 프로토타입으로
 
-void MOD_EXP_LR_MUL(bigint** T, bigint* X, int n, bigint* M); // Modular Exponentiaition used Binary Long Division L->R * func
-void MOD_EXP_LR_ADD(bigint** T, bigint* X, int n, bigint* M); // Modular Exponentiaition used Binary Long Division L->R + func
-void MOD_EXP_RL_MUL(bigint** T, bigint* X, int n, bigint* M); // Modular Exponentiaition used Binary Long Division L<-R * func
-void MOD_EXP_RL_ADD(bigint** T, bigint* X, int n, bigint* M); // Modular Exponentiaition used Binary Long Division L<-R + func
+void MOD_EXP_LR_MUL(bigint** T, bigint* X, bigint* N, bigint* M);  // Modular Exponentiaition used Binary Long Division L->R * func
+void MOD_EXP_LR_ADD(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiaition used Binary Long Division L->R + func
+void MOD_EXP_RL_MUL(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiaition used Binary Long Division L<-R * func
+void MOD_EXP_RL_ADD(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiaition used Binary Long Division L<-R + func
 
-void MOD_EXP_LR_MUL_DIV(bigint** T, bigint* X, int n, bigint* M); // Modular Exponentiation used Multi Long Division L->R * func
-void MOD_EXP_LR_ADD_DIV(bigint** T, bigint* X, int n, bigint* M); // Modular Exponentiation used Multi Long Division L->R + func
-void MOD_EXP_RL_MUL_DIV(bigint** T, bigint* X, int n, bigint* M); // Modular Exponentiation used Multi Long Division L<-R * func
-void MOD_EXP_RL_ADD_DIV(bigint** T, bigint* X, int n, bigint* M); // Modular Exponentiation used Multi Long Division L<-R + func
+void MOD_EXP_LR_MUL_DIV(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiation used Multi Long Division L->R * func
+void MOD_EXP_LR_ADD_DIV(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiation used Multi Long Division L->R + func
+void MOD_EXP_RL_MUL_DIV(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiation used Multi Long Division L<-R * func
+void MOD_EXP_RL_ADD_DIV(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiation used Multi Long Division L<-R + func
 
 #endif
