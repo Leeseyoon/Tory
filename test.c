@@ -1782,7 +1782,7 @@ void Left_Right_EXP_ADD_time() // Only Exponentiation function L->R add
 
 	printf("\n");
 	printf("print(\"Left to Right EXP ADD time\")\n");
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 20; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		len = 1;
@@ -1832,7 +1832,7 @@ void Left_Right_EXP_MUL_time() // Only Exponentiation function L->R mul
 	bigint* bi_re = NULL;
 	printf("\n");
 	printf("print(\"Left to Right EXP MUL time\")\n");
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 20; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		len = 1;
@@ -1881,7 +1881,7 @@ void Right_Left_EXP_ADD_time() // Only Exponentiation function R<-L add
 
 	printf("\n");
 	printf("print(\"Right to Left Exp ADD time\")\n");
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 20; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		len = 1;
@@ -1931,7 +1931,7 @@ void Right_Left_EXP_MUL_time()  // Only Exponentiation function R<-L mul
 
 	printf("\n");
 	printf("print(\"Right to Letf Exp MUL time\")\n"); // bi_1의 size가 0일 떄의 예외처리
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 20; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		len = 1;
@@ -1983,7 +1983,7 @@ void Left_Right_EXP_ADD_MOD_time() // Modular Exponentiaition used Binary Long D
 
 	printf("\n");
 	printf("print(\"Left to Right modular exp add time\")\n");
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 20; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		size2 = size1 - (rand() & 0x7) - 10;
@@ -2041,7 +2041,7 @@ void Left_Right_EXP_MUL_MOD_time() // Modular Exponentiaition used Binary Long D
 
 	printf("\n");
 	printf("print(\"Left to Right modular exp mul time\")\n");
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 20; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		size2 = size1 - (rand() & 0x3) - 10;
@@ -2099,7 +2099,7 @@ void Right_Left_EXP_ADD_MOD_time() // Modular Exponentiaition used Binary Long D
 
 	printf("\n");
 	printf("print(\"Right to Left Modular Exp ADD time\")\n");
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 20; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		size2 = size1 - (rand() & 0x3) - 10;
@@ -2157,7 +2157,7 @@ void Right_Left_EXP_MUL_MOD_time() // Modular Exponentiaition used Binary Long D
 
 	printf("\n");
 	printf("print(\"Right to Left Modular EXP MUL time\")\n");
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 20; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		size2 = size1 - (rand() & 0x3) - 10;
@@ -2215,7 +2215,7 @@ void Left_Right_EXP_ADD_MOD_DIV_time() // Modular Exponentiation used Multi Long
 
 	printf("\n");
 	printf("print(\"Left to Right modular exp add time (DIV func)\")\n");
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 20; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		size2 = size1 - (rand() & 0x3) - 10;
@@ -2273,7 +2273,7 @@ void Left_Right_EXP_MUL_MOD_DIV_time() // Modular Exponentiation used Multi Long
 
 	printf("\n");
 	printf("print(\"left to right modular exp mul time (DIV func)\")\n");
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 20; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		size2 = size1 - (rand() & 0x3) - 10;
@@ -2330,7 +2330,7 @@ void Right_Left_EXP_ADD_MOD_DIV_time() // Modular Exponentiation used Multi Long
 	bigint* bi_re = NULL;
 
 	printf("print(\"Right to Left Modular Exp ADD time (DIV func)\")\n");
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 20; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		size2 = size1 - (rand() & 0x3) - 10;
@@ -2388,7 +2388,7 @@ void Right_Left_EXP_MUL_MOD_DIV_time() // Modular Exponentiation used Multi Long
 
 	printf("\n");
 	printf("print(\"Right to Left Modular EXP MUL test (DIV func)\")\n");
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 20; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		size2 = size1 - (rand() & 0xf) - 10;
