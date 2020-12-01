@@ -2303,6 +2303,57 @@ void MOD_EXP_LR_MUL(bigint** T, bigint* X, int n, bigint* M)
 	BI_Delete(&t0);
 }
 
+void MOD_EXP_LR_MUL2(bigint** T, bigint* X, bigint* N, bigint* M)
+{
+	int i = 0; // 반복문에 사용될 변수 i
+	int len = 0; // X의 비트 길이를 담을 변수 len
+	int result = 0;
+	int x_len = 0;
+	int t0_len = 0;
+
+	bigint* t0 = NULL;
+	bigint* temp0 = NULL;
+	bigint* temp1 = NULL;
+	bigint* trash_q = NULL;
+	bigint* trash_r = NULL;
+	BI_Set_One(&t0);
+
+	BI_Bit_Length_of_number(n, &len);
+
+	for (i = len - 1; i >= 0; i--)
+	{
+		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+		BI_New(&temp1, 2 * t0_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
+		SQU(&temp1, t0);
+		BI_Delete(&t0);
+		Binary_Long_Div(&trash_q, &trash_r, temp1, M);
+		BI_Assign(&temp1, trash_r);
+		BI_Delete(&trash_r);
+		BI_Delete(&trash_r);
+
+		BI_Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
+		BI_New(&temp0, 2 * t0_len + x_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
+		result = j_th_Bit_of_number(i, n);
+		if (result == 1)
+		{
+			MUL_Multi(&temp0, temp1, X);
+			Binary_Long_Div(&trash_q, &trash_r, temp0, M);
+			BI_Assign(&temp0, trash_r);
+			BI_Delete(&trash_r);
+			BI_Delete(&trash_q);
+		}
+
+		else
+			BI_Assign(&temp0, temp1);
+
+		BI_Delete(&temp1);
+		BI_Assign(&t0, temp0);
+		BI_Delete(&temp0);
+	}
+	BI_Assign(T, t0);
+	BI_Delete(&t0);
+}
+
 void MOD_EXP_LR_ADD(bigint** T, bigint* X, int n, bigint* M)
 {
 	int i = 0; // 반복문에 사용될 변수 i
