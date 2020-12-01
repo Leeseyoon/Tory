@@ -628,6 +628,7 @@ int montgomery_ladder_Modular_Exponentiation_addtion_test()
 	return 0;
 }
 
+
 void Left_Right_EXP_ADD_test() // Only Exponentiation function L->R add
 {
 	int i = 0;
@@ -635,6 +636,7 @@ void Left_Right_EXP_ADD_test() // Only Exponentiation function L->R add
 	int len = 0;
 
 	bigint* bi_1 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 
 	printf("\n");
@@ -642,19 +644,25 @@ void Left_Right_EXP_ADD_test() // Only Exponentiation function L->R add
 	for (i = 0; i < 10; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
-		len = (rand() & 0x7) + 100;
+		len = 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
+		BI_New(&bi_N, len);
+		
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
+		bi_N->a[0] = 0x0a;
+		//BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-
-		EXP_LR_ADD(&bi_re, bi_1, len);
+		EXP_LR_ADD(&bi_re, bi_1, bi_N);
 		printf("A = ");
 		BI_Show(bi_1, 16);
-		printf("%d * A == ", len);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("N * A == ");
 		BI_Show(bi_re, 16);
 
 		BI_Delete(&bi_1);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
 }
@@ -666,25 +674,31 @@ void Left_Right_EXP_MUL_test() // Only Exponentiation function L->R mul
 	int len = 0;
 
 	bigint* bi_1 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 	printf("\n");
 	printf("print(\"Left to Right EXP MUL test\")\n");
 	for (i = 0; i < 10; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
-		len = (rand() & 0x7) + 100;
+		len = 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
-		bi_1->a[0] = 0x11;
-		//BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_New(&bi_N, len); // len 길이인 big integer인 bi_N 생성
+		
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
+		bi_N->a[0] = 0x0a; //BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
 
-		EXP_LR_MUL(&bi_re, bi_1, len);
+		EXP_LR_MUL(&bi_re, bi_1, bi_N);
 		printf("A = ");
 		BI_Show(bi_1, 16);
-		printf("A ^ %d == ", len);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("A ^ N == ");
 		BI_Show(bi_re, 16);
 
 		BI_Delete(&bi_1);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
 }
@@ -696,26 +710,32 @@ void Right_Left_EXP_ADD_test() // Only Exponentiation function R<-L add
 	int len = 0;
 
 	bigint* bi_1 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
-	
+
 	printf("\n");
 	printf("print(\"Right to Left Exp ADD test\")\n");
 	for (i = 0; i < 10; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
-		len = (rand() & 0x7) + 100;
+		len = 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
+		BI_New(&bi_N, len); // len 길이인 big integer인 bi_N 생성
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
+		bi_N->a[0] = 0x0a; //BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
 
-		EXP_RL_ADD(&bi_re, bi_1, len);
+		EXP_RL_ADD(&bi_re, bi_1, bi_N);
 		printf("A = ");
 		BI_Show(bi_1, 16);
-		printf("%d * A == ", len);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("N * A == ");
 		BI_Show(bi_re, 16);
 
 		BI_Delete(&bi_1);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
 }
@@ -727,26 +747,32 @@ void Right_Left_EXP_MUL_test()  // Only Exponentiation function R<-L mul
 	int len = 0;
 
 	bigint* bi_1 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 
 	printf("\n");
 	printf("print(\"Right to Letf Exp MUL test\")\n"); // bi_1의 size가 0일 떄의 예외처리
 	for (i = 0; i < 10; i++)
-	{		
+	{
 		size1 = (rand() & 0x7) + 30;
-		len = (rand() & 0x7) + 100;
+		len = 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
+		BI_New(&bi_N, len); // len 길이인 big integer인 bi_N 생성
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
+		bi_N->a[0] = 0x0a; //BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
 
-		EXP_RL_MUL(&bi_re, bi_1, len);
+		EXP_RL_MUL(&bi_re, bi_1, bi_N);
 		printf("A = ");
 		BI_Show(bi_1, 16);
-		printf("A^%d == ", len);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("A^N == ");
 		BI_Show(bi_re, 16);
 
 		BI_Delete(&bi_1);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 
 	}
@@ -761,7 +787,9 @@ void Left_Right_EXP_ADD_MOD_test() // Modular Exponentiaition used Binary Long D
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
+
 	printf("\n");
 	printf("print(\"Left to Right modular exp add test\")\n");
 	for (i = 0; i < 10; i++)
@@ -770,25 +798,30 @@ void Left_Right_EXP_ADD_MOD_test() // Modular Exponentiaition used Binary Long D
 		size2 = size1 - (rand() & 0x7) - 10;
 		if (size2 <= 0)
 			size2 = 1;
-		len = (rand() & 0x7) + 100;
+		len = (rand() & 0x7) + 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
 		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
-		MOD_EXP_LR_ADD(&bi_re, bi_1, len, bi_2);
-		
-		printf("a = ");
+		MOD_EXP_LR_ADD(&bi_re, bi_1, bi_N, bi_2);
+
+		printf("A = ");
 		BI_Show(bi_1, 16);
-		printf("b = ");
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("B = ");
 		BI_Show(bi_2, 16);
-		printf("(%d * a) %% b == ", len);
+		printf("(N * A) %% B == ");
 		BI_Show(bi_re, 16);
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
 }
@@ -802,6 +835,7 @@ void Left_Right_EXP_MUL_MOD_test() // Modular Exponentiaition used Binary Long D
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 
 	printf("\n");
@@ -812,25 +846,30 @@ void Left_Right_EXP_MUL_MOD_test() // Modular Exponentiaition used Binary Long D
 		size2 = size1 - (rand() & 0x3) - 10;
 		if (size2 <= 0)
 			size2 = 1;
-		len = (rand() & 0x7) + 100;
+		len = (rand() & 0x7) + 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
 		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
-		MOD_EXP_RL_MUL(&bi_re, bi_1, len, bi_2);
+		MOD_EXP_LR_MUL(&bi_re, bi_1, bi_N, bi_2);
 
-		printf("a = ");
+		printf("A = ");
 		BI_Show(bi_1, 16);
-		printf("b = ");
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("B = ");
 		BI_Show(bi_2, 16);
-		printf("(a ^ %d) %% b == ", len);
+		printf("power_mod(A, N, B) == ");
 		BI_Show(bi_re, 16);
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
 }
@@ -844,6 +883,7 @@ void Right_Left_EXP_ADD_MOD_test() // Modular Exponentiaition used Binary Long D
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 
 	printf("\n");
@@ -854,25 +894,30 @@ void Right_Left_EXP_ADD_MOD_test() // Modular Exponentiaition used Binary Long D
 		size2 = size1 - (rand() & 0x3) - 10;
 		if (size2 <= 0)
 			size2 = 1;
-		len = (rand() & 0x7) + 100;
+		len = (rand() & 0x7) + 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
 		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
-		MOD_EXP_RL_ADD(&bi_re, bi_1, len, bi_2);
-		
+		MOD_EXP_RL_ADD(&bi_re, bi_1, bi_N, bi_2);
+
 		printf("A = ");
 		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
 		printf("B = ");
 		BI_Show(bi_2, 16);
-		printf("(%d * A) %% B == ", len);
+		printf("(N * A) %% B == ");
 		BI_Show(bi_re, 16);
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
 }
@@ -886,6 +931,7 @@ void Right_Left_EXP_MUL_MOD_test() // Modular Exponentiaition used Binary Long D
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 
 	printf("\n");
@@ -896,25 +942,30 @@ void Right_Left_EXP_MUL_MOD_test() // Modular Exponentiaition used Binary Long D
 		size2 = size1 - (rand() & 0x3) - 10;
 		if (size2 <= 0)
 			size2 = 1;
-		len = (rand() & 0x7) + 100;
+		len = (rand() & 0x7) + 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
 		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		bi_N->a[0] = 0x2;
+		MOD_EXP_RL_MUL(&bi_re, bi_1, bi_N, bi_2);
 
-		MOD_EXP_RL_MUL(&bi_re, bi_1, len, bi_2);
-		
 		printf("A = ");
 		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
 		printf("B = ");
 		BI_Show(bi_2, 16);
-		printf("(A ^ %d) %% B == ", len);
+		printf("power_mod(A, N, B) == ");
 		BI_Show(bi_re, 16);
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
 }
@@ -928,6 +979,7 @@ void Left_Right_EXP_ADD_MOD_DIV_test() // Modular Exponentiation used Multi Long
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 
 	printf("\n");
@@ -938,25 +990,30 @@ void Left_Right_EXP_ADD_MOD_DIV_test() // Modular Exponentiation used Multi Long
 		size2 = size1 - (rand() & 0x3) - 10;
 		if (size2 <= 0)
 			size2 = 1;
-		len = (rand() & 0x7) + 100;
+		len = (rand() & 0x7) + 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
 		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
-		MOD_EXP_LR_ADD_DIV(&bi_re, bi_1, len, bi_2);
-		
-		printf("a = ");
+		MOD_EXP_LR_ADD_DIV(&bi_re, bi_1, bi_N, bi_2);
+
+		printf("A = ");
 		BI_Show(bi_1, 16);
-		printf("b = ");
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("B = ");
 		BI_Show(bi_2, 16);
-		printf("(%d * a) %% b == ", len);
+		printf("(N * A) %% B == ");
 		BI_Show(bi_re, 16);
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
 }
@@ -970,6 +1027,7 @@ void Left_Right_EXP_MUL_MOD_DIV_test() // Modular Exponentiation used Multi Long
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 
 	printf("\n");
@@ -984,27 +1042,32 @@ void Left_Right_EXP_MUL_MOD_DIV_test() // Modular Exponentiation used Multi Long
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
 		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
-		MOD_EXP_RL_MUL_DIV(&bi_re, bi_1, len, bi_2);
-		
-		printf("a = ");
+		MOD_EXP_LR_MUL_DIV(&bi_re, bi_1, bi_N, bi_2);
+
+		printf("A = ");
 		BI_Show(bi_1, 16);
-		printf("b = ");
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("B = ");
 		BI_Show(bi_2, 16);
-		printf("(a ^ %d) %% b == ", len);
+		printf("power_mod(A, N, B) == ");
 		BI_Show(bi_re, 16);
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
 }
 
 void Right_Left_EXP_ADD_MOD_DIV_test() // Modular Exponentiation used Multi Long Division L<-R +
-{	
+{
 	int i = 0;
 	int size1 = 0;
 	int size2 = 0;
@@ -1012,8 +1075,9 @@ void Right_Left_EXP_ADD_MOD_DIV_test() // Modular Exponentiation used Multi Long
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
-	
+
 	printf("print(\"Right to Left Modular Exp ADD test (DIV func)\")\n");
 	for (i = 0; i < 10; i++)
 	{
@@ -1021,25 +1085,30 @@ void Right_Left_EXP_ADD_MOD_DIV_test() // Modular Exponentiation used Multi Long
 		size2 = size1 - (rand() & 0x3) - 10;
 		if (size2 <= 0)
 			size2 = 1;
-		len = (rand() & 0x7) + 100;
+		len = (rand() & 0x7) + 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
 		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
-		MOD_EXP_RL_ADD_DIV(&bi_re, bi_1, len, bi_2);
-		
+		MOD_EXP_RL_ADD_DIV(&bi_re, bi_1, bi_N, bi_2);
+
 		printf("A = ");
 		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
 		printf("B = ");
 		BI_Show(bi_2, 16);
-		printf("(%d * A) %% B == ", len);
+		printf("(N * A) %% B == ", len);
 		BI_Show(bi_re, 16);
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
 }
@@ -1052,6 +1121,7 @@ void Right_Left_EXP_MUL_MOD_DIV_test() // Modular Exponentiation used Multi Long
 	int len = 0;
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 
 	printf("\n");
@@ -1062,25 +1132,30 @@ void Right_Left_EXP_MUL_MOD_DIV_test() // Modular Exponentiation used Multi Long
 		size2 = size1 - (rand() & 0xf) - 10;
 		if (size2 <= 0)
 			size2 = 1;
-		len = (rand() & 0x7) + 100;
+		len = (rand() & 0x7) + 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
 		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
-		MOD_EXP_RL_MUL_DIV(&bi_re, bi_1, len, bi_2);
-		
+		MOD_EXP_RL_MUL_DIV(&bi_re, bi_1, bi_N, bi_2);
+
 		printf("A = ");
 		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
 		printf("B = ");
 		BI_Show(bi_2, 16);
-		printf("(A ^ %d) %% B == ", len);
+		printf("power_mod(A, N, B) == ");
 		BI_Show(bi_re, 16);
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
 }
@@ -1696,42 +1771,38 @@ void Left_Right_EXP_ADD_time() // Only Exponentiation function L->R add
 {
 	int i = 0;
 	int size1 = 0;
-	int size2 = 0;
 	int len = 0;
-	double total_time = 0;
 
 	bigint* bi_1 = NULL;
-	bigint* bi_2 = NULL;
-	bigint* bi_q = NULL;
-	bigint* bi_r = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 
 	printf("\n");
-	printf("\"Left to Right EXP ADD test\"\n");
+	printf("print(\"Left to Right EXP ADD time\")\n");
 	for (i = 0; i < 10; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
-		size2 = size1 - (rand() & 0x7) - 10;
-		len = 65550;
+		len = 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
-		BI_New(&bi_2, size1); // size2 길이인 big integer인 bi_2 생성
+		BI_New(&bi_N, len);
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
+		bi_N->a[0] = 0x0a; // 너무 오래걸려서
+		//BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
 
-		clock_t start = clock();
-		EXP_LR_ADD(&bi_re, bi_1, len);
-		DIV(&bi_q, &bi_r, bi_re, bi_2);
-		clock_t end = clock();
-		total_time += (end - start);
+		/*EXP_LR_ADD(&bi_re, bi_1, bi_N);
+		printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("N * A == ");
+		BI_Show(bi_re, 16);*/
 
 		BI_Delete(&bi_1);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
-	total_time = total_time / (CLOCKS_PER_SEC);
-	printf("Total[%d] time of test : %fs\n", i, total_time);
-	printf("Avearage time of test  : %fs\n", total_time / i);
 }
 
 void Left_Right_EXP_MUL_time() // Only Exponentiation function L->R mul
@@ -1739,32 +1810,35 @@ void Left_Right_EXP_MUL_time() // Only Exponentiation function L->R mul
 	int i = 0;
 	int size1 = 0;
 	int len = 0;
-	double total_time = 0;
 
 	bigint* bi_1 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 	printf("\n");
-	printf("print(\"Left to Right EXP MUL test\")\n");
+	printf("print(\"Left to Right EXP MUL time\")\n");
 	for (i = 0; i < 10; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
-		len = (rand() & 0x7) + 100;
+		len = 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
-		bi_1->a[0] = 0x11;
-		//BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_New(&bi_N, len); // len 길이인 big integer인 bi_N 생성
 
-		clock_t start = clock();
-		EXP_LR_MUL(&bi_re, bi_1, len);
-		clock_t end = clock();
-		total_time += (end - start);
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
+		bi_N->a[0] = 0x0a; //BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
+
+		/*EXP_LR_MUL(&bi_re, bi_1, bi_N);
+		printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("A ^ N == ");
+		BI_Show(bi_re, 16);*/
 
 		BI_Delete(&bi_1);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
-	total_time = total_time / (CLOCKS_PER_SEC);
-	printf("Total[%d] time of test : %fs\n", i, total_time);
-	printf("Avearage time of test  : %fs\n", total_time / i);
 }
 
 void Right_Left_EXP_ADD_time() // Only Exponentiation function R<-L add
@@ -1772,33 +1846,36 @@ void Right_Left_EXP_ADD_time() // Only Exponentiation function R<-L add
 	int i = 0;
 	int size1 = 0;
 	int len = 0;
-	double total_time = 0;
 
 	bigint* bi_1 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 
 	printf("\n");
-	printf("print(\"Right to Left Exp ADD test\")\n");
+	printf("print(\"Right to Left Exp ADD time\")\n");
 	for (i = 0; i < 10; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
-		len = (rand() & 0x7) + 100;
+		len = 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
+		BI_New(&bi_N, len); // len 길이인 big integer인 bi_N 생성
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
+		bi_N->a[0] = 0x0a; //BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
 
-		clock_t start = clock();
-		EXP_RL_ADD(&bi_re, bi_1, len);
-		clock_t end = clock();
-		total_time += (end - start);
+		/*EXP_RL_ADD(&bi_re, bi_1, bi_N);
+		printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("N * A == ");
+		BI_Show(bi_re, 16);*/
 
 		BI_Delete(&bi_1);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
-	total_time = total_time / (CLOCKS_PER_SEC);
-	printf("Total[%d] time of test : %fs\n", i, total_time);
-	printf("Avearage time of test  : %fs\n", total_time / i);
 }
 
 void Right_Left_EXP_MUL_time()  // Only Exponentiation function R<-L mul
@@ -1806,34 +1883,37 @@ void Right_Left_EXP_MUL_time()  // Only Exponentiation function R<-L mul
 	int i = 0;
 	int size1 = 0;
 	int len = 0;
-	double total_time = 0;
 
 	bigint* bi_1 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 
 	printf("\n");
-	printf("print(\"Right to Letf Exp MUL test\")\n"); // bi_1의 size가 0일 떄의 예외처리
+	printf("print(\"Right to Letf Exp MUL time\")\n"); // bi_1의 size가 0일 떄의 예외처리
 	for (i = 0; i < 10; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
-		len = (rand() & 0x7) + 100;
+		len = 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
+		BI_New(&bi_N, len); // len 길이인 big integer인 bi_N 생성
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
+		bi_N->a[0] = 0x0a; //BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호가 양수인 랜덤한 배열을 담은 bigint 생성
 
-		clock_t start = clock();
-		EXP_RL_MUL(&bi_re, bi_1, len);
-		clock_t end = clock();
-		total_time += (end - start);
+		/*EXP_RL_MUL(&bi_re, bi_1, bi_N);
+		printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("A^N == ");
+		BI_Show(bi_re, 16);*/
 
 		BI_Delete(&bi_1);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 
 	}
-	total_time = total_time / (CLOCKS_PER_SEC);
-	printf("Total[%d] time of test : %fs\n", i, total_time);
-	printf("Avearage time of test  : %fs\n", total_time / i);
 }
 
 void Left_Right_EXP_ADD_MOD_time() // Modular Exponentiaition used Binary Long Division L->R +
@@ -1842,40 +1922,46 @@ void Left_Right_EXP_ADD_MOD_time() // Modular Exponentiaition used Binary Long D
 	int size1 = 0;
 	int size2 = 0;
 	int len = 0;
-	double total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 
 	printf("\n");
-	printf("\"Left to Right modular exp add test\"\n");
+	printf("print(\"Left to Right modular exp add time\")\n");
 	for (i = 0; i < 10; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		size2 = size1 - (rand() & 0x7) - 10;
 		if (size2 <= 0)
 			size2 = 1;
-		len = 65530;// (rand() & 0x7) + 100;
+		len = (rand() & 0x7) + 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
 		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
-		clock_t start = clock();
-		MOD_EXP_LR_ADD(&bi_re, bi_1, len, bi_2);
-		clock_t end = clock();
-		total_time += (end - start);
+		MOD_EXP_LR_ADD(&bi_re, bi_1, bi_N, bi_2);
+
+	/*	printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("B = ");
+		BI_Show(bi_2, 16);
+		printf("(N * A) %% B == ");
+		BI_Show(bi_re, 16);*/
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
-	total_time = total_time / (CLOCKS_PER_SEC);
-	printf("Total[%d] time of test : %fs\n", i, total_time);
-	printf("Avearage time of test  : %fs\n", total_time / i);
 }
 
 void Left_Right_EXP_MUL_MOD_time() // Modular Exponentiaition used Binary Long Division L->R *
@@ -1884,181 +1970,14 @@ void Left_Right_EXP_MUL_MOD_time() // Modular Exponentiaition used Binary Long D
 	int size1 = 0;
 	int size2 = 0;
 	int len = 0;
-	double total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 
 	printf("\n");
-	printf("\"Left to Right modular exp mul test\"\n");
-	for (i = 0; i < 10; i++)
-	{
-		size1 = (rand() & 0x7) + 30;
-		size2 = size1 - (rand() & 0x3) - 10;
-		if (size2 <= 0)
-			size2 = 1;
-		len = (rand() & 0x7) + 100;
-
-		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
-		BI_New(&bi_2, size2);
-
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-
-		clock_t start = clock();
-		MOD_EXP_RL_MUL(&bi_re, bi_1, len, bi_2);
-		clock_t end = clock();
-		total_time += (end - start);
-
-		BI_Delete(&bi_1);
-		BI_Delete(&bi_2);
-		BI_Delete(&bi_re);
-	}
-	total_time = total_time / (CLOCKS_PER_SEC);
-	printf("Total[%d] time of test : %fs\n", i, total_time);
-	printf("Avearage time of test  : %fs\n", total_time / i);
-}
-
-void Right_Left_EXP_ADD_MOD_time() // Modular Exponentiaition used Binary Long Division L<-R +
-{
-	int i = 0;
-	int size1 = 0;
-	int size2 = 0;
-	int len = 0;
-	double total_time = 0;
-
-	bigint* bi_1 = NULL;
-	bigint* bi_2 = NULL;
-	bigint* bi_re = NULL;
-
-	printf("\n");
-	printf("\"Right to Left Modular Exp ADD test\"\n");
-	for (i = 0; i < 10; i++)
-	{
-		size1 = (rand() & 0x7) + 30;
-		size2 = size1 - (rand() & 0x3) - 10;
-		if (size2 <= 0)
-			size2 = 1;
-		len = (rand() & 0x7) + 100;
-
-		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
-		BI_New(&bi_2, size2);
-
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-
-		clock_t start = clock();
-		MOD_EXP_RL_ADD(&bi_re, bi_1, len, bi_2);
-		clock_t end = clock();
-		total_time += (end - start);
-
-		BI_Delete(&bi_1);
-		BI_Delete(&bi_2);
-		BI_Delete(&bi_re);
-	}
-	total_time = total_time / (CLOCKS_PER_SEC);
-	printf("Total[%d] time of test : %fs\n", i, total_time);
-	printf("Avearage time of test  : %fs\n", total_time / i);
-}
-
-void Right_Left_EXP_MUL_MOD_time() // Modular Exponentiaition used Binary Long Division L<-R *
-{
-	int i = 0;
-	int size1 = 0;
-	int size2 = 0;
-	int len = 0;
-	double total_time = 0;
-
-	bigint* bi_1 = NULL;
-	bigint* bi_2 = NULL;
-	bigint* bi_re = NULL;
-
-	printf("\"Right to Left Modular EXP MUL test\"\n");
-	for (i = 0; i < 10; i++)
-	{
-		size1 = (rand() & 0x7) + 30;
-		size2 = size1 - (rand() & 0x3) - 10;
-		if (size2 <= 0)
-			size2 = 1;
-		len = (rand() & 0x7) + 100;
-
-		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
-		BI_New(&bi_2, size2);
-
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-
-		clock_t start = clock();
-		MOD_EXP_RL_MUL(&bi_re, bi_1, len, bi_2);
-		clock_t end = clock();
-		total_time += (end - start);
-
-		BI_Delete(&bi_1);
-		BI_Delete(&bi_2);
-		BI_Delete(&bi_re);
-	}
-	total_time = total_time / (CLOCKS_PER_SEC);
-	printf("Total[%d] time of test : %fs\n", i, total_time);
-	printf("Avearage time of test  : %fs\n", total_time / i);
-}
-
-void Left_Right_EXP_ADD_MOD_DIV_time() // Modular Exponentiation used Multi Long Division L->R +
-{
-	int i = 0;
-	int size1 = 0;
-	int size2 = 0;
-	int len = 0;
-	double total_time = 0;
-
-	bigint* bi_1 = NULL;
-	bigint* bi_2 = NULL;
-	bigint* bi_re = NULL;
-
-	printf("\n");
-	printf("\"Left to Right modular exp add test (DIV func)\"\n");
-	for (i = 0; i < 10; i++)
-	{
-		size1 = (rand() & 0x7) + 30;
-		size2 = size1 - (rand() & 0x3) - 10;
-		if (size2 <= 0)
-			size2 = 1;
-		len = 65530;// (rand() & 0x7) + 100;
-
-		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
-		BI_New(&bi_2, size2);
-
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-
-		clock_t start = clock();
-		MOD_EXP_LR_ADD_DIV(&bi_re, bi_1, len, bi_2);
-		clock_t end = clock();
-		total_time += (end - start);
-
-		BI_Delete(&bi_1);
-		BI_Delete(&bi_2);
-		BI_Delete(&bi_re);
-	}
-	total_time = total_time / (CLOCKS_PER_SEC);
-	printf("Total[%d] time of test : %fs\n", i, total_time);
-	printf("Avearage time of test  : %fs\n", total_time / i);
-}
-
-void Left_Right_EXP_MUL_MOD_DIV_time() // Modular Exponentiation used Multi Long Division L->R *
-{
-	int i = 0;
-	int size1 = 0;
-	int size2 = 0;
-	int len = 0;
-	double total_time = 0;
-
-	bigint* bi_1 = NULL;
-	bigint* bi_2 = NULL;
-	bigint* bi_re = NULL;
-
-	printf("\n");
-	printf("\"left to right modular exp mul test (DIV func)\"\n");
+	printf("print(\"Left to Right modular exp mul time\")\n");
 	for (i = 0; i < 10; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
@@ -2069,22 +1988,220 @@ void Left_Right_EXP_MUL_MOD_DIV_time() // Modular Exponentiation used Multi Long
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
 		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
-		clock_t start = clock();
-		MOD_EXP_RL_MUL_DIV(&bi_re, bi_1, len, bi_2);
-		clock_t end = clock();
-		total_time += (end - start);
+		MOD_EXP_LR_MUL(&bi_re, bi_1, bi_N, bi_2);
+
+		/*printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("B = ");
+		BI_Show(bi_2, 16);
+		printf("power_mod(A, N, B) == ");
+		BI_Show(bi_re, 16);*/
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
-	total_time = total_time / (CLOCKS_PER_SEC);
-	printf("Total[%d] time of test : %fs\n", i, total_time);
-	printf("Avearage time of test  : %fs\n", total_time / i);
+}
+
+void Right_Left_EXP_ADD_MOD_time() // Modular Exponentiaition used Binary Long Division L<-R +
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"Right to Left Modular Exp ADD time\")\n");
+	for (i = 0; i < 10; i++)
+	{
+		size1 = (rand() & 0x7) + 30;
+		size2 = size1 - (rand() & 0x3) - 10;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
+		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
+
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+
+		MOD_EXP_RL_ADD(&bi_re, bi_1, bi_N, bi_2);
+
+		/*printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("B = ");
+		BI_Show(bi_2, 16);
+		printf("(N * A) %% B == ");
+		BI_Show(bi_re, 16);*/
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
+		BI_Delete(&bi_re);
+	}
+}
+
+void Right_Left_EXP_MUL_MOD_time() // Modular Exponentiaition used Binary Long Division L<-R *
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"Right to Left Modular EXP MUL time\")\n");
+	for (i = 0; i < 10; i++)
+	{
+		size1 = (rand() & 0x7) + 30;
+		size2 = size1 - (rand() & 0x3) - 10;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
+		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
+
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		bi_N->a[0] = 0x2;
+		MOD_EXP_RL_MUL(&bi_re, bi_1, bi_N, bi_2);
+
+		/*printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("B = ");
+		BI_Show(bi_2, 16);
+		printf("power_mod(A, N, B) == ");
+		BI_Show(bi_re, 16);*/
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
+		BI_Delete(&bi_re);
+	}
+}
+
+void Left_Right_EXP_ADD_MOD_DIV_time() // Modular Exponentiation used Multi Long Division L->R +
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"Left to Right modular exp add time (DIV func)\")\n");
+	for (i = 0; i < 10; i++)
+	{
+		size1 = (rand() & 0x7) + 30;
+		size2 = size1 - (rand() & 0x3) - 10;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
+		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
+
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+
+		MOD_EXP_LR_ADD_DIV(&bi_re, bi_1, bi_N, bi_2);
+
+		/*printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("B = ");
+		BI_Show(bi_2, 16);
+		printf("(N * A) %% B == ");
+		BI_Show(bi_re, 16);*/
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
+		BI_Delete(&bi_re);
+	}
+}
+
+void Left_Right_EXP_MUL_MOD_DIV_time() // Modular Exponentiation used Multi Long Division L->R *
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"left to right modular exp mul time (DIV func)\")\n");
+	for (i = 0; i < 10; i++)
+	{
+		size1 = (rand() & 0x7) + 30;
+		size2 = size1 - (rand() & 0x3) - 10;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
+		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
+
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+
+		MOD_EXP_LR_MUL_DIV(&bi_re, bi_1, bi_N, bi_2);
+
+		/*printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("B = ");
+		BI_Show(bi_2, 16);
+		printf("power_mod(A, N, B) == ");
+		BI_Show(bi_re, 16);*/
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
+		BI_Delete(&bi_re);
+	}
 }
 
 void Right_Left_EXP_ADD_MOD_DIV_time() // Modular Exponentiation used Multi Long Division L<-R +
@@ -2093,40 +2210,45 @@ void Right_Left_EXP_ADD_MOD_DIV_time() // Modular Exponentiation used Multi Long
 	int size1 = 0;
 	int size2 = 0;
 	int len = 0;
-	double total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
-	
-	printf("\n");
-	printf("\"Right to Left Modular Exp ADD test (DIV func)\"\n");
+
+	printf("print(\"Right to Left Modular Exp ADD time (DIV func)\")\n");
 	for (i = 0; i < 10; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		size2 = size1 - (rand() & 0x3) - 10;
 		if (size2 <= 0)
 			size2 = 1;
-		len = (rand() & 0x7) + 100;
+		len = (rand() & 0x7) + 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
 		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
-		clock_t start = clock();
-		MOD_EXP_RL_ADD_DIV(&bi_re, bi_1, len, bi_2);
-		clock_t end = clock();
-		total_time += (end - start);
+		MOD_EXP_RL_ADD_DIV(&bi_re, bi_1, bi_N, bi_2);
+
+		/*printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("B = ");
+		BI_Show(bi_2, 16);
+		printf("(N * A) %% B == ", len);
+		BI_Show(bi_re, 16);*/
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
-	total_time = total_time / (CLOCKS_PER_SEC);
-	printf("Total[%d] time of test : %fs\n", i, total_time);
-	printf("Avearage time of test  : %fs\n", total_time / i);
 }
 
 void Right_Left_EXP_MUL_MOD_DIV_time() // Modular Exponentiation used Multi Long Division L<-R *
@@ -2135,37 +2257,43 @@ void Right_Left_EXP_MUL_MOD_DIV_time() // Modular Exponentiation used Multi Long
 	int size1 = 0;
 	int size2 = 0;
 	int len = 0;
-	double total_time = 0;
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 
 	printf("\n");
-	printf("\"Right to Left Modular EXP MUL test (DIV func)\"\n");
+	printf("print(\"Right to Left Modular EXP MUL test (DIV func)\")\n");
 	for (i = 0; i < 10; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		size2 = size1 - (rand() & 0xf) - 10;
 		if (size2 <= 0)
 			size2 = 1;
-		len = (rand() & 0x7) + 100;
+		len = (rand() & 0x7) + 1;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
 		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
-		clock_t start = clock();
-		MOD_EXP_RL_MUL_DIV(&bi_re, bi_1, len, bi_2);
-		clock_t end = clock();
-		total_time += (end - start);
+		MOD_EXP_RL_MUL_DIV(&bi_re, bi_1, bi_N, bi_2);
+
+		/*printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("B = ");
+		BI_Show(bi_2, 16);
+		printf("power_mod(A, N, B) == ");
+		BI_Show(bi_re, 16);*/
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_re);
 	}
-	total_time = total_time / (CLOCKS_PER_SEC);
-	printf("Total[%d] time of test : %fs\n", i, total_time);
-	printf("Avearage time of test  : %fs\n", total_time / i);
 }
