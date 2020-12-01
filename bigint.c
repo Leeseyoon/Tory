@@ -429,7 +429,7 @@ void BI_Bit_Length(int* len, bigint* x)
 		if ((x->a[i] & k) != 0)
 			break; // 값이 들어가 있으면( != 0) break;
 	}
-	j += i * WORD_BIT_LEN; // 최상위 워드의 몇번째 비트의 길이인지 출력하도록 j에 대입
+	j += i * WORD_BIT_LEN + 1; // 최상위 워드의 몇번째 비트의 길이인지 출력하도록 j에 대입
 	*len = j;
 }
 
@@ -449,26 +449,34 @@ void BI_Bit_Length(int* len, bigint* x)
 	8 :
 	9 :
 */
-void BI_j_th_Bit_of_BI(int j, bigint* x)
+int BI_j_th_Bit_of_BI(int j, bigint* x)
 {
 	char* z = NULL;
 	unsigned long long i = 0;
 	int k = 0;
-	printf("j_th bit : ");
+	int r = 0; // 서우 추가
+	//printf("j_th bit : ");
 	if (j >= (x->wordlen) * WORD_BIT_LEN) // x의 bit len보다 길면 에러
-		return;
+		return ERROR;
 	else
 	{
 		k = j / WORD_BIT_LEN; // 변수 k는 j번째 비트가 위치한 워드의 위치(몇 번째 워드)
+		r = j % WORD_BIT_LEN; // x->a[k]에서 r만큼 왼쪽으로 이동해야 전체에서 j번째 위치 (서우 추가)
 		i = 1;
-		i = i << j; // 1을 j번 left shift. ex) 1을 3만큼 left shift --> 1000
+		//i = i << j; // 1을 j번 left shift. ex) 1을 3만큼 left shift --> 1000
+		i = i << r; // 서우 추가
 
 		if (i == (x->a[k] & i)) // shift한 i와 j번째 비트가 위치한 워드와 &연산을 통해 j번째 비트의 값을 알아내기
-			printf("1");
+		{
+			//printf("1\n");
+			return 1;
+		}
 		else
-			printf("0");
+		{
+			//printf("0\n");
+			return 0;
+		}
 	}
-	printf("\n");
 }
 
 // Chapter 2.7 /* negative: 1, non-negative: 0 */
