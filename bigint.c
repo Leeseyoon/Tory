@@ -2851,21 +2851,24 @@ void Montgomery_Mod_Exp_Add(bigint** C, bigint* A, bigint* n, bigint* M)
 	BI_Delete(&t1);
 }
 
-/*
-	[Exponentiation] Left to Right MUL function
+
+/**
+* @brief [Exponentiation] Left to Right MUL function
+* @details
 
 	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
+	Input  : T, X, N, M
+
+	1 : t <- 1
+	2 : for i <- l - 1 downto 0 do
+	3 :		t <- t^2 ( ^ 2 : SQU )
+	4 :		t <- t * X^(N_{i}) ( * : MUL_Multi() )
+	5 :	end for
+	6 : T <- t
+
+* @param T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+* @param X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+* @param N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
 */
 void EXP_LR_MUL(bigint** T, bigint* X, bigint* N)
 {
@@ -2909,21 +2912,23 @@ void EXP_LR_MUL(bigint** T, bigint* X, bigint* N)
 	BI_Delete(&temp1);
 }
 
-/*
-	[Exponentiation] Left to Right ADD function
+/**
+* @brief [Exponentiation] Left to Right ADD function
+* @details
 
 	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
+	Input  : T, X, N, M
+
+	1 : t <- 0
+	2 : for i <- l - 1 downto 0 do
+	3 :		t <-  2 * t 
+	4 :		t <- t + N_{i} * X 
+	5 :	end for
+	6 : T <- t
+
+* @param T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+* @param X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+* @param N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
 */
 void EXP_LR_ADD(bigint** T, bigint* X, bigint* N)
 {
@@ -2961,21 +2966,22 @@ void EXP_LR_ADD(bigint** T, bigint* X, bigint* N)
 	BI_Delete(&t0);
 }
 
-/*
-	[Exponentiation] Right to Left MUL function
+/**
+* @brief [Exponentiation] Right to Left MUL function
+* details
 
 	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
+	Input : T, X, N, M
+	1 : (t0, t1) <- (1, X)
+	2 :	for i <- 0 to l - 1 do
+	3 :		t0 <- t0 * t1^(N_{i}) ( * : MUL_Multi )
+	4 :		t1 <- t1 ^ 2( ^ : SQU )
+	5 :	end for
+	6 :	T <- t
+
+* @param T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+* @param X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+* @param N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
 */
 void EXP_RL_MUL(bigint** T, bigint* X, bigint* N)
 {
@@ -3035,21 +3041,22 @@ void EXP_RL_MUL(bigint** T, bigint* X, bigint* N)
 	BI_Refine(*T);
 }
 
-/*
-	[Exponentiation] Right to Left ADD function
+/**
+* @brief [Exponentiation] Right to Left ADD function
+* @details
 
 	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
+	Input : T, X, N, M
+	1 : (t0, t1) <- (0, X)
+	2 :	for i <- 0 to l - 1 do
+	3 :		t0 <- t0 + N_{i} * t1
+	4 :		t1 <- 2 * t1 
+	5 :	end for
+	6 :	T <- t
+
+* @param T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+* @param X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+* @param N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
 */
 void EXP_RL_ADD(bigint** T, bigint* X, bigint* N)
 {
@@ -3103,608 +3110,638 @@ void EXP_RL_ADD(bigint** T, bigint* X, bigint* N)
 	BI_Refine(*T);
 }
 
-/*
-	[Modular Exponentiation] Left to Right MUL function (used Binary Long Division)
+/**
+* @brief [Modular Exponentiation] Left to Right MUL function (used Binary Long Division)
+* @details
 
 	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
+	Input  : T, X, N, M
+
+	1 : t <- 1
+	2 : for i <- l - 1 downto 0 do
+	3 :		t <- t^2 mod M ( ^ 2 : SQU , mod : Binary_Long_Div)
+	4 :		t <- t * X^(N_{i}) mod M ( * : MUL_Multi(), mod : Binary_Long_Div)
+	5 :	end for
+	6 : T <- t
+	
+* @param T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+* @param X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+* @param N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+* @param M Modular 지수 연산에서 X^N 과 T를 합동해주는 bigint 포인터형 변수
 */
 void MOD_EXP_LR_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 {
-	int i = 0; // 반복문에 사용될 변수 i
-	int len = 0; // X의 비트 길이를 담을 변수 len
-	int result = 0;
-	int x_len = 0;
-	int t0_len = 0;
+	int i = 0; // 반복문에 사용될 int형 변수 i
+	int len = 0; // 지수승 N의 비트 길이를 담을 int형 변수 len
+	int result = 0; // 해당 비트 값의 결과를 return 받는 int형 변수 result
+	int x_len = 0; // X의 워드열 길이를 대입할 int형 변수 x_len
+	int t0_len = 0; // t0의 워드열 길이를 대입할 int형 변수 t0_len
 
-	bigint* t0 = NULL;
-	bigint* temp0 = NULL;
-	bigint* temp1 = NULL;
-	bigint* trash_q = NULL;
-	bigint* trash_r = NULL;
-	BI_Set_One(&t0);
+	bigint* t0 = NULL; // T0
+	bigint* temp0 = NULL; //
+	bigint* temp1 = NULL; //
+	bigint* trash_q = NULL; // Modular 연산을 위해 사용되는 Binary_Long_Div()의 몫 매개변수로 들어갈 bigint 포인터형 변수 
+	bigint* trash_r = NULL; // Modular 연산을 위해 사용되는 Binary_Long_Div()의 나머지 매개변수로 들어갈 bigint 포인터형 변수
+	
+	BI_Set_One(&t0); // t0를 1로 선언
 
-	BI_Bit_Length(&len, N);
+	BI_Bit_Length(&len, N); // 지수승(N)에 대한 비트 길이 -> len 대입
 
-	for (i = len - 1; i >= 0; i--)
+	for (i = len - 1; i >= 0; i--) // 지수승(N)의 최상위 비트부터 최하위 비트까지 반복문
 	{
-		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
-		BI_New(&temp1, 2 * t0_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
-		SQU(&temp1, t0);
-		BI_Delete(&t0);
-		Binary_Long_Div(&trash_q, &trash_r, temp1, M);
-		BI_Assign(&temp1, trash_r);
-		BI_Delete(&trash_r);
-		BI_Delete(&trash_r);
+		BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+		BI_New(&temp1, 2 * t0_len + 1); // temp1 = t0^2 을 저장하기 위한 bigint 생성
+		SQU(&temp1, t0); // temp1 = t0^2 연산
+		BI_Delete(&t0); // t0를 Delete
+		Binary_Long_Div(&trash_q, &trash_r, temp1, M); // temp1(=t0^2)에 대하여 M으로 모듈러 연산
+		BI_Assign(&temp1, trash_r); // 나머지만 관심 있으므로 나머지를 temp1에 Assign
+		BI_Delete(&trash_r); // temp1에 같은 값을 대입했으므로 delete
+		BI_Delete(&trash_q); //trash_q로 바꿀까
 
-		BI_Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
-		BI_New(&temp0, 2 * t0_len + x_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
-		result = BI_j_th_Bit_of_BI(i, N);
-		if (result == 1)
+		BI_Get_Word_Length(&x_len, &X); // X의 워드열 길이 -> x_len
+		BI_New(&temp0, 2 * t0_len + x_len + 1); // temp0 = t1^2 * X 를 저장하기 위한 bigint 생성
+		result = BI_j_th_Bit_of_BI(i, N); // 반복문에서 사용 중인 변수 i를 이용해 N의 해당 비트가 1인지 0인지 조사
+		if (result == 1) // 해당 비트가 1이면,
 		{
-			MUL_Multi(&temp0, temp1, X);
-			Binary_Long_Div(&trash_q, &trash_r, temp0, M);
-			BI_Assign(&temp0, trash_r);
-			BI_Delete(&trash_r);
-			BI_Delete(&trash_q);
+			MUL_Multi(&temp0, temp1, X); //t1^2 * X (곱셈)연산 후 temp0에 대입
+			Binary_Long_Div(&trash_q, &trash_r, temp0, M); // 곱셈 연산한 temp0에 대하여 M으로 모듈러 연산 진행
+			BI_Assign(&t0, trash_r); // 나머지만 관심 있으므로 나머지를 temp0에 assign. --> 반복문에서 t0로 연산을 진행할 수 있도록
+			BI_Delete(&trash_r); // temp0에 같은 값을 대입했으므로 delete
+			BI_Delete(&trash_q); // Binary Long_Div()에서 사용한 몫도 필요없으므로 delete
 		}
 
-		else
-			BI_Assign(&temp0, temp1);
+		else // 해당 비트가 0이면, 곱셈을 진행하지 않아도 되므로
+			BI_Assign(&t0, temp1); // temp0에 t0 assign --> 반복문에서 t0로 연산을 진행할 수 있도록
 
-		BI_Delete(&temp1);
-		BI_Assign(&t0, temp0);
-		BI_Delete(&temp0);
+		BI_Delete(&temp1); // temp1를 delete.
+		BI_Delete(&temp0); // temp0를 delete.
 	}
-	BI_Assign(T, t0);
-	BI_Delete(&t0);
+	BI_Assign(T, t0); // 반복문이 끝난 결과인 t0를 T에 assign
+	BI_Delete(&t0); // t0를 delete.
 }
 
-/*
-	[Modular Exponentiation] Left to Right ADD function (used Binary Long Division)
+/**
+* @brief [Modular Exponentiation] Left to Right ADD function (used Binary Long Division)
+* @details
 
 	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
+	Input  : T, X, N, M
+	
+	1 : t <- 0
+	2 : for i <- l - 1 downto 0 do
+	3 :		t <-  2 * t mod M ( mod : Binary_Long_Div )
+	4 :		t <- t + N_{i} * X mod M ( mod : Binary_Long_Div )
+	5 :	end for
+	6 : T <- t
+
+* @param T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+* @param X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+* @param N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+* @param M Modular 지수 연산에서 X^N 과 T를 합동해주는 bigint 포인터형 변수
 */
 void MOD_EXP_LR_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 {
-	int i = 0; // 반복문에 사용될 변수 i
-	int len = 0; // X의 비트 길이를 담을 변수 len
-	int result = 0;
-	int x_len = 0;
-	int t0_len = 0;
+	int i = 0; // 반복문에 사용될 int형 변수 i
+	int len = 0; // 지수승 N의 비트 길이를 담을 int형 변수 len
+	int result = 0; // 해당 비트 값의 결과를 return 받는 int형 변수 result
+	int x_len = 0; // X의 워드열 길이를 대입할 int형 변수 x_len
+	int t0_len = 0; // 나머지 워드열 길이를 대입할 int형 변수 t0_len
 
 	bigint* t0 = NULL;
 	bigint* temp0 = NULL;
-	bigint* trash_q = NULL;
-	bigint* trash_r = NULL;
-	BI_Set_Zero(&t0);
+	bigint* trash_q = NULL; // Modular 연산을 위해 사용되는 Binary_Long_Div()의 몫 매개변수로 들어갈 bigint 포인터형 변수
+	bigint* trash_r = NULL; // Modular 연산을 위해 사용되는 Binary_Long_Div()의 나머지 매개변수로 들어갈 bigint 포인터형 변수
+	BI_Set_Zero(&t0); // t0를 0으로 선언
 
-	BI_Bit_Length(&len, N);
+	BI_Bit_Length(&len, N); // 지수승(N)에 대한 비트 길이 -> len 대입
 
 	for (i = len - 1; i >= 0; i--)
 	{
-		Left_Shift(t0, 1);
-		Binary_Long_Div(&trash_q, &trash_r, t0, M);
-		BI_Get_Word_Length(&t0_len, &trash_r); // t1의 워드열 길이 -> t1_len
-		BI_Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
-		BI_New(&temp0, t0_len + x_len); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
-		result = BI_j_th_Bit_of_BI(i, N);
+		Left_Shift(t0, 1); // t0 <- 2 * t0
+		Binary_Long_Div(&trash_q, &trash_r, t0, M); // 2 * t0에 대해 Binary_Long_Div에 의해 MOD 연산된 값 -> 2 * t0 (mod M) == trash_r
+		BI_Get_Word_Length(&t0_len, &trash_r); // 나머지의 워드열 길이 -> t0_len
+		BI_Get_Word_Length(&x_len, &X); // X의 워드열 길이 -> x_len
+		BI_New(&temp0, MAX(t0_len, x_len)); // trash_r(= 2 * t0 (mod M))과 X의 덧셈결과를 담을 bigint temp0 생성
+		result = BI_j_th_Bit_of_BI(i, N); // 반복문에서 사용 중인 변수 i를 이용해 N의 해당 비트가 1인지 0인지 조사
 
-		if (result == 1)
+		if (result == 1)// 해당 비트가 1이면(If result is 1),
 		{
-			ADD(&temp0, &trash_r, &X);
-			Binary_Long_Div(&trash_q, &trash_r, temp0, M);
-			BI_Assign(&temp0, trash_r);
-			BI_Delete(&trash_r);
+			ADD(&temp0, &trash_r, &X); // [line 4] trash_r + X 의 값을 temp0에 대입 
+			Binary_Long_Div(&trash_q, &trash_r, temp0, M); // temp0의 modular 값을 구해서 trash_r에 다시 대입
+			BI_Assign(&t0, trash_r);  // 나머지만 관심 있으므로 나머지를 temp0에 assign. --> 반복문에서 다시 돌 때 t0로 연산을 진행할 수 있도록
 		}
-		else
+		else // 해당 비트가 0이면(If result is 0),
 		{
-			BI_Assign(&temp0, trash_r);
+			BI_Assign(&t0, trash_r); // 나머지만 관심 있으므로 나머지를 temp0에 assign. --> 반복문에서 다시 돌 때 t0로 연산을 진행할 수 있도록 
 		}
 		
-		BI_Assign(&t0, temp0);
-		BI_Delete(&temp0);
-		BI_Delete(&trash_q);
-		BI_Delete(&trash_r);
+		BI_Delete(&temp0); // temp0를 delete.
+		BI_Delete(&trash_q); // trash_q를 delete.
+		BI_Delete(&trash_r); // trash_r를 delete.
 	}
-	BI_Assign(T, t0);
-	BI_Delete(&t0);
-}
+	BI_Assign(T, t0); // 반복문이 끝난 최종 결과인 t0를 T에 assign
+	BI_Delete(&t0); // t0를 delete.
+} 
 
-/*
-	[Modular Exponentiation] Right to Left MUL function (used Binary Long Division)
+/**
+* @brief [Modular Exponentiation] Right to Left MUL function (used Binary Long Division)
+* details
 
 	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
+	Input : T, X, N, M
+	1 : (t0, t1) <- (1, X)
+	2 :	for i <- 0 to l - 1 do
+	3 :		t0 <- t0 * t1^(N_{i}) mod M ( * : MUL_Multi, mod : Binary_Long_Div )
+	4 :		t1 <- t1 ^ 2 mod M ( ^ : SQU, mod : Binary_Long_Div )
+	5 :	end for
+	6 :	T <- t
+
+* @param T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+* @param X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+* @param N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+* @param M Modular 지수 연산에서 X^N 과 T를 합동해주는 bigint 포인터형 변수
 */
 void MOD_EXP_RL_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 {
-	int i = 0; // 반복문에 사용될 변수 i
-	int len = 0; // X의 비트 길이를 담을 변수 len
-	int result = 0;
-	int t0_len = 0;
-	int t1_len = 0;
+	int i = 0; // 반복문에 사용될 int형 변수 i
+	int len = 0; // 지수승 N의 비트 길이를 담을 int형 변수 len
+	int result = 0; // 해당 비트 값의 결과를 return 받는 int형 변수 result
+	int t0_len = 0; // t0의 워드열 길이를 대입할 int형 변수 t0_len
+	int t1_len = 0; // t1의 워드열 길이를 대입할 int형 변수 t1_len
 
 	bigint* t0 = NULL;
 	bigint* t1 = NULL;
 	bigint* temp0 = NULL;
 	bigint* temp1 = NULL;
-	bigint* trash_q = NULL;
-	bigint* trash_r = NULL;
+	bigint* trash_q = NULL; // Modular 연산을 위해 사용되는 Binary_Long_Div()의 몫 매개변수로 들어갈 bigint 포인터형 변수
+	bigint* trash_r = NULL; // Modular 연산을 위해 사용되는 Binary_Long_Div()의 나머지 매개변수로 들어갈 bigint 포인터형 변수
 
-	BI_Set_One(&t0);
-	BI_Assign(&t1, X); //line. 1. 
+	BI_Set_One(&t0); // t0를 1로 선언
+	BI_Assign(&t1, X); // t1에 X를 assign
 
-	BI_Bit_Length(&len, N);
-	/*BI_j_th_Bit_of_BI(i, N);
-	len = n;*/
-	if (len == 1)
+	BI_Bit_Length(&len, N);  // 지수승(N)에 대한 비트 길이 -> len 대입
+	
+	if ((len == 1) & (N->a[0] == 1)) // X ^ 1일 때
 	{
-		BI_Assign(T, X);
-		Binary_Long_Div(&trash_q, &trash_r, *T, M);
-		BI_Assign(T, trash_r);
-		BI_Delete(&trash_q);
-		BI_Delete(&trash_r);
-		BI_Delete(&t0);
-		BI_Delete(&t1);
+		BI_Assign(T, X);  // 이 경우에서는 T의 값이 X이므로 assign
+		Binary_Long_Div(&trash_q, &trash_r, *T, M); // X mod M 연산 후 trash_r에 대입
+		BI_Assign(T, trash_r); // X mod M 값인 trash_r을 T에 assign
+		BI_Delete(&trash_q); // 할당한 trash_q delete
+		BI_Delete(&trash_r); // 할당한 trash_r delete
+		BI_Delete(&t0); // 할당한 t0 delete
+		BI_Delete(&t1); // 할당한 t1 delete
 		return;
 	}
-	for (i = 0; i <= len - 1; i++)
+
+	//if (len == 1 & N->a[0] == 0) // X ^ 0일 때 예외처리 추가
+	//{
+	//	
+	//}
+	for (i = 0; i <= len - 1; i++) // 지수승(N)의 최하위 비트부터 최상위 비트까지 반복문
 	{
-		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
 		BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 		
 		BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 
-		result = BI_j_th_Bit_of_BI(i, N);
+		result = BI_j_th_Bit_of_BI(i, N);  // 반복문에서 사용 중인 변수 i를 이용해 N의 해당 비트가 1인지 0인지 조사
 
-		if (result == 1)
+		if (result == 1)// 해당 비트가 1이면,
 		{
 			BI_New(&temp0, t0_len + t1_len); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
-			MUL_Multi(&temp0, t0, t1);
+			MUL_Multi(&temp0, t0, t1); // temp0에 t0 * t1 을 연산
 		}
-		else
+		else // 해당 비트가 0이면,
 		{
-			BI_Assign(&temp0, t0);
-			BI_Delete(&t0);
+			BI_Assign(&temp0, t0); // t0에 1을 곱하는 것이므로, temp0에 t0을 assign --> 반복문에서 t0로 연산을 진행할 수 있도록
 		}
-		Binary_Long_Div(&trash_q, &trash_r, temp0, M);
-		BI_Assign(&temp0, trash_r);
-		BI_Delete(&trash_q);
-		BI_Delete(&trash_r);
+		Binary_Long_Div(&trash_q, &trash_r, temp0, M); // 연산된 temp0(t0)에 Binary_Long_Div()를 이용해 modular M 연산 후 결과값을 trash_r에 대입
+		BI_Assign(&t0, trash_r);
+		BI_Delete(&temp0); // 할당한 temp0 delete
+		BI_Delete(&trash_q); // 연산을 통해 할당한 trash_q delete
+		BI_Delete(&trash_r); // 연산을 통해 할당한 trash_r delete
 
-		BI_Assign(&t0, temp0);
-		BI_Delete(&temp0);
-
-		SQU(&temp1, t1);
-		Binary_Long_Div(&trash_q, &trash_r, temp1, M);
-		BI_Assign(&temp1, trash_r);
-		BI_Delete(&trash_q);
-		BI_Delete(&trash_r);
-		BI_Delete(&t1);
-		BI_Assign(&t1, temp1);
-		BI_Delete(&temp1);
+		SQU(&temp1, t1);  // temp1(t1) <- t1 * t1
+		Binary_Long_Div(&trash_q, &trash_r, temp1, M); // temp1( = t1 * t1)에 Binary_Long_Div()를 이용해 modular M 연산 후 결과값을 trash_r에 대입
+		BI_Assign(&t1, trash_r); // t1 * t1 (mod M) 값인 trash_r을 다시 t1에 assign --> 반복문에서 t1로 연산을 진행할 수 있도록
+		BI_Delete(&trash_q); // 연산을 통해 할당한 trash_q delete
+		BI_Delete(&trash_r); // 연산을 통해 할당한 trash_r delete
+		BI_Delete(&temp1); // 할당한 temp0 delete
 	}
-	
-	BI_Assign(T, t0);
-	BI_Delete(&t0);
-	BI_Delete(&t1);
-	BI_Refine(*T);
+	BI_Assign(T, t0); // 반복문이 끝난 결과인 t0를 T에 assign
+	BI_Delete(&t0); // 연산을 통해 할당한 t0 delete
+	BI_Delete(&t1); // 연산을 통해 할당한 t1 delete
+	BI_Refine(*T); // 결과값인 T를 refine 해주기
 }
 
-/*
-	[Modular Exponentiation] Right to Left ADD function (used Binary Long Division)
+/**
+* @brief [Modular Exponentiation] Right to Left ADD function (used Binary Long Division)
+* @details
 
 	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
+	Input : T, X, N, M
+	1 : (t0, t1) <- (0, X)
+	2 :	for i <- 0 to l - 1 do
+	3 :		t0 <- t0 + N_{i} * t1 mod M ( mod : Binary_Long_Div )
+	4 :		t1 <- 2 * t1 mod M ( mod : Binary_Long_Div )
+	5 :	end for
+	6 :	T <- t
+
+* @param T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+* @param X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+* @param N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+* @param M Modular 지수 연산에서 X^N 과 T를 합동해주는 bigint 포인터형 변수
 */
 void MOD_EXP_RL_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 {
-	int i = 0; // 반복문에 사용될 변수 i
-	int len = 0; // X의 비트 길이를 담을 변수 len
-	int result = 0;
-	int t0_len = 0;
-	int t1_len = 0;
+	int i = 0; // 반복문에 사용될 int형 변수 i
+	int len = 0; // 지수승 N의 비트 길이를 담을 int형 변수 len
+	int result = 0; // 해당 비트 값의 결과를 return 받는 int형 변수 result
+	int t0_len = 0; // t0의 워드열 길이를 대입할 int형 변수 t0_len
+	int t1_len = 0; // t1의 워드열 길이를 대입할 int형 변수 t1_len
 
 	bigint* t0 = NULL;
 	bigint* t1 = NULL;
 	bigint* temp0 = NULL;
 	bigint* temp1 = NULL;
-	bigint* trash_q = NULL;
-	bigint* trash_r = NULL;
+	bigint* trash_q = NULL; // Modular 연산을 위해 사용되는 Binary_Long_Div()의 몫 매개변수로 들어갈 bigint 포인터형 변수
+	bigint* trash_r = NULL; // Modular 연산을 위해 사용되는 Binary_Long_Div()의 나머지 매개변수로 들어갈 bigint 포인터형 변수
 
-	BI_Set_Zero(&t0);
-	BI_Assign(&t1, X); //line. 1. 
+	BI_Set_Zero(&t0); // t0를 0으로 선언
+	BI_Assign(&t1, X); // t1에 X를 assign
 	
-	BI_Bit_Length(&len, N);
+	BI_Bit_Length(&len, N); // 지수승(N)에 대한 비트 길이 -> len 대입
 	
-	if (len == 1)
+	if ((len == 1) & (N->a[0] == 1)) // 1 * X일 때
 	{
-		BI_Assign(T, X);
-		Binary_Long_Div(&trash_q, &trash_r, *T, M);
-		BI_Assign(T, trash_r);
-		BI_Delete(&trash_q);
-		BI_Delete(&trash_r);
-		BI_Delete(&t0);
-		BI_Delete(&t1);
+		BI_Assign(T, X);  // 이 경우에서는 T의 값이 X이므로 assign
+		Binary_Long_Div(&trash_q, &trash_r, *T, M); // X mod M 연산 후 trash_r에 대입
+		BI_Assign(T, trash_r); // X mod M 값인 trash_r을 T에 assign
+		BI_Delete(&trash_q); // 할당한 trash_q delete
+		BI_Delete(&trash_r); // 할당한 trash_r delete
+		BI_Delete(&t0); // 할당한 t0 delete
+		BI_Delete(&t1); // 할당한 t1 delete
 		return;
 	}
-	for(i = 0; i <= len - 1; i++)
-	{
-		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+	//if (len == 1 & N->a[0] == 0) // 0 * X일 때 예외처리 추가
+	//{
+	
+	//	return;
+	//}
+	for(i = 0; i <= len - 1; i++) // 지수승(N)의 최하위 비트부터 최상위 비트까지 반복문
+	{ 
+		BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
 		BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
-		result = BI_j_th_Bit_of_BI(i, N);
+		result = BI_j_th_Bit_of_BI(i, N);  // 반복문에서 사용 중인 변수 i를 이용해 N의 해당 비트가 1인지 0인지 조사
 
-		if (result == 1)
+		if (result == 1) // 해당 비트가 1이면,
 		{
-			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
-			ADD(&temp0, &t0, &t1);
+			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 + t1을 저장하기 위한 bigint 생성
+			ADD(&temp0, &t0, &t1); // temp0에 t0 + t1 연산
 		}
-		else
+		else // 해당 비트가 0이면,
 		{
-			BI_Assign(&temp0, t0);
-			BI_Delete(&t0);
+			BI_Assign(&temp0, t0); // t0에 0을 더하는 것이므로, temp0에 t0을 assign.
 		}
-		Binary_Long_Div(&trash_q, &trash_r, temp0, M);
-		BI_Assign(&temp0, trash_r);
-		BI_Delete(&trash_q);
-		BI_Delete(&trash_r);
-		BI_Assign(&t0, temp0);
-		BI_Delete(&temp0);
-
-		Left_Shift(t1, 1);
-		Binary_Long_Div(&trash_q, &trash_r, t1, M);
-		BI_Assign(&t1, trash_r);
-		BI_Delete(&trash_q);
-		BI_Delete(&trash_r);
+		Binary_Long_Div(&trash_q, &trash_r, temp0, M); // 연산된 temp0(t0)에 modular M 연산 후 결과값을 trash_r에 대입
+		BI_Delete(&temp0); // 할당한 temp0 delete
+		BI_Assign(&t0, trash_r); // t0 + result * t1 (mod M) 값인 trash_r을 t0에 assign --> 반복문에서 t0로 연산을 진행할 수 있도록
+		BI_Delete(&trash_q); // 연산을 통해 할당한 trash_q delete
+		BI_Delete(&trash_r); // 연산을 통해 할당한 trash_r delete
+		
+		Left_Shift(t1, 1); // t1 <- 2 * t1
+		Binary_Long_Div(&trash_q, &trash_r, t1, M); // 2 * t1에 modular M 연산 후 결과값을 trash_r에 대입
+		BI_Assign(&t1, trash_r); // 2 * t1 (mod M) 값인 trash_r을 다시 t1에 assign --> 반복문에서 t1로 연산을 진행할 수 있도록
+		BI_Delete(&trash_q); // 연산을 통해 할당한 trash_q delete
+		BI_Delete(&trash_r); // 연산을 통해 할당한 trash_r delete
 	}
-	BI_Assign(T, t0);
-	BI_Delete(&t0);
-	BI_Delete(&t1);
-	BI_Refine(*T);
+	BI_Assign(T, t0); // 반복문이 끝난 결과인 t0를 T에 assign
+	BI_Delete(&t0); // 연산을 통해 할당한 t0 delete
+	BI_Delete(&t1); // 연산을 통해 할당한 t1 delete
+	BI_Refine(*T); // 결과값인 T를 refine 해주기
 }
 
-/*
-	[Modular Exponentiation] Left to Right MUL function (used Multi Long Division)
+/**
+* @brief [Modular Exponentiation] Left to Right MUL function (used Multi Long Division)
+* @details
 
 	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
+	Input  : T, X, N, M
+
+	1 : t <- 1
+	2 : for i <- l - 1 downto 0 do
+	3 :		t <- t^2 mod M ( ^ 2 : SQU , mod : DIV )
+	4 :		t <- t * X^(N_{i}) mod M ( * : MUL_Multi(), mod : DIV )
+	5 :	end for
+	6 : T <- t
+
+* @param T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+* @param X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+* @param N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+* @param M Modular 지수 연산에서 X^N 과 T를 합동해주는 bigint 포인터형 변수
 */
 void MOD_EXP_LR_MUL_DIV(bigint** T, bigint* X, bigint* N, bigint* M)
 {
-	int i = 0; // 반복문에 사용될 변수 i
-	int len = 0; // X의 비트 길이를 담을 변수 len
-	int result = 0;
-	int x_len = 0;
-	int t0_len = 0;
+	int i = 0; // 반복문에 사용될 int형 변수 i
+	int len = 0; // 지수승 N의 비트 길이를 담을 int형 변수 len
+	int result = 0; // 해당 비트 값의 결과를 return 받는 int형 변수 result
+	int x_len = 0; // X의 워드열 길이를 대입할 int형 변수 x_len
+	int t0_len = 0; // t0의 워드열 길이를 대입할 int형 변수 t0_len
 
 	bigint* t0 = NULL;
 	bigint* temp0 = NULL;
 	bigint* temp1 = NULL;
-	bigint* trash_q = NULL;
-	bigint* trash_r = NULL;
-	BI_Set_One(&t0);
+	bigint* trash_q = NULL; // Modular 연산을 위해 사용되는 Multi_Long_Div()의 몫 매개변수로 들어갈 bigint 포인터형 변수
+	bigint* trash_r = NULL; // Modular 연산을 위해 사용되는 Mutli_Long_Div()의 나머지 매개변수로 들어갈 bigint 포인터형 변수
 	
-	BI_Bit_Length(&len, N);
+	BI_Set_One(&t0); // t0를 1로 선언
+	
+	BI_Bit_Length(&len, N); // 지수승(N)에 대한 비트 길이 -> len 대입
 
-	for (i = len - 1; i >= 0; i--)
+	for (i = len - 1; i >= 0; i--) // 지수승(N)의 최상위 비트부터 최하위 비트까지 반복문
 	{
-		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
-		BI_New(&temp1, 2 * t0_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
-		SQU(&temp1, t0);
-		BI_Delete(&t0);
-		DIV(&trash_q, &trash_r, temp1, M);
-		BI_Assign(&temp1, trash_r);
-		BI_Delete(&trash_r);
-		BI_Delete(&trash_r);
+		BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+		BI_New(&temp1, 2 * t0_len + 1); // temp1 = t0^2 을 저장하기 위한 bigint 생성
+		SQU(&temp1, t0); // temp1 = t0^2 연산
+		BI_Delete(&t0); // t0를 Delete
+		DIV(&trash_q, &trash_r, temp1, M);// temp1(=t0^2)을 Mutli_Long_Div() 이용해 M으로 모듈러 연산
+		BI_Assign(&temp1, trash_r);// 나머지만 관심 있으므로 나머지를 temp1에 Assign
+		BI_Delete(&trash_r); // temp1에 같은 값을 대입했으므로 delete
+		BI_Delete(&trash_q); //trash_q로 바꿀까
 
-		BI_Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
-		BI_New(&temp0, 2 * t0_len + x_len + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
-		result = BI_j_th_Bit_of_BI(i, N);
-		if (result == 1)
+		BI_Get_Word_Length(&x_len, &X); // X의 워드열 길이 -> x_len
+		BI_New(&temp0, 2 * t0_len + x_len + 1); // temp0 = t1^2 * X 를 저장하기 위한 bigint 생성
+		result = BI_j_th_Bit_of_BI(i, N); // 반복문에서 사용 중인 변수 i를 이용해 N의 해당 비트가 1인지 0인지 조사
+		if (result == 1) // 해당 비트가 1이면,
 		{
-			MUL_Multi(&temp0, temp1, X);
-			DIV(&trash_q, &trash_r, temp0, M);
-			BI_Assign(&temp0, trash_r);
-			BI_Delete(&trash_r);
-			BI_Delete(&trash_q);
+			MUL_Multi(&temp0, temp1, X); //t1^2 * X (곱셈)연산 후 temp0에 대입
+			DIV(&trash_q, &trash_r, temp0, M); // 곱셈 연산한 temp0에 대하여 M으로 모듈러 연산 진행
+			BI_Assign(&t0, trash_r); // 나머지만 관심 있으므로 나머지를 temp0에 assign. --> 반복문에서 t0로 연산을 진행할 수 있도록
+			BI_Delete(&trash_r); // temp0에 같은 값을 대입했으므로 delete
+			BI_Delete(&trash_q); // Binary Long_Div()에서 사용한 몫도 필요없으므로 delete
 		}
 
-		else
-			BI_Assign(&temp0, temp1);
+		else // 해당 비트가 0이면, 곱셈을 진행하지 않아도 되므로
+			BI_Assign(&t0, temp1); // temp0에 t0 assign --> 반복문에서 t0로 연산을 진행할 수 있도록
 
-		BI_Delete(&temp1);
-		BI_Assign(&t0, temp0);
-		BI_Delete(&temp0);
+		BI_Delete(&temp1); // temp1를 delete
+		BI_Delete(&temp0); // temp0를 delete.
 	}
-	BI_Assign(T, t0);
-	BI_Delete(&t0);
+	BI_Assign(T, t0); // 반복문이 끝난 결과인 t0를 T에 assign
+	BI_Delete(&t0); // t0를 delete.
 }
 
-/*
-	[Modular Exponentiation] Left to Right ADD function (used Multi Long Division)
+/**
+* @brief [Modular Exponentiation] Left to Right ADD function (used Multi Long Division)
+* details
 
 	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
+	Input  : T, X, N, M
+	
+	1 : t <- 0
+	2 : for i <- l - 1 downto 0 do
+	3 :		t <-  2 * t mod M ( mod : DIV )
+	4 :		t <- t + N_{i} * X mod M ( mod : DIV )
+	5 :	end for
+	6 : T <- t
+
+* @param T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+* @param X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+* @param N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+* @param M Modular 지수 연산에서 X^N 과 T를 합동해주는 bigint 포인터형 변수
 */
 void MOD_EXP_LR_ADD_DIV(bigint** T, bigint* X, bigint* N, bigint* M)
 {
-	int i = 0; // 반복문에 사용될 변수 i
-	int len = 0; // X의 비트 길이를 담을 변수 len
-	int result = 0;
-	int x_len = 0;
-	int t0_len = 0;
+	int i = 0; // 반복문에 사용될 int형 변수 i
+	int len = 0; // 지수승 N의 비트 길이를 담을 int형 변수 len
+	int result = 0; // 해당 비트 값의 결과를 return 받는 int형 변수 result
+	int x_len = 0; // X의 워드열 길이를 대입할 int형 변수 x_len
+	int t0_len = 0;  // 나머지 워드열 길이를 대입할 int형 변수 t0_len
 
 	bigint* t0 = NULL;
 	bigint* temp0 = NULL;
-	bigint* trash_q = NULL;
-	bigint* trash_r = NULL;
-	BI_Set_Zero(&t0);
+	bigint* trash_q = NULL; // Modular 연산을 위해 사용되는 Multi_Long_Div()의 몫 매개변수로 들어갈 bigint 포인터형 변수
+	bigint* trash_r = NULL; // Modular 연산을 위해 사용되는 Multi_Long_Div()의 나머지 매개변수로 들어갈 bigint 포인터형 변수
+	
+	BI_Set_Zero(&t0); // t0를 0으로 선언
 
-	BI_Bit_Length(&len, N);
+	BI_Bit_Length(&len, N); // 지수승(N)에 대한 비트 길이 -> len 대입
 	
 	for (i = len - 1; i >= 0; i--)
 	{
-		Left_Shift(t0, 1);
-		DIV(&trash_q, &trash_r, t0, M);
-		BI_Get_Word_Length(&t0_len, &trash_r); // t1의 워드열 길이 -> t1_len
-		BI_Get_Word_Length(&x_len, &X); // t1의 워드열 길이 -> t1_len
-		BI_New(&temp0, t0_len + x_len); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
-		result = BI_j_th_Bit_of_BI(i, N);
-		if (result == 1)
+		Left_Shift(t0, 1); // t0 <- 2 * t0
+		DIV(&trash_q, &trash_r, t0, M);  // 2 * t0에 대해서 Multi_Long_Div을 이용해 MOD 연산된 값 -> 2 * t0 (mod M) == trash_r
+		BI_Get_Word_Length(&t0_len, &trash_r); // 나머지의 워드열 길이 -> t0_len
+		BI_Get_Word_Length(&x_len, &X); // X의 워드열 길이 -> x_len
+		BI_New(&temp0, t0_len + x_len); // trash_r(= 2 * t0 (mod M))과 X의 덧셈결과를 담을 bigint temp0 생성
+		
+		result = BI_j_th_Bit_of_BI(i, N); // 반복문에서 사용 중인 변수 i를 이용해 N의 해당 비트가 1인지 0인지 조사
+		if (result == 1) // 해당 비트가 1이면(If result is 1)
 		{
-			ADD(&temp0, &trash_r, &X);
-			DIV(&trash_q, &trash_r, temp0, M);
-			BI_Assign(&temp0, trash_r);
-			BI_Delete(&trash_r);
+			ADD(&temp0, &trash_r, &X); // [line 4] trash_r + X 의 값을 temp0에 대입
+			DIV(&trash_q, &trash_r, temp0, M); // temp0의 modular 값을 구해서 trash_r에 다시 대입
+			BI_Assign(&t0, trash_r);  // 나머지만 관심 있으므로 나머지를 temp0에 assign. --> 반복문에서 다시 돌 때 t0로 연산을 진행할 수 있도록
 		}
 
-		else
+		else // 해당 비트가 0이면(If result is 0),
 		{
-			BI_Assign(&temp0, trash_r);
-			BI_Delete(&trash_r);
+			BI_Assign(&t0, trash_r); // 나머지만 관심 있으므로 나머지를 temp0에 assign. --> 반복문에서 다시 돌 때 t0로 연산을 진행할 수 있도록
 		}
-
-		BI_Assign(&t0, temp0);
-		BI_Delete(&temp0);
-		BI_Delete(&trash_q);
+				
+		BI_Delete(&temp0); // temp0를 delete.
+		BI_Delete(&trash_r); // trash_q를 delete. 
+		BI_Delete(&trash_q); // trash_r를 delete
 
 	}
-	BI_Assign(T, t0);
-	BI_Delete(&t0);
+	BI_Assign(T, t0); // 반복문이 끝난 최종 결과인 t0를 T에 assign
+	BI_Delete(&t0); // t0를 delete.
 }
 
-/*
-	[Modular Exponentiation] Right to Left MUL function (used Multi Long Division)
+/**
+* @brief [Modular Exponentiation] Right to Left MUL function (used Multi Long Division)
+* details
 
 	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
+	Input : T, X, N, M
+	1 : (t0, t1) <- (1, X)
+	2 :	for i <- 0 to l - 1 do
+	3 :		t0 <- t0 * t1^(N_{i}) mod M ( * : MUL_Multi, mod : DIV )
+	4 :		t1 <- t1 ^ 2 mod M ( ^ : SQU, mod : DIV )
+	5 :	end for
+	6 :	T <- t
+
+* @param T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+* @param X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+* @param N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+* @param M Modular 지수 연산에서 X^N 과 T를 합동해주는 bigint 포인터형 변수
 */
 void MOD_EXP_RL_MUL_DIV(bigint** T, bigint* X, bigint* N, bigint* M)
 {
-	int i = 0; // 반복문에 사용될 변수 i
-	int len = 0; // X의 비트 길이를 담을 변수 len
-	int result = 0;
-	int t0_len = 0;
-	int t1_len = 0;
+	int i = 0; // 반복문에 사용될 int형 변수 i
+	int len = 0; // 지수승 N의 비트 길이를 담을 int형 변수 len
+	int result = 0; // 해당 비트 값의 결과를 return 받는 int형 변수 result
+	int t0_len = 0; // t0의 워드열 길이를 대입할 int형 변수 t0_len
+	int t1_len = 0; // t1의 워드열 길이를 대입할 int형 변수 t1_len
 
 	bigint* t0 = NULL;
 	bigint* t1 = NULL;
 	bigint* temp0 = NULL;
 	bigint* temp1 = NULL;
-	bigint* trash_q = NULL;
-	bigint* trash_r = NULL;
+	bigint* trash_q = NULL; // Modular 연산을 위해 사용되는 Binary_Long_Div()의 몫 매개변수로 들어갈 bigint 포인터형 변수
+	bigint* trash_r = NULL; // Modular 연산을 위해 사용되는 Binary_Long_Div()의 나머지 매개변수로 들어갈 bigint 포인터형 변수
 
-	BI_Set_One(&t0);
-	BI_Assign(&t1, X); //line. 1. 
+	BI_Set_One(&t0); // t0를 1로 선언
+	BI_Assign(&t1, X); // t1에 X를 assign
 
-	BI_Bit_Length(&len, N);
+	BI_Bit_Length(&len, N);  // 지수승(N)에 대한 비트 길이 -> len 대입
 
-	if (len == 1)
+	if ((len == 1) & (N->a[0] == 1)) // X ^ 1일 때
 	{
-		BI_Assign(T, X);
-		DIV(&trash_q, &trash_r, *T, M);
-		BI_Assign(T, trash_r);
-		BI_Delete(&trash_q);
-		BI_Delete(&trash_r);
-		BI_Delete(&t0);
-		BI_Delete(&t1);
+		BI_Assign(T, X);  // 이 경우에서는 T의 값이 X이므로 assign
+		Binary_Long_Div(&trash_q, &trash_r, *T, M); // X mod M 연산 후 trash_r에 대입
+		BI_Assign(T, trash_r); // X mod M 값인 trash_r을 T에 assign
+		BI_Delete(&trash_q); // 할당한 trash_q delete
+		BI_Delete(&trash_r); // 할당한 trash_r delete
+		BI_Delete(&t0); // 할당한 t0 delete
+		BI_Delete(&t1); // 할당한 t1 delete
 		return;
 	}
-	for(i = 0;  i <= len - 1; i++)
+
+	//if (len == 1 & N->a[0] == 0) // X ^ 0일 때 예외처리 추가
+	//{
+	//	
+	//}
+	for (i = 0; i <= len - 1; i++) // 지수승(N)의 최하위 비트부터 최상위 비트까지 반복문
 	{
-		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
 		BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 		BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 
-		result = BI_j_th_Bit_of_BI(i, N);
+		result = BI_j_th_Bit_of_BI(i, N);  // 반복문에서 사용 중인 변수 i를 이용해 N의 해당 비트가 1인지 0인지 조사
 
-		if (result == 1)
+		if (result == 1)// 해당 비트가 1이면,
 		{
 			BI_New(&temp0, t0_len + t1_len); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
-			MUL_Multi(&temp0, t0, t1);
+			MUL_Multi(&temp0, t0, t1); // temp0에 t0 * t1 을 연산
 		}
-		else
+		else // 해당 비트가 0이면,
 		{
-			BI_Assign(&temp0, t0);
-			BI_Delete(&t0);
+			BI_Assign(&temp0, t0); // t0에 1을 곱하는 것이므로, temp0에 t0을 assign --> 반복문에서 t0로 연산을 진행할 수 있도록
 		}
-		DIV(&trash_q, &trash_r, temp0, M);
-		BI_Assign(&temp0, trash_r);
-		BI_Delete(&trash_q);
-		BI_Delete(&trash_r);
+		DIV(&trash_q, &trash_r, temp0, M); // 연산된 temp0(t0)에 Binary_Long_Div()를 이용해 modular M 연산 후 결과값을 trash_r에 대입
+		BI_Assign(&t0, trash_r);
+		BI_Delete(&temp0); // 할당한 temp0 delete
+		BI_Delete(&trash_q); // 연산을 통해 할당한 trash_q delete
+		BI_Delete(&trash_r); // 연산을 통해 할당한 trash_r delete
 
-		BI_Assign(&t0, temp0);
-		BI_Delete(&temp0);
-
-		SQU(&temp1, t1);
-		Binary_Long_Div(&trash_q, &trash_r, temp1, M);
-		BI_Assign(&temp1, trash_r);
-		BI_Delete(&trash_q);
-		BI_Delete(&trash_r);
-		BI_Delete(&t1);
-		BI_Assign(&t1, temp1);
-		BI_Delete(&temp1);
+		SQU(&temp1, t1);  // temp1(t1) <- t1 * t1
+		DIV(&trash_q, &trash_r, temp1, M); // temp1( = t1 * t1)에 Binary_Long_Div()를 이용해 modular M 연산 후 결과값을 trash_r에 대입
+		BI_Assign(&t1, trash_r); // t1 * t1 (mod M) 값인 trash_r을 다시 t1에 assign --> 반복문에서 t1로 연산을 진행할 수 있도록
+		BI_Delete(&trash_q); // 연산을 통해 할당한 trash_q delete
+		BI_Delete(&trash_r); // 연산을 통해 할당한 trash_r delete
+		BI_Delete(&temp1); // 할당한 temp0 delete
 	}
-	BI_Assign(T, t0);
-	BI_Delete(&t0);
-	BI_Delete(&t1);
-	BI_Refine(*T);
+	BI_Assign(T, t0); // 반복문이 끝난 결과인 t0를 T에 assign
+	BI_Delete(&t0); // 연산을 통해 할당한 t0 delete
+	BI_Delete(&t1); // 연산을 통해 할당한 t1 delete
+	BI_Refine(*T); // 결과값인 T를 refine 해주기
 }
 
-/*
-	[Modular Exponentiation] Right to Left ADD function (used Multi Long Division)
+/**
+* @brief [Modular Exponentiation] Right to Left ADD function (used Multi Long Division)
+* details
 
 	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
+	Input : T, X, N, M
+	1 : (t0, t1) <- (0, X)
+	2 :	for i <- 0 to l - 1 do
+	3 :		t0 <- t0 + N_{i} * t1 mod M ( mod :DIV )
+	4 :		t1 <- 2 * t1 mod M ( mod : DIV )
+	5 :	end for
+	6 :	T <- t
+
+* @param T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+* @param X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+* @param N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+* @param M Modular 지수 연산에서 X^N 과 T를 합동해주는 bigint 포인터형 변수
 */
 void MOD_EXP_RL_ADD_DIV(bigint** T, bigint* X, bigint* N, bigint* M)
 {
-	int i = 0; // 반복문에 사용될 변수 i
-	int len = 0; // X의 비트 길이를 담을 변수 len
-	int result = 0;
-	int t0_len = 0;
-	int t1_len = 0;
+	int i = 0; // 반복문에 사용될 int형 변수 i
+	int len = 0; // 지수승 N의 비트 길이를 담을 int형 변수 len
+	int result = 0; // 해당 비트 값의 결과를 return 받는 int형 변수 result
+	int t0_len = 0; // t0의 워드열 길이를 대입할 int형 변수 t0_len
+	int t1_len = 0; // t1의 워드열 길이를 대입할 int형 변수 t1_len
 
 	bigint* t0 = NULL;
 	bigint* t1 = NULL;
 	bigint* temp0 = NULL;
 	bigint* temp1 = NULL;
-	bigint* trash_q = NULL;
-	bigint* trash_r = NULL;
+	bigint* trash_q = NULL; // Modular 연산을 위해 사용되는 Binary_Long_Div()의 몫 매개변수로 들어갈 bigint 포인터형 변수
+	bigint* trash_r = NULL; // Modular 연산을 위해 사용되는 Binary_Long_Div()의 나머지 매개변수로 들어갈 bigint 포인터형 변수
 
-	BI_Set_Zero(&t0);
-	BI_Assign(&t1, X); //line. 1. 
+	BI_Set_Zero(&t0); // t0를 0으로 선언
+	BI_Assign(&t1, X); // t1에 X를 assign
 
-	BI_Bit_Length(&len, N);
+	BI_Bit_Length(&len, N);  // 지수승(N)에 대한 비트 길이 -> len 대입
 
-	if (len == 1)
+	if ((len == 1) & (N->a[0] == 1)) // 1 * X일 때
 	{
-		BI_Assign(T, X);
-		DIV(&trash_q, &trash_r, *T, M);
-		BI_Assign(T, trash_r);
-		BI_Delete(&trash_q);
-		BI_Delete(&trash_r);
-		BI_Delete(&t0);
-		BI_Delete(&t1);
+		BI_Assign(T, X);  // 이 경우에서는 T의 값이 X이므로 assign
+		Binary_Long_Div(&trash_q, &trash_r, *T, M); // X mod M 연산 후 trash_r에 대입
+		BI_Assign(T, trash_r); // X mod M 값인 trash_r을 T에 assign
+		BI_Delete(&trash_q); // 할당한 trash_q delete
+		BI_Delete(&trash_r); // 할당한 trash_r delete
+		BI_Delete(&t0); // 할당한 t0 delete
+		BI_Delete(&t1); // 할당한 t1 delete
 		return;
 	}
-	for(i = 0; i <= len - 1; i++)
+
+	//if (len == 1 & N->a[0] == 0) // 0 * X일 때 예외처리 추가
+	//{
+	//	BI_Assign(T, X);
+	//	Binary_Long_Div(&trash_q, &trash_r, *T, M);
+	//	BI_Assign(T, trash_r);
+	//	BI_Delete(&trash_q);
+	//	BI_Delete(&trash_r);
+	//	BI_Delete(&t0);
+	//	BI_Delete(&t1);
+	//	return;
+	//}
+
+	for(i = 0; i <= len - 1; i++) // 지수승(N)의 최하위 비트부터 최상위 비트까지 반복문
 	{
-		BI_Get_Word_Length(&t0_len, &t0); // t1의 워드열 길이 -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
 		BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
-		result = BI_j_th_Bit_of_BI(i, N);
-		if (result == 1)
+		result = BI_j_th_Bit_of_BI(i, N); // 반복문에서 사용 중인 변수 i를 이용해 N의 해당 비트가 1인지 0인지 조사
+		if (result == 1) // 해당 비트가 1이면,
 		{
-			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
-			ADD(&temp0, &t0, &t1);
+			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 + t1을 저장하기 위한 bigint 생성
+			ADD(&temp0, &t0, &t1); // temp0에 t0 + t1 연산
 		}
-		else
+		else  // 해당 비트가 0이면,
 		{
-			BI_Assign(&temp0, t0);
-			BI_Delete(&t0);
+			BI_Assign(&temp0, t0); // t0에 0을 더하는 것이므로, temp0에 t0을 assign.
 		}
-		DIV(&trash_q, &trash_r, temp0, M);
-		BI_Assign(&temp0, trash_r);
-		BI_Delete(&trash_q);
-		BI_Delete(&trash_r);
-		BI_Assign(&t0, temp0);
-		BI_Delete(&temp0);
-
-		Left_Shift(t1, 1);
-		Binary_Long_Div(&trash_q, &trash_r, t1, M);
-		BI_Assign(&t1, trash_r);
-		BI_Delete(&trash_q);
-		BI_Delete(&trash_r);
+		DIV(&trash_q, &trash_r, temp0, M); // 연산된 temp0(t0)에 Multi Long Division을 이용해 modular M 연산 후 결과값을 trash_r에 대입
+		BI_Delete(&temp0); // 할당한 temp0 delete
+		BI_Assign(&t0, trash_r);  // t0 + result * t1 (mod M) 값인 trash_r을 t0에 assign --> 반복문에서 t0로 연산을 진행할 수 있도록
+		BI_Delete(&trash_q); // 연산을 통해 할당한 trash_q delete
+		BI_Delete(&trash_r); // 연산을 통해 할당한 trash_r delete
+		
+		Left_Shift(t1, 1); // t1 <- 2 * t1
+		Binary_Long_Div(&trash_q, &trash_r, t1, M); // 2 * t1에 modular M 연산 후 결과값을 trash_r에 대입
+		BI_Assign(&t1, trash_r); // 2 * t1 (mod M) 값인 trash_r을 다시 t1에 assign --> 반복문에서 t1로 연산을 진행할 수 있도록
+		BI_Delete(&trash_q); // 연산을 통해 할당한 trash_q delete
+		BI_Delete(&trash_r); // 연산을 통해 할당한 trash_r delete
 	}
-	BI_Assign(T, t0);
-	BI_Delete(&t0);
-	BI_Delete(&t1);
-	BI_Refine(*T);
+	BI_Assign(T, t0); // 반복문이 끝난 결과인 t0를 T에 assign
+	BI_Delete(&t0); // 연산을 통해 할당한 t0 delete
+	BI_Delete(&t1); // 연산을 통해 할당한 t1 delete
+	BI_Refine(*T); // 결과값인 T를 refine 해주기
 }
 
 
