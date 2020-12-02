@@ -903,25 +903,33 @@ void BI_Reduction(bigint** x, int r)
 }
 
 //Chapter 3 Addition
-// 캐리 포함한 단일 덧셈
 
-/*
-	Addition
+/**
+ * @brief Addition (캐리를 포함한 단일 덧셈)
+ * @details
 
-	[pseudo code]
-	Input  :
-	Output :
+	 [pseudo code]
+	 Input  : C, A, B, c, i
+	 Output : carry (0 or 1)
+	 1 : carry <- 0
+	 2 : C <- A + B mod(2^word)
+	 3 : if C < A then
+	 4 :		carry <- 1
+	 5 :	end if
+	 6 : C <- C + c mod(2^word)
+	 7 : if C < c then
+	 8 :		carry = carry + 1
+	 9 : end if
+	10 : return carry
 
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-*/
+ * @param C 덧셈 결과를 저장할 bigint 형 더블포인터 변수
+ * @param A 덧셈을 수행할 bigint 형 더블포인터 변수
+ * @param B 덧셈을 수행할 bigint 형 더블포인터 변수
+ * @param c 이전 연산에서 받아 온 캐리 (0 또는 1)
+ * @param i 덧셈을 수행할 배열의 index
+
+ * @return carry 캐리 여부 (0 또는 1)
+ */
 unsigned int ADD_ABc(bigint** C, bigint** A, bigint** B, unsigned int c, int i)
 {
 	int carry = 0;
@@ -940,24 +948,29 @@ unsigned int ADD_ABc(bigint** C, bigint** A, bigint** B, unsigned int c, int i)
 	return carry;
 }
 
-// WordLen(A) >= WordLen(B)
-/*
-	Addition Core
+/**
+ * @brief Addition Core (WordLen(A) >= WordLen(B), Sign(A) = Sign(B))
+ * @details
 
-	[pseudo code]
-	Input  :
-	Output :
+	 [pseudo code]
+	 Input  : C, A, B, sign
+	 1 : B[j] <- 0 for j = m, m + 1, ... , n - 1
+	 2 : c <- 0
+	 3 : for j = 0 to n - 1 do
+	 4 :	c, C[j] <- ADD_ABc(A[j], B[j], c)
+	 5 : end for
+	 6 : C[n] <- c
+	 7 : if C[n] = 1 then
+	 8 :	C = (-1)^sign * sum(C[j] * W^j) for j = 0 to n
+	 9 : else
+	10 :	C = (-1)^sign * sum(C[j] * W^j) for j = 0 to n - 1
+	11 : end if
 
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-*/
+ * @param C 덧셈 결과를 저장할 bigint 형 더블포인터 변수
+ * @param A 덧셈을 수행할 bigint 형 더블포인터 변수
+ * @param B 덧셈을 수행할 bigint 형 더블포인터 변수
+ * @param sign 덧셈 결과 C의 부호
+ */
 void ADDC(bigint** C, bigint** A, bigint** B, int sign)
 {
 	int A_Len;
@@ -1947,6 +1960,7 @@ void SQU(bigint** C, bigint* A)
 	}
 
 	BI_Delete(&temp);
+	BI_New(C, A->wordlen * 2 + 1);
 	SQUC(C, A); // A = 0. -1, 1이 아닌 경우 SQUC 실행
 
 }
