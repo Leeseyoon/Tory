@@ -33,6 +33,11 @@ void Left_Right_EXP_MUL_MOD_DIV_test(); // Test of 'Modular Exponentiation used 
 void Right_Left_EXP_ADD_MOD_DIV_test(); // Test of 'Modular Exponentiation used Multi Long Division L<-R +'
 void Right_Left_EXP_MUL_MOD_DIV_test(); // Test of 'Modular Exponentiation used Multi Long Division L<-R *'
 
+void Left_Right_EXP_Kara_MOD_DIV_test(); // Test of 'Modular Exponentiation used Multi Long Division L<-R +'
+void Right_Left_EXP_Kara_MOD_DIV_test(); // Test of 'Modular Exponentiation used Multi Long Division L<-R +'
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
 int addition_time();
 int subtraction_time();
 
@@ -64,4 +69,7 @@ void Left_Right_EXP_ADD_MOD_DIV_time(); // Test of 'Modular Exponentiation used 
 void Left_Right_EXP_MUL_MOD_DIV_time(); // Test of 'Modular Exponentiation used Multi Long Division L->R *'
 void Right_Left_EXP_ADD_MOD_DIV_time(); // Test of 'Modular Exponentiation used Multi Long Division L<-R +'
 void Right_Left_EXP_MUL_MOD_DIV_time(); // Test of 'Modular Exponentiation used Multi Long Division L<-R *'
+
+void Left_Right_EXP_Kara_MOD_DIV_time();
+void Right_Left_EXP_Kara_MOD_DIV_time();
 #endif
