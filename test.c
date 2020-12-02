@@ -1160,6 +1160,102 @@ void Right_Left_EXP_MUL_MOD_DIV_test() // Modular Exponentiation used Multi Long
 	}
 }
 
+// Karatsuba + Multi Long Division
+void Left_Right_EXP_Kara_MOD_DIV_test() // Modular Exponentiation used Multi Long Division L->R *
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"left to right modular exp mul test (DIV func)\")\n");
+	for (i = 0; i < 20; i++)
+	{
+		size1 = (rand() & 0x7) + 30;
+		size2 = size1 - (rand() & 0x3) - 10;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x7) + 1;
+
+		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
+		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
+
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+
+		MOD_EXP_LR_Kara_DIV(&bi_re, bi_1, bi_N, bi_2);
+
+		printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("B = ");
+		BI_Show(bi_2, 16);
+		printf("power_mod(A, N, B) == ");
+		BI_Show(bi_re, 16);
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
+		BI_Delete(&bi_re);
+	}
+}
+
+void Right_Left_EXP_Kara_MOD_DIV_test() // Modular Exponentiation used Multi Long Division L<-R *
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"Right to Left Modular EXP MUL test (DIV func)\")\n");
+	for (i = 0; i < 20; i++)
+	{
+		size1 = (rand() & 0x7) + 30;
+		size2 = size1 - (rand() & 0xf) - 10;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x1) + 1;
+
+		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
+		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
+
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+
+		MOD_EXP_RL_Kara_DIV(&bi_re, bi_1, bi_N, bi_2);
+
+		printf("A = ");
+		BI_Show(bi_1, 16);
+		printf("N = ");
+		BI_Show(bi_N, 16);
+		printf("B = ");
+		BI_Show(bi_2, 16);
+		printf("power_mod(A, N, B) == ");
+		BI_Show(bi_re, 16);
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
+		BI_Delete(&bi_re);
+	}
+}
+
 int addition_time()
 {
 
@@ -2416,6 +2512,122 @@ void Right_Left_EXP_MUL_MOD_DIV_time() // Modular Exponentiation used Multi Long
 		
 		clock_t start = clock();
 		MOD_EXP_RL_MUL_DIV(&bi_re, bi_1, bi_N, bi_2);
+		clock_t end = clock();
+		total_time += (double)end - (double)start;
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
+		BI_Delete(&bi_re);
+	}
+	total_time = total_time / (CLOCKS_PER_SEC);
+	printf("Total[%d] time of test : %fs\n", i, total_time);
+	printf("Avearage time of test  : %fs\n", total_time / i);
+}
+
+void Left_Right_EXP_Kara_MOD_DIV_time() // Modular Exponentiation used Multi Long Division L->R *
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int len = 0;
+	int sign1 = 0;
+	int sign2 = 0;
+	double total_time = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"Left to right modular exp kara time (DIV func)\")\n");
+	for (i = 0; i < 20; i++)
+	{
+		size1 = (rand() & 0x7) + 30;
+		size2 = size1 - (rand() & 0x3) - 10;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x1) + 1;
+
+		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
+		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
+
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+
+		sign1 = BI_Get_Sign(bi_1);
+		sign2 = BI_Get_Sign(bi_1);
+		if (sign1 | sign2)
+		{
+			BI_Delete(&bi_1);
+			BI_Delete(&bi_2);
+			BI_Delete(&bi_N);
+			return;
+		}
+
+		clock_t start = clock();
+		MOD_EXP_LR_Kara_DIV(&bi_re, bi_1, bi_N, bi_2);
+		clock_t end = clock();
+		total_time += (double)end - (double)start;
+
+		BI_Delete(&bi_1);
+		BI_Delete(&bi_2);
+		BI_Delete(&bi_N);
+		BI_Delete(&bi_re);
+	}
+	total_time = total_time / (CLOCKS_PER_SEC);
+	printf("Total[%d] time of test : %fs\n", i, total_time);
+	printf("Avearage time of test  : %fs\n", total_time / i);
+}
+
+void Right_Left_EXP_Kara_MOD_DIV_time() // Modular Exponentiation used Multi Long Division L<-R *
+{
+	int i = 0;
+	int size1 = 0;
+	int size2 = 0;
+	int sign1 = 0;
+	int sign2 = 0;
+	int len = 0;
+	double total_time = 0;
+
+	bigint* bi_1 = NULL;
+	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
+	bigint* bi_re = NULL;
+
+	printf("\n");
+	printf("print(\"Right to Left Modular EXP MUL test (DIV func)\")\n");
+	for (i = 0; i < 20; i++)
+	{
+		size1 = (rand() & 0x7) + 30;
+		size2 = size1 - (rand() & 0xf) - 10;
+		if (size2 <= 0)
+			size2 = 1;
+		len = (rand() & 0x1) + 1;
+
+		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
+		BI_New(&bi_2, size2);
+		BI_New(&bi_N, len);
+
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+
+		sign1 = BI_Get_Sign(bi_1);
+		sign2 = BI_Get_Sign(bi_1);
+		if (sign1 | sign2)
+		{
+			BI_Delete(&bi_1);
+			BI_Delete(&bi_2);
+			BI_Delete(&bi_N);
+			return;
+		}
+
+		clock_t start = clock();
+		MOD_EXP_RL_Kara_DIV(&bi_re, bi_1, bi_N, bi_2);
 		clock_t end = clock();
 		total_time += (double)end - (double)start;
 
