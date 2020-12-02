@@ -143,4 +143,7 @@ void MOD_EXP_LR_ADD_DIV(bigint** T, bigint* X, bigint* N, bigint* M); // Modular
 void MOD_EXP_RL_MUL_DIV(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiation used Multi Long Division L<-R * func
 void MOD_EXP_RL_ADD_DIV(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiation used Multi Long Division L<-R + func
 
+void MOD_EXP_LR_Kara_DIV(bigint** T, bigint* X, bigint* N, bigint* M);
+void MOD_EXP_RL_Kara_DIV(bigint** T, bigint* X, bigint* N, bigint* M);
+
 #endif
