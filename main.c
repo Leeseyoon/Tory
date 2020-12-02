@@ -68,6 +68,10 @@ int main()
 	//Left_Right_EXP_MUL_MOD_DIV_time(); // Memory 0
 	//Right_Left_EXP_ADD_MOD_DIV_time(); // Memory 0
 	//Right_Left_EXP_MUL_MOD_DIV_time(); // Memory 0
+	
+	// DIV + Kara
+	Left_Right_EXP_MUL_MOD_DIV_time(); // Memory 0
+	Right_Left_EXP_MUL_MOD_DIV_time(); // Memory 0
 	_CrtDumpMemoryLeaks();
 	return 0;
 }
