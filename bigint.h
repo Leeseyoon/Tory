@@ -1,36 +1,7 @@
 #ifndef _BIG_INT_
 #define _BIG_INT_
 
-#define NON_NEGATIVE   0
-#define NEGATIVE   1
-#define ERROR   -1
-#define WORD_BIT_LEN    8   // 8 or 32 or 64
-
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
-
-#if WORD_BIT_LEN == 8
-typedef unsigned char word;
-#define word_mask 0xff
-#define test_size 256
-
-#elif WORD_BIT_LEN == 32
-typedef unsigned int word;
-#define word_mask 0xffffffff
-#define test_size  64
-
-#else
-typedef unsigned long long word;
-#define word_mask 0xffffffffffffffff
-#define test_size  32
-
-#endif
-
-typedef struct {
-	int sign;
-	int wordlen;
-	word* a;
-} bigint;
+#include "config.h"
 
 void array_init(word* a, int len);
 
@@ -93,17 +64,24 @@ void SUBC(unsigned int* borrow, bigint** c, bigint** a, bigint** b);
 void SUB(bigint** c, bigint* a, bigint* b);
 
 // Chapter 5 Multiplication
+int Multiplication(bigint** C, bigint* A, bigint* B);
+
 void MUL_Word(word* c, word* a, word* b);
 void MUL_Multi(bigint** result, bigint* A, bigint* B);
 
-// Karatsuba test
-void Karatsuba(bigint** C, bigint* A, bigint* B);
+// Karatsuba multiplication
+void MUL_Karatsuba(bigint** C, bigint* A, bigint* B);
 
 // Squaring
+int Squaring(bigint** C, bigint* A);
+
 void Single_Squaring(bigint* C, bigint* A);
 void SQU(bigint** C, bigint* A);
 void SQUC(bigint** C, bigint* A);
 void SQUC_Karatsuba(bigint** C, bigint* A);
+
+// Division
+int Division(bigint** Q, bigint** R, bigint* A, bigint* B);
 
 // Binary Division
 void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B);
@@ -118,14 +96,13 @@ void DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m); // 프로토타입으�
 void DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m); // 프로토타입으로
 
 // Modular Exponentiation
-void Montgomery_Exp_Mul(bigint** C, bigint* A, bigint* n); // 프로토타입으로
-void Montgomery_Exp_Add(bigint** C, bigint* A, bigint* n); // 프로토타입으로
-void Montgomery_Mod_Exp_Mul(bigint** C, bigint* A, bigint* n, bigint* M);
-void Montgomery_Mod_Exp_Add(bigint** C, bigint* A, bigint* n, bigint* M);
+int Modular_Exponentiation_MUL(bigint** C, bigint* A, bigint* N, bigint* M);
+int Modular_Exponentiation_ADD(bigint** C, bigint* A, bigint* N, bigint* M);
 
-void BI_Bit_Length_of_number(int num, int* len); // 정수의 비트열의 개수 구하는 함수
-int j_th_Bit_of_number(int j, int num); // 정수의 j번째 비트가 0인지 1인지 판단하는 함수
-// 프로토타입으로
+void EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N); // 프로토타입으로
+void EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N); // 프로토타입으로
+void MOD_EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N, bigint* M);
+void MOD_EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N, bigint* M);
 
 void EXP_LR_MUL(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L->R * func
 void EXP_LR_ADD(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L->R + func
@@ -137,13 +114,5 @@ void MOD_EXP_LR_MUL(bigint** T, bigint* X, bigint* N, bigint* M);  // Modular Ex
 void MOD_EXP_LR_ADD(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiaition used Binary Long Division L->R + func
 void MOD_EXP_RL_MUL(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiaition used Binary Long Division L<-R * func
 void MOD_EXP_RL_ADD(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiaition used Binary Long Division L<-R + func
-
-void MOD_EXP_LR_MUL_DIV(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiation used Multi Long Division L->R * func
-void MOD_EXP_LR_ADD_DIV(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiation used Multi Long Division L->R + func
-void MOD_EXP_RL_MUL_DIV(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiation used Multi Long Division L<-R * func
-void MOD_EXP_RL_ADD_DIV(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiation used Multi Long Division L<-R + func
-
-void MOD_EXP_LR_Kara_DIV(bigint** T, bigint* X, bigint* N, bigint* M);
-void MOD_EXP_RL_Kara_DIV(bigint** T, bigint* X, bigint* N, bigint* M);
 
 #endif

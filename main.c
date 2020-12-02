@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "config.h"
 #include "bigint.h"
 #include "test.h"
 
@@ -21,28 +22,18 @@ int main()
 	//_crtBreakAlloc = 93;
 	//addition_test(); // Memory 0
 	//subtraction_test(); // Memory 0
-	//schoolbook_multiplication_test(); // Memory 0
-	//karatsuba_multiplication_test(); // Memory 0
-	//binary_long_division_test(); // Memory 0
-	//multi_long_division_test(); // Memory 0
+	//multiplication_test(); // Memory 0
 	//squaring_test(); // Memory 0
-	//////squaring_karatsuba_test();
+	//division_test(); // Memory 0
+	//modular_exponentiation_multiplication_test(); // Memory 0
+	//modular_exponentiation_addition_test(); // Memory 0
+
 	//montgomery_Exponentiation_multiplication_test(); // Memory 0
 	//montgomery_ladder_Exponentiation_addtion_test(); // Memory 0
-	//montgomery_ladder_Modular_Exponentiation_multiplication_test(); // Memory 0
-	//montgomery_ladder_Modular_Exponentiation_addtion_test();  // Memory 0
 	//Left_Right_EXP_ADD_test(); // Memory 0 
 	//Left_Right_EXP_MUL_test(); // Memory 0
 	//Right_Left_EXP_ADD_test(); // Memory 0
 	//Right_Left_EXP_MUL_test(); // Memory 0
-	//Left_Right_EXP_ADD_MOD_test(); // Memory 0
-	//Left_Right_EXP_MUL_MOD_test(); // *Memory 0
-	//Right_Left_EXP_ADD_MOD_test(); // Memory 0
-	//Right_Left_EXP_MUL_MOD_test(); // Memory 0
-	//Left_Right_EXP_ADD_MOD_DIV_test(); // Memory 0
-	//Left_Right_EXP_MUL_MOD_DIV_test(); // Memory 0
-	//Right_Left_EXP_ADD_MOD_DIV_test(); // Memory 0
-	//Right_Left_EXP_MUL_MOD_DIV_test(); // Memory 0
 	
 	//addition_time(); // Memory 0
 	//subtraction_time(); // Memory 0
@@ -64,14 +55,9 @@ int main()
 	//Left_Right_EXP_MUL_MOD_time(); // *Memory 0
 	//Right_Left_EXP_ADD_MOD_time(); // Memory 0
 	//Right_Left_EXP_MUL_MOD_time(); // Memory 0
-	//Left_Right_EXP_ADD_MOD_DIV_time(); // Memory 0
-	//Left_Right_EXP_MUL_MOD_DIV_time(); // Memory 0
-	//Right_Left_EXP_ADD_MOD_DIV_time(); // Memory 0
-	//Right_Left_EXP_MUL_MOD_DIV_time(); // Memory 0
-	
-	// DIV + Kara
-	Left_Right_EXP_MUL_MOD_DIV_time(); // Memory 0
-	Right_Left_EXP_MUL_MOD_DIV_time(); // Memory 0
+
+	//////squaring_karatsuba_test();
+
 	_CrtDumpMemoryLeaks();
 	return 0;
 }
