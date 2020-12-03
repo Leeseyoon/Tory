@@ -1157,41 +1157,38 @@ int montgomery_ladder_Modular_Exponentiation_multiplication_time()
 	int n;
 
 	bigint* bi_1 = NULL;
-	//bigint* bi_2 = NULL; 삭제바람
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 	bigint* bi_M = NULL;
+	float total_time = 0;
 
 	/* n번 Montgomery Ladder multiplacation 연산하기 */
 	printf("\n");
 	printf("\"Montgomery Ladder modular exponentiation multiplacation\"\n");
-	for (i = 0; i < 20; i++)
+	for (i = 0; i < 10; i++)
 	{
-		size1 = (rand() & 0xf) + 50;
-		//size1 = (rand() & 0xf) + 1;
-		size_M = (rand() & 0xf) + 1;
-		n = (rand() & 0xf) + 1;
+		size1 = test_size;
+		size_M = test_size;
+		n = 1;
 
 		BI_Gen_Rand(&bi_1, NON_NEGATIVE, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 		BI_Gen_Rand(&bi_M, NON_NEGATIVE, size_M); // bi_M 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-
-		/*printf("A = ");
-		BI_Show(bi_1, 16);
-
-		printf("M = ");
-		BI_Show(bi_M, 16);*/
-
-		MOD_EXP_Montgomery_MUL(&bi_re, bi_1, n, bi_M);
+		BI_Gen_Rand(&bi_N, NON_NEGATIVE, n); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+			
+		clock_t start = clock();
+		MOD_EXP_Montgomery_MUL(&bi_re, bi_1, bi_N, bi_M);
+		clock_t end = clock();
+		total_time += (float)(end - start);
 		BI_Refine(bi_re);
-
-		/*printf("(A ^ %d) %% M == ", n);
-		BI_Show(bi_re, 16);
-
-		printf("\n");*/
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_re);
+		BI_Delete(&bi_N);
 		BI_Delete(&bi_M);
 	}
+	total_time = total_time / (CLOCKS_PER_SEC);
+	printf("Total[%d] time of test : %fs\n", i, total_time);
+	printf("Avearage time of test  : %fs\n", total_time / i);
 	return 0;
 }
 
@@ -1202,9 +1199,9 @@ int montgomery_ladder_Modular_Exponentiation_addtion_time()
 	int size_M = 0;
 	int len = 0;
 	int n;
-
+	float total_time = 0;
 	bigint* bi_1 = NULL;
-	bigint* bi_2 = NULL;
+	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 	bigint* bi_M = NULL;
 
@@ -1213,32 +1210,30 @@ int montgomery_ladder_Modular_Exponentiation_addtion_time()
 	printf("\"Montgomery Ladder odular exponentiation addition\"\n");
 	for (i = 0; i < 20; i++)
 	{
-		size1 = (rand() & 0xf) + 50;
-		//size1 = (rand() & 0xf) + 1;
-		size_M = (rand() & 0xf) + 1;
-		n = (rand() & 0xf) + 1;
+		size1 = test_size; // (rand() & 0xf) + 50;
+		size_M = test_size; // (rand() & 0xf) + 1;
+		n = 1;// (rand() & 0xf) + 1;
 
 		BI_Gen_Rand(&bi_1, NON_NEGATIVE, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 		BI_Gen_Rand(&bi_M, NON_NEGATIVE, size_M); // bi_M 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
+		BI_Gen_Rand(&bi_N, NON_NEGATIVE, n); // bi_N 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
-		/*printf("A = ");
-		BI_Show(bi_1, 16);
-
-		printf("M = ");
-		BI_Show(bi_M, 16);*/
-
-		MOD_EXP_Montgomery_ADD(&bi_re, bi_1, n, bi_M);
+		clock_t start = clock();
+		MOD_EXP_Montgomery_ADD(&bi_re, bi_1, bi_N, bi_M);
+		clock_t end = clock();
+		total_time += (float)(end - start);
 		BI_Refine(bi_re);
 
-		/*printf("(A * %d) %% M == ", n);
-		BI_Show(bi_re, 16);
-
-		printf("\n");*/
+		
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_M);
 		BI_Delete(&bi_re);
 	}
+	total_time = total_time / (CLOCKS_PER_SEC);
+	printf("Total[%d] time of test : %fs\n", i, total_time);
+	printf("Avearage time of test  : %fs\n", total_time / i);
+
 	return 0;
 }
 
