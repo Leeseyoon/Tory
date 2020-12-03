@@ -52,10 +52,10 @@ void BI_Reduction(bigint** x, int r);
 
 // Chapter 3 Additon
 unsigned int ADD_ABc(bigint** C, bigint** A, bigint** B, unsigned int c, int i);
-void ADDC(bigint** C, bigint** A, bigint** B, int sign);
-void ADD(bigint** C, bigint** A, bigint** B);
-void ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign);
-void ADD_AAB(bigint** C, bigint** A, bigint** B);
+int ADDC(bigint** C, bigint** A, bigint** B, int sign);
+int ADD(bigint** C, bigint** A, bigint** B);
+int ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign);
+int ADD_AAB(bigint** C, bigint** A, bigint** B);
 
 int Compare_WordLen(bigint* A, bigint* B);
 
@@ -70,15 +70,15 @@ int MUL_Word(word* c, word* a, word* b);
 int MUL_Multi(bigint** result, bigint* A, bigint* B);
 
 // Karatsuba multiplication
-void MUL_Karatsuba(bigint** C, bigint* A, bigint* B);
+int MUL_Karatsuba(bigint** C, bigint* A, bigint* B);
 
 // Squaring
 int Squaring(bigint** C, bigint* A);
 
-void Single_Squaring(bigint* C, bigint* A);
-void SQU(bigint** C, bigint* A);
-void SQUC(bigint** C, bigint* A);
-void SQUC_Karatsuba(bigint** C, bigint* A);
+int Single_Squaring(bigint* C, bigint* A);
+int SQU(bigint** C, bigint* A);
+int SQUC(bigint** C, bigint* A);
+int SQUC_Karatsuba(bigint** C, bigint* A);
 
 // Division
 int Division(bigint** Q, bigint** R, bigint* A, bigint* B);
@@ -99,10 +99,10 @@ int DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m); // 프로토타입으�
 int Modular_Exponentiation_MUL(bigint** C, bigint* A, bigint* N, bigint* M);
 int Modular_Exponentiation_ADD(bigint** C, bigint* A, bigint* N, bigint* M);
 
-void EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N); // 프로토타입으로
-void EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N); // 프로토타입으로
-void MOD_EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N, bigint* M);
-void MOD_EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N, bigint* M);
+int EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N); // 프로토타입으로
+int EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N); // 프로토타입으로
+int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M);
+int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M);
 
 int EXP_LR_MUL(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L->R * func
 int EXP_LR_ADD(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L->R + func
