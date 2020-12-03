@@ -2243,22 +2243,21 @@ int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 * @brief Binary_Long_Division Algorithm
 * @details
 	[pseudo code]
-	Input  :
-	Output :
+	Input  : Q, R, A, B
 
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-* @param Q Binary Long Divsion 연산의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
-* @param R Binary Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
-* @param A Binary Long Divsion 연산의 나누려는 수인 bigint 형 포인터 변수
-* @param B Binary Long Divsion 연산의 나누는 수인 bigint 형 포인터 변수
+	1 : (Q, R) <- (0, 0)
+	2 : for j = n -1 downto 0 do
+	3 : 	R <- 2 * R + a_{j}
+	4 : 	if R >= B then
+	5 :		Q <- Q + 2^j
+	6 :		R <- R - B
+	7 :	end if
+	8 : end for
+	
+* @param bigint** Q Binary Long Divsion 연산의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param bigint* R Binary Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param bigint* A Binary Long Divsion 연산의 나누려는 수인 bigint 형 포인터 변수
+* @param bigint* B Binary Long Divsion 연산의 나누는 수인 bigint 형 포인터 변수
 */
 void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 {
@@ -2270,13 +2269,13 @@ void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 	bigint* T = NULL;
 	bigint* U = NULL;
 	BI_New(&T, 1);
-	BI_Set_Zero(Q);
-	BI_Set_Zero(R);
+	BI_Set_Zero(Q); // [line 1]
+	BI_Set_Zero(R); // [line 1]
 
 	BI_Get_Word_Length(&size, &A); // size == bigint A's word length.
 
 	size = size * WORD_BIT_LEN; // 변수 size 는 A의 총 비트 길이
-	for (i = size - 1; i >= 0; i--) // 최상위 비트부터
+	for (i = size - 1; i >= 0; i--) // [line 2] 최상위 비트부터
 	{
 		len = (int)(i / WORD_BIT_LEN); // len에는 지금 조사하고 있는 비트의 워드 위치
 		temp = A->a[len]; // 현재 연산 중인 워드의 값을 temp에 대입
@@ -2285,24 +2284,24 @@ void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 		temp = temp & 1; // 1과 & 해서 
 		T->a[0] = temp; // 해당 비트의 값을 대입 // j_th_BI_Bit_Length 바꿔서 하기
 
-		Left_Shift(*R, 1); // 2R
-		ADD_DIV(R, R, &T); // 2R + a{j}
-		result = BI_Compare(&B, R); // R >= B --> 0, -1
-		if (result < 1) // R >= B인지 비교
+		Left_Shift(*R, 1); // [line 3] 2R
+		ADD_DIV(R, R, &T); // [line 3] 2R + a{j}
+		result = BI_Compare(&B, R); // R = B -> 0, R > B -> -1이므로, result 에는 0, -1이 들어가야한다. 
+		if (result < 1) // [line 3] R >= B인지 비교
 		{
 			len = (int)(i / WORD_BIT_LEN) + 1;
 			BI_New(&U, len);
 
-			U->a[len - 1] = (word)1 << (i % WORD_BIT_LEN);
-			ADD_DIV(Q, Q, &U); // Q + 2 ^ j
-			SUB(R, *R, B); // R - B
+			U->a[len - 1] = (word)1 << (i % WORD_BIT_LEN); // make 2 ^ j
+			ADD_DIV(Q, Q, &U); // [line 5] Q <- Q + 2 ^ j
+			SUB(R, *R, B); // [line 6] R <- R - B 
 			BI_Delete(&U); // 덧셈해준 빅넘버 U(2 ^ j)는 delete 해준다.
-
 		}
 	}
-	BI_Refine(*Q);
-	BI_Delete(&T);
+	BI_Refine(*Q); // Q를 refine 시켜주기
+	BI_Delete(&T); // 할당한 빅넘버 T delete.
 }
+
 
 void ADDC_DIV(bigint** C, bigint** A, bigint** B, int sign)
 {
