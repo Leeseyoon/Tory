@@ -2272,7 +2272,7 @@ int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 	9 :	return (Q, R)
 
 * @param bigint** Q Binary Long Divsion 연산의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
-* @param bigint* R Binary Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param bigint** R Binary Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint* A Binary Long Divsion 연산의 나누려는 수인 bigint 형 포인터 변수
 * @param bigint* B Binary Long Divsion 연산의 나누는 수인 bigint 형 포인터 변수
 */
@@ -2457,7 +2457,7 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 	11: end for
 
 * @param bigint** Q Multi Long Divsion 연산의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
-* @param bigint* R Multi Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param bigint** R Multi Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint* A Multi Long Divsion 연산의 나누려는 수인 bigint 형 포인터 변수
 * @param bigint* B Multi Long Divsion 연산의 나누는 수인 bigint 형 포인터 변수
 */
