@@ -331,7 +331,7 @@ bigint* SUB(bigint** a, bigint** b);
 ##### Multi Long Division core's core condition (n == m + 1)
 ```c
 ```
-===
+---
 #### Chapter 7 Squaring
 ##### Single Squaring
 ```c
@@ -348,7 +348,7 @@ bigint* SUB(bigint** a, bigint** b);
 ##### Squaring Core Karatsuba function
 ```c
 ```
-===
+---
 #### Chapter 8 Modular Exponentiation
 ##### Montgomery ADD Exponentiation func
 ```c
@@ -397,4 +397,4 @@ bigint* SUB(bigint** a, bigint** b);
 ##### Right to Left MUL Modular Exponentiation func
 ```c
 ```
-===
+---
