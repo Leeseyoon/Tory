@@ -2233,7 +2233,12 @@ int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 		return ERROR;
 	}
 
-	if (A->sign | B->sign) // A >= B > 0 의 조건을 만족하지 않을 때
+	if (A->sign | B->sign) // A, B > 0 의 조건을 만족하지 않을 때
+	{
+		return ERROR;
+	}
+
+	if(BI_Compare(&A, &B) < 0) // A >= B의 조건을 만족하지 않을 떄
 	{
 		return ERROR;
 	}
@@ -2249,6 +2254,7 @@ int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 	return 0;
 }
 
+
 /**
 * @brief Binary_Long_Division Algorithm
 * @details
@@ -2257,13 +2263,14 @@ int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 
 	1 : (Q, R) <- (0, 0)
 	2 : for j = n -1 downto 0 do
-	3 : 	R <- 2 * R + a_{j}
-	4 : 	if R >= B then
-	5 :		Q <- Q + 2^j
-	6 :		R <- R - B
-	7 :	end if
-	8 : end for
-	
+	3 :		R <- 2 * R + a_{j}
+	4 :		if R >= B then
+	5 :			Q <- Q + 2^j
+	6 :			R <- R - B
+	7 :		end if
+	8 :	end for
+	9 :	return (Q, R)
+
 * @param bigint** Q Binary Long Divsion 연산의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint* R Binary Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint* A Binary Long Divsion 연산의 나누려는 수인 bigint 형 포인터 변수
@@ -2311,7 +2318,6 @@ void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 	BI_Refine(*Q); // Q를 refine 시켜주기
 	BI_Delete(&T); // 할당한 빅넘버 T delete.
 }
-
 
 void ADDC_DIV(bigint** C, bigint** A, bigint** B, int sign)
 {
@@ -2450,10 +2456,10 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 	10:		(Q_{i}, R) <- DIVC(R, B)
 	11: end for
 	12 : return (Q, R)
-* @param Q Multi Long Divsion 연산의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
-* @param R Multi Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
-* @param A Multi Long Divsion 연산의 나누려는 수인 bigint 형 포인터 변수
-* @param B Multi Long Divsion 연산의 나누는 수인 bigint 형 포인터 변수
+* @param bigint** Q Multi Long Divsion 연산의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param bigint** R Multi Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param bigint* A Multi Long Divsion 연산의 나누려는 수인 bigint 형 포인터 변수
+* @param bigint* B Multi Long Divsion 연산의 나누는 수인 bigint 형 포인터 변수
 */
 void DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorithm(Multi-precision version)에서 DIV(A, B) fucntion.
 {
