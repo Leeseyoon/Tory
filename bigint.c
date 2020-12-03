@@ -1330,7 +1330,7 @@ void SUB(bigint** C, bigint* A, bigint* B)
 		{
 			if (BI_Compare(&A, &B) < 0) // A, B를 비교해서 A < B일 때. (BI_Compare(A, B)의 return : -1)
 			{
-				SUBC(&borrow, C, &B, &A); // B - A 를 하고
+				SUBC(C, &B, &A); // B - A 를 하고
 				BI_Flip_Sign(*C); // 뺄셈 연산이 종료되었으므로 원래대로 부호 바꿔주기
 
 				return;
@@ -1346,7 +1346,7 @@ void SUB(bigint** C, bigint* A, bigint* B)
 			}
 			else // A, B 를 비교해서 A >= B일 때. BI_Compare(A, B)'s return : 0, 1
 			{
-				SUBC(&borrow, C, &A, &B); // A - B 연산
+				SUBC(C, &A, &B); // A - B 연산
 
 				return;
 			}
@@ -1358,7 +1358,7 @@ void SUB(bigint** C, bigint* A, bigint* B)
 			BI_Flip_Sign(B); // B의 부호가 음수이므로 부호 바꿔주기
 			if (BI_Compare(&A, &B) < 0)
 			{
-				SUBC(&borrow, C, &B, &A);
+				SUBC(C, &B, &A);
 				BI_Flip_Sign(A); // 뺄셈 연산이 종료되었으므로 원래대로 부호 원위치
 				BI_Flip_Sign(B); // 뺄셈 연산이 종료되었으므로 원래대로 부호 원위치
 
@@ -1366,7 +1366,7 @@ void SUB(bigint** C, bigint* A, bigint* B)
 			}
 			else
 			{
-				SUBC(&borrow, C, &A, &B);
+				SUBC(C, &A, &B);
 				BI_Flip_Sign(*C);
 				BI_Flip_Sign(A); // 부호 원위치
 				BI_Flip_Sign(B); // 부호 원위치
