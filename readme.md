@@ -101,7 +101,7 @@ void BI_Set_By_Array()  // Set Array -> Big_Integer
    2nd arg : 저장할 배열의 부호
    3rd arg : 저장할 배열의 포인터
    4th arg : 저장할 배열의 크기
-```.
+```
 ***
 ##### String --> Big Integer
 ```c
@@ -147,7 +147,7 @@ void Assign_BI() // Assign Big_Integer
    2nd arg : 복사할 Big_Integer형 포인터
 ```
 ---
-#### Chpater 2.5
+#### Chater 2.5
 ##### Generate Random number function
 ```c
 void bi_gen_rand() // generate random number
@@ -165,7 +165,7 @@ void array_rand() // set random number
    2nd arg : random number의 워드 길이
 ```
 ---
-#### Chpater 2.6
+#### Chapter 2.6
 ##### Get Word Length of Big Integer function
 ```c
 void Get_Word_Length() // Get Word Length of Big_Integer
@@ -192,7 +192,7 @@ void j_th_Bit_of_BI() // j-th Bit of Big_Integer
    2nd arg : 조사당할 bigint형 포인터
 ```
 ---
-#### Chpater 2.7
+#### Chapter 2.7
 ##### Get Sign function
 ```c
 int Get_Sign() // Get Sign
@@ -208,7 +208,7 @@ void Flip_Sign() // Flip Sign
    1st arg : 부호를 뒤집을 Big_Integer의 포인터
 ```
 ---
-#### Chpater 2.8
+#### Chapter 2.8
 ##### Set Big Integer function
 ```c
 void BI_Set_One (); // Set Big_Integer 1
@@ -239,7 +239,7 @@ int Is_Zero() // Determine if zero or not
    1st arg : 0인지 아닌지 판단할 Big_Integer의 더블 포인터
 ```
 ---
-#### Chpater 2.9
+#### Chapter 2.9
 ##### Compare Big Integer A with Big Integer B
 ```c
 int Compare_BI(); //Compare Big_Integer
@@ -249,7 +249,7 @@ int Compare_BI(); //Compare Big_Integer
    2nd arg : 1st arg와 비교 대상인 Big_Integer의 더블 포인터
 ```
 ---
-#### Chpater 2.10
+#### Chapter 2.10
 ##### Left Shift function
 ```c
 void Left_Shift()
