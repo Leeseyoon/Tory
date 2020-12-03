@@ -1602,14 +1602,29 @@ void MUL_Word(word* C, word* A, word* B) // 단일 워드 곱셈
 	[pseudo code]
 	Input  : C, A, B
 
-	1 : C <- 0 // 미리 선언하고 대입
-	2 : for j = 0 to n - 1 do
-	3 :		for i = 0 to m - 1 do
-	4 :			Temp <- A_{j} * B_{i}
-	5 :			Temp <- Temp << w(i+j)
-	6 :			C <- ADDC(C, Temp)
-	7 :		end for
-	8 : end for	
+	1 : if A = 0 or B = 0 then
+	2 :		return 0;
+	3 : end if
+	4 : if A = 1 
+	5 :		if Sign(A) is NON_NEGATIVE
+	6 :			return B
+	7 :		else
+	8 :			return -B
+	10: end if
+	11: if B = 1
+	12:		if sign(B) is NON_NEGATIVE
+	13:			return A
+	14:		else
+	15:			return -A
+	16: end if
+	17: for j = 0 to n - 1 do // MULC(|A|, |B|)
+	18:		for i = 0 to m - 1 do
+	19:			Temp <- A_{j} * B_{i}
+	20:			Temp <- Temp << w(i+j)
+	21:			C <- ADDC(C, Temp)
+	22:		end for
+	23: end for
+	24: Sign(C) = Sign(A) ^ Sign(B)
 
 * @param bigint** C 다중 워드 곱셈 연산의 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint* A 다중 워드 곱셈 연산의 곱하는 수인 bigint 형 포인터 변수
@@ -1619,11 +1634,39 @@ void MUL_Multi(bigint** C, bigint* A, bigint* B)
 {
 	int i, j, len = 0;
 	int size_a, size_b, size_c = 0;
+	int sign_a, sign_b = 0;
+
+	sign_a = BI_Get_Sign(A);
+	sign_b = BI_Get_Sign(B);
 
 	if ((BI_Is_Zero(&A) & BI_Is_Zero(&B)) == 0) // 피연산자중 하나라도 0이면,
 	{
 		BI_Set_Zero(C); // 곱셈 결과는 0이므로, 연산 진행하지 않고 0 출력 후
 		return; // return;처리
+	}
+
+	if (BI_Is_One(&A) == 0)
+	{
+		if (&B == C) // 1st arg == 2nd arg(AAB)인 경우
+			return; // 이미 1st arg = 2nd arg 이므로 (이미 1 * B = B) return으로 종료.
+		BI_Assign(C, B);
+		if (sign_a == 0)
+			(*C)->sign = 0;
+		else
+			(*C)->sign = 1;
+		return;
+	}
+
+	if (BI_Is_One(&B) == 0)
+	{
+		if (&A == C) // 1st arg == 2nd arg(AAB)인 경우
+			return; // 이미 1st arg = 2nd arg 이므로 (이미 A * 1 = A) return으로 종료.
+		BI_Assign(C, A);
+		if (sign_a == 0)
+			(*C)->sign = 0;
+		else
+			(*C)->sign = 1;
+		return;
 	}
 
 	BI_Get_Word_Length(&size_a, &A); // A의 word 길이를 size_a에 대입
