@@ -312,7 +312,7 @@ int montgomery_Exponentiation_multiplication_test() // 너무 느림... ㅠ
 		BI_Gen_Rand(&bi_1, NON_NEGATIVE, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 		BI_Gen_Rand(&bi_n, NON_NEGATIVE, size_n);
 
-		printf("A = ");
+		printf("X = ");
 		BI_Show(bi_1, 16);
 
 		printf("n = ");
@@ -321,7 +321,7 @@ int montgomery_Exponentiation_multiplication_test() // 너무 느림... ㅠ
 		EXP_Montgomery_MUL(&bi_re, bi_1, bi_n);
 		BI_Refine(bi_re);
 
-		printf("A ^ n == ");
+		printf("X ^ n == ");
 		BI_Show(bi_re, 16);
 
 		printf("\n");
@@ -333,7 +333,7 @@ int montgomery_Exponentiation_multiplication_test() // 너무 느림... ㅠ
 	return 0;
 }
 
-int montgomery_ladder_Exponentiation_addtion_test()
+int montgomery_Ladder_Exponentiation_addtion_test()
 {
 	int i = 0;
 	int size1, size_n = 0;
@@ -359,7 +359,7 @@ int montgomery_ladder_Exponentiation_addtion_test()
 		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 		BI_Gen_Rand(&bi_n, NON_NEGATIVE, size_n);
 
-		printf("A = ");
+		printf("X = ");
 		BI_Show(bi_1, 16);
 
 		printf("n = ");
@@ -368,7 +368,7 @@ int montgomery_ladder_Exponentiation_addtion_test()
 		EXP_Montgomery_ADD(&bi_re, bi_1, bi_n);
 		BI_Refine(bi_re);
 
-		printf("A * n == ");
+		printf("X * n == ");
 		BI_Show(bi_re, 16);
 
 		printf("\n");
@@ -398,7 +398,7 @@ int modular_exponentiation_multiplication_test()
 	else if (FLAG_EXP == RTOL)
 		printf("print(\"Modular exponentiation of multiplication [Right to Left ver]\")\n");
 	else if(FLAG_EXP == MONTGOMERY)
-		printf("print(\"Modular exponentiation of multiplication [Montgomery ladder ver]\")\n");
+		printf("print(\"Modular exponentiation of multiplication [Montgomery Ladder ver]\")\n");
 
 	for (i = 0; i < 10; i++)
 	{
@@ -410,7 +410,7 @@ int modular_exponentiation_multiplication_test()
 		BI_Gen_Rand(&bi_N, NON_NEGATIVE, size_N); // bi_n의 부호를 양수로 하여 랜덤한 배열을 담은 bigint 생성
 		BI_Gen_Rand(&bi_M, NON_NEGATIVE, size_M); // bi_M의 부호를 양수로 하여 랜덤한 배열을 담은 bigint 생성
 
-		printf("A = ");
+		printf("X = ");
 		BI_Show(bi_1, 16);
 
 		printf("N = ");
@@ -421,7 +421,7 @@ int modular_exponentiation_multiplication_test()
 
 		Modular_Exponentiation_MUL(&bi_re, bi_1, bi_N, bi_M);
 
-		printf("power_mod(A, N, M) == ");
+		printf("power_mod(X, N, M) == ");
 		BI_Show(bi_re, 16);
 
 		printf("\n");
@@ -451,7 +451,7 @@ int modular_exponentiation_addition_test()
 	else if (FLAG_EXP == RTOL)
 		printf("print(\"Modular exponentiation of addition [Right to Left ver]\")\n");
 	else if (FLAG_EXP == MONTGOMERY)
-		printf("print(\"Modular exponentiation of addition [Montgomery ladder ver]\")\n");
+		printf("print(\"Modular exponentiation of addition [Montgomery Ladder ver]\")\n");
 
 	for (i = 0; i < 10; i++)
 	{
@@ -463,7 +463,7 @@ int modular_exponentiation_addition_test()
 		BI_Gen_Rand(&bi_N, NON_NEGATIVE, size_N); // bi_n의 부호를 양수로 하여 랜덤한 배열을 담은 bigint 생성
 		BI_Gen_Rand(&bi_M, NON_NEGATIVE, size_M); // bi_M의 부호를 양수로 하여 랜덤한 배열을 담은 bigint 생성
 
-		printf("A = ");
+		printf("X = ");
 		BI_Show(bi_1, 16);
 
 		printf("N = ");
@@ -474,7 +474,7 @@ int modular_exponentiation_addition_test()
 
 		Modular_Exponentiation_ADD(&bi_re, bi_1, bi_N, bi_M);
 
-		printf("(A * N) %% M == ");
+		printf("(X * N) %% M == ");
 		BI_Show(bi_re, 16);
 
 		printf("\n");
@@ -1106,7 +1106,7 @@ int montgomery_Exponentiation_multiplication_time()
 	return 0;
 }
 
-int montgomery_ladder_Exponentiation_addtion_time()
+int montgomery_Ladder_Exponentiation_addtion_time()
 {
 	int i = 0;
 	int size1, size2 = 0;
@@ -1148,7 +1148,7 @@ int montgomery_ladder_Exponentiation_addtion_time()
 	return 0;
 }
 
-int montgomery_ladder_Modular_Exponentiation_multiplication_time()
+int montgomery_Ladder_Modular_Exponentiation_multiplication_time()
 {
 	int i = 0;
 	int size1 = 0;
@@ -1192,7 +1192,7 @@ int montgomery_ladder_Modular_Exponentiation_multiplication_time()
 	return 0;
 }
 
-int montgomery_ladder_Modular_Exponentiation_addtion_time()
+int montgomery_Ladder_Modular_Exponentiation_addtion_time()
 {
 	int i = 0;
 	int size1 = 0;
