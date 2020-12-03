@@ -643,7 +643,7 @@ int addition_time()
 	int len = 0;
 	int sign_bi_1 = 0;
 	int sign_bi_2 = 0;
-	double total_time = 0;
+	float total_time = 0;
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
@@ -665,19 +665,10 @@ int addition_time()
 		size = MAX(bi_1->wordlen, bi_2->wordlen);
 		BI_New(&bi_re, size + 1); // 더 긴 길이인 size로 덧셈 연산 결과인 big integer 생성
 
-		// 출력 부분
-		/*printf("A = ");
-		BI_Show(bi_1, 16);
-		printf("B = ");
-		BI_Show(bi_2, 16);*/
 		clock_t start = clock();
 		ADD(&bi_re, &bi_1, &bi_2); // ADD함수에 덧셈 결과인 bi_re , 피연산자 1인 bi_1, 피연산자 2인 bi_2
 		clock_t end = clock();
 		total_time += (end - start);
-		/*printf("A + B == ");
-		BI_Show(bi_re, 16);
-		printf("\n");*/
-
 		// 메모리 free
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
@@ -696,7 +687,7 @@ int subtraction_time()
 	int len = 0;
 	int sign_bi_1 = 0;
 	int sign_bi_2 = 0;
-	double total_time = 0;
+	float total_time = 0;
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
@@ -718,19 +709,11 @@ int subtraction_time()
 		size = (size1 > size2) ? size1 : size2; // size1 과 size2 비교해서 size 변수에 대입
 		BI_New(&bi_re, size + 1); //size + 1?
 
-		/*printf("A = ");
-		BI_Show(bi_1, 16);
-		printf("B = ");
-		BI_Show(bi_2, 16);*/
-
 		clock_t start = clock();
 		SUB(&bi_re, bi_1, bi_2);
 		clock_t end = clock();
-
-		total_time += (double)(end - start);
-		/*printf("A - B == ");
-		BI_Show(bi_re, 16);
-		printf("\n");*/
+		total_time += (float)(end - start);
+	
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
 		BI_Delete(&bi_re);
@@ -748,7 +731,7 @@ int schoolbook_multiplication_time()
 	int len = 0;
 	int sign_bi_1 = 0;
 	int sign_bi_2 = 0;
-	double total_time = 0;
+	float total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
@@ -768,19 +751,11 @@ int schoolbook_multiplication_time()
 
 		BI_New(&bi_re, size1 + size2);
 
-		/*printf("A = ");
-		BI_Show(bi_1, 16);
-		printf("B = ");
-		BI_Show(bi_2, 16);*/
-
 		clock_t start = clock();
 		MUL_Multi(&bi_re, bi_1, bi_2);
 		clock_t end = clock();
-		total_time += (end - start);
+		total_time += (float)(end - start);
 
-		/*printf("A * B == ");
-		BI_Show(bi_re, 16);
-		printf("\n");*/
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
 		BI_Delete(&bi_re);
@@ -798,7 +773,8 @@ int karatsuba_multiplication_time()
 	int len = 0;
 	int sign_bi_1 = 0;
 	int sign_bi_2 = 0;
-
+	float total_time = 0;
+	
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
@@ -815,11 +791,6 @@ int karatsuba_multiplication_time()
 
 		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-
-		/*printf("A = ");
-		BI_Show(bi_1, 16);
-		printf("B = ");
-		BI_Show(bi_2, 16);*/
 
 		len = (MAX(bi_1->wordlen, bi_2->wordlen) + 1) >> 1;
 		len = 4 * len + 1;
@@ -840,8 +811,11 @@ int karatsuba_multiplication_time()
 		if (sign_bi_2 == NEGATIVE)
 			BI_Flip_Sign(bi_2);
 
-
+		clock_t start = clock();
 		MUL_Karatsuba(&bi_re, bi_1, bi_2);
+		clock_t end = clock();
+		total_time += (float)(end - start);
+		
 		BI_Refine(bi_re);
 
 		if ((sign_bi_1 ^ sign_bi_2) == 1)
@@ -850,15 +824,14 @@ int karatsuba_multiplication_time()
 		else
 			bi_re->sign = NON_NEGATIVE;
 
-		/*printf("A * B == ");
-		BI_Show(bi_re, 16);
-		printf("\n");*/
-
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
 		BI_Delete(&bi_re);
 	}
-
+	total_time = total_time / (CLOCKS_PER_SEC);
+	printf("Total[%d] time of test : %fs\n", i, total_time);
+	printf("Avearage time of test  : %fs\n", total_time / i);
+	return 0;
 	return 0;
 }
 
@@ -869,7 +842,7 @@ int binary_long_division_time()
 	int len = 0;
 	int sign_bi_1 = 0;
 	int sign_bi_2 = 0;
-	double total_time = 0;
+	float total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
@@ -904,7 +877,7 @@ int binary_long_division_time()
 			clock_t start = clock();
 			Binary_Long_Div(&bi_q, &bi_re, bi_1, bi_2);
 			clock_t end = clock();
-			total_time += (end - start);
+			total_time += (float)(end - start);
 
 			// 메모리 free
 			BI_Delete(&bi_1);
@@ -926,7 +899,7 @@ int multi_long_division_time()
 	int len = 0;
 	int sign_bi_1 = 0;
 	int sign_bi_2 = 0;
-	double total_time = 0;
+	float total_time = 0;
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
@@ -958,7 +931,7 @@ int multi_long_division_time()
 			clock_t start = clock();
 			DIV(&bi_q, &bi_re, bi_1, bi_2);
 			clock_t end = clock();
-			total_time += (end - start);
+			total_time += (float)(end - start);
 
 			// 메모리 free
 			BI_Delete(&bi_1);
@@ -980,7 +953,8 @@ int squaring_time()
 	int len = 0;
 	int sign_bi_1 = 0;
 	int sign_bi_2 = 0;
-
+	float total_time = 0;
+	
 	bigint* bi_1 = NULL;
 	bigint* bi_re = NULL;
 
@@ -992,22 +966,21 @@ int squaring_time()
 	{
 		size1 = (rand() & 0xf) + 100;
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성 //음수일 떄 안되는 것 같아보임 1201
-		/*printf("A = ");
-		BI_Show(bi_1, 16);*/
-
-		//BI_New(&bi_re, size1 * 2 + 1);
-
+		
+		clock_t start = clock();
 		SQU(&bi_re, bi_1);
+		clock_t end = clock();
+		total_time += (float)(end - start);
+		
 		BI_Refine(bi_re);
-
-		/*printf("A * A == ");
-		BI_Show(bi_re, 16);
-
-		printf("\n");*/
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_re);
 	}
+	total_time = total_time / (CLOCKS_PER_SEC);
+	printf("Total[%d] time of test : %fs\n", i, total_time);
+	printf("Avearage time of test  : %fs\n", total_time / i);
+	
 	return 0;
 }
 
@@ -1018,7 +991,8 @@ int squaring_karatsuba_time()
 	int len = 0;
 	int sign_bi_1 = 0;
 	int sign_bi_2 = 0;
-
+	float total_time = 0;
+	
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
@@ -1049,8 +1023,11 @@ int squaring_karatsuba_time()
 		len = 4 * len + 1;
 
 		BI_New(&bi_re, len);
-
+		
+		clock_t start = clock();
 		SQUC_Karatsuba(&bi_re, bi_1);
+		clock_t end = clock();
+		total_time += (float)(end - start);
 		BI_Refine(bi_re);
 
 		printf("A * A == ");
@@ -1061,6 +1038,10 @@ int squaring_karatsuba_time()
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_re);
 	}
+	total_time = total_time / (CLOCKS_PER_SEC);
+	printf("Total[%d] time of test : %fs\n", i, total_time);
+	printf("Avearage time of test  : %fs\n", total_time / i);
+	
 	return 0;
 }
 
@@ -1072,37 +1053,38 @@ int montgomery_Exponentiation_multiplication_time()
 	int n;
 	int sign_bi_1 = 0;
 	int sign_bi_2 = 0;
-
+	float total_time = 0;
+	
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
 	bigint* bi_q = NULL;
-
+	bigint* bi_N = NULL;
+	
 	/* n번 Montgomery Ladder multiplacation 연산하기 */
 	printf("\n");
 	printf("\"Montgomery Ladder exponentiation multiplacation\"\n");
 	for (i = 0; i < 20; i++)
 	{
-		//size1 = (rand() & 0xf) + 50;
 		size1 = (rand() & 0xf) + 1;
 		n = (rand() & 0xf) + 1;
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-
-		printf("A = ");
-		BI_Show(bi_1, 16);
-
-		EXP_Montgomery_MUL(&bi_re, bi_1, n);
+		BI_Gen_Rand(&bi_N, 0, n); 
+		
+		clock_t start = clock();
+		EXP_Montgomery_MUL(&bi_re, bi_1, bi_N);
+		clock_t end = clock();
+		total_time += (float)(end - start);
 		BI_Refine(bi_re);
-
-		/*printf("A ^ %d == ", n);
-		BI_Show(bi_re, 16);
-
-		printf("\n");*/
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_re);
 	}
+	total_time = total_time / (CLOCKS_PER_SEC);
+	printf("Total[%d] time of test : %fs\n", i, total_time);
+	printf("Avearage time of test  : %fs\n", total_time / i);
+	
 	return 0;
 }
 
@@ -1114,11 +1096,13 @@ int montgomery_Ladder_Exponentiation_addtion_time()
 	int n;
 	int sign_bi_1 = 0;
 	int sign_bi_2 = 0;
+	float total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
 	bigint* bi_q = NULL;
+	bigint* bi_N = NULL;
 
 	/* n번 Montgomery Ladder addition 연산하기 */
 	printf("\n");
@@ -1130,21 +1114,21 @@ int montgomery_Ladder_Exponentiation_addtion_time()
 		n = (rand() & 0xf) + 1;
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-
-		/*printf("A = ");
-		BI_Show(bi_1, 16);*/
-
-		EXP_Montgomery_ADD(&bi_re, bi_1, n);
+		BI_Gen_Rand(&bi_N, 0, n)
+			
+		clock_t start = clock();
+		EXP_Montgomery_ADD(&bi_re, bi_1, bi_N);
+		clock_t end = clock();
+		total_time += (float)(end - start);
 		BI_Refine(bi_re);
 
-		/*printf("A * %d == ", n);
-		BI_Show(bi_re, 16);
-
-		printf("\n");*/
-
+		
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_re);
 	}
+	total_time = total_time / (CLOCKS_PER_SEC);
+	printf("Total[%d] time of test : %fs\n", i, total_time);
+	printf("Avearage time of test  : %fs\n", total_time / i);
 	return 0;
 }
 
@@ -1155,12 +1139,12 @@ int montgomery_Ladder_Modular_Exponentiation_multiplication_time()
 	int size_M = 0;
 	int len = 0;
 	int n;
-
+	float total_time = 0;
+	
 	bigint* bi_1 = NULL;
 	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
 	bigint* bi_M = NULL;
-	float total_time = 0;
 
 	/* n번 Montgomery Ladder multiplacation 연산하기 */
 	printf("\n");
@@ -1200,6 +1184,7 @@ int montgomery_Ladder_Modular_Exponentiation_addtion_time()
 	int len = 0;
 	int n;
 	float total_time = 0;
+	
 	bigint* bi_1 = NULL;
 	bigint* bi_N = NULL;
 	bigint* bi_re = NULL;
@@ -1244,7 +1229,7 @@ void Left_Right_EXP_ADD_time() // Only Exponentiation function L->R add
 	int len = 0;
 	int sign1 = 0;
 	int sign2 = 0;
-	double total_time = 0;
+	float total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_N = NULL;
@@ -1276,7 +1261,7 @@ void Left_Right_EXP_ADD_time() // Only Exponentiation function L->R add
 		clock_t start = clock();
 		EXP_LR_ADD(&bi_re, bi_1, bi_N);
 		clock_t end = clock();
-		total_time += (double)end - (double)start;
+		total_time += (float)(end - start);
 		
 		
 		BI_Delete(&bi_1);
@@ -1295,7 +1280,7 @@ void Left_Right_EXP_MUL_time() // Only Exponentiation function L->R mul
 	int len = 0;
 	int sign1 = 0;
 	int sign2 = 0;
-	double total_time = 0;
+	float total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_N = NULL;
@@ -1325,7 +1310,7 @@ void Left_Right_EXP_MUL_time() // Only Exponentiation function L->R mul
 		clock_t start = clock();
 		EXP_LR_MUL(&bi_re, bi_1, bi_N);
 		clock_t end = clock();
-		total_time += (double)end - (double)start;
+		total_time += (float)(end - start);
 				
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_N);
@@ -1343,7 +1328,7 @@ void Right_Left_EXP_ADD_time() // Only Exponentiation function R<-L add
 	int len = 0;
 	int sign1 = 0;
 	int sign2 = 0;
-	double total_time = 0;
+	float total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_N = NULL;
@@ -1375,7 +1360,7 @@ void Right_Left_EXP_ADD_time() // Only Exponentiation function R<-L add
 		clock_t start = clock();
 		EXP_RL_ADD(&bi_re, bi_1, bi_N);
 		clock_t end = clock();
-		total_time += (double)end - (double)start;
+		total_time += (float)(end - start);
 
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_N);
@@ -1393,7 +1378,7 @@ void Right_Left_EXP_MUL_time()  // Only Exponentiation function R<-L mul
 	int len = 0;
 	int sign1 = 0;
 	int sign2 = 0;
-	double total_time = 0;
+	float total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_N = NULL;
@@ -1425,7 +1410,7 @@ void Right_Left_EXP_MUL_time()  // Only Exponentiation function R<-L mul
 		clock_t start = clock();
 		EXP_RL_MUL(&bi_re, bi_1, bi_N);
 		clock_t end = clock();
-		total_time += (double)end - (double)start;
+		total_time += (float)(end - start);
 				
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_N);
@@ -1444,7 +1429,7 @@ void Left_Right_EXP_ADD_MOD_time() // Modular Exponentiaition used Binary Long D
 	int len = 0;
 	int sign1 = 0;
 	int sign2 = 0;
-	double total_time = 0;
+	float total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
@@ -1482,7 +1467,7 @@ void Left_Right_EXP_ADD_MOD_time() // Modular Exponentiaition used Binary Long D
 		clock_t start = clock();
 		MOD_EXP_LR_ADD(&bi_re, bi_1, bi_N, bi_2);
 		clock_t end = clock();
-		total_time += (double)end - (double)start;
+		total_time += (float)(end - start);
 		
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
@@ -1502,7 +1487,7 @@ void Left_Right_EXP_MUL_MOD_time() // Modular Exponentiaition used Binary Long D
 	int len = 0;
 	int sign1 = 0;
 	int sign2 = 0;
-	double total_time = 0;
+	float total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
@@ -1540,7 +1525,7 @@ void Left_Right_EXP_MUL_MOD_time() // Modular Exponentiaition used Binary Long D
 		clock_t start = clock();
 		MOD_EXP_LR_MUL(&bi_re, bi_1, bi_N, bi_2);
 		clock_t end = clock();
-		total_time += (double)end - (double)start;
+		total_time += (float)(end - start);
 		
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
@@ -1560,7 +1545,7 @@ void Right_Left_EXP_ADD_MOD_time() // Modular Exponentiaition used Binary Long D
 	int len = 0;
 	int sign1 = 0;
 	int sign2 = 0;
-	double total_time = 0;
+	float total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
@@ -1598,7 +1583,7 @@ void Right_Left_EXP_ADD_MOD_time() // Modular Exponentiaition used Binary Long D
 		clock_t start = clock();
 		MOD_EXP_RL_ADD(&bi_re, bi_1, bi_N, bi_2);
 		clock_t end = clock();
-		total_time += (double)end - (double)start;
+		total_time += (float)(end - start);
 		
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
@@ -1618,7 +1603,7 @@ void Right_Left_EXP_MUL_MOD_time() // Modular Exponentiaition used Binary Long D
 	int len = 0;
 	int sign1 = 0;
 	int sign2 = 0;
-	double total_time = 0;
+	float total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
@@ -1656,7 +1641,7 @@ void Right_Left_EXP_MUL_MOD_time() // Modular Exponentiaition used Binary Long D
 		clock_t start = clock();
 		MOD_EXP_RL_MUL(&bi_re, bi_1, bi_N, bi_2);
 		clock_t end = clock();
-		total_time += (double)end - (double)start;
+		total_time += (float)(end - start);
 		
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
