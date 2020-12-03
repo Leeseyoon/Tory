@@ -1542,7 +1542,7 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 			BI_Flip_Sign(B);
 
 		MUL_Karatsuba(C, A, B);
-		BI_Refine(&C);
+		BI_Refine(*C);
 
 		if ((sign_A ^ sign_B) == 1) // C의 부호 결정
 			(*C)->sign = NEGATIVE;
