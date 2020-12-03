@@ -1421,10 +1421,11 @@ void SUB(bigint** C, bigint* A, bigint* B)
 * @param bigint** A 단일 뺄셈 연산의(A - B) A에 해당하는 bigint 형 포인터 변수
 * @param bigint** B 단일 뺄셈 연산의(A - B) B에 해당하는 bigint 형 포인터 변수
 */
-void SUBC(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
+void SUBC(bigint** C, bigint** A, bigint** B)
 {
 	int len, i = 0;
 	int result = 0;
+	unsigned int borrow = 0;
 	bigint* temp = NULL; // A와 b의 길이가 다를 때 -> bigint** b의 길이를 바꿀 수 없으므로 temp를 만들어줌
 	bigint* temp3 = NULL; // C랑 A랑 같을 때를 대비하여
 	BI_Get_Word_Length(&len, A); // b보다 큰 A의 길이를 구하자
@@ -1437,8 +1438,8 @@ void SUBC(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
 	if ((*C)->wordlen < len) // Binary Long Division에서 C의 길이가 1이고, A, B의 길이가 2일 때가 있어서. //A = 0x40bd
 	{
 		bigint* temp2 = NULL;
-		BI_New(&temp2, len);
-		for (i = 0; i < (*C)->wordlen; i++)
+		BI_New(&temp2, len); // C보다 더 큰 길이인 len을 가지는 temp2를 생성
+		for (i = 0; i < (*C)->wordlen; i++) // C->wordle의 길이만큼만 temp2에 대입. 안채워진 부분은 0으로 그대로
 			temp2->a[i] = (*C)->a[i];
 		BI_Assign(C, temp2);
 		BI_Delete(&temp2);
@@ -1447,23 +1448,19 @@ void SUBC(unsigned int* borrow, bigint** C, bigint** A, bigint** B)
 		temp->a[i] = (*B)->a[i]; // b와 같은 값을 가지고 있어야하고, 더 길게 생성됐을 때는 0이 들어가있어야함.
 	// A가 b보다 길 때 b의 길이를 맞춰줘야하는데 b를 건들이면 b가 바뀌기 때문에 temp를 이용
 
+	//BI_New(&temp3, len); // A의 wordlen과 같은 len의 길이로 temp3 생성
+	BI_Assign(&temp3, *A); // 이후 A와 동일하게
 	for (i = 0; i < len; i++)
 	{
-
-		BI_New(&temp3, len); // A의 wordlen과 같은 len의 길이로 temp3 생성
-		BI_Assign(&temp3, *A); // 이후 A와 동일하게
-		if (i == 0)
-			*borrow = 0;
-
-		(*C)->a[i] = temp3->a[i] - (*borrow);//(*C)->a[i] = (*A)->a[i] - (*borrow); // A - b의 값을 C 에 대입
+		(*C)->a[i] = temp3->a[i] - borrow; //(*C)->a[i] = (*A)->a[i] - (borrow); // A - b의 값을 C 에 대입 // 처음 borrow값은 초기화된 0으로 들어옴
 		(*C)->a[i] = (*C)->a[i] & word_mask; // mod 2 ^ (WORD_BIT_LEN)
-		if (temp3->a[i] < *borrow)//if ((*A)->a[i] < *borrow) // borrow 될 때
-			*borrow = 1;
+		if (temp3->a[i] < borrow) //if ((*A)->a[i] < borrow) // borrow가 생길 때
+			borrow = 1;// *borrow = 1;
 		else // borrow 안될 때
 		{
-			*borrow = 0;
+			borrow = 0;// *borrow = 0;
 			if ((*C)->a[i] < temp->a[i])
-				*borrow = *borrow + 1;
+				borrow += 1;// borrow = borrow + 1;
 		}
 		(*C)->a[i] -= temp->a[i]; // temp에 넣어놓은 b와 뺄셈 연산
 		(*C)->a[i] = (*C)->a[i] & word_mask; // mod 2 ^ (WORD_BIT_LEN)
