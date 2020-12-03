@@ -930,23 +930,28 @@ void BI_Reduction(bigint** x, int r)
  * @param int i 덧셈을 수행할 배열의 index
 
  * @return carry 캐리 여부 (0 또는 1)
+ * @throws ERROR 배열의 index가 음수인 경우
  */
 unsigned int ADD_ABc(bigint** C, bigint** A, bigint** B, unsigned int c, int i)
 {
-	int carry = 0;
-	word temp = 0; //word* --> word로 바꿈
+	int carry = 0; // [line 1]
+	word temp = 0; 
+
+	if (i < 0) // 예외 처리
+		return ERROR;
+
 	temp = (*A)->a[i];
-	(*C)->a[i] = (*A)->a[i] + (*B)->a[i]; // A, B 각각의 i번째 값 더해서 C의 i번째 배열에 대입
+	(*C)->a[i] = (*A)->a[i] + (*B)->a[i]; // [line 2] A, B 각각의 i번째 값 더해서 C의 i번째 배열에 대입
 
-	if ((*C)->a[i] < temp) // 원래의 A의 i번째 값이 앞에서 계산한 결과보다 작으면 캐리가 발생한 것
-		carry = 1;
+	if ((*C)->a[i] < temp) // [line 3] 원래의 A의 i번째 값이 앞에서 계산한 결과보다 작으면 캐리가 발생한 것
+		carry = 1; // [line 4]
 
-	(*C)->a[i] = (*C)->a[i] + c; // 인자로 받아온 캐리 값(c) 더해 주기
+	(*C)->a[i] = (*C)->a[i] + c; // [line 6] 인자로 받아온 캐리 값(c) 더해 주기
 
-	if ((*C)->a[i] < c) // 앞의 결과가 c보다 작으면 캐리가 발생한 것
-		carry = carry + 1;
+	if ((*C)->a[i] < c) // [line 7] 앞의 결과가 c보다 작으면 캐리가 발생한 것
+		carry = carry + 1; // [line 8]
 
-	return carry;
+	return carry; // [line 10]
 }
 
 /**
@@ -954,7 +959,8 @@ unsigned int ADD_ABc(bigint** C, bigint** A, bigint** B, unsigned int c, int i)
  * @details
 
 	 [pseudo code]
-	 Input  : C, A, B, sign
+	 Input  : A, B, sign
+	 Output : C = A + B
 	 1 : B[j] <- 0 for j = m, m + 1, ... , n - 1
 	 2 : c <- 0
 	 3 : for j = 0 to n - 1 do
@@ -962,25 +968,34 @@ unsigned int ADD_ABc(bigint** C, bigint** A, bigint** B, unsigned int c, int i)
 	 5 : end for
 	 6 : C[n] <- c
 	 7 : if C[n] = 1 then
-	 8 :	C = (-1)^sign * sum(C[j] * W^j) for j = 0 to n
+	 8 :	C <- (-1)^sign * sum(C[j] * W^j) for j = 0 to n
 	 9 : else
-	10 :	C = (-1)^sign * sum(C[j] * W^j) for j = 0 to n - 1
+	10 :	C <- (-1)^sign * sum(C[j] * W^j) for j = 0 to n - 1
 	11 : end if
 
  * @param bigint** C 덧셈 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint** A 덧셈을 수행할 bigint 형 더블포인터 변수
  * @param bigint** B 덧셈을 수행할 bigint 형 더블포인터 변수
  * @param int sign 덧셈 결과 C의 부호
+ * @return SUCCESS
+ * @throws
+	ERROR A(B)의 word length가 양수가 아닌 경우
+	ERROR bigint 구조체 내부에 있는 배열 재할당 실패 시
  */
-void ADDC(bigint** C, bigint** A, bigint** B, int sign)
+int ADDC(bigint** C, bigint** A, bigint** B, int sign)
 {
 	int A_Len;
 	int B_Len;
 	int i;
 	unsigned int carry;
 
-	A_Len = (*A)->wordlen;
-	B_Len = (*B)->wordlen;
+	BI_Get_Word_Length(&A_Len, A);
+	BI_Get_Word_Length(&B_Len, B);
+
+	if (A_Len <= 0)
+		return ERROR;
+	if (B_Len <= 0)
+		return ERROR;
 
 	word* temp;
 
@@ -989,23 +1004,25 @@ void ADDC(bigint** C, bigint** A, bigint** B, int sign)
 	temp = (word*)realloc((*B)->a, sizeof(word) * A_Len);
 	if (temp != NULL)
 		(*B)->a = temp;
+	else
+		return ERROR;
 
 	for (i = B_Len; i < A_Len; i++)
-		(*B)->a[i] = 0; // 늘어난 길이만큼 0으로 초기화
+		(*B)->a[i] = 0; // [line 1] 늘어난 길이만큼 0으로 초기화
 
-	carry = 0;
+	carry = 0; // [line 2]
 
-	for (i = 0; i < A_Len; i++)
-		carry = ADD_ABc(C, A, B, carry, i); // 단일 덧셈 A의 워드열 길이만큼 실행
+	for (i = 0; i < A_Len; i++) // [line 3]
+		carry = ADD_ABc(C, A, B, carry, i); // [line 4] 단일 덧셈 A의 워드열 길이만큼 실행
 
-	if (carry == 1) // 마지막 carry가 1이면
-		(*C)->a[A_Len] = 1; // 결과값의 MSB에 1 설정
+	if (carry == 1) // [line 7] 마지막 carry가 1이면
+		(*C)->a[A_Len] = 1; // [line 8] 결과값의 MSB에 1 설정
 //	else // 마지막 carry가 0이면
 //		(*C)->a[A_Len] = 0; // 결과값의 MSB에 0 설정
 
 	BI_Refine(*C);
 
-	// 부호 설정
+	// [line 8, 10] 부호 설정
 	if (sign == 0)
 		(*C)->sign = 0;
 	else
@@ -1021,8 +1038,12 @@ void ADDC(bigint** C, bigint** A, bigint** B, int sign)
  * @param bigint** A 덧셈을 수행할 bigint 형 더블포인터 변수
  * @param bigint** B 덧셈을 수행할 bigint 형 더블포인터 변수
  * @param int sign 덧셈 결과 C의 부호
+ * @return SUCCESS
+ * @throws
+	ERROR A(B)의 word length가 양수가 아닌 경우
+	ERROR bigint 구조체 내부에 있는 배열 재할당 실패 시
  */
-void ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign)
+int ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign)
 {
 	int A_Len;
 	int B_Len;
@@ -1032,12 +1053,19 @@ void ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign)
 	BI_Get_Word_Length(&A_Len, A);
 	BI_Get_Word_Length(&B_Len, B);
 
+	if (A_Len <= 0)
+		return ERROR;
+	if (B_Len <= 0)
+		return ERROR;
+
 	word* temp;
 
 	(*B)->wordlen = A_Len;
 	temp = (word*)realloc((*B)->a, sizeof(word) * A_Len);
 	if (temp != NULL)
 		(*B)->a = temp;
+	else
+		return ERROR;
 
 	for (i = B_Len; i < A_Len; i++)
 		(*B)->a[i] = 0;
@@ -1061,104 +1089,115 @@ void ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign)
  * @details
 
 	 [pseudo code]
-	 Input  : C, A, B
+	 Input  : A, B
+	 Output : C = A + B
 	 1 : if A = 0 then
-	 2 :	return B
+	 2 :	C <- B
 	 3 : end if
 	 4 : if B = 0 then
-	 5 :	return A
+	 5 :	C <- A
 	 6 : end if
 	 7 : if A > 0 and B < 0 then
-	 8 :	return SUB(A, |B|)
+	 8 :	C <- SUB(A, |B|)
 	 9 : end if
 	10 : if A < 0 and B > 0 then
-	11 :	return SUB(B, |A|)
+	11 :	C <- SUB(B, |A|)
 	12 : end if
 	13 : if WordLen(A) >= WordLen(B) then
-	14 :	return ADDC(A, B)
+	14 :	C <- ADDC(A, B)
 	15 : else
-	16 :	return ADDC(B, A)
+	16 :	C <- ADDC(B, A)
 	17 : end if
 
  * @param bigint** C 덧셈 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint** A 덧셈을 수행할 bigint 형 더블포인터 변수
  * @param bigint** B 덧셈을 수행할 bigint 형 더블포인터 변수
+ * @return SUCCESS 성공 시
+ * @throws
+	ERROR A(B)의 bigint 구조체 미할당 시
+	ERROR A(B)의 부호 가져오기 실패 시
  */
-void ADD(bigint** C, bigint** A, bigint** B)
+int ADD(bigint** C, bigint** A, bigint** B)
 {
 	int A_Len = 0;
 	int B_Len = 0;
 	int A_sign;
 	int B_sign;
 	int i;
+
+	if ((*A) == NULL)
+		return ERROR;
+	if ((*B) == NULL)
+		return ERROR;
+
 	A_sign = BI_Get_Sign(*A);
 	B_sign = BI_Get_Sign(*B);
 
-	BI_Get_Word_Length(&A_Len, A);
-	BI_Get_Word_Length(&B_Len, B);
+	if (A_sign == ERROR)
+		return ERROR;
+	if (B_sign == ERROR)
+		return ERROR;
 
-	if (BI_Is_Zero(A) == 0) // A is zero
+	if (BI_Is_Zero(A) == 0) // [line 1] A is zero
 	{
-		// A + B에서 A가 0이면 B return
+		// [line 2] A + B에서 A가 0이면 B return
 		(*C)->sign = (*B)->sign;
 		(*C)->wordlen = (*B)->wordlen;
 		for (i = 0; i < (*C)->wordlen; i++)
 			(*C)->a[i] = (*B)->a[i];
 
-		return;
+		return SUCCESS;
 	}
 
-	if (BI_Is_Zero(B) == 0) // B is zero
+	if (BI_Is_Zero(B) == 0) // [line 4] B is zero
 	{
-		// A + B에서 B가 0이면 A return
+		// [line 5] A + B에서 B가 0이면 A return
 		(*C)->sign = (*A)->sign;
 		(*C)->wordlen = (*A)->wordlen;
 		for (i = 0; i < (*C)->wordlen; i++)
 			(*C)->a[i] = (*A)->a[i];
 
-		return;
+		return SUCCESS;
 	}
 
-	if ((A_sign == NON_NEGATIVE) && (B_sign == NEGATIVE)) // A가 양수, B가 음수이면
+	if ((A_sign == NON_NEGATIVE) && (B_sign == NEGATIVE)) // [line 7] A가 양수, B가 음수이면
 	{
 		bigint* temp = NULL;
-		BI_New(&temp, B_Len);
 		BI_Assign(&temp, *B); // temp = B
 
 		BI_Flip_Sign(temp); // temp = |B|
-		SUB(C, *A, temp); // C = A - |B|
+		SUB(C, *A, temp); // [line 8] C = A - |B|
 		BI_Refine(*C);
 
 		BI_Delete(&temp);
 
-		return;
+		return SUCCESS;
 	}
 
-	if ((A_sign == NEGATIVE) && (B_sign == NON_NEGATIVE)) // A가 음수, B가 양수이면
+	if ((A_sign == NEGATIVE) && (B_sign == NON_NEGATIVE)) // [line 10] A가 음수, B가 양수이면
 	{
 		bigint* temp = NULL;
-		BI_New(&temp, A_Len);
 		BI_Assign(&temp, *A); // temp = A
 
 		BI_Flip_Sign(temp); // temp = |A|
-		SUB(C, *B, temp); // C = B - |A|
+		SUB(C, *B, temp); // [line 11] C = B - |A|
 		BI_Refine(*C);
 
 		BI_Delete(&temp);
 
-		return;
+		return SUCCESS;
 	}
 
 	// A, B가 동일한 부호일 때
-	if (A_Len >= B_Len) // A의 워드열의 길이가 B의 워드열의 길이보다 길 때
+	if (A_Len >= B_Len) // [line 13] A의 워드열의 길이가 B의 워드열의 길이보다 길 때
 	{
-		ADDC(C, A, B, A_sign); // 덧셈 실행
-		return;
+		ADDC(C, A, B, A_sign); // [line 14] 덧셈 실행
+		return SUCCESS;
 	}
-	else // B의 워드열의 길이가 A의 워드열의 길이보다 길 때
+	else // [line 15] B의 워드열의 길이가 A의 워드열의 길이보다 길 때
 	{
-		ADDC(C, B, A, A_sign); // 덧셈 실행
-		return;
+		ADDC(C, B, A, A_sign); // [line 16] 덧셈 실행
+		return SUCCESS;
 	}
 
 }
@@ -1171,19 +1210,31 @@ void ADD(bigint** C, bigint** A, bigint** B)
  * @param bigint** C 덧셈 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint** A 덧셈을 수행할 bigint 형 더블포인터 변수
  * @param bigint** B 덧셈을 수행할 bigint 형 더블포인터 변수
+ * @return SUCCESS 성공 시
+ * @throws
+	ERROR A(B)의 bigint 구조체 미할당 시
+	ERROR A(B)의 부호 가져오기 실패 시
  */
-void ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
+int ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 {
 	int A_Len = 0;
 	int B_Len = 0;
 	int A_sign;
 	int B_sign;
 	int i;
+
+	if (*A == NULL)
+		return ERROR;
+	if (*B == NULL)
+		return ERROR;
+
 	A_sign = BI_Get_Sign(*A);
 	B_sign = BI_Get_Sign(*B);
 
-	BI_Get_Word_Length(&A_Len, A);
-	BI_Get_Word_Length(&B_Len, B);
+	if (A_sign == ERROR)
+		return ERROR;
+	if (B_sign == ERROR)
+		return ERROR;;
 
 	if (BI_Is_Zero(A) == 0) // A is zero
 	{
@@ -1192,7 +1243,7 @@ void ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 		for (i = 0; i < (*C)->wordlen; i++)
 			(*C)->a[i] = (*B)->a[i];
 
-		return;
+		return SUCCESS;
 	}
 
 	if (BI_Is_Zero(B) == 0) // B is zero
@@ -1202,13 +1253,12 @@ void ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 		for (i = 0; i < (*C)->wordlen; i++)
 			(*C)->a[i] = (*A)->a[i];
 
-		return;
+		return SUCCESS;
 	}
 
 	if ((A_sign == NON_NEGATIVE) && (B_sign == NEGATIVE))
 	{
 		bigint* temp = NULL;
-		BI_New(&temp, B_Len);
 		BI_Assign(&temp, *B);
 
 		BI_Flip_Sign(temp);
@@ -1216,13 +1266,12 @@ void ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 
 		BI_Delete(&temp);
 
-		return;
+		return SUCCESS;
 	}
 
 	if ((A_sign == NEGATIVE) && (B_sign == NON_NEGATIVE))
 	{
 		bigint* temp = NULL;
-		BI_New(&temp, A_Len);
 		BI_Assign(&temp, *A);
 
 		BI_Flip_Sign(temp);
@@ -1230,21 +1279,47 @@ void ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 
 		BI_Delete(&temp);
 
-		return;
+		return SUCCESS;
 	}
 
 	// A, B가 동일한 부호일 때
 	if (A_Len >= B_Len)
 	{
 		ADDC_AAB(C, A, B, A_sign);
-		return;
+		return SUCCESS;
 	}
 	else
 	{
 		ADDC_AAB(C, B, A, A_sign);
-		return;
+		return SUCCESS;
 	}
+}
 
+/**
+ * @brief Compare and return longer word length
+ * @details
+	두 bigint의 워드열 길이를 비교하여 더 긴 워드열의 길이 반환
+ * @param bigint* A 워드 길이 비교를 수행할 bigint 형 포인터 변수
+ * @param bigint* B 워드 길이 비교를 수행할 bigint 형 포인터 변수
+ * @return int MAX(WordLen(A), WordLen(B)) 더 긴 워드열 길이
+ * @throws ERROR A(B)의 word length가 양수가 아닌 경우
+ */
+int Compare_WordLen(bigint* A, bigint* B) // return wordlen 큰 사이즈
+{
+	int A_Len, B_Len;
+
+	BI_Get_Word_Length(&A_Len, &A); // A의 워드열 길이
+	BI_Get_Word_Length(&B_Len, &B); // B의 워드열 길이
+
+	if (A_Len <= 0)
+		return ERROR;
+	if (B_Len <= 0)
+		return ERROR;
+
+	if (A_Len > B_Len) // A의 워드열의 길이가 더 길면
+		return A_Len; // A의 워드열 길이 return
+	else // B의 워드열의 길이가 더 길면
+		return B_Len; // B의 워드열 길이 return
 }
 
 /**
@@ -1526,19 +1601,19 @@ int SUBC(bigint** C, bigint** A, bigint** B)
 	return SUCCESS;
 }
 
-
 /**
  * @brief Multiplication
  * @details
 	flag에 따라 곱셈 연산 수행(Karatsuba multiplication / textbook multiplication)
-	C = A * B
+	Input  : A
+	Output : C = A * B
  * @param bigint* C 곱셈 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint* A 곱셈 연산을 수행할 bigint 형 포인터 변수
  * @param bigint* B 곱셈 연산을 수행할 bigint 형 포인터 변수
- * @return 0 (성공)
+ * @return SUCCESS
  * @throws
-	flag 미지정 시 error
-	A, B의 부호 가져오기 실패 시 error
+	ERROR flag 미지정 시
+	ERROR A(B)의 bigint 구조체 미할당 시
  */
 int Multiplication(bigint** C, bigint* A, bigint* B)
 {
@@ -1546,7 +1621,7 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 	int B_Len = 0;
 	int C_Len = 0;
 	
-	if ((*C == NULL) | (B == NULL) | (A == NULL))
+	if ((B == NULL) | (A == NULL))
 		return ERROR;
 
 	if ((A->sign != 0) & (A->sign != 1))
@@ -1555,16 +1630,10 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 	if ((B->sign != 0) & (B->sign != 1))
 		return ERROR;
 
-	if (((*C)->sign != 0) & ((*C)->sign != 1))
-		return ERROR;
-
 	if (A->wordlen <= 0)
 		return ERROR;
 
 	if (B->wordlen <= 0)
-		return ERROR;
-
-	if ((*C)->wordlen <= 0)
 		return ERROR;
 	
 	BI_Get_Word_Length(&A_Len, &A); // A_Len = A의 워드열 길이
@@ -1609,7 +1678,7 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 	else
 		return ERROR;
 
-	return 0;
+	return SUCCESS;
 }
 
 /**
@@ -1806,20 +1875,41 @@ int MUL_Multi(bigint** C, bigint* A, bigint* B)
 }
 
 
+
 /**
  * @brief Karatsuba Multiplication
  * @details
 
 	 [pseudo code]
-	 Input  : C, A, B
-	 1 : procedure MUL_Karatsuba(A, B)
-	 2 : if flag >= min(WordLen(A), WordLen(B)) then
+	 Input  : A, B
+	 Output : C = A * B
+	  1 : procedure MUL_Karatsuba(A, B)
+	  2 :	if flag >= min(WordLen(A), WordLen(B)) then
+	  3 :		C <- MUL(A, B)
+	  4 :	end if
+	  5 :	l <- (max(WordLen(A), WordLen(B)) + 1) >> 1
+	  6 :	A1, A0 <- A >> lw, A mod 2^lw
+	  7 :	B1, B0 <- B >> lw, B mod 2^lw
+	  8 :	T1, T0 <- MUL_Karatsuba(A1, B1), MUL_Karatsuba(A0, B0)
+	  9 :	R <- (T1 << 2lw) + T0
+	 10 :	S1, S0 <- SUB(A0, A1), SUB(B1, B0)
+	 11 :	S <- (-1)^(Sign(S1)^Sign(S2)) * MUL_Karatsuba(|S1|, |S0|)
+	 12 :	S <- ADD(S, T1)
+	 13 :	S <- ADD(S, T0)
+	 14 :	S << lw
+	 15 :	R <- ADD(R, S)
+	 16 :	C <- R
+	 17 : end procedure
 
  * @param bigint** C 카라추바 곱셈 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint** A 카라추바 곱셈을 수행할 bigint 형 더블포인터 변수
  * @param bigint** B 카라추바 곱셈을 수행할 bigint 형 더블포인터 변수
+ * @return SUCCESS
+ * @throws
+	ERROR A(B)의 word length 가져오기 실패 시
+	ERROR S0(S1)의 부호 가져오기 실패 시
  */
-void MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
+int MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 {
 	int i, j = 0;
 	int len, A_Len, B_Len;
@@ -1828,13 +1918,19 @@ void MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 	BI_Get_Word_Length(&A_Len, &A); // A_Len = A의 워드열 길이
 	BI_Get_Word_Length(&B_Len, &B); // B_Len = B의 워드열 길이
 
-	if (FLAG >= MIN(A_Len, B_Len)) // A의 워드열의 길이와 B의 워드열의 길이 중 더 작은 것이 flag보다 작으면
+	// 예외 처리
+	if (A_Len < 0)
+		return ERROR;
+	if (B_Len < 0)
+		return ERROR;
+
+	if (FLAG >= MIN(A_Len, B_Len)) // [line 2] A의 워드열의 길이와 B의 워드열의 길이 중 더 작은 것이 flag보다 작으면
 	{
-		MUL_Multi(C, A, B); // textbook multiplication 실행
-		return;
+		MUL_Multi(C, A, B); // [line 3] textbook multiplication 실행
+		return 0;
 	}
 
-	len = (MAX(A_Len, B_Len) + 1) >> 1;
+	len = (MAX(A_Len, B_Len) + 1) >> 1; // [line 5]
 
 	bigint* A1 = NULL;
 	bigint* A0 = NULL;
@@ -1856,10 +1952,10 @@ void MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 	BI_Assign(&B1, B);
 	BI_Assign(&B0, B);
 
-	Right_Shift(A1, len * WORD_BIT_LEN); // A1 = A >> len word (A를 len 워드만큼 오른쪽으로 이동)
-	BI_Reduction(&A0, len * WORD_BIT_LEN); // A0 = A mod (2^(len * wordlen)) (A를 len 워드만큼 modular 연산 수행)
-	Right_Shift(B1, len * WORD_BIT_LEN); // B1 = A >> len word (A를 len 워드만큼 오른쪽으로 이동)
-	BI_Reduction(&B0, len * WORD_BIT_LEN); // B0 = A mod (2^(len * wordlen)) (A를 len 워드만큼 modular 연산 수행)
+	Right_Shift(A1, len * WORD_BIT_LEN); // [line 6] A1 = A >> len word (A를 len 워드만큼 오른쪽으로 이동)
+	BI_Reduction(&A0, len * WORD_BIT_LEN); // [line 6] A0 = A mod (2^(len * wordlen)) (A를 len 워드만큼 modular 연산 수행)
+	Right_Shift(B1, len * WORD_BIT_LEN); // [line 7] B1 = A >> len word (A를 len 워드만큼 오른쪽으로 이동)
+	BI_Reduction(&B0, len * WORD_BIT_LEN); // [line 7] B0 = A mod (2^(len * wordlen)) (A를 len 워드만큼 modular 연산 수행)
 
 	BI_New(&T0, len * 2);
 	BI_New(&T1, len * 2);
@@ -1868,8 +1964,8 @@ void MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 	BI_New(&R, len * 4);
 	BI_New(&S, len * 2);
 
-	MUL_Karatsuba(&T1, A1, B1); // T1 = A1 * B1
-	MUL_Karatsuba(&T0, A0, B0); // T0 = A0 * B0
+	MUL_Karatsuba(&T1, A1, B1); // [line 8] T1 = A1 * B1
+	MUL_Karatsuba(&T0, A0, B0); // [line 8] T0 = A0 * B0
 
 	BI_Refine(T1);
 	BI_Refine(T0);
@@ -1878,7 +1974,7 @@ void MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 	BI_Assign(&T1_tmp, T1);
 	Left_Shift(T1_tmp, 2 * WORD_BIT_LEN * len); // T1_tmp = T1을 2 * len 워드만큼 오른쪽으로 이동
 
-	// R = T1 || T0
+	// [line 9] R = T1 || T0
 	for (i = 0; i < T1->wordlen; i++)
 		R->a[len * 2 + i] = T1_tmp->a[T1_tmp->wordlen - T1->wordlen + i];
 	for (i = 0; i < T0->wordlen; i++)
@@ -1886,13 +1982,19 @@ void MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 
 	BI_Refine(R);
 
-	SUB(&S1, A0, A1); // S1 = A0 - A1
-	SUB(&S0, B1, B0); // S0 = B1 - B0
+	SUB(&S1, A0, A1); // [line 10] S1 = A0 - A1
+	SUB(&S0, B1, B0); // [line 10] S0 = B1 - B0
 
 	S0_sign = BI_Get_Sign(S0);
 	S1_sign = BI_Get_Sign(S1);
 
-	//S0, S1은 음수일 수 있으므로 절댓값 취해 주기
+	// 예외 처리
+	if (S0_sign == ERROR)
+		return ERROR;
+	if (S1_sign == ERROR)
+		return ERROR;
+
+	// S0, S1은 음수일 수 있으므로 절댓값 취해 주기
 	if (S1_sign == S0_sign)
 	{
 		if (S1_sign == NEGATIVE)
@@ -1909,7 +2011,7 @@ void MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 			BI_Flip_Sign(S0);
 	}
 
-	MUL_Karatsuba(&S, S1, S0); // S = S1 * S0
+	MUL_Karatsuba(&S, S1, S0); // [line 11] S = S1 * S0
 	BI_Refine(S);
 
 	// S 부호 정해 주기
@@ -1925,10 +2027,10 @@ void MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 	BI_New(&ADD_result1, len * 2 + 1);
 	BI_New(&ADD_result2, len * 2 + 1);
 
-	ADD(&ADD_result1, &S, &T1); // ADD_result1 = S + T1
-	ADD(&ADD_result2, &ADD_result1, &T0); // ADD_result2 = ADD_result1 + T0 = S + T1 + T0
-	Left_Shift(ADD_result2, len * WORD_BIT_LEN); // ADD_result2 << len 워드
-	ADD_AAB(C, &R, &ADD_result2); // C = R + ADD_result2
+	ADD(&ADD_result1, &S, &T1); // [line 12] ADD_result1 = S + T1
+	ADD(&ADD_result2, &ADD_result1, &T0); // [line 13] ADD_result2 = ADD_result1 + T0 = S + T1 + T0
+	Left_Shift(ADD_result2, len * WORD_BIT_LEN); // [line 14] ADD_result2 << len 워드
+	ADD_AAB(C, &R, &ADD_result2); // [line 15] C = R + ADD_result2
 
 	BI_Delete(&A0);
 	BI_Delete(&A1);
@@ -1946,36 +2048,37 @@ void MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 	BI_Delete(&ADD_result2);
 
 	BI_Delete(&T1_tmp);
+
+	return SUCCESS;
 }
 
 /**
  * @brief Squaring
  * @details
 	flag에 따라 제곱 연산 수행(Karatsuba sqauring / textbook sqauring)
-	C = A * A
+	Input  : A
+	Output : C = A ^ 2
  * @param bigint** C 제곱 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint* A 제곱 연산을 수행할 bigint 형 포인터 변수
- * @return 0 (성공)
+ * @return SUCCESS
  * @throws
-	flag 미지정 시 error
+	ERROR A의 bigint 구조체 미할당 시
+	ERROR A의 word length가 양수가 아닌 경우
+	ERROR flag 미지정 시
  */
 int Squaring(bigint** C, bigint* A)
 {
 	int A_Len = 0;
-	
-	if ((A->sign != 0) & (A->sign != 1))
+
+	// 예외 처리
+	if (A == NULL)
 		return ERROR;
 
-	if ((B->sign != 0) & (B->sign != 1))
-		return ERROR;
-
-	if (A->wordlen <= 0)
-		return ERROR;
-
-	if (B->wordlen <= 0)
-		return ERROR;
-	
 	BI_Get_Word_Length(&A_Len, &A); // A_Len = A의 워드열 길이
+
+	// 예외 처리
+	if (A_Len <= 0)
+		return ERROR;
 
 	if (FLAG_SQU == TEXTBOOK) // textbook sqauring
 	{
@@ -1992,36 +2095,47 @@ int Squaring(bigint** C, bigint* A)
 		SQUC_Karatsuba(C, A);
 		BI_Refine(*C);
 	}
-	else
+	else // 예외 처리
 		return ERROR;
 
-	return 0;
+	return SUCCESS;
 }
 
-/*
-	Single Squaring
+/**
+ * @brief Single Squaring
+ * @details
 
-	[pseudo code]
-	Input  :
-	Output :
+	 [pseudo code]
+	 Input  : A
+	 Output : C = A ^ 2
+	  1 : A1, A0 <- |A| >> w/2, |A| mod 2^(w/2)
+	  2 : C1, C0 <- A1^2, A0^2
+	  3 : C <- (C1 << w) + C0
+	  4 : T <- A0 * A1
+	  5 : T <- T << (w/2 + 1)
+	  6 : C <- C + T
 
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-*/
-void Single_Squaring(bigint* C, bigint* A)
+ * @param bigint* C 제곱 연산을 수행한 결과를 저장할 bigint 형 포인터 변수
+ * @param bigint* A 제곱 연산을 수행할 bigint 형 포인터 변수
+
+ * @return SUCCESS
+ * @throws
+	ERROR A의 부호 가져오기 실패 시
+ */
+int Single_Squaring(bigint* C, bigint* A)
 {
+	int A_Sign = 0;
+
 	bigint* A1 = NULL;
 	bigint* A0 = NULL;
 	bigint* C1 = NULL;
 	bigint* C0 = NULL;
 	bigint* T = NULL;
+
+	A_Sign = BI_Get_Sign(A);
+
+	if (A_Sign == ERROR) // 예외 처리
+		return ERROR;
 
 	BI_Assign(&A1, A);
 	BI_Assign(&A0, A);
@@ -2031,52 +2145,66 @@ void Single_Squaring(bigint* C, bigint* A)
 	BI_New(&T, 2);
 
 	// A1 = |A| >> WORD_BIT_LEN / 2, A0 = |A| mod (WORD_BIT_LEN / 2) 를 위한 |A| 처리
-	if (A->sign == NEGATIVE)
+	if (A_Sign == NEGATIVE)
 	{
 		BI_Flip_Sign(A1);
 		BI_Flip_Sign(A0);
 	}
 
-	Right_Shift(A1, (int)(WORD_BIT_LEN / 2)); // A1 = |A| >> WORD_BIT_LEN / 2
-	BI_Reduction(&A0, (int)(WORD_BIT_LEN / 2)); // A0 = |A| mod (WORD_BIT_LEN / 2)
+	Right_Shift(A1, (int)(WORD_BIT_LEN / 2)); // [line 1] A1 = |A| >> WORD_BIT_LEN / 2
+	BI_Reduction(&A0, (int)(WORD_BIT_LEN / 2)); // [line 1] A0 = |A| mod (WORD_BIT_LEN / 2)
 
-	C1->a[0] = A1->a[0] * A1->a[0]; // C1 = A1^2
-	C0->a[0] = A0->a[0] * A0->a[0]; // C0 = A0^2
+	C1->a[0] = A1->a[0] * A1->a[0]; // [line 2] C1 = A1^2
+	C0->a[0] = A0->a[0] * A0->a[0]; // [line 2] C0 = A0^2
 
-	// C = (C1 << WORD_BIT_LEN) + C0
+	// [line 3] C = (C1 << WORD_BIT_LEN) + C0
 	C->a[1] = C1->a[0];
 	C->a[0] = C0->a[0];
 
-	MUL_Multi(&T, A0, A1); // T = A0 * A1
-	Left_Shift(T, (WORD_BIT_LEN / 2) + 1); // T = T << ((WORD_BIT_LEN / 2) + 1)
+	MUL_Multi(&T, A0, A1); // [line 4] T = A0 * A1
+	Left_Shift(T, (WORD_BIT_LEN / 2) + 1); // [line 5] T = T << ((WORD_BIT_LEN / 2) + 1)
 
-	ADD_AAB(&C, &C, &T); // C = C + T
+	ADD_AAB(&C, &C, &T); // [line 6] C = C + T
 
 	BI_Delete(&A1);
 	BI_Delete(&A0);
 	BI_Delete(&C1);
 	BI_Delete(&C0);
 	BI_Delete(&T);
+
+	return SUCCESS;
 }
 
-/*
-	Squaring Core
+/**
+ * @brief Squaring Core
+ * @details
 
-	[pseudo code]
-	Input  :
-	Output :
+	 [pseudo code]
+	 Input  : A
+	 Output : C = A ^ 2
+	  1 : C1, C2 <- 0
+	  2 : for j = 0 to WordLen(A) - 1 do
+	  3 :	T1 <- A[j] * A[j]
+	  4 :	T1 <- T1 << 2jw
+	  5 :	C1 <- T1 + C1
+	  6 :	 for i = j + 1 to WordLen(A) - 1 do
+	  7 :		T2 = A[j] * A[i]
+	  8 :		T2 <- T2 << (i + j)w
+	  9 :		C2 <- ADD(C2, T2)
+	 10 :	end for
+	 11 : end for
+	 12 : C2 <- C2 << 1
+	 13 : C <- ADD(C1, C2)
 
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-*/
-void SQUC(bigint** C, bigint* A)
+ * @param bigint** C 제곱 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+ * @param bigint* A 제곱 연산을 수행할 bigint 형 포인터 변수
+
+ * @return SUCCESS
+ * @throws
+	ERROR A의 word length가 양수가 아닌 경우
+	ERROR bigint 구조체 내부에 있는 배열 재할당 실패 시
+ */
+int SQUC(bigint** C, bigint* A)
 {
 	int i, j, k, m;
 	int wordlen_A;
@@ -2102,20 +2230,22 @@ void SQUC(bigint** C, bigint* A)
 	A_j->sign = A->sign;
 
 	BI_Get_Word_Length(&wordlen_A, &A);
+	if (wordlen_A <= 0)
+		return ERROR;
 
 	BI_New(C, wordlen_A * 2 + 1);
-	BI_New(&C1, 2 * wordlen_A);
-	BI_New(&C2, 2 * wordlen_A);
+	BI_New(&C1, 2 * wordlen_A); // [line 1] 크기만 크게 잡고 0으로 설정
+	BI_New(&C2, 2 * wordlen_A); // [line 1] 크기만 크게 잡고 0으로 설정
 
 	for (j = 0; j < wordlen_A; j++)
 	{
 		BI_New(&T1, 2);
 		A_j->a[0] = A->a[j];
-		Single_Squaring(T1, A_j);
+		Single_Squaring(T1, A_j); // [line 3]
 		BI_Assign(&temp1, T1);
-		Left_Shift(temp1, (int)(2 * j * WORD_BIT_LEN)); // T1 = T1 << ((2 * j) * WORD_BIT_LEN)
+		Left_Shift(temp1, (int)(2 * j * WORD_BIT_LEN)); // [line 4] T1 = T1 << ((2 * j) * WORD_BIT_LEN)
 
-		// C1 = T1 || C1
+		// [line 5] C1 = T1 || C1
 		if (j == 0)
 		{
 			for (k = 0; k < temp1->wordlen; k++)
@@ -2133,25 +2263,28 @@ void SQUC(bigint** C, bigint* A)
 
 		BI_Delete(&T1);
 
-		for (i = j + 1; i < wordlen_A; i++)
+		for (i = j + 1; i < wordlen_A; i++) // [line 6]
 		{
 			BI_New(&T2, 2);
 			A_i->a[0] = A->a[i];
-			MUL_Multi(&T2, A_j, A_i);
+			MUL_Multi(&T2, A_j, A_i); // [line 7]
 			BI_Assign(&temp2, T2);
-			Left_Shift(temp2, (int)((i + j) * WORD_BIT_LEN));
+			Left_Shift(temp2, (int)((i + j) * WORD_BIT_LEN)); // [line 8]
 
 			c2_len = C2->wordlen;
-			len = MAX(C2->wordlen, temp2->wordlen) + 1;
+
+			len = MAX(C2->wordlen, temp2->wordlen) + 1; // C2 = C2 + temp2를 하기 위해 C2와 temp2 중 더 긴 워드열의 길이 구하기
 			C2->wordlen = len;
 			temp = (word*)realloc(C2->a, sizeof(word) * len); // new_wordlen만큼 bigint 구조체 재할당
 			if (temp != NULL)
 				C2->a = temp;
+			else
+				return ERROR;
 
 			for (m = c2_len; m < len; m++)
 				C2->a[m] = 0; // 늘어난 길이만큼 0으로 초기화
 
-			ADD_AAB(&C2, &C2, &temp2);
+			ADD_AAB(&C2, &C2, &temp2); // [line 9]
 			BI_Refine(C2);
 
 			array_init(T2->a, T2->wordlen);
@@ -2159,8 +2292,9 @@ void SQUC(bigint** C, bigint* A)
 			BI_Delete(&T2);
 		}
 	}
-	Left_Shift(C2, 1);
-	ADD(C, &C1, &C2);
+
+	Left_Shift(C2, 1); // [line 12] C2 = C2 << 1
+	ADD(C, &C1, &C2); // [line 13] C = C1 + C2
 
 	BI_Delete(&C1);
 	BI_Delete(&C2);
@@ -2168,26 +2302,30 @@ void SQUC(bigint** C, bigint* A)
 	BI_Delete(&A_j);
 	BI_Delete(&temp1);
 	BI_Delete(&temp2);
+
+	return SUCCESS;
 }
 
-/*
-	Squaring
+/**
+ * @brief Squaring
+ * @details
 
-	[pseudo code]
-	Input  :
-	Output :
+	 [pseudo code]
+	 Input  : A
+	 Output : C = A ^ 2
+	  1 : if A = 0 or A = 1 or A = -1 then
+	  2 :	C <- |A|
+	  3 : end if
+	  4 : C <- SQUC(A)
 
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-*/
-void SQU(bigint** C, bigint* A)
+ * @param bigint** C 제곱 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+ * @param bigint* A 제곱 연산을 수행할 bigint 형 포인터 변수
+
+ * @return SUCCESS
+ * @throws
+	ERROR A의 부호 가져오기 실패 시
+ */
+int SQU(bigint** C, bigint* A)
 {
 	int flag0; // A가 0인지 판별하는 flag
 	int flag1; // A가 1인지 판별하는 flag
@@ -2199,6 +2337,9 @@ void SQU(bigint** C, bigint* A)
 	BI_Assign(&temp, A);
 
 	sign = BI_Get_Sign(A);
+	if (sign == ERROR)
+		return ERROR;
+
 	if (sign == NEGATIVE) // A의 부호가 음수인 경우
 	{
 		BI_Flip_Sign(temp); // 부호 바꾼 뒤
@@ -2208,62 +2349,78 @@ void SQU(bigint** C, bigint* A)
 	flag0 = BI_Is_Zero(&A); // A가 0인지 판별
 	flag1 = BI_Is_One(&A); // A가 1인지 판별
 
-	if (flag0 == 0) // A = 0인 경우, A^2 = 0 return
+	if (flag0 == 0) // [line 1] A = 0인 경우, A^2 = 0 return
 	{
-		BI_Assign(C, A);
+		BI_Assign(C, A); // [line 2]
 		BI_Delete(&temp);
-		return;
+
+		return SUCCESS;
 	}
-	if (flag1 == 0) // A = 1인 경우, A^2 = 1 return
+	if (flag1 == 0) // [line 1] A = 1인 경우, A^2 = 1 return
 	{
-		BI_Assign(C, A);
+		BI_Assign(C, A); // [line 2]
 		BI_Delete(&temp);
-		return;
+
+		return SUCCESS;
 	}
-	if (flag2 == 0) // A = -1인 경우, A^2 = 1 return
+	if (flag2 == 0) // [line 1] A = -1인 경우, A^2 = 1 return
 	{
-		BI_Assign(C, temp);
+		BI_Assign(C, temp); // [line 2]
 		BI_Delete(&temp);
-		return;
+
+		return SUCCESS;
 	}
 
 	BI_Delete(&temp);
 	BI_New(C, A->wordlen * 2 + 1);
 	SQUC(C, A); // A = 0. -1, 1이 아닌 경우 SQUC 실행
-
+	return SUCCESS;
 }
 
-/*
-	Squaring (used Karatsuba)
+/**
+ * @brief Karatsuba Squaring
+ * @details
 
-	[pseudo code]
-	Input  :
-	Output :
+	 [pseudo code]
+	 Input  : A
+	 Output : C = A ^ 2
+	  1 : procedure SQUC_Karatsuba(A, B)
+	  2 :	if flag >= WordLen(A) then
+	  3 :		C <- SQUC(A)
+	  4 :	end if
+	  5 :	l <- (WordLen(A) + 1) >> 1
+	  6 :	A1, A0 <- |A| >> lw, |A| mod 2^lw
+	  7 :	T1, T0 <- SQUC_Karatsuba(A1), SQUC_Karatsuba(A0)
+	  8 :	R <- (T1 << 2lw) + T0
+	  9 :	S1 <- MUL_Karatsuba(A1, A0)
+	 10 :	S <- S << (lw + 1)
+	 11 :	R <- ADDC(R, S)
+	 12 :	C <- R
+	 13 : end procedure
 
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-*/
-void SQUC_Karatsuba(bigint** C, bigint* A)
+ * @param bigint** C 제곱 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+ * @param bigint* A 제곱 연산을 수행할 bigint 형 포인터 변수
+
+ * @return SUCCESS
+ * @throws
+	ERROR A의 word length가 양수가 아닌 경우
+ */
+int SQUC_Karatsuba(bigint** C, bigint* A)
 {
 	int i;
 	int len, A_Len;
 
 	BI_Get_Word_Length(&A_Len, &A); // A_Len = A의 워드열 길이
+	if (A_Len <= 0)
+		return ERROR;
 
-	if (FLAG >= A_Len) // A의 워드열의 길이와 B의 워드열의 길이 중 더 작은 것이 flag보다 작으면
+	if (FLAG >= A_Len) // [line 2] A의 워드열의 길이와 B의 워드열의 길이 중 더 작은 것이 flag보다 작으면
 	{
-		SQUC(C, A); // textbook squaring 실행
-		return;
+		SQUC(C, A); // [line 3] textbook squaring 실행
+		return SUCCESS;
 	}
 
-	len = (A_Len + 1) >> 1;
+	len = (A_Len + 1) >> 1; // [line 5]
 
 	bigint* A1 = NULL;
 	bigint* A0 = NULL;
@@ -2286,11 +2443,11 @@ void SQUC_Karatsuba(bigint** C, bigint* A)
 		BI_Flip_Sign(A0);
 	}
 
-	Right_Shift(A1, len * (int)(WORD_BIT_LEN)); // A1 = |A| >> WORD_BIT_LEN / 2
-	BI_Reduction(&A0, len * (int)(WORD_BIT_LEN)); // A0 = |A| mod (WORD_BIT_LEN / 2)
+	Right_Shift(A1, len * (int)(WORD_BIT_LEN)); // [line 6] A1 = |A| >> WORD_BIT_LEN / 2
+	BI_Reduction(&A0, len * (int)(WORD_BIT_LEN)); // [line 6] A0 = |A| mod (WORD_BIT_LEN / 2)
 
-	SQUC_Karatsuba(&T1, A1);
-	SQUC_Karatsuba(&T0, A0);
+	SQUC_Karatsuba(&T1, A1); // [line 7]
+	SQUC_Karatsuba(&T0, A0); // [line 7]
 
 	BI_Refine(T1);
 	BI_Refine(T0);
@@ -2299,7 +2456,7 @@ void SQUC_Karatsuba(bigint** C, bigint* A)
 	BI_Assign(&T1_tmp, T1);
 	Left_Shift(T1_tmp, 2 * WORD_BIT_LEN * len); // T1_tmp = T1을 2 * len 워드만큼 오른쪽으로 이동
 
-	// R = T1 || T0
+	// [line 8] R = T1 || T0
 	for (i = 0; i < T1->wordlen; i++)
 		R->a[len * 2 + i] = T1_tmp->a[T1_tmp->wordlen - T1->wordlen + i];
 	for (i = 0; i < T0->wordlen; i++)
@@ -2307,11 +2464,11 @@ void SQUC_Karatsuba(bigint** C, bigint* A)
 
 	BI_Refine(R);
 
-	MUL_Karatsuba(&S, A1, A0); // S = A1 * A0
+	MUL_Karatsuba(&S, A1, A0); // [line 9] S = A1 * A0
 	BI_Refine(S);
 
-	Left_Shift(S, len * WORD_BIT_LEN + 1); // S << len * WORD_BIT_LEN + 1 비트만큼 왼쪽으로 이동
-	ADDC(C, &R, &S, R->sign); // C = R + S
+	Left_Shift(S, len * WORD_BIT_LEN + 1); // [line 10] S << len * WORD_BIT_LEN + 1 비트만큼 왼쪽으로 이동
+	ADDC(C, &R, &S, R->sign); // [line 11] C = R + S
 
 	BI_Delete(&A0);
 	BI_Delete(&A1);
@@ -2320,22 +2477,24 @@ void SQUC_Karatsuba(bigint** C, bigint* A)
 	BI_Delete(&R);
 	BI_Delete(&S);
 	BI_Delete(&T1_tmp);
+	
+	return SUCCESS;
 }
-
 
 /**
  * @brief Division
  * @details
 	flag에 따라 나눗셈 연산 수행(binary long division / multi-precision long division)
-	A = B * Q + R
+	Input  : A, B
+	Output : Q, R (A = B * Q + R)
  * @param bigint** Q 나눗셈 연산을 수행한 결과 중 몫을 저장할 bigint 형 더블포인터 변수
  * @param bigint** R 나눗셈 연산을 수행한 결과 중 나머지 저장할 bigint 형 더블포인터 변수
  * @param bigint* A 나눗셈 연산에서 나누려는 수인 bigint 형 포인터 변수
  * @param bigint* B 나누는 수인 bigint 형 포인터 변수
- * @return 0 (성공)
+ * @return SUCCESS
  * @throws
-	flag 미지정 시 error
-	B > A일 경우 error
+	ERROR flag 미지정 시
+	ERROR B > A일 경우
  */
 int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 {
@@ -2372,7 +2531,7 @@ int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 	else
 		return ERROR;
 
-	return 0;
+	return SUCCESS;
 }
 
 
@@ -2843,124 +3002,146 @@ int DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m) // DIVCC 에서 if(n == 
 
 	return SUCCESS;
 }
-
 /**
  * @brief Modular exponentiation of multiplication
  * @details
-	flag에 따라 모듈러 지수승 연산 수행(Left to Right / Right to Left / Montgomery ladder)
-	C = A ^ N (mod M)
- * @param bigint** C 모듈러 지수승 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
- * @param bigint* A 모듈러 지수승 연산을 수행할 bigint 형 포인터 변수
+	flag에 따라 모듈러 지수승 연산 수행(Left to Right / Right to Left / Montgomery Ladder)
+	Input  : X, N, M
+	Output : T = X ^ N (mod M)
+ * @param bigint** T 모듈러 지수승 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+ * @param bigint* X 모듈러 지수승 연산을 수행할 bigint 형 포인터 변수
  * @param bigint* N 모듈러 지수승 연산에서의 지수를 가리키는 bigint 형 포인터 변수
  * @param bigint* M 모듈러 지수승 연산에서의 모듈러를 수행할 bigint 형 포인터 변수
- * @return 0 (성공)
+ * @return SUCCESS
  * @throws
-	flag 미지정 시 error
+	ERROR flag 미지정 시
+	ERROR 지수가 음수인 경우
+	ERROR 모듈러 취하는 수가 0인 경우
  */
-int Modular_Exponentiation_MUL(bigint** C, bigint* A, bigint* N, bigint* M)
+int Modular_Exponentiation_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 {
+	if (N->sign == NEGATIVE) // 예외 처리 (지수는 양수만)
+		return ERROR;
+
 	if (BI_Is_Zero(&M) == 0) // mod 0일 때
 		return ERROR;
-	
 
 	if (BI_Is_One(&M) == 0) // mod 1 일 때
 	{
-		BI_Set_Zero(C);
+		BI_Set_Zero(T);
 		return SUCCESS;
 	}
 
-
-	if (BI_Is_One(&A) == 0) // 1 ^ N (mod M)일 때
+	if (BI_Is_Zero(&X) == 0) // T <- 0 ^ N (mod M) = 0
 	{
-		BI_Set_One(C);
+		BI_Set_Zero(T);
 		return SUCCESS;
 	}
 
-	if (BI_Is_Zero(&N) == 0) // A ^ 0 (mod 0)일 때
+	if (BI_Is_One(&X) == 0) // T <- 1 ^ N (mod M) = 1
 	{
-		BI_Set_One(C);
+		BI_Set_One(T);
+		return SUCCESS;
+	}
+	
+	if (BI_Is_Zero(&N) == 0) // T <- A ^ 0 (mod M) = 1
+	{
+		BI_Set_One(T);
 		return SUCCESS;
 	}
 	
 	if (FLAG_EXP == LTOR) // Left to Right
-		MOD_EXP_LR_MUL(C, A, N, M);
+		MOD_EXP_LR_MUL(T, X, N, M);
+
 	else if (FLAG_EXP == RTOL) // Right to Left
-		MOD_EXP_RL_MUL(C, A, N, M);
-	else if (FLAG_EXP == MONTGOMERY) // Montgomery ladder
+		MOD_EXP_RL_MUL(T, X, N, M);
+
+	else if (FLAG_EXP == MONTGOMERY) // Montgomery Ladder
 	{
-		MOD_EXP_Montgomery_MUL(C, A, N, M);
-		BI_Refine(*C);
+		MOD_EXP_Montgomery_MUL(T, X, N, M);
+		BI_Refine(*T);
 	}
+
 	else
 		return ERROR;
 
-	return 0;
+	return SUCCESS;
 }
 
 /**
  * @brief Modular exponentiation of addition
  * @details
-	flag에 따라 모듈러 곱셈 연산 수행(Left to Right / Right to Left / Montgomery ladder)
-	C = A * N (mod M)
- * @param bigint** C 모듈러 곱셈 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
- * @param bigint* A 모듈러 곱셈 연산을 수행할 bigint 형 포인터 변수
- * @param bigint* N 모듈러 곱셈 연산에서의 지수를 가리키는 bigint 형 포인터 변수
- * @param bigint* M 모듈러 곱셈 연산에서의 모듈러를 수행할 bigint 형 포인터 변수
- * @return 0 (성공)
+	flag에 따라 모듈러 exponentiation 덧셈 연산 수행(Left to Right / Right to Left / Montgomery Ladder)
+	Input  : X, N, M
+	Output : T = X * N (mod M)
+ * @param bigint** T 모듈러 exponentiation 덧셈 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+ * @param bigint* X 모듈러 exponentiation 덧셈 연산을 수행할 bigint 형 포인터 변수
+ * @param bigint* N 모듈러 exponentiation 덧셈 연산에서의 지수(덧셈할 횟수)를 가리키는 bigint 형 포인터 변수
+ * @param bigint* M 모듈러 exponentiation 덧셈 연산에서의 모듈러를 수행할 bigint 형 포인터 변수
+ * @return SUCCESS
  * @throws
-	flag 미지정 시 error
+	ERROR flag 미지정 시
+	ERROR 덧셈하는 횟수가 음수인 경우 (N < 0)
+	ERROR 모듈러 취하는 수가 0인 경우
  */
-int Modular_Exponentiation_ADD(bigint** C, bigint* A, bigint* N, bigint* M)
+int Modular_Exponentiation_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 {
+	if (N->sign == NEGATIVE)
+		return ERROR;
+
 	if (BI_Is_Zero(&M) == 0) // mod 0일 때
 		return ERROR;
 
 	if (BI_Is_One(&M) == 0) // mod 1 일 때
 	{
-		BI_Set_Zero(C);
+		BI_Set_Zero(T);
 		return SUCCESS;
 	}
 
-	if ((BI_Is_Zero(&N) == 0) | (BI_Is_Zero(&A) == 0)) // 0 * A (mod 0) 또는 N * 0일 때
+	if ((BI_Is_Zero(&N) == 0) | (BI_Is_Zero(&X) == 0)) // T <- 0 * N (mod M) = X * 0 (mod M) = 0
 	{
-		BI_Set_Zero(C);
+		BI_Set_Zero(T);
 		return SUCCESS;
 	}
 	
 	if (FLAG_EXP == LTOR) // Left to Right
-		MOD_EXP_LR_ADD(C, A, N, M);
+		MOD_EXP_LR_ADD(T, X, N, M);
 	else if (FLAG_EXP == RTOL) // Right to Left
-		MOD_EXP_RL_ADD(C, A, N, M);
-	else if (FLAG_EXP == MONTGOMERY) // Montgomery ladder
+		MOD_EXP_RL_ADD(T, X, N, M);
+	else if (FLAG_EXP == MONTGOMERY) // Montgomery Ladder
 	{
-		MOD_EXP_Montgomery_ADD(C, A, N, M);
-		BI_Refine(*C);
+		MOD_EXP_Montgomery_ADD(T, X, N, M);
+		BI_Refine(*T);
 	}
 	else
 		return ERROR;
 
-	return 0;
+	return SUCCESS;
 }
 
-// C = A ^ N
-/*
-	Montgomery Exponentiation MUL function
-
+/**
+ * @brief Exponentiation of multiplication used Montgomery Ladder
+ * @details
 	[pseudo code]
-	Input  :
-	Output :
+	Input  : X, N
+	Output : T = X ^ N
 
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-*/
-void EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N)
+	1 : t0, t1 <- 1, X
+	2 : for i <- BitLen(N) - 1 downto 0 do
+	3 :		t(1-(N_i)) <- t0 * t1
+	4 :		t(N_i) <- t(N_i) ^ 2
+	5 :	end for
+	6  T <- t0
+	
+ * @param bigint** T 지수승 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+ * @param bigint* X 지수승 연산을 수행할 bigint 형 포인터 변수
+ * @param bigint* N 지수승 연산에서의 지수를 가리키는 bigint 형 포인터 변수
+ * @return SUCCESS
+ * @throws
+	ERROR 지수가 음수인 경우
+	ERROR N의 i번째 비트가 1도 0도 아닌 경우
+ */
+int EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N)
 {
 	int i, bit;
 	int N_bit_len;
@@ -2973,31 +3154,33 @@ void EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N)
 	bigint* temp1 = NULL; // t1을 저장할 임시 변수
 
 	if (N->sign == NEGATIVE) // 예외 처리 (지수는 양수만)
-		return;
+		return ERROR;
 
 	BI_Bit_Length(&N_bit_len, N); // N의 비트열 길이 -> N_bit_len
 
-	BI_Set_One(&t0); // t0 = 1
-	BI_Assign(&t1, A); // t1 = A
+	BI_Set_One(&t0); // [line 1] t0 = 1
+	BI_Assign(&t1, X); // [line 1] t1 = A
 
-	for (i = N_bit_len - 1; i >= 0; i--)
+	for (i = N_bit_len - 1; i >= 0; i--) // [line 2]
 	{
 		bit = BI_j_th_Bit_of_BI(i, N); // N의 i번째 비트가 1인지 0인지 판별
 
 		if (bit == 1) // N의 i번째 비트가 1일 경우
 		{
-			BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
-			BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+			//BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			//BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
-			BI_New(&temp0, t0_len + t1_len); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
+			//BI_New(&temp0, t0_len + t1_len); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
 			//BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 
-			MUL_Multi(&temp0, t0, t1); // temp0 = t0 * t1
+			// [line 3]
+			Multiplication(&temp0, t0, t1); // temp0 = t0 * t1
 			BI_Delete(&t0);
 			BI_Assign(&t0, temp0); // t0 = temp0 (t0 갱신)
 			BI_Delete(&temp0);
 
-			SQU(&temp1, t1); // temp1 = t1^2
+			// [line 4]
+			Squaring(&temp1, t1); // temp1 = t1^2
 			BI_Delete(&t1);
 			BI_Assign(&t1, temp1); // t1 = temp1 (t1 갱신)
 			BI_Delete(&temp1);
@@ -3005,52 +3188,59 @@ void EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N)
 		}
 		else if (bit == 0) // N의 i번째 비트가 0일 경우
 		{
-			BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
-			BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
+			//BI_Get_Word_Length(&t0_len, &t0); // t0의 워드열 길이 -> t0_len
+			//BI_Get_Word_Length(&t1_len, &t1); // t1의 워드열 길이 -> t1_len
 
 			//BI_New(&temp0, t0_len * 2 + 1); // temp0(t0) = t0^2을 저장하기 위한 bigint 생성
-			BI_New(&temp1, t0_len + t1_len);  // temp1(t1) = t0 * t1을 저장하기 위한 bigint 생성
+			//BI_New(&temp1, t0_len + t1_len);  // temp1(t1) = t0 * t1을 저장하기 위한 bigint 생성
 
-			MUL_Multi(&temp1, t0, t1); // temp1 = t0 * t1
+			// [line 3]
+			Multiplication(&temp1, t0, t1); // temp1 = t0 * t1
 			BI_Delete(&t1);
 			BI_Assign(&t1, temp1); // t1 = temp1 (t1 갱신)
 			BI_Delete(&temp1);
 
-
-			SQU(&temp0, t0); // temp0 = t0^2
+			// [line 4]
+			Squaring(&temp0, t0); // temp0 = t0^2
 			BI_Delete(&t0);
 			BI_Assign(&t0, temp0); // t0 = temp0 (t0 갱신)
 			BI_Delete(&temp0);
 		}
 		else // N의 i번째 비트가 1도 0도 아닌 경우
-			return; // 예외 처리
+			return ERROR; // 예외 처리
 	}
 
-	BI_Assign(C, t0); // 마지막 t0 값 C에 할당
+	BI_Assign(T, t0); // 마지막 t0 값 T에 할당
 
 	BI_Delete(&t0);
 	BI_Delete(&t1);
+
+	return SUCCESS;
 }
 
-// C = N * A
-/*
-	Montgomery Exponentiation ADD function
-
+/**
+ * @brief Exponentiation of addition used Montgomery Ladder
+ * @details
 	[pseudo code]
-	Input  :
-	Output :
+	Input  : X, N
+	Output : T = X ^ N
 
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-*/
-void EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N)
+	1 : t0, t1 <- 0, X
+	2 : for i <- BitLen(N) - 1 downto 0 do
+	3 :		t(1-(N_i)) <- t0 + t1
+	4 :		t(N_i) <- 2 * t(N_i)
+	5 :	end for
+	6  T <- t0
+
+ * @param bigint** T exponentiation 덧셈 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+ * @param bigint* X exponentiation 덧셈 연산을 수행할 bigint 형 포인터 변수
+ * @param bigint* N exponentiation 덧셈 연산에서의 지수(덧셈할 횟수)를 가리키는 bigint 형 포인터 변수
+ * @return SUCCESS
+ * @throws
+	ERROR 더하는 횟수가 음수인 경우
+	ERROR N의 i번째 비트가 1도 0도 아닌 경우
+ */
+int EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N)
 {
 	int i, bit;
 	int N_bit_len;
@@ -3063,14 +3253,15 @@ void EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N)
 	bigint* temp1 = NULL; // t1을 저장할 임시 변수
 
 	if (N->sign == NEGATIVE) // 예외 처리 (양수만)
-		return;
+		return ERROR;
 
 	BI_Bit_Length(&N_bit_len, N); // N의 비트열 길이 -> N_bit_len
 
+	// [line 1]
 	BI_Set_Zero(&t0); // t0 = 0
-	BI_Assign(&t1, A); // t1 = A
+	BI_Assign(&t1, X); // t1 = A
 
-	for (i = N_bit_len - 1; i >= 0; i--)
+	for (i = N_bit_len - 1; i >= 0; i--) // [line 2]
 	{
 		bit = BI_j_th_Bit_of_BI(i, N); // N의 i번째 비트가 1인지 0인지 판별
 
@@ -3081,12 +3272,13 @@ void EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N)
 
 			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 + t1을 저장하기 위한 bigint 생성
 
+			// [line 3]
 			ADD(&temp0, &t0, &t1); // temp0 = t0 + t1
 			BI_Delete(&t0);
 			BI_Assign(&t0, temp0); // t0 = temp0 (t0 갱신)
 			BI_Delete(&temp0);
 
-			Left_Shift(t1, 1); // t1 = t1 << 2
+			Left_Shift(t1, 1); // [line 4] t1 = t1 << 2
 
 		}
 		else if (bit == 0) // N의 i번째 비트가 0일 경우
@@ -3096,42 +3288,52 @@ void EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N)
 
 			BI_New(&temp1, MAX(t0_len, t1_len) + 1);  // temp1(t1) = t0 + t1을 저장하기 위한 bigint 생성
 
+			// [line 3]
 			ADD(&temp1, &t0, &t1); // temp1 = t0 + t1
 			BI_Delete(&t1);
 			BI_Assign(&t1, temp1); // t1 = temp1 (t1 갱신)
 			BI_Delete(&temp1);
 
-			Left_Shift(t0, 1); // t0 = t0 << 2
+			Left_Shift(t0, 1); // [line 4] t0 = t0 << 2
 		}
 		else // N의 i번째 비트가 1도 0도 아닌 경우
-			return; // 예외 처리
+			return ERROR; // 예외 처리
 	}
 
-	BI_Assign(C, t0); // 마지막 t0 값 C에 할당
+	BI_Assign(T, t0); // 마지막 t0 값 T에 할당
 
 	BI_Delete(&t0);
 	BI_Delete(&t1);
+
+	return SUCCESS;
 }
 
-// C = A^N (mod M)
-/*
-	Montgomery Modular Exponentiation MUL function
-
+/**
+ * @brief Modular Exponentiation of multiplication used Montgomery Ladder
+ * @details
 	[pseudo code]
-	Input  :
-	Output :
+	Input  : X, N
+	Output : T = X ^ N (mod M)
 
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-*/
-void MOD_EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N, bigint* M)
+	1 : t0, t1 <- 1, X
+	2 : for i <- BitLen(N) - 1 downto 0 do
+	3 :		t(1-(N_i)) <- t0 * t1 (mod M)
+	4 :		t(N_i) <- t(N_i) ^ 2 (mod M)
+	5 :	end for
+	6  T <- t0
+
+ * @param bigint** T 모듈러 지수승 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+ * @param bigint* X 모듈러 지수승 연산을 수행할 bigint 형 포인터 변수
+ * @param bigint* N 모듈러 지수승 연산에서의 지수를 가리키는 bigint 형 포인터 변수
+ * @param bigint* M 모듈러 지수승 연산에서의 모듈러를 수행할 bigint 형 포인터 변수
+ * @return SUCCESS
+ * @throws
+	ERROR 지수가 음수인 경우
+	ERROR 밑이 음수인 경우
+	ERROR 모듈러 취하는 수가 음수인 경우
+	ERROR N의 i번째 비트가 1도 0도 아닌 경우
+ */
+int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 {
 	int i, bit;
 	int N_bit_len;
@@ -3147,18 +3349,19 @@ void MOD_EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N, bigint* M)
 	bigint* R = NULL;
 
 	if (N->sign == NEGATIVE) // 예외 처리
-		return;
+		return ERROR;
 	if (M->sign == NEGATIVE)
-		return;
-	if (A->sign == NEGATIVE)
-		return;
+		return ERROR;
+	if (X->sign == NEGATIVE)
+		return ERROR;
 
 	BI_Bit_Length(&N_bit_len, N); // N의 비트열 길이 -> N_bit_len
 
+	// [line 1]
 	BI_Set_One(&t0); // t0 = 1
-	BI_Assign(&t1, A); // t1 = A
+	BI_Assign(&t1, X); // t1 = X
 
-	for (i = N_bit_len - 1; i >= 0; i--)
+	for (i = N_bit_len - 1; i >= 0; i--) // [line 2]
 	{
 		bit = BI_j_th_Bit_of_BI(i, N); // N의 i번째 비트가 1인지 0인지 판별
 
@@ -3170,6 +3373,7 @@ void MOD_EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N, bigint* M)
 			//BI_New(&temp0, t0_len + t1_len); // temp0(t0) = t0 * t1을 저장하기 위한 bigint 생성
 			//BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2을 저장하기 위한 bigint 생성
 
+			// [line 3]
 			Multiplication(&temp0, t0, t1); // temp0 = t0 * t1
 			Division(&Q, &R, temp0, M); // R = temp0 (mod M)
 			BI_Delete(&t0);
@@ -3178,6 +3382,7 @@ void MOD_EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N, bigint* M)
 			BI_Delete(&Q);
 			BI_Delete(&R);
 
+			// [line 4]
 			Squaring(&temp1, t1); // temp1 = t1^2
 			Division(&Q, &R, temp1, M); // R = temp1 (mod M)
 			BI_Delete(&t1);
@@ -3195,6 +3400,7 @@ void MOD_EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N, bigint* M)
 			//BI_New(&temp0, t0_len * 2 + 1); // temp0(t0) = t0^2을 저장하기 위한 bigint 생성
 			//BI_New(&temp1, t0_len + t1_len);  // temp1(t1) = t0 * t1을 저장하기 위한 bigint 생성
 
+			// [line 3]
 			Multiplication(&temp1, t0, t1); // temp1 = t0 * t1
 			Division(&Q, &R, temp1, M); // R = temp1 (mod M)
 			BI_Delete(&t1);
@@ -3203,6 +3409,7 @@ void MOD_EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N, bigint* M)
 			BI_Delete(&Q);
 			BI_Delete(&R);
 
+			// [line 4]
 			Squaring(&temp0, t0); // temp0 = t0^2
 			Division(&Q, &R, temp0, M); // R = temp0 (mod M)
 			BI_Delete(&t0);
@@ -3212,34 +3419,42 @@ void MOD_EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N, bigint* M)
 			BI_Delete(&R);
 		}
 		else // N의 i번째 비트가 1도 0도 아닌 경우
-			return; // 예외 처리
+			return ERROR; // 예외 처리
 	}
 
-	BI_Assign(C, t0); // 마지막 t0 값 C에 할당
+	BI_Assign(T, t0); // 마지막 t0 값 T에 할당
 
 	BI_Delete(&t0);
 	BI_Delete(&t1);
 }
 
-// C = N * A (mod M)
-/*
-	Montgomery Modular Exponentiation ADD function
 
+/**
+ * @brief Modular Exponentiation of addition used Montgomery Ladder
+ * @details
 	[pseudo code]
-	Input  :
-	Output :
+	Input  : X, N
+	Output : T = X ^ N (mod M)
 
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-*/
-void MOD_EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N, bigint* M)
+	1 : t0, t1 <- 0, X
+	2 : for i <- BitLen(N) - 1 downto 0 do
+	3 :		t(1-(N_i)) <- t0 + t1 (mod M)
+	4 :		t(N_i) <- 2 * t(N_i) (mod M)
+	5 :	end for
+	6  T <- t0
+
+ * @param bigint** T 모듈러 지수 덧셈 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+ * @param bigint* X 모듈러 지수 덧셈 연산을 수행할 bigint 형 포인터 변수
+ * @param bigint* N 모듈러 지수 덧셈 연산에서의 지수(덧셈할 횟수)를 가리키는 bigint 형 포인터 변수
+ * @param bigint* M 모듈러 지수 연산에서의 모듈러를 수행할 bigint 형 포인터 변수
+ * @return SUCCESS
+ * @throws
+	ERROR 더하는 횟수가 음수인 경우
+	ERROR 더하는 대상이 음수인 경우
+	ERROR 모듈러 취하는 수가 음수인 경우
+	ERROR N의 i번째 비트가 1도 0도 아닌 경우
+ */
+int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 {
 	int i, bit;
 	int N_bit_len;
@@ -3255,18 +3470,19 @@ void MOD_EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N, bigint* M)
 	bigint* R = NULL;
 
 	if (N->sign == NEGATIVE) // 예외 처리
-		return;
+		return ERROR;
 	if (M->sign == NEGATIVE)
-		return;
-	if (A->sign == NEGATIVE)
-		return;
+		return ERROR;
+	if (X->sign == NEGATIVE)
+		return ERROR;
 
 	BI_Bit_Length(&N_bit_len, N); // N의 비트열 길이 -> N_bit_len
 
+	// [line 1]
 	BI_Set_Zero(&t0); // t0 = 0
-	BI_Assign(&t1, A); // t1 = A
+	BI_Assign(&t1, X); // t1 = X
 
-	for (i = N_bit_len - 1; i >= 0; i--)
+	for (i = N_bit_len - 1; i >= 0; i--) // [line 2]
 	{
 		bit = BI_j_th_Bit_of_BI(i, N); // N의 i번째 비트가 1인지 0인지 판별
 
@@ -3277,6 +3493,7 @@ void MOD_EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N, bigint* M)
 
 			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 + t1을 저장하기 위한 bigint 생성
 
+			// [line 3]
 			ADD(&temp0, &t0, &t1); // temp0 = t0 + t1
 			Division(&Q, &R, temp0, M); // R = temp0 (mod M)
 			BI_Delete(&t0);
@@ -3285,6 +3502,7 @@ void MOD_EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N, bigint* M)
 			BI_Delete(&Q);
 			BI_Delete(&R);
 
+			// [line 4]
 			Left_Shift(t1, 1); // t1 = t1 << 2
 			Division(&Q, &R, t1, M); // t1 = t1 (mod M)
 			BI_Delete(&t1);
@@ -3299,6 +3517,7 @@ void MOD_EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N, bigint* M)
 
 			BI_New(&temp1, MAX(t0_len, t1_len) + 1);  // temp1(t1) = t0 + t1을 저장하기 위한 bigint 생성
 
+			// [line 3]
 			ADD(&temp1, &t0, &t1); // temp1 = t0 + t1
 			Division(&Q, &R, temp1, M); // R = temp1 (mod M)
 			BI_Delete(&t1);
@@ -3307,6 +3526,7 @@ void MOD_EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N, bigint* M)
 			BI_Delete(&Q);
 			BI_Delete(&R);
 
+			// [line 4]
 			Left_Shift(t0, 1); // t0 = t0 << 2
 			Division(&Q, &R, t0, M); // t0 = t0 (mod M)
 			BI_Delete(&t0);
@@ -3315,15 +3535,14 @@ void MOD_EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N, bigint* M)
 			BI_Delete(&R);
 		}
 		else // N의 i번째 비트가 1도 0도 아닌 경우
-			return; // 예외 처리
+			return ERROR; // 예외 처리
 	}
 
-	BI_Assign(C, t0); // 마지막 t0 값 C에 할당
+	BI_Assign(T, t0); // 마지막 t0 값 T에 할당
 
 	BI_Delete(&t0);
 	BI_Delete(&t1);
 }
-
 
 /**
 * @brief [Exponentiation] Left to Right MUL function
