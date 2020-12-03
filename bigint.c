@@ -2223,11 +2223,21 @@ int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 
 	if (size == -1)
 	{
-		//printf("print(\"B is larger than A.\")\n");
 		BI_Set_Zero(Q);
 		BI_Assign(R, A);
 		return ERROR;
 	}
+	
+	if (BI_Is_Zero(&B) == 0) // 나누는 수가 0 이므로
+	{
+		return ERROR;
+	}
+
+	if (A->sign | B->sign) // A >= B > 0 의 조건을 만족하지 않을 때
+	{
+		return ERROR;
+	}
+
 
 	if (FLAG_DIV == BINARY_LONG) // binary long division
 		Binary_Long_Div(Q, R, A, B);
