@@ -1488,7 +1488,28 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 	int A_Len = 0;
 	int B_Len = 0;
 	int C_Len = 0;
+	
+	if ((*C == NULL) | (B == NULL) | (A == NULL))
+		return ERROR;
 
+	if ((A->sign != 0) & (A->sign != 1))
+		return ERROR;
+
+	if ((B->sign != 0) & (B->sign != 1))
+		return ERROR;
+
+	if (((*C)->sign != 0) & ((*C)->sign != 1))
+		return ERROR;
+
+	if (A->wordlen <= 0)
+		return ERROR;
+
+	if (B->wordlen <= 0)
+		return ERROR;
+
+	if ((*C)->wordlen <= 0)
+		return ERROR;
+	
 	BI_Get_Word_Length(&A_Len, &A); // A_Len = A의 워드열 길이
 	BI_Get_Word_Length(&B_Len, &B); // B_Len = B의 워드열 길이
 
@@ -1521,7 +1542,7 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 			BI_Flip_Sign(B);
 
 		MUL_Karatsuba(C, A, B);
-		BI_Refine(C);
+		BI_Refine(&C);
 
 		if ((sign_A ^ sign_B) == 1) // C의 부호 결정
 			(*C)->sign = NEGATIVE;
@@ -1853,7 +1874,19 @@ void MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 int Squaring(bigint** C, bigint* A)
 {
 	int A_Len = 0;
+	
+	if ((A->sign != 0) & (A->sign != 1))
+		return ERROR;
 
+	if ((B->sign != 0) & (B->sign != 1))
+		return ERROR;
+
+	if (A->wordlen <= 0)
+		return ERROR;
+
+	if (B->wordlen <= 0)
+		return ERROR;
+	
 	BI_Get_Word_Length(&A_Len, &A); // A_Len = A의 워드열 길이
 
 	if (FLAG_SQU == TEXTBOOK) // textbook sqauring
