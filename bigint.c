@@ -3326,7 +3326,7 @@ int EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N)
  * @param bigint* X 모듈러 지수승 연산을 수행할 bigint 형 포인터 변수
  * @param bigint* N 모듈러 지수승 연산에서의 지수를 가리키는 bigint 형 포인터 변수
  * @param bigint* M 모듈러 지수승 연산에서의 모듈러를 수행할 bigint 형 포인터 변수
- * @return SUCCESS
+ * @return SUCCESS 성공 시
  * @throws
 	ERROR 지수가 음수인 경우
 	ERROR 밑이 음수인 경우
@@ -3447,7 +3447,7 @@ int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
  * @param bigint* X 모듈러 지수 덧셈 연산을 수행할 bigint 형 포인터 변수
  * @param bigint* N 모듈러 지수 덧셈 연산에서의 지수(덧셈할 횟수)를 가리키는 bigint 형 포인터 변수
  * @param bigint* M 모듈러 지수 연산에서의 모듈러를 수행할 bigint 형 포인터 변수
- * @return SUCCESS
+ * @return SUCCESS 성공 시
  * @throws
 	ERROR 더하는 횟수가 음수인 경우
 	ERROR 더하는 대상이 음수인 경우
@@ -3561,6 +3561,7 @@ int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 * @param bigint** T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
 * @param bigint* X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
 * @param bigint* N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+* @return SUCCESS 성공 시
 */
 int EXP_LR_MUL(bigint** T, bigint* X, bigint* N)
 {
@@ -3617,7 +3618,8 @@ int EXP_LR_MUL(bigint** T, bigint* X, bigint* N)
 * @param bigint** T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
 * @param bigint* X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
 * @param bigint* N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
-*/
+* @return SUCCESS 성공 시
+ */
 int EXP_LR_ADD(bigint** T, bigint* X, bigint* N)
 {
 	int i = 0; // 반복문에 사용될 변수 i
@@ -3672,6 +3674,7 @@ int EXP_LR_ADD(bigint** T, bigint* X, bigint* N)
 * @param bigint** T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
 * @param bigint* X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
 * @param bigint* N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+* @return SUCCESS 성공 시
 */
 int EXP_RL_MUL(bigint** T, bigint* X, bigint* N)
 {
