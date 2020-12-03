@@ -60,14 +60,14 @@ void ADD_AAB(bigint** C, bigint** A, bigint** B);
 int Compare_WordLen(bigint* A, bigint* B);
 
 // Chapter 4 Subtraction
-void SUBC(bigint** c, bigint** a, bigint** b);
-void SUB(bigint** c, bigint* a, bigint* b);
+int SUBC(bigint** c, bigint** a, bigint** b);
+int SUB(bigint** c, bigint* a, bigint* b);
 
 // Chapter 5 Multiplication
 int Multiplication(bigint** C, bigint* A, bigint* B);
 
-void MUL_Word(word* c, word* a, word* b);
-void MUL_Multi(bigint** result, bigint* A, bigint* B);
+int MUL_Word(word* c, word* a, word* b);
+int MUL_Multi(bigint** result, bigint* A, bigint* B);
 
 // Karatsuba multiplication
 void MUL_Karatsuba(bigint** C, bigint* A, bigint* B);
@@ -84,16 +84,16 @@ void SQUC_Karatsuba(bigint** C, bigint* A);
 int Division(bigint** Q, bigint** R, bigint* A, bigint* B);
 
 // Binary Division
-void Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B);
-void ADDC_DIV(bigint** C, bigint** A, bigint** B, int sign); // 프로토타입으로
-void ADD_DIV(bigint** C, bigint** A, bigint** B); // 프로토타입으로
+int Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B);
+int ADDC_DIV(bigint** C, bigint** A, bigint** B, int sign); // 프로토타입으로
+int ADD_DIV(bigint** C, bigint** A, bigint** B); // 프로토타입으로
 
 // Multi Division
-void DIV(bigint** Q, bigint** R, bigint* A, bigint* B);
-void DIVC(bigint** Q, bigint** R, bigint* A, bigint* B);
-void DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B);
-void DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m); // 프로토타입으로
-void DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m); // 프로토타입으로
+int DIV(bigint** Q, bigint** R, bigint* A, bigint* B);
+int DIVC(bigint** Q, bigint** R, bigint* A, bigint* B);
+int DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B);
+int DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m); // 프로토타입으로
+int DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m); // 프로토타입으로
 
 // Modular Exponentiation
 int Modular_Exponentiation_MUL(bigint** C, bigint* A, bigint* N, bigint* M);
@@ -104,15 +104,15 @@ void EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N); // 프로토타입으
 void MOD_EXP_Montgomery_MUL(bigint** C, bigint* A, bigint* N, bigint* M);
 void MOD_EXP_Montgomery_ADD(bigint** C, bigint* A, bigint* N, bigint* M);
 
-void EXP_LR_MUL(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L->R * func
-void EXP_LR_ADD(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L->R + func
-void EXP_RL_MUL(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L<-R * func
-void EXP_RL_ADD(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L<-R + func
+int EXP_LR_MUL(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L->R * func
+int EXP_LR_ADD(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L->R + func
+int EXP_RL_MUL(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L<-R * func
+int EXP_RL_ADD(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L<-R + func
 // 프로토타입으로
 
-void MOD_EXP_LR_MUL(bigint** T, bigint* X, bigint* N, bigint* M);  // Modular Exponentiaition used Binary Long Division L->R * func
-void MOD_EXP_LR_ADD(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiaition used Binary Long Division L->R + func
-void MOD_EXP_RL_MUL(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiaition used Binary Long Division L<-R * func
-void MOD_EXP_RL_ADD(bigint** T, bigint* X, bigint* N, bigint* M); // Modular Exponentiaition used Binary Long Division L<-R + func
+int MOD_EXP_LR_MUL(bigint** T, bigint* X, bigint* N, bigint* M);  // Modular Exponentiaition L->R * func
+int MOD_EXP_LR_ADD(bigint** T, bigint* X, bigint* N, bigint* M);  // Modular Exponentiaition L->R + func
+int MOD_EXP_RL_MUL(bigint** T, bigint* X, bigint* N, bigint* M);  // Modular Exponentiaition L<-R * func
+int MOD_EXP_RL_ADD(bigint** T, bigint* X, bigint* N, bigint* M);  // Modular Exponentiaition L<-R + func
 
 #endif
