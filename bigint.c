@@ -1539,18 +1539,22 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 * @details
 
 	[pseudo code]
-	Input  :
-	Output :
+	Input  : C, A, B
 
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
+	1 : A1, A0 <- A >> w/2, A mod 2^(w/2)
+	2 : A1, A0 <- A >> w/2, A mod 2^(w/2)
+	3 : MUL1, MUL0 <- A1 * B1, A0 * B0
+	4 : SUM0, SUM1 <- A1 * B0, A0 * B1
+	5 : SUM1 = SUM1 + SUM0 (mod W)
+	6 : if (SUM1 < SUM0) then
+	7 :		carry1 <- 1
+	8 : SUM2 <- SUM1 << (w/2)
+	9 : SUM1 <- SUM1 >> (w/2)
+	10: MUL0 <- MUL0 + SUM2 (mod W)
+	11: if (MUL0 < SUM2)
+	12:		carry0 <- 1
+	13: MUL1 <- MUL1 + SUM1 + carry0 + (carry1 << (w/2)) (mod W)
+	14: C = (00.. || MUL1 || MUL0 || ..00)
 
 * @param word* C 단일 워드 곱셈 연산의 결과를 저장할 word 형 포인터 변수
 * @param word* A 단일 워드 곱셈 연산의 곱하는 수인 word 형 포인터 변수
@@ -1558,41 +1562,41 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 */
 void MUL_Word(word* C, word* A, word* B) // 단일 워드 곱셈
 {
-	int len = 0;
-	int i = 0;
-	int carry0 = 0;
-	int carry1 = 0;
+	int carry0 = 0; // 워드간의 덧셈을 통해 생성되는 carry를 담을 int 형 변수 carry0
+	int carry1 = 0; // 워드간의 덧셈을 통해 생성되는 carry를 담을 int 형 변수 carry1
 
-	word sum1 = 0;
-	word sum2 = 0;
-	word mul0 = 0;
-	word mul1 = 0;
-	word A1 = 0;
-	word B1 = 0;
-	word A0 = 0;
-	word B0 = 0;
+	word sum0 = 0; // 워드간의 덧셈을 담을 word형 변수 sum0
+	word sum1 = 0; // 워드간의 덧셈을 담을 word형 변수 sum1
+	word sum2 = 0; // 워드간의 덧셈을 담을 word형 변수 sum2
+	word mul0 = 0; // 단일 워드 곱셈 결과 중 하위 워드를 담을 word형 변수 mul0
+	word mul1 = 0; // 단일 워드 곱셈 결과 중 상위 워드를 담을 word형 변수 mul1
+	word A1 = 0; // A의 최상위비트부터 중간비트까지 담을 word형 변수 A1
+	word B1 = 0; // B의 최상위비트부터 중간비트까지 담을 word형 변수 B1
+	word A0 = 0; // A의 중간비트부터 최하위 비트까지 담을 word형 변수 A0
+	word B0 = 0; // B의 중간비트부터 최하위 비트까지 담을 word형 변수 B0
 
 	A1 = ((*A) >> (WORD_BIT_LEN >> 1)); // A의 최상위비트부터 중간비트까지
 	B1 = ((*B) >> (WORD_BIT_LEN >> 1)); // B의 최상위비트부터 중간비트까지
 	A0 = (*A) & (((word)1 << (WORD_BIT_LEN >> 1)) - 1); // A의 중간비트부터 최하위 비트까지
 	B0 = (*B) & (((word)1 << (WORD_BIT_LEN >> 1)) - 1); // B의 중간비트부터 최하위 비트까지
 
-	mul1 = A1 * B1;
-	mul0 = A0 * B0;
-	sum1 = A1 * B0;
-	sum1 += A0 * B1;
-	if (sum1 < A0 * B1)
-		carry1 += 1;
-	sum2 = (sum1 & (((word)1 << (WORD_BIT_LEN >> 1)) - 1));
-	sum2 = sum2 << (WORD_BIT_LEN >> 1); //sum1의 뒷부분
-	sum1 = sum1 >> (WORD_BIT_LEN >> 1); // sum1의 앞부분
-	mul0 = sum2 + mul0;
-	if (mul0 < sum2)
-		carry0 += 1;
-	mul1 = sum1 + mul1 + carry0 + ((word)carry1 << (WORD_BIT_LEN >> 1));
+	mul1 = A1 * B1; //  [line 3] A1과 B1을 곱해 mul1에 대입
+	mul0 = A0 * B0; //  [line 3] A0와 B0를 곱해 mul0에 대입
+	sum0 = A1 * B0; //  [line 4] A1과 B0를 곱해 sum0에 대입
+	sum1 = A0 * B1; //	[line 4] A0와 B1을 곱해 sum1에 대입
+	sum1 += sum0; //	[line 5] sum1에 sum0를 덧셈
+	if (sum1 < sum0) // [line 6] carry 발생했으면,
+		carry1 = 1; // [line 7] carr1가 1이 되도록 대입
+	sum2 = (sum1 & (((word)1 << (WORD_BIT_LEN >> 1)) - 1));  // sum1의 뒷부분(중간비트 ~ 최하위비트)을 만들어서 sum2에 대입
+	sum2 = sum2 << (WORD_BIT_LEN >> 1); // [line 8] sum1의 뒷부분(중간비트 ~ 최하위비트)는 mul0와 더할 때 자리를 맞춰줘야하므로
+	sum1 = sum1 >> (WORD_BIT_LEN >> 1); // [line 9] sum1의 앞부분(최상위비트 ~ 중간비트)을 만들어주기
+	mul0 = sum2 + mul0; // [line 10] 곱셈 결과의 단일 워드 중 하위 워드 부분 덧셈 연산
+	if (mul0 < sum2) // [line 11] 덧셈 연산에서 carry가 발생했으면,
+		carry0 = 1; // [line 12] carry1 = 1
+	mul1 = sum1 + mul1 + carry0 + ((word)carry1 << (WORD_BIT_LEN >> 1)); // [line 13] 곱셈 결과의 단일 워드 중 상위 워드 부분 덧셈 연산
 
-	*C = mul0;
-	*(C + 1) = mul1;
+	*C = mul0; // [line 14] 곱셈 결과 후의 단일 워드 중 하위에 대입
+	*(C + 1) = mul1; // [line 14] 곱셈 결과 후의 단일 워드 중 상위에 대입
 }
 
 /**
@@ -1603,7 +1607,7 @@ void MUL_Word(word* C, word* A, word* B) // 단일 워드 곱셈
 	Input  : C, A, B
 
 	1 : if A = 0 or B = 0 then
-	2 :		return 0;
+	2 :		C <- 0;
 	3 : end if
 	4 : if A = 1 
 	5 :		if Sign(A) is NON_NEGATIVE
@@ -1638,34 +1642,35 @@ void MUL_Multi(bigint** C, bigint* A, bigint* B)
 
 	sign_a = BI_Get_Sign(A);
 	sign_b = BI_Get_Sign(B);
+	
 
-	if ((BI_Is_Zero(&A) & BI_Is_Zero(&B)) == 0) // 피연산자중 하나라도 0이면,
+	if ((BI_Is_Zero(&A) & BI_Is_Zero(&B)) == 0) // [line 1] 피연산자중 하나라도 0이면,
 	{
-		BI_Set_Zero(C); // 곱셈 결과는 0이므로, 연산 진행하지 않고 0 출력 후
+		BI_Set_Zero(C); // [line 2] 곱셈 결과는 0이므로, 연산 진행하지 않고 0 출력 후
 		return; // return;처리
 	}
 
-	if (BI_Is_One(&A) == 0)
+	if (BI_Is_One(&A) == 0) // [line 4]
 	{
-		if (&B == C) // 1st arg == 2nd arg(AAB)인 경우
+		if (&B == C) // (예외처리) 1st arg == 2nd arg(AAB)인 경우
 			return; // 이미 1st arg = 2nd arg 이므로 (이미 1 * B = B) return으로 종료.
-		BI_Assign(C, B);
-		if (sign_a == 0)
-			(*C)->sign = 0;
-		else
-			(*C)->sign = 1;
+		BI_Assign(C, B); // C <- 1 * B 이므로 C에 B assign
+		if (sign_a == 0) // [line 5] 1이 양수인 +1이면,
+			(*C)->sign = sign_b; // [line 6] C의 부호가 B의 부호와 동일하게
+		else // [line 7] 1이 음수인 -1이면, 
+			(*C)->sign = !sign_b ; // [line 8] C의 부호가 B의 부호와 반대로
 		return;
 	}
 
-	if (BI_Is_One(&B) == 0)
+	if (BI_Is_One(&B) == 0) // [line 11]
 	{
-		if (&A == C) // 1st arg == 2nd arg(AAB)인 경우
+		if (&A == C) // (예외 처리)1st arg == 2nd arg(ABA)인 경우
 			return; // 이미 1st arg = 2nd arg 이므로 (이미 A * 1 = A) return으로 종료.
-		BI_Assign(C, A);
-		if (sign_a == 0)
-			(*C)->sign = 0;
-		else
-			(*C)->sign = 1;
+		BI_Assign(C, A); // C <- A * 1 이므로 C에 B assign
+		if (sign_a == 0) // [line 12] 1이 양수인 +1이면,
+			(*C)->sign = sign_a; // [line 13] C의 부호가 B의 부호와 동일하게
+		else // [line 14] 1이 음수인 -1이면, 
+			(*C)->sign = !sign_a; // [line 15] C의 부호가 B의 부호와 반대로
 		return;
 	}
 
@@ -1676,20 +1681,21 @@ void MUL_Multi(bigint** C, bigint* A, bigint* B)
 	BI_Get_Word_Length(&size_c, C); // C의 word 길이를 size_r에 대입
 	BI_New(&Temp, size_c); // C와 덧셈 연산을 진행해야하므로 C와 동일한 wordlen으로 생성
 
-	for (i = 0; i < B->wordlen; i++)
+	for (i = 0; i < B->wordlen; i++) // [line 17]
 	{
-		for (j = 0; j < A->wordlen; j++)
+		for (j = 0; j < A->wordlen; j++) // [line 18]
 		{
-			MUL_Word(&Temp->a[i + j], &A->a[j], &B->a[i]); // A의 단일워드와 B의 단일워드 연산 후 Temp의 단일 워드에 대입
-			ADDC_AAB(C, C, &Temp, 0); // 단일워드 곱셈한 Temp와 C를 덧셈연산 진행
+			MUL_Word(&Temp->a[i + j], &A->a[j], &B->a[i]); // [line 19, 20] A의 단일워드와 B의 단일워드 연산 후 Temp의 단일 워드에 대입
+			ADDC_AAB(C, C, &Temp, 0); // [line 21] 단일워드 곱셈한 Temp와 C를 덧셈연산 진행
 			Temp->a[i + j] = 0; // 곱셈 연산에 사용된 워드 부분 초기화
 			Temp->a[i + j + 1] = 0; // 위와 동일
 		}
 	}
 	BI_Delete(&Temp); // 할당된 Temp를 delete.
-	(*C)->sign = A->sign ^ B->sign; // 결과값 C의 부호를 결정
+	(*C)->sign = A->sign ^ B->sign; // 결과값 C의 부호를 결정 [line 24]
 	BI_Refine(*C); // Refine 시켜주기
 }
+
 
 /**
  * @brief Karatsuba Multiplication
