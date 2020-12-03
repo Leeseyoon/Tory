@@ -2443,7 +2443,7 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 
 	[pseudo code]
 	Input  : Q, R, A, B
-	Output : Q, R
+
 	1 : if B <= 0 then
 	2 :		return INVAILD
 	3 : end if
@@ -2455,9 +2455,9 @@ void ADD_DIV(bigint** C, bigint** A, bigint** B)
 	9 :		R <- RW + A_{i}
 	10:		(Q_{i}, R) <- DIVC(R, B)
 	11: end for
-	12 : return (Q, R)
+
 * @param bigint** Q Multi Long Divsion 연산의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
-* @param bigint** R Multi Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param bigint* R Multi Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint* A Multi Long Divsion 연산의 나누려는 수인 bigint 형 포인터 변수
 * @param bigint* B Multi Long Divsion 연산의 나누는 수인 bigint 형 포인터 변수
 */
@@ -2485,7 +2485,7 @@ void DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorith
 
 	for (i = len - 1; i >= 0; i--) // line 8.
 	{
-		BI_Set_Zero(&Word); // 길이가 1이고 값이 0인 빅넘버 Word 생성. BI_New(&Word, 1)도 가능. //1201
+		BI_Set_Zero(&Word); // 길이가 1이고 값이 0인 빅넘버 Word 생성. BI_New(&Word, 1)도 가능.
 		BI_New(&Temp, 1); // A의 j번째 워드(A_{j})를 담는 빅넘버 Temp를 워드 길이가 1로 생성. 
 		Temp->a[0] = A->a[i]; // Temp에 A_{j}를 대입.
 		Left_Shift(*R, WORD_BIT_LEN); // R을 왼쪽으로 W만큼 shift ==> R * W
@@ -2497,15 +2497,13 @@ void DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorith
 	}
 
 	BI_Refine(*Q);
-	//BI_Refine(*R);
 }
 
 /*
 	Long Division Algorithm Core function (Multi-precision version)
 
 	[pseudo code]
-	Input  :
-	Output :
+	Input  : Q, R, A, B
 
 	1 : if A < B then
 	2 :		return (0, A)
@@ -2515,6 +2513,11 @@ void DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorith
 	6 :	Q', R' <- DIVCC(A', B')
 	7 : Q, R <- Q', 2^(-k) * R'
 	8 : return (Q, R)
+
+* @param bigint** Q DIV( )의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param bigint* R DIV( )의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param bigint* A DIV( )의 나누려는 수인 bigint 형 포인터 변수
+* @param bigint* B DIV( )의 나누는 수인 bigint 형 포인터 변수
 
 */
 void DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
@@ -2529,10 +2532,7 @@ void DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
 	result = BI_Compare(&A, &B);
 	if (result == -1) // A < B 보다 클 때
 	{
-		return;
-		// return (Q, R) = (0, A)을 해줘야하는데
-		// DIV에서의 2번째 arg와 3번째 arg를 같은 R로 대입했으므로
-		// R은 A가 되었고, Q는 DIV 함수내에서 0이다. 
+		return; 
 	}
 	BI_Assign(&AP, A); // 빅넘버 A' 에 빅넘버 A assing
 	BI_Assign(&BP, B); // 빅넘버 B' 에 빅넘버 B assing
@@ -2564,8 +2564,8 @@ void DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
 	Long Division Algorithm Core's Core function (Multi-precision version)
 
 	[pseudo code]
-	Input  :
-	Output :
+	Input  : Q, R, A, B
+
 	1 : if n == m then    <-- DIVCC_n_m( )
 	2 :		Q <- Lower Bound(A_{m-1} / B_{m-1})
 	3 : end if
@@ -2581,6 +2581,11 @@ void DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
 	13:		(Q, R) <- (Q - 1, R + B)
 	14:	end while
 	15:	return (Q, R)
+
+* @param bigint** Q DIVC( )의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param bigint* R DIVC( )의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+* @param bigint* A DIVC( )의 나누려는 수인 bigint 형 포인터 변수
+* @param bigint* B DIVC( )의 나누는 수인 bigint 형 포인터 변수
 */
 void DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B) // 7.2.3 DIVCC(A, B)
 {
@@ -2614,24 +2619,28 @@ void DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B) // 7.2.3 DIVCC(A, B)
 	BI_New(&BQ, n + m); // 빅넘버 B와 빅넘버 Q를 곱한 값을 저장할 빅넘버 BQ를 B와 Q의 곱셈연산이 가능한 길이인 n + m 로 생성.
 	MUL_Multi(&BQ, *Q, B); // B와 Q를 곱셈 연산해 빅넘버 BQ에 대입 (이 때 Karatsuba로 변경도 가능 --> 속도 비교 가능!!)
 	SUB(R, A, BQ);// R = A - B * Q // [line 11]
-	while ((*R)->sign & 1) // [line 12] R의 부호가 음수일 때 1 & 1 = 1 
+	while ((*R)->sign & 1) // [line 12] R의 부호가 음수일 때 1 & 1 = 1  ( Q, Q - 1, Q - 2)
 	{
 		SUB(Q, *Q, one); // Q = Q - 1.
 		ADD_AAB(R, R, &B); // R = R + B. 1st arg, 2nd arg가 같으므로 ADD_AAB 함수 사용
 	}
 	BI_Delete(&one); // 선언해준 빅넘버 one delete.
 	BI_Delete(&BQ); // 선언해준 빅넘버 BQ delete.
-
 }
 
 /*
 	Long Division Algorithm Core's Core's condition (if n == m) (Multi-precision version)
 
 	[pseudo code]
-	Input  :
-	Output :
+	Input  : Q, A, B, m
+
 	1 : Q <- A_{m-1} / B_{m-1}
 	2 : Q <- LowerBound(Q)
+
+* @param bigint** Q DIVCC()에서 Q hat인 bigint 형 더블 포인터 변수
+* @param bigint* A DIVCC()에서 나눠지는 수인 A의 bigint 형 포인터 변수
+* @param bigint* B DIVCC()에서 나누려는 수인 B의 bigint 형 포인터 변수
+* @param int m DIVCC()에서 B의 wordlen을 나타내는 int형 변수
 */
 void DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m) // DIVCC 에서 if(n == m) 일 때
 {
@@ -2656,10 +2665,15 @@ void DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m) // DIVCC 에서 if(n == 
 	Long Division Algorithm Core's Core's condition (if n == m + 1) (Multi-precision version)
 
 	[pseudo code]
-	Input  :
-	Output :
+	Input  : Q, A, B, m
+
 	1 : Q <- A_{m} * W + A_{m-1} / B_{m-1}
 	2 : Q <- LowerBound(Q)
+
+* @param bigint** Q DIVCC()에서 Q hat인 bigint 형 더블 포인터 변수
+* @param bigint* A DIVCC()에서 나눠지는 수인 A의 bigint 형 포인터 변수
+* @param bigint* B DIVCC()에서 나누려는 수인 B의 bigint 형 포인터 변수
+* @param int m DIVCC()에서 B의 wordlen을 나타내는 int형 변수
 */
 void DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m) // DIVCC 에서 if(n == m + 1) 일 때
 {
