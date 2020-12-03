@@ -1600,49 +1600,52 @@ void MUL_Word(word* C, word* A, word* B) // 단일 워드 곱셈
 * @details
 
 	[pseudo code]
-	Input  :
-	Output :
+	Input  : C, A, B
 
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
+	1 : C <- 0 // 미리 선언하고 대입
+	2 : for j = 0 to n - 1 do
+	3 :		for i = 0 to m - 1 do
+	4 :			Temp <- A_{j} * B_{i}
+	5 :			Temp <- Temp << w(i+j)
+	6 :			C <- ADDC(C, Temp)
+	7 :		end for
+	8 : end for	
 
-* @param bigint** result 다중 워드 곱셈 연산의 결과를 저장할 bigint 형 더블 포인터 변수
+* @param bigint** C 다중 워드 곱셈 연산의 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint* A 다중 워드 곱셈 연산의 곱하는 수인 bigint 형 포인터 변수
 * @param bigint* B 다중 워드 곱셈 연산의 곱하는 수인 bigint 형 포인터 변수
 */
-void MUL_Multi(bigint** result, bigint* A, bigint* B)
+void MUL_Multi(bigint** C, bigint* A, bigint* B)
 {
 	int i, j, len = 0;
-	int size_a, size_b = 0;
+	int size_a, size_b, size_c = 0;
 
-	BI_Get_Word_Length(&size_a, &A);
-	BI_Get_Word_Length(&size_b, &B);
+	if ((BI_Is_Zero(&A) & BI_Is_Zero(&B)) == 0) // 피연산자중 하나라도 0이면,
+	{
+		BI_Set_Zero(C); // 곱셈 결과는 0이므로, 연산 진행하지 않고 0 출력 후
+		return; // return;처리
+	}
 
-	bigint* D = NULL;
-	bigint* result2 = NULL;
+	BI_Get_Word_Length(&size_a, &A); // A의 word 길이를 size_a에 대입
+	BI_Get_Word_Length(&size_b, &B); // B의 word 길이를 size_b에 대입
 
-	BI_New(&D, (*result)->wordlen); // 단일 워드 곱셈 연산의 결과를 저장할 big integer d
+	bigint* Temp = NULL; // 단일 워드 곱셈 연산의 결과를 저장해 C와 덧셈 연산을 진행할 big integer형 포인터
+	BI_Get_Word_Length(&size_c, C); // C의 word 길이를 size_r에 대입
+	BI_New(&Temp, size_c); // C와 덧셈 연산을 진행해야하므로 C와 동일한 wordlen으로 생성
 
 	for (i = 0; i < B->wordlen; i++)
 	{
 		for (j = 0; j < A->wordlen; j++)
 		{
-			MUL_Word(&D->a[i + j], &A->a[j], &B->a[i]); // A의 단일워드와 B의 단일워드 연산 후 D의 단일 워드에 대입
-			ADDC_AAB(result, result, &D, 0);
-			D->a[i + j] = 0;
-			D->a[i + j + 1] = 0;
+			MUL_Word(&Temp->a[i + j], &A->a[j], &B->a[i]); // A의 단일워드와 B의 단일워드 연산 후 Temp의 단일 워드에 대입
+			ADDC_AAB(C, C, &Temp, 0); // 단일워드 곱셈한 Temp와 C를 덧셈연산 진행
+			Temp->a[i + j] = 0; // 곱셈 연산에 사용된 워드 부분 초기화
+			Temp->a[i + j + 1] = 0; // 위와 동일
 		}
 	}
-	BI_Delete(&D);
-	(*result)->sign = A->sign ^ B->sign;
-	BI_Refine(*result);
+	BI_Delete(&Temp); // 할당된 Temp를 delete.
+	(*C)->sign = A->sign ^ B->sign; // 결과값 C의 부호를 결정
+	BI_Refine(*C); // Refine 시켜주기
 }
 
 /**
