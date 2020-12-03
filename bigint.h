@@ -60,7 +60,7 @@ void ADD_AAB(bigint** C, bigint** A, bigint** B);
 int Compare_WordLen(bigint* A, bigint* B);
 
 // Chapter 4 Subtraction
-void SUBC(unsigned int* borrow, bigint** c, bigint** a, bigint** b);
+void SUBC(bigint** c, bigint** a, bigint** b);
 void SUB(bigint** c, bigint* a, bigint* b);
 
 // Chapter 5 Multiplication
