@@ -1344,8 +1344,8 @@ int Compare_WordLen(bigint* A, bigint* B) // return wordlen 큰 사이즈
 	13:		return SUBC(|B|, |A|)
 	14:	else
 	15:		return -SUBC(|A|, |B|)
-	16: end if
-	17: if A > 0 and B < 0 then
+	16:	end if
+	17: 	if A > 0 and B < 0 then
 	18:		return ADD(A, |B|)
 	19:	else
 	20:		return -ADD(|A|, B)
@@ -1392,33 +1392,33 @@ int SUB(bigint** C, bigint* A, bigint* B)
 	BI_Get_Word_Length(&len, &A);   // A->wordlen을 len에 대입
 	BI_Get_Word_Length(&borrow, &B);// B->wordlen을 borrow에 대입 
 
-	if (BI_Is_Zero(&A) == 0) // 0-B --> -B
+	if (BI_Is_Zero(&A) == 0) // [line 1] 0-B --> -B
 	{
-		BI_Assign(C, B); // B의 값 그대로
-		(*C)->sign = NEGATIVE; // 부호만 반대로
+		BI_Assign(C, B); // [line 2] B의 값 그대로
+		(*C)->sign = NEGATIVE; // [line 2] 부호만 반대로
 
 		return SUCCESS; // memory leackege X
 	}
 
-	if (BI_Is_Zero(&B) == 0) // A - 0 --> A
+	if (BI_Is_Zero(&B) == 0) // [line 4] A - 0 --> A
 	{
 		if (&A == C) // 1st arg == 2nd arg(AAB)인 경우
 			return SUCCESS; // 이미 1st arg = 2nd arg 이므로 return으로 종료.
-		BI_Assign(C, A); // 1st arg != 2nd arg(AAB)인 경우 C에 A를 assign
+		BI_Assign(C, A); // [line 5] 1st arg != 2nd arg(AAB)인 경우 C에 A를 assign
 		return SUCCESS;
 	}
 
 
 	if ((A->sign ^ B->sign) == 0) // A, B 부호가 같을 때
 	{
-		if ((A->sign & B->sign) == 0) // A, B의 부호가 모두 양수일 때
+		if ((A->sign & B->sign) == 0) // [line 7] A, B의 부호가 모두 양수일 때
 		{
-			if (BI_Compare(&A, &B) < 0) // A, B를 비교해서 A < B일 때. (BI_Compare(A, B)의 return : -1)
+			if (BI_Compare(&A, &B) < 0) // [line 9] A, B를 비교해서 A < B일 때. (BI_Compare(A, B)의 return : -1)
 			{
-				ret = SUBC(C, &B, &A); // B - A 를 하고
+				ret = SUBC(C, &B, &A); // [line 10] B - A 를 하고
 				if (ret == -1)
 					return ERROR;
-				BI_Flip_Sign(*C); // 뺄셈 연산이 종료되었으므로 원래대로 부호 바꿔주기
+				BI_Flip_Sign(*C); // [line 10] 뺄셈 연산이 종료되었으므로 원래대로 부호 바꿔주기
 
 				return SUCCESS;
 			}
@@ -1431,9 +1431,9 @@ int SUB(bigint** C, bigint* A, bigint* B)
 
 				return SUCCESS;
 			}
-			else // A, B 를 비교해서 A >= B일 때. BI_Compare(A, B)'s return : 0, 1
+			else // [line 7] A, B 를 비교해서 A >= B일 때. BI_Compare(A, B)'s return : 0, 1
 			{
-				ret = SUBC(C, &A, &B); // A - B 연산
+				ret = SUBC(C, &A, &B); // [line 8] A - B 연산
 				if (ret == -1)
 					return ERROR;
 				return SUCCESS;
@@ -1444,9 +1444,9 @@ int SUB(bigint** C, bigint* A, bigint* B)
 		{
 			BI_Flip_Sign(A); // A의 부호가 음수이므로 부호 바꿔주기
 			BI_Flip_Sign(B); // B의 부호가 음수이므로 부호 바꿔주기
-			if (BI_Compare(&A, &B) < 0)
+			if (BI_Compare(&A, &B) < 0) // [line 12]
 			{
-				ret = SUBC(C, &B, &A);
+				ret = SUBC(C, &B, &A); // [line 13]
 				if (ret == -1)
 					return ERROR;
 				BI_Flip_Sign(A); // 뺄셈 연산이 종료되었으므로 원래대로 부호 원위치
@@ -1454,14 +1454,14 @@ int SUB(bigint** C, bigint* A, bigint* B)
 
 				return SUCCESS;
 			}
-			else
+			else // [line 14]
 			{
-				ret = SUBC(C, &A, &B);
+				ret = SUBC(C, &A, &B); // [line 15]
 				if (ret == -1)
 					return ERROR;
-				BI_Flip_Sign(*C);
-				BI_Flip_Sign(A); // 부호 원위치
-				BI_Flip_Sign(B); // 부호 원위치
+				BI_Flip_Sign(*C); // [line 15]에서 결과의 부호 바꿔주기
+				BI_Flip_Sign(A); // 뺄셈 연산이 종료되었으므로 원래대로 부호 원위치
+				BI_Flip_Sign(B); // 뺄셈 연산이 종료되었으므로 원래대로 부호 원위치
 
 				return SUCCESS;
 			}
@@ -1470,20 +1470,20 @@ int SUB(bigint** C, bigint* A, bigint* B)
 
 	else // A,B 부호가 다를 때
 	{
-		if (A->sign == 0) // A가 양수, B가 음수
+		if (A->sign == 0) // [line 17] A가 양수, B가 음수
 		{
 			BI_Flip_Sign(B); // B의 부호를 바꿔주고
-			ADD(C, &A, &B);  // ADD 연산
+			ADD(C, &A, &B);  // [line 18] ADD 연산
 			if (ret == -1)
 				return ERROR;
 			BI_Flip_Sign(B); // 부호 원위치
 
 			return SUCCESS;
 		}
-		else
+		else // [line 19]
 		{
-			BI_Flip_Sign(A); //
-			ADD(C, &A, &B);
+			BI_Flip_Sign(A); // A => |A|
+			ADD(C, &A, &B); // [line 20]
 			if (ret == -1)
 				return ERROR;
 
@@ -1580,24 +1580,24 @@ int SUBC(bigint** C, bigint** A, bigint** B)
 
 	//BI_New(&temp3, len); // A의 wordlen과 같은 len의 길이로 temp3 생성
 	BI_Assign(&temp3, *A); // 이후 A와 동일하게
-	for (i = 0; i < len; i++)
+	for (i = 0; i < len; i++) // [line 3]
 	{
-		(*C)->a[i] = temp3->a[i] - borrow; //(*C)->a[i] = (*A)->a[i] - (borrow); // A - b의 값을 C 에 대입 // 처음 borrow값은 초기화된 0으로 들어옴
+		(*C)->a[i] = temp3->a[i] - borrow; // [line 4] (*C)->a[i] = (*A)->a[i] - (borrow); // A - b의 값을 C 에 대입 // 처음 borrow값은 초기화된 0으로 들어옴
 		(*C)->a[i] = (*C)->a[i] & word_mask; // mod 2 ^ (WORD_BIT_LEN)
-		if (temp3->a[i] < borrow) //if ((*A)->a[i] < borrow) // borrow가 생길 때
-			borrow = 1;// *borrow = 1;
-		else // borrow 안될 때
+		if (temp3->a[i] < borrow) // [line 5] if ((*A)->a[i] < borrow) // borrow가 생길 때
+			borrow = 1;// [line 6] *borrow = 1;
+		else // [line 7] borrow 안될 때
 		{
-			borrow = 0;// *borrow = 0;
-			if ((*C)->a[i] < temp->a[i])
-				borrow += 1;// borrow = borrow + 1;
+			borrow = 0;// [line 8] *borrow = 0;
+			if ((*C)->a[i] < temp->a[i]) // [line 10]
+				borrow += 1;// [line 11] borrow = borrow + 1;
 		}
-		(*C)->a[i] -= temp->a[i]; // temp에 넣어놓은 b와 뺄셈 연산
+		(*C)->a[i] -= temp->a[i]; // [line 13] temp에 넣어놓은 b와 뺄셈 연산
 		(*C)->a[i] = (*C)->a[i] & word_mask; // mod 2 ^ (WORD_BIT_LEN)
 	}
 	BI_Delete(&temp3);
 	BI_Delete(&temp);
-	BI_Refine(*C);
+	BI_Refine(*C); // [line 15, 16]
 	return SUCCESS;
 }
 
