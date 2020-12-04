@@ -1376,6 +1376,7 @@ int SUB(bigint** C, bigint* A, bigint* B)
 	int i = 0;
 	//bigint* d = NULL;
 	int ret = 0;
+	int result = 0;
 
 	if ((*C == NULL) | (B == NULL) | (A == NULL))
 		return ERROR;
@@ -1404,12 +1405,15 @@ int SUB(bigint** C, bigint* A, bigint* B)
 		return SUCCESS;
 	}
 
-
+	result = BI_Compare(&A, &B);
+	if(result == -1)
+		return ERROR;
+	
 	if ((A->sign ^ B->sign) == 0) // A, B 부호가 같을 때
 	{
 		if ((A->sign & B->sign) == 0) // [line 7] A, B의 부호가 모두 양수일 때
 		{
-			if (BI_Compare(&A, &B) < 0) // [line 9] A, B를 비교해서 A < B일 때. (BI_Compare(A, B)의 return : -1)
+			if(result == 2) // [line 9] A, B를 비교해서 A < B일 때. (BI_Compare(A, B)의 return : 2)
 			{
 				ret = SUBC(C, &B, &A); // [line 10] B - A 를 하고
 				if (ret == -1)
@@ -1418,7 +1422,7 @@ int SUB(bigint** C, bigint* A, bigint* B)
 
 				return SUCCESS;
 			}
-			else if (BI_Compare(&A, &B) == 0) // A = B일 때, C의 값은 0이 되어야한다.
+			else if (result == 0) // A = B일 때, C의 값은 0이 되어야한다.
 			{
 				// BI_Set_Zero(C); 로 바꾸는게 어떨까?
 				for (i = 0; i < (*C)->wordlen; i++) // C의 길이만큼
@@ -1440,7 +1444,7 @@ int SUB(bigint** C, bigint* A, bigint* B)
 		{
 			BI_Flip_Sign(A); // A의 부호가 음수이므로 부호 바꿔주기
 			BI_Flip_Sign(B); // B의 부호가 음수이므로 부호 바꿔주기
-			if (BI_Compare(&A, &B) < 0) // [line 12]
+			if (BI_Compare(&A, &B) == 2) // [line 12]
 			{
 				ret = SUBC(C, &B, &A); // [line 13]
 				if (ret == -1)
@@ -1541,9 +1545,9 @@ int SUBC(bigint** C, bigint** A, bigint** B)
 	BI_New(&temp, len);  // A의 워드 길이와 같게 temp 를 생성
 
 	result = BI_Compare(A, B);
-	if (result >= 0)
+	if (-1 < result && result < 2)
 		(*C)->sign = 0; // 매개변수 C에 이미 부호가 들어가있을 때 바꿔주는 게 없어서
-	if (result < 0)
+	if (result == 2)
 		(*C)->sign = 1;
 	if ((*C)->wordlen < len) // Binary Long Division에서 C의 길이가 1이고, A, B의 길이가 2일 때가 있어서. //A = 0x40bd
 	{
@@ -2525,8 +2529,11 @@ int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 	int ret;
 
 	size = BI_Compare(&A, &B); // A와 B의 크기 비교
-
-	if (size == -1)
+	
+	if(size == -1) // Compare 함수 내부에서의 에러
+		return ERROR;
+	
+	if (size == 2) // A>=B를 만족하지 않을 때
 	{
 		BI_Set_Zero(Q);
 		BI_Assign(R, A);
@@ -2542,12 +2549,6 @@ int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 	{
 		return ERROR;
 	}
-
-	if (BI_Compare(&A, &B) < 0) // A >= B의 조건을 만족하지 않을 떄
-	{
-		return ERROR;
-	}
-
 
 	if (FLAG_DIV == BINARY_LONG) // binary long division
 	{
@@ -2621,7 +2622,7 @@ int Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 		if (ret == -1)
 			return ERROR;
 		result = BI_Compare(&B, R); // R = B -> 0, R > B -> -1이므로, result 에는 0, -1이 들어가야한다. 
-		if (result < 1) // [line 3] R >= B인지 비교
+		if (result == 0 && result == 2) // [line 3] R >= B인지 비교
 		{
 			len = (int)(i / WORD_BIT_LEN) + 1;
 			BI_New(&U, len);
@@ -2806,7 +2807,10 @@ int DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorithm
 	if (B->sign & 1) // [line 1]
 		return ERROR; // return INVALID.
 	result = BI_Compare(&A, &B);
-	if (result < 0) // [line 4] B > A 일 경우, Compare(&A, &B)의 return : -1
+	if (result == -1) // Compare 함수 에러
+		return FAILURE;
+	
+	if (result == 2) // [line 4] B > A 일 경우, Compare(&A, &B)의 return : 2
 	{
 		BI_Assign(R, A);
 		return SUCCESS;
@@ -2861,7 +2865,9 @@ int DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
 	bigint* BP = NULL; // B를 BI_Left shift 해서 보관할 빅넘버 B'(BP, B Prime)
 
 	result = BI_Compare(&A, &B);
-	if (result == -1) // A < B 보다 클 때
+	if (result == -1) // Compare 함수 에러
+		return ERROR;
+	if (result == 2) // A < B 보다 클 때
 	{
 		return SUCCESS;
 	}
