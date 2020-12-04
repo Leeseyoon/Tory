@@ -101,7 +101,7 @@ void BI_Set_By_Array()  // Set Array -> Big_Integer
    2nd arg : 저장할 배열의 부호
    3rd arg : 저장할 배열의 포인터
    4th arg : 저장할 배열의 크기
-```
+```.
 ***
 ##### String --> Big Integer
 ```c
@@ -147,7 +147,7 @@ void Assign_BI() // Assign Big_Integer
    2nd arg : 복사할 Big_Integer형 포인터
 ```
 ---
-#### Chater 2.5
+#### Chpater 2.5
 ##### Generate Random number function
 ```c
 void bi_gen_rand() // generate random number
@@ -165,7 +165,7 @@ void array_rand() // set random number
    2nd arg : random number의 워드 길이
 ```
 ---
-#### Chapter 2.6
+#### Chpater 2.6
 ##### Get Word Length of Big Integer function
 ```c
 void Get_Word_Length() // Get Word Length of Big_Integer
@@ -192,7 +192,7 @@ void j_th_Bit_of_BI() // j-th Bit of Big_Integer
    2nd arg : 조사당할 bigint형 포인터
 ```
 ---
-#### Chapter 2.7
+#### Chpater 2.7
 ##### Get Sign function
 ```c
 int Get_Sign() // Get Sign
@@ -208,13 +208,13 @@ void Flip_Sign() // Flip Sign
    1st arg : 부호를 뒤집을 Big_Integer의 포인터
 ```
 ---
-#### Chapter 2.8
+#### Chpater 2.8
 ##### Set Big Integer function
 ```c
 void BI_Set_One (); // Set Big_Integer 1
    input : bigint** x
    1st arg: 1로 설정할 Big_Integer의 더블 포인터
-```
+``'
 ***
 ##### Set Big Integer --> 0
 ```c
@@ -239,7 +239,7 @@ int Is_Zero() // Determine if zero or not
    1st arg : 0인지 아닌지 판단할 Big_Integer의 더블 포인터
 ```
 ---
-#### Chapter 2.9
+#### Chpater 2.9
 ##### Compare Big Integer A with Big Integer B
 ```c
 int Compare_BI(); //Compare Big_Integer
@@ -249,7 +249,7 @@ int Compare_BI(); //Compare Big_Integer
    2nd arg : 1st arg와 비교 대상인 Big_Integer의 더블 포인터
 ```
 ---
-#### Chapter 2.10
+#### Chpater 2.10
 ##### Left Shift function
 ```c
 void Left_Shift()
@@ -275,126 +275,367 @@ void Reduction_BI() //Reduction Integer
    2nd arg : 나누고자 하는 수
 ```
 ---
+#### Chapter 3 Addition
+##### Addition (A + B + carry) function
+```c
+unsigned int ADD_ABc(bigint** C, bigint** A, bigint** B, unsigned int c, int i);
+    input : bigint** C, bigint** A, bigint** B, unsigned int c, int i
+    
+    bigint** C : 덧셈 결과를 저장할 bigint 형 더블포인터 변수
+    bigint** A : 덧셈을 수행할 bigint 형 더블포인터 변수
+    bigint** B : 덧셈을 수행할 bigint 형 더블포인터 변수
+    unsigned int c : 이전 연산에서 받아 온 캐리 (0 또는 1)
+    int i : 덧셈을 수행할 배열의 index
+
+    return carry;(캐리 여부 0 or 1)
+```
+***
+##### Addition Core function (WordLen(A) >= WordLen(B), Sign(A) = Sign(B))
+```c
+void ADDC(bigint** C, bigint** A, bigint** B, int sign)
+    input : bigint** C, bigint** A, bigint** B, int sign
+    
+    bigint** C : 덧셈 결과를 저장할 bigint 형 더블포인터 변수
+    bigint** A : 덧셈을 수행할 bigint 형 더블포인터 변수
+    bigint** B : 덧셈을 수행할 bigint 형 더블포인터 변수
+    Int sign : 덧셈 결과 C의 부호
+```
+***
+##### Addition Core function (WordLen(A) >= WordLen(B), Sign(A) = Sign(B), A = A + B)
+```c
+void ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign)
+    input : bigint** C, bigint** A, bigint** B, int sign
+    
+    bigint** C : 덧셈 결과를 저장할 bigint 형 더블포인터 변수
+    bigint** A : 덧셈을 수행할 bigint 형 더블포인터 변수
+    bigint** B : 덧셈을 수행할 bigint 형 더블포인터 변수
+    Int sign : 덧셈 결과 C의 부호
+```
+***
+##### Addition function 
+```c
+void ADD(bigint** C, bigint** A, bigint** B)
+    input : bigint** C, bigint** A, bigint** B
+    
+    bigint** C : 덧셈 결과를 저장할 bigint 형 더블포인터 변수
+    bigint** A : 덧셈을 수행할 bigint 형 더블포인터 변수
+    bigint** B : 덧셈을 수행할 bigint 형 더블포인터 변수
+```
+***
+##### Addition function (A = A + B)
+```c
+void ADD_AAB(bigint** C, bigint** A, bigint** B)
+    input : bigint** C, bigint** A, bigint** B
+    
+    bigint** C : 덧셈 결과를 저장할 bigint 형 더블포인터 변수
+    bigint** A : 덧셈을 수행할 bigint 형 더블포인터 변수
+    bigint** B : 덧셈을 수행할 bigint 형 더블포인터 변수
+```
+---
 #### Chapter 4 Subtraction
 ##### Subtraction Core function
 ```c
-void SUBC(int* borrow, bigint** c, bigint** a, bigint** b);
-    input : int* borrow, bigint** c, bigint** a, bigint** b
-    argv[0] : return 되는 borrow 값
-    argv[1] : 뺄셈 연산할 때 A - B 연산 결과인 bigint형 더블 포인터
-    argv[2] : 뺄셈 연산할 때 A - B 에서 A인 bigint형 더블 포인터
-    argv[3] : 뺄셈 연산할 때 A - B 에서 B인 bigint형 더블 포인터
+int SUBC(bigint** C, bigint** A, bigint** B);
+    input : bigint** C, bigint** A, bigint** B
+    
+    unsigned int* borrow 단일 뺄셈 연산에서 return 되는 borrow에 해당하는 unsigned int 형 포인터 변수
+    bigint** C : 단일 뺄셈 연산의(A - B) 결과를 저장할 bigint 형 더블 포인터 변수
+    bigint** A : 단일 뺄셈 연산의(A - B) A에 해당하는 bigint 형 포인터 변수
+    bigint** B : 단일 뺄셈 연산의(A - B) B에 해당하는 bigint 형 포인터 변수
+    
+    return SUCCESS (성공 시) / ERROR(실패 시)
 ```
 ***
-##### Subtraction Big Integer
+##### Subtraction
 ```c
-bigint* SUB(bigint** a, bigint** b);
-    input : bigint** a, bigint** b
-    argv[0] : 뺄셈 연산할 때 A - B 에서 A인 bigint형 더블 포인터
-    argv[1] : 뺄셈 연산할 때 A - B 에서 B인 bigint형 더블 포인터
+int SUB(bigint** C, bigint* A, bigint* B);
+    input : bigint** C, bigint* A, bigint* B
+    
+    bigint** C : 뺄셈 연산의(A - B) 결과를 저장할 bigint 형 더블 포인터 변수
+    bigint** A : 뺄셈 연산의(A - B) A에 해당하는 bigint 형 포인터 변수
+    bigint** B : 뺄셈 연산의(A - B) B에 해당하는 bigint 형 포인터 변수
+    
+    return SUCCESS (성공 시) / ERROR(실패 시)
 ```
 ---
 #### Chapter 5 Multiplication
 ##### Multiplication Word
 ```c
+int MUL_Word(word* C, word* A, word* B);
+    input : word* C, word* A, word* B
+
+    word* C : 단일 워드 곱셈 연산의 결과를 저장할 word 형 포인터 변수
+    word* A : 단일 워드 곱셈 연산의 곱하는 수인 word 형 포인터 변수
+    word* B : 단일 워드 곱셈 연산의 곱하는 수인 word 형 포인터 변수
+
+    return SUCCESS (성공 시) / ERROR(실패 시)
 ```
 ***
 ##### Multiplication Mutli Word
 ```c
+int MUL_Word(word* C, word* A, word* B);
+    intput : word* C, word* A, word* B
+    
+    bigint** C : 다중 워드 곱셈 연산의 결과를 저장할 bigint 형 더블 포인터 변수
+    bigint* A : 다중 워드 곱셈 연산의 곱하는 수인 bigint 형 포인터 변수
+    bigint* B : 다중 워드 곱셈 연산의 곱하는 수인 bigint 형 포인터 변수
+    
+    return SUCCESS 성공 시 /  ERROR(실패 시)
 ```
 ***
 ##### Multiplication Karatsuba
 ```c
+void MUL_Karatsuba(bigint** C, bigint* A, bigint* B);
+    input : bigint** C, bigint* A, bigint* B
+
+    bigint** C : 카라추바 곱셈 결과를 저장할 bigint 형 더블포인터 변수
+    bigint** A : 카라추바 곱셈을 수행할 bigint 형 더블포인터 변수
+    bigint** B : 카라추바 곱셈을 수행할 bigint 형 더블포인터 변수
 ```
 ---
 #### Chapter 6 Division
 ##### Binary Long Division Algorithm
 ```c
+int Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B);
+    input : bigint** Q, bigint** R, bigint* A, bigint* B
+
+    bigint** Q : Binary Long Divsion 연산의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+    bigint* R : Binary Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+    bigint* A : Binary Long Divsion 연산의 나누려는 수인 bigint 형 포인터 변수
+    bigint* B : Binary Long Divsion 연산의 나누는 수인 bigint 형 포인터 변수
 ```
 ***
 ##### Multi Long Division Algorithm
 ```c
+int DIV(bigint** Q, bigint** R, bigint* A, bigint* B);
+    input : bigint** Q, bigint** R, bigint* A, bigint* B
+
+    bigint** Q Multi Long Divsion 연산의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+    bigint* R Multi Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+    bigint* A Multi Long Divsion 연산의 나누려는 수인 bigint 형 포인터 변수
+    bigint* B Multi Long Divsion 연산의 나누는 수인 bigint 형 포인터 변수
 ```
 ***
 ##### Multi Long Division core
 ```c
+int DIVC(bigint** Q, bigint** R, bigint* A, bigint* B);
+    input : bigint** Q, bigint** R, bigint* A, bigint* B
+
+    bigint** Q : DIV( )의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+    bigint* R : DIV( )의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+    bigint* A : DIV( )의 나누려는 수인 bigint 형 포인터 변수
+    bigint* B : DIV( )의 나누는 수인 bigint 형 포인터 변수
 ```
 ***
 ##### Multi Long Division core's core
 ```c
+int DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B);
+    input : bigint** Q, bigint** R, bigint* A, bigint* B
+
+     bigint** Q : DIVC( )의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+     bigint* R : DIVC( )의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
+     bigint* A : DIVC( )의 나누려는 수인 bigint 형 포인터 변수
+     bigint* B : DIVC( )의 나누는 수인 bigint 형 포인터 변수
 ```
 ***
 ##### Multi Long Division core's core condition (n == m)
 ```c
+int DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m);
+    input : bigint** Q, bigint* A, bigint* B, int m
+
+    bigint** Q : DIVCC()에서 Q hat인 bigint 형 더블 포인터 변수
+    bigint* A : DIVCC()에서 나눠지는 수인 A의 bigint 형 포인터 변수
+    bigint* B : DIVCC()에서 나누려는 수인 B의 bigint 형 포인터 변수
+    int m : DIVCC()에서 B의 wordlen을 나타내는 int형 변수
 ```
 ***
 ##### Multi Long Division core's core condition (n == m + 1)
 ```c
+int DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m;
+    input : bigint** Q, bigint* A, bigint* B, int m
+
+    bigint** Q : DIVCC()에서 Q hat인 bigint 형 더블 포인터 변수
+    bigint* A : DIVCC()에서 나눠지는 수인 A의 bigint 형 포인터 변수
+    bigint* B : DIVCC()에서 나누려는 수인 B의 bigint 형 포인터 변수
+    int m : DIVCC()에서 B의 wordlen을 나타내는 int형 변수
 ```
----
+===
 #### Chapter 7 Squaring
 ##### Single Squaring
 ```c
+int Single_Squaring(bigint* C, bigint* A)
+    input : bigint* C, bigint* 
+
+    bigint* C : 제곱 연산을 수행한 결과를 저장할 bigint 형 포인터 변수
+    bigint* A : 제곱 연산을 수행할 bigint 형 포인터 변수
+    return SUCCESS
 ```
 ***
 ##### Squaring
 ```c
+int SQU(bigint** C, bigint* A);
+    input : bigint* C, bigint* 
+
+    bigint** C : 제곱 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+    bigint* A : 제곱 연산을 수행할 bigint 형 포인터 변수
+    return SUCCESS
 ```
 ***
 ##### Squaring Core function
 ```c
+int SQUC(bigint** C, bigint* A);
+    input : bigint* C, bigint* 
+
+    bigint** C : 제곱 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+    bigint* A : 제곱 연산을 수행할 bigint 형 포인터 변수
+    return SUCCESS
 ```
 ***
 ##### Squaring Core Karatsuba function
 ```c
+int SQUC_Karatsuba(bigint** C, bigint* A);
+    input : bigint* C, bigint*A
+
+    bigint** C : 제곱 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+    bigint* A : 제곱 연산을 수행할 bigint 형 포인터 변수
+    return SUCCESS
 ```
----
+===
 #### Chapter 8 Modular Exponentiation
 ##### Montgomery ADD Exponentiation func
 ```c
+int EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N)
+    input : bigint** T, bigint* X, bigint* N
+
+    bigint** T : exponentiation 덧셈 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+    bigint* X : exponentiation 덧셈 연산을 수행할 bigint 형 포인터 변수
+    bigint* N : exponentiation 덧셈 연산에서의 지수(덧셈할 횟수)를 가리키는 bigint 형 포인터 변수
+    return SUCCESS
 ```
 ***
 ##### Montgomery MUL Exponentiation func
 ```c
+int EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N)
+    input : bigint** T, bigint* X, bigint* N
+
+    bigint** T : 지수승 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+    bigint* X : 지수승 연산을 수행할 bigint 형 포인터 변수
+    bigint* N : 지수승 연산에서의 지수를 가리키는 bigint 형 포인터 변수
+    return SUCCESS
 ```
 ***
 ##### Left to Right ADD Exponentiation func
 ```c
+int EXP_LR_ADD(bigint** T, bigint* X, bigint* N)
+    input : bigint** T, bigint* X, bigint* N
+
+    bigint** T : Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+    bigint* X : Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+    bigint* N : Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+    return SUCCESS 성공 시
 ```
 ***
 ##### Left to Right MUL Exponentiation func
 ```c
+int EXP_LR_MUL(bigint** T, bigint* X, bigint* N)
+    input : bigint** T, bigint* X, bigint* N
+
+    bigint** T : Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+    bigint* X : Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+    bigint* N : Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+    return SUCCESS 성공 시
 ```
 ***
 ##### Right to Left ADD Exponentiation func
 ```c
+int EXP_RL_ADD(bigint** T, bigint* X, bigint* N)
+    input : bigint** T, bigint* X, bigint* N
+
+    bigint** T : Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+    bigint* X : Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+    bigint* N : Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
 ```
 ***
 ##### Right to Left MUL Exponentiation func
 ```c
+int EXP_RL_MUL(bigint** T, bigint* X, bigint* N)
+    input : bigint** T, bigint* X, bigint* N
+
+    bigint** T : Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+    bigint* X : Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+    bigint* N : Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+    return SUCCESS 성공 시
 ```
 ***
 ##### Montgomery ADD Modular Exponentiation func
 ```c
+int EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N)
+    input : bigint** T, bigint* X, bigint* N
+
+    bigint** T : 모듈러 지수 덧셈 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+    bigint* X : 모듈러 지수 덧셈 연산을 수행할 bigint 형 포인터 변수
+    bigint* N : 모듈러 지수 덧셈 연산에서의 지수(덧셈할 횟수)를 가리키는 bigint 형 포인터 변수
+    bigint* M : 모듈러 지수 연산에서의 모듈러를 수행할 bigint 형 포인터 변수
+    return SUCCESS 성공 시
 ```
 ***
 ##### Montgomery MUL Modular Exponentiation func
 ```c
+int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
+    input : (bigint** T, bigint* X, bigint* N, bigint* M
+
+    bigint** T : 모듈러 지수승 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
+    bigint* X : 모듈러 지수승 연산을 수행할 bigint 형 포인터 변수
+    bigint* N : 모듈러 지수승 연산에서의 지수를 가리키는 bigint 형 포인터 변수
+    bigint* M : 모듈러 지수승 연산에서의 모듈러를 수행할 bigint 형 포인터 변수
+    return SUCCESS 성공 시
 ```
 ***
 ##### Left to Right ADD Modular Exponentiation func
 ```c
+int MOD_EXP_LR_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
+    input : bigint** T, bigint* X, bigint* N, bigint* M
+
+    bigint** T : Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+    bigint* X : Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+    bigint* N : Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+    bigint* M : Modular 지수 연산에서 X^N 과 T를 합동해주는 bigint 포인터형 변수
+    return SUCCESS 성공 시
 ```
 ***
 ##### Left to Right MUL Modular Exponentiation func
 ```c
+int MOD_EXP_LR_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
+    input : bigint** T, bigint* X, bigint* N, bigint* M
+
+    bigint** T : Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+    bigint* X : Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+    bigint* N : Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+    bigint* M : Modular 지수 연산에서 X^N 과 T를 합동해주는 bigint 포인터형 변수
+    return SUCCESS 성공 시
 ```
 ***
 ##### Right to Left ADD Modular Exponentiation func
 ```c
+int MOD_EXP_RL_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
+    input : bigint** T, bigint* X, bigint* N, bigint* M
+
+    bigint** T : Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+    bigint* X : Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+    bigint* N : Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+    bigint* M : Modular 지수 연산에서 X^N 과 T를 합동해주는 bigint 포인터형 변수
+    
 ```
 ***
 ##### Right to Left MUL Modular Exponentiation func
 ```c
+int MOD_EXP_RL_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
+    input : bigint** T, bigint* X, bigint* N, bigint* M
+
+    bigint** T : Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
+    bigint* X : Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
+    bigint* N : Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
+    bigint* M : Modular 지수 연산에서 X^N 과 T를 합동해주는 bigint 포인터형 변수
+    return SUCCESS 성공 시
 ```
 ---
