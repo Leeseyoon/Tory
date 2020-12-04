@@ -1137,7 +1137,10 @@ int ADD(bigint** C, bigint** A, bigint** B)
 		return ERROR;
 	if (B_sign == ERROR)
 		return ERROR;
-
+	
+	BI_Get_Word_Length(&A_Len, A);
+	BI_Get_Word_Length(&B_Len, B);
+	
 	if (BI_Is_Zero(A) == 0) // [line 1] A is zero
 	{
 		// [line 2] A + B에서 A가 0이면 B return
@@ -1235,7 +1238,10 @@ int ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 		return ERROR;
 	if (B_sign == ERROR)
 		return ERROR;;
-
+	
+	BI_Get_Word_Length(&A_Len, A);
+	BI_Get_Word_Length(&B_Len, B);
+	
 	if (BI_Is_Zero(A) == 0) // A is zero
 	{
 		(*C)->sign = (*B)->sign;
