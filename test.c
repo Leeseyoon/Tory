@@ -1045,7 +1045,7 @@ int squaring_karatsuba_time()
 	return 0;
 }
 
-int montgomery_Exponentiation_multiplication_time()
+int montgomery_ladder_Exponentiation_multiplication_time()
 {
 	int i = 0;
 	int size1, size2 = 0;
@@ -1088,7 +1088,7 @@ int montgomery_Exponentiation_multiplication_time()
 	return 0;
 }
 
-int montgomery_Ladder_Exponentiation_addtion_time()
+int montgomery_ladder_Exponentiation_addtion_time()
 {
 	int i = 0;
 	int size1, size2 = 0;
@@ -1132,7 +1132,7 @@ int montgomery_Ladder_Exponentiation_addtion_time()
 	return 0;
 }
 
-int montgomery_Ladder_Modular_Exponentiation_multiplication_time()
+int montgomery_ladder_Modular_Exponentiation_multiplication_time()
 {
 	int i = 0;
 	int size1 = 0;
@@ -1176,7 +1176,7 @@ int montgomery_Ladder_Modular_Exponentiation_multiplication_time()
 	return 0;
 }
 
-int montgomery_Ladder_Modular_Exponentiation_addtion_time()
+int montgomery_ladder_Modular_Exponentiation_addtion_time()
 {
 	int i = 0;
 	int size1 = 0;
