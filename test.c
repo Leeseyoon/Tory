@@ -906,7 +906,8 @@ int multi_long_division_time()
 	bigint* bi_q = NULL;
 
 	/* n번 Multi Long Division 연산하기 */ // 32, 64 (8이고 size가 클 경우 몇 개 False)
-
+	
+	printf("\n");
 	printf("\"Multi Long Division\"\n");
 	for (i = 0; i < 50; i++)
 	{
@@ -1015,9 +1016,6 @@ int squaring_karatsuba_time()
 
 		BI_New(&bi_1, size1);
 		BI_Set_By_Array(&bi_1, NON_NEGATIVE, arr, size1);
-
-		printf("A = ");
-		BI_Show(bi_1, 16);
 
 		len = (bi_1->wordlen + 1) >> 1;
 		len = 4 * len + 1;
