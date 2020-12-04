@@ -22,8 +22,6 @@ OS | Compiler
 ---|:---:
 Window 10 | Visual studio
 Ubuntu 18.04(Linux) | gcc
-asdf|asdf|asdf|asdf
-
 ─────────────────────────────────────────────────────────────────────
 
 ### [1] Description of Tory.
@@ -52,13 +50,16 @@ asdf|asdf|asdf|asdf
 ### [3] Compiling Tory.
 
 1. Use 'visual studio' Compiler
-
+    1.  [2] Getting Tory를 참조해 library를 윈도우에 다운로드
+    2.  main.c 열기
+    3.  빅넘버 연산 함수를 이용해 test vector 생성을 원한다면, 해당 함수(...test())의 주석 제거 후 시작
+    4.  빅넘버 연산 함수를 이용해 시간 측정을 원한다면, 해당 함수(...time())의 주석 제거 후 시작
 2. Use gcc Compiler in linux
-
-    2.1 test vector 생성을 원한다면,
-        ` $ gcc -o [ File name ] main.c bigint.c bigint.h `
-    2.2 시간 측정을 하고 싶다면,
-        ` $ gcc -o [ File name ] main.c bigint.c bigint.h `ㄹ
+    1.  [2] Getting Tory를 참조해 library를 윈도우에 다운로드  
+    2.  ` $ vi Tory `
+    3.  test vector 생성 및 시간측정을 원한다면, ` $ gcc -o [ File name ] main.c bigint.c test.c config.h bigint.h test.h  `
+    4.  사용자가 빅넘버 함수들을 이용해 코드를 짠 후 컴파일한다면, ` $ gcc -o [ File name ] main.c bigint.c config.h bigint.h `
+    5.  ` $ ./[ File name ] ` 
 
 ─────────────────────────────────────────────────────────────────────
 ### [4] Description of Tory's function.
@@ -106,7 +107,7 @@ void BI_Set_By_Array()  // Set Array -> Big_Integer
    2nd arg : 저장할 배열의 부호
    3rd arg : 저장할 배열의 포인터
    4th arg : 저장할 배열의 크기
-```.
+```
 ***
 ##### String --> Big Integer
 ```c
