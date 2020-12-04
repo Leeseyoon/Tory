@@ -50,7 +50,7 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 
 2. To obatin Tory enter into the your prefered folder and write the following syntax :
 
-` $ git clone https://github.com/Leeseyoon/Tory.git `
+    ` $ git clone https://github.com/Leeseyoon/Tory.git `
 
 ─────────────────────────────────────────────────────────────────────
 
@@ -60,8 +60,10 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 
 2. Use gcc Compiler in linux
 
-    2.1 ` $ gcc -o [ File name ] main.c bigint.c bigint.h `
-    2.2 ㄴㄻㄴㅇㄹ
+    2.1 test vector 생성을 원한다면,
+        ` $ gcc -o [ File name ] main.c bigint.c bigint.h `
+    2.2 시간 측정을 하고 싶다면,
+        ` $ gcc -o [ File name ] main.c bigint.c bigint.h `ㄹ
 
 ─────────────────────────────────────────────────────────────────────
 ### [4] Description of Tory's function.
