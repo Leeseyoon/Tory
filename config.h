@@ -1,7 +1,7 @@
 #ifndef _CONFIG_
 #define _CONFIG_
 
-#define NON_NEGATIVE	0
+#define NON_NEGATIVE		0
 #define NEGATIVE		1
 
 #define SUCCESS			0
