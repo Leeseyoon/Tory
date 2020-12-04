@@ -18,9 +18,9 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 ### [0] Development environment
 
 |OS | Version | Compiler _
-|---|:---:|---:|
-|Window | 10 |Visual studio |
-|Ubuntu | 18.04 |gcc |
+|---|:---:|:---:|
+|Window |10|Visual studio|
+|Ubuntu |18.04|gcc|
 
 ---
 ### [1] Description of Tory.
@@ -63,22 +63,22 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 
 - define
 ```c
-#define NON_NEGATIVE	0 : Big_Integer의 부호가 양수일 때  
+#define NON_NEGATIVE    0 : Big_Integer의 부호가 양수일 때  
 #define NEGATIVE        1 : Big_Integer의 부호가 음수일 때 
 #define ERROR           -1: 오류 발생 시 반환값
-#define SUCCESS			0 : 성공할 시 반환값
+#define SUCCESS         0 : 성공할 시 반환값
 #define TRUE            0
 #define FALSE           -1
 // Multiplication flag
-#define KARATSUBA		10 // multiplication()에서 KARATSUBA의 사용을 원할 경우, FLAG_MUL, FLAG_SQU에 값 대입
-#define TEXTBOOK		11 // multiplication()에서 TEXTBOOK의 사용을 원할 경우, FLAG_MUL, FLAG_SQU에 값 대입
+#define KARATSUBA       10 // multiplication()에서 KARATSUBA의 사용을 원할 경우, FLAG_MUL, FLAG_SQU에 값 대입
+#define TEXTBOOK        11 // multiplication()에서 TEXTBOOK의 사용을 원할 경우, FLAG_MUL, FLAG_SQU에 값 대입
 // Division flag
-#define BINARY_LONG		12 // division()에서 Binary_Long_Division Alg의 사용을 원할 경우, FLAG_DIV에 값 대입
-#define MULTI_PRE		13 // division()에서 MULti_Long_Division Alg의 사용을 원할 경우, FLAG_DIV에 값 대입
+#define BINARY_LONG     12 // division()에서 Binary_Long_Division Alg의 사용을 원할 경우, FLAG_DIV에 값 대입
+#define MULTI_PRE       13 // division()에서 MULti_Long_Division Alg의 사용을 원할 경우, FLAG_DIV에 값 대입
 // Modular exponentiation flag
-#define LTOR			14 // modular_exponentiaion()에서 Left to Right Alg의 사용을 원할 경우, FLAG_EXP에 값 대입
-#define RTOL			15 // modular_exponentiaion()에서 Right to Left Alg의 사용을 원할 경우, FLAG_EXP에 값 대입
-#define MONTGOMERY		16 // modular_exponentiaion()에서 Mongtomery Alg의 사용을 원할 경우, FLAG_EXP에 값 대입
+#define LTOR            14 // modular_exponentiaion()에서 Left to Right Alg의 사용을 원할 경우, FLAG_EXP에 값 대입
+#define RTOL            15 // modular_exponentiaion()에서 Right to Left Alg의 사용을 원할 경우, FLAG_EXP에 값 대입
+#define MONTGOMERY      16 // modular_exponentiaion()에서 Mongtomery Alg의 사용을 원할 경우, FLAG_EXP에 값 대입
 ```
 - 사용자가 테스트할 때 결정해야하는 값
 ```c
