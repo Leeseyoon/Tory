@@ -17,9 +17,11 @@
 #define RTOL			15
 #define MONTGOMERY		16
 
-#define FLAG			3	// karatsuba에서 사용하는 flag
+#define FLAG			3	
 
-/* 함수 선택 */
+#define TEST_COUNT		10
+#define TEST_SIZE		SIZE_2048
+
 #define FLAG_MUL			KARATSUBA	// Multiplication flag: KARATSUBA, TEXTBOOK
 #define FLAG_DIV			MULTI_PRE	// Division flag: BINARY_LONG, MULTI_PRE
 #define FLAG_SQU			TEXTBOOK	// Squaring flag: KARATSUBA, TEXTBOOK
@@ -31,17 +33,20 @@
 #if WORD_BIT_LEN == 8
 typedef unsigned char word;
 #define word_mask 0xff
-#define test_size 256
+#define SIZE_1024 128
+#define SIZE_2048 256
 
 #elif WORD_BIT_LEN == 32
 typedef unsigned int word;
 #define word_mask 0xffffffff
-#define test_size  64
+#define SIZE_1024  32
+#define SIZE_2048  64
 
 #else
 typedef unsigned long long word;
 #define word_mask 0xffffffffffffffff
-#define test_size  32
+#define SIZE_1024  16
+#define SIZE_2048  32
 
 #endif
 
