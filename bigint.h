@@ -44,7 +44,7 @@ int BI_Is_Zero(bigint** x); // Determine Big Integer is 0
 int BI_Compare(bigint** x, bigint** y);
 
 // Chapter 2.10 Left/Right Shift
-void Left_Shift(bigint* x, int len);
+int Left_Shift(bigint* x, int len);
 void Right_Shift(bigint* x, int r);
 
 // Chapter 2.11 Reduction
