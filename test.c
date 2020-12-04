@@ -1114,7 +1114,7 @@ int montgomery_Ladder_Exponentiation_addtion_time()
 		n = (rand() & 0xf) + 1;
 
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
-		BI_Gen_Rand(&bi_N, 0, n)
+		BI_Gen_Rand(&bi_N, 0, n);
 			
 		clock_t start = clock();
 		EXP_Montgomery_ADD(&bi_re, bi_1, bi_N);
