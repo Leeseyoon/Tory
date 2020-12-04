@@ -214,7 +214,7 @@ void Flip_Sign() // Flip Sign
 void BI_Set_One (); // Set Big_Integer 1
    input : bigint** x
    1st arg: 1로 설정할 Big_Integer의 더블 포인터
-``'
+```
 ***
 ##### Set Big Integer --> 0
 ```c
