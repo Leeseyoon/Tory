@@ -17,7 +17,8 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 ─────────────────────────────────────────────────────────────────────
 
 ### [0] Development environment
-
+OS
+---:
 OS | Compiler 
 ---|:---:
 Window 10 | Visual studio
