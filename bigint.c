@@ -732,17 +732,20 @@ int BI_Compare(bigint** x, bigint** y) // return : 1(x > y), 0(x == y), -1(x < y
 	8 :
 	9 :
 */
-void Left_Shift(bigint* x, int len) // len: 이동할 비트 수
+int Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 {
 	int length = 0;
 	int add_len = 0;
 	int q = 0;
 	int new_wordlen = 0;
 	int i = 0;
-	//int wn = 0;
-	//int count = 0;
+	int wn = 0;
+	int count = 0;
 	int r = 0;
 	word* temp = NULL;
+
+	if (x == NULL)
+		return ERROR;
 
 	length = x->wordlen;
 
@@ -761,11 +764,14 @@ void Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 	temp = (word*)realloc(x->a, sizeof(word) * new_wordlen); // new_wordlen만큼 bigint 구조체 재할당
 	if (temp != NULL)
 		x->a = temp;
+	else
+		return ERROR;
 
 	x->wordlen = new_wordlen; // 재할당한 구조체 길이 설정
 
-	for (i = 0; i < add_len; i++)
-		x->a[length + i] = 0; // 추가된 워드 길이만큼 0으로 초기화
+	//for (i = 0; i < add_len; i++)
+	//	x->a[length + i] = 0; // 추가된 워드 길이만큼 0으로 초기화
+	memset(&x->a[length], 0x00, add_len);
 
 	q = len / WORD_BIT_LEN; // 이동할 비트 수를 WORD_BIT_LEN으로 나눈 몫
 	r = len % WORD_BIT_LEN; // 이동할 비트 수를 WORD_BIT_LEN으로 나눈 나머지
@@ -785,13 +791,20 @@ void Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 
 		x->a[q] = cp->a[0] << r; // q번째 배열에 원래 배열 중 0번째 배열을 r만큼 왼쪽으로 이동한 것 대입
 
-		for (i = 1; i <= cp->wordlen - 1; i++) // 1번째 배열 ~ 배열의 끝 바로 앞 = (Aj << r) || (Aj-1 >> (WORD_BIT_LEN - r))
-			x->a[i + q] = (cp->a[i] << r) | (cp->a[i - 1] >> (WORD_BIT_LEN - r));
+		if ((sizeof(x->a) == new_wordlen) && (x->wordlen > cp->wordlen))
+		{
+			for (i = 1; i <= cp->wordlen - 1; i++) // 1번째 배열 ~ 배열의 끝 바로 앞 = (Aj << r) || (Aj-1 >> (WORD_BIT_LEN - r))
+				x->a[i + q] = (cp->a[i] << r) | (cp->a[i - 1] >> (WORD_BIT_LEN - r));
 
-		x->a[x->wordlen - 1] = cp->a[cp->wordlen - 1] >> (WORD_BIT_LEN - r); // 마지막 배열 = An-1 >> (WORD_BIT_LEN - r)
+			x->a[x->wordlen - 1] = (cp->a[cp->wordlen - 1] >> (WORD_BIT_LEN - r)); // 마지막 배열 = An-1 >> (WORD_BIT_LEN - r)
+		}
+		
+		
 	}
 	BI_Delete(&cp);
 	BI_Refine(x);
+
+	return SUCCESS;
 }
 
 /*
@@ -1007,8 +1020,7 @@ int ADDC(bigint** C, bigint** A, bigint** B, int sign)
 	else
 		return ERROR;
 
-	for (i = B_Len; i < A_Len; i++)
-		(*B)->a[i] = 0; // [line 1] 늘어난 길이만큼 0으로 초기화
+	memset(&(*B)->a, 0x00, A_Len - B_Len); // [line 1] 늘어난 길이만큼 0으로 초기화
 
 	carry = 0; // [line 2]
 
@@ -1069,8 +1081,7 @@ int ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign)
 	else
 		return ERROR;
 
-	for (i = B_Len; i < A_Len; i++)
-		(*B)->a[i] = 0;
+	memset(&(*B)->a, 0x00, A_Len - B_Len);
 
 	carry = 0;
 
@@ -2634,8 +2645,7 @@ int ADDC_DIV(bigint** C, bigint** A, bigint** B, int sign)
 	if (temp != NULL)
 		(*B)->a = temp;
 
-	for (i = B_Len; i < A_Len; i++)
-		(*B)->a[i] = 0;
+	memset(&(*B)->a, 0x00, A_Len - B_Len);
 
 	carry = 0;
 
