@@ -869,7 +869,7 @@ int binary_long_division_time()
 		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
 		size = BI_Compare(&bi_1, &bi_2); // size1 과 size2 비교
-		if (size == -1)
+		if (size == 2)
 		{
 			BI_Delete(&bi_1);
 			BI_Delete(&bi_2);
@@ -924,7 +924,7 @@ int multi_long_division_time()
 		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 
 		size = BI_Compare(&bi_1, &bi_2); // size1 과 size2 비교
-		if (size == -1)
+		if (size == 2)
 		{
 			BI_Delete(&bi_1); // 크기보다 더 썼을 때 [30]짜리 배열인데 사용자가 임의로 31크기만큼에 값을 주었을때도 예외처리? 1201
 			BI_Delete(&bi_2);
