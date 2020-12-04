@@ -58,8 +58,8 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 2. Use gcc Compiler in linux
     1.  [2] Getting Tory를 참조해 library를 윈도우에 다운로드  
     2.  ` $ vi Tory `
-    3.  test vector 생성 및 시간측정을 원한다면,  ` $ gcc -o [ File name ] main.c bigint.c test.c config.h bigint.h test.h  `
-    4.  사용자가 빅넘버 함수들을 이용해 코드를 짠 후 컴파일한다면,  ` $ gcc -o [ File name ] main.c bigint.c config.h bigint.h `
+    3.  test vector 생성 및 시간측정을 원한다면,<br>` $ gcc -o [ File name ] main.c bigint.c test.c config.h bigint.h test.h  `
+    4.  사용자가 빅넘버 함수들을 이용해 코드를 짠 후 컴파일한다면,<br>` $ gcc -o [ File name ] main.c bigint.c config.h bigint.h `
     5.  ` $ ./[ File name ] ` 
 
 ---
