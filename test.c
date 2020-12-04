@@ -333,7 +333,7 @@ int montgomery_Exponentiation_multiplication_test() // 너무 느림... ㅠ
 	return 0;
 }
 
-int montgomery_Ladder_Exponentiation_addtion_test()
+int montgomery_ladder_Exponentiation_addtion_test()
 {
 	int i = 0;
 	int size1, size_n = 0;
