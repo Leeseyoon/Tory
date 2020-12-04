@@ -115,7 +115,7 @@ int multiplication_test()
 	else if (FLAG_MUL == KARATSUBA)
 		printf("print(\"Multiplication [Karatsuba ver]\")\n");
 
-	for (i = 0; i < 1; i++) //n번 곱셈 연산하기
+	for (i = 0; i < TEST_COUNT; i++) //n번 곱셈 연산하기
 	{
 		size1 = (rand() & 0xf) + 60;
 		size2 = (rand() & 0xf) + 60;
@@ -160,7 +160,7 @@ int division_test()
 	else if (FLAG_DIV == MULTI_PRE)
 		printf("print(\"Division [Multi-precision ver]\")\n");
 
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < TEST_COUNT; i++)
 	{
 		size2 = (rand() & 0x7) + 20; // size2 : 1~4
 		size1 = size2 + (rand() & 0x7) + 10;//size2 + (rand() & 3) + 1; // size1은 size2 보다 길이 더 길게
@@ -214,7 +214,7 @@ int squaring_test()
 	else if (FLAG_SQU == KARATSUBA)
 		printf("print(\"Squaring [Karatsuba ver]\")\n");
 
-	for (i = 0; i < 20; i++) //n번 곱셈 연산하기
+	for (i = 0; i < TEST_COUNT; i++) //n번 곱셈 연산하기
 	{
 		size1 = (rand() & 0xf) + 60;
 		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
@@ -400,7 +400,7 @@ int modular_exponentiation_multiplication_test()
 	else if (FLAG_EXP == MONTGOMERY)
 		printf("print(\"Modular exponentiation of multiplication [Montgomery Ladder ver]\")\n");
 
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < TEST_COUNT; i++)
 	{
 		size1 = (rand() & 0xf) + 10;
 		size_N = (rand() & 0xf) + 1;
@@ -453,7 +453,7 @@ int modular_exponentiation_addition_test()
 	else if (FLAG_EXP == MONTGOMERY)
 		printf("print(\"Modular exponentiation of addition [Montgomery Ladder ver]\")\n");
 
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < TEST_COUNT; i++)
 	{
 		size1 = (rand() & 0xf) + 50;
 		size_N = (rand() & 0xf) + 10;
@@ -654,7 +654,7 @@ int addition_time()
 
 	printf("\"Addition Test\"\n");
 
-	for (i = 0; i < 50; i++) // n에 20 대입
+	for (i = 0; i < TEST_COUNT; i++) // n에 20 대입
 	{
 		size1 = (rand() & 0x7) + 30; // size1 : 1~16
 		size2 = (rand() & 0x7) + 30; // size2 : 1~16
@@ -698,7 +698,7 @@ int subtraction_time()
 	printf("\n");
 	printf("\"Subtraction\"\n");
 
-	for (i = 0; i < 50; i++) // n에 20 대입
+	for (i = 0; i < TEST_COUNT; i++) // n에 20 대입
 	{
 		size1 = (rand() & 0x7) + 30; // size1 : 1~16
 		size2 = (rand() & 0x7) + 30; // size2 : 1~16
@@ -741,10 +741,10 @@ int schoolbook_multiplication_time()
 	/* n번 Schoolbook 곱셈 연산하기 */ // 8, 32, 64
 
 	printf("\"Schoolbook Multiplication\"\n");
-	for (i = 0; i < 50; i++) //n번 곱셈 연산하기
+	for (i = 0; i < TEST_COUNT; i++) //n번 곱셈 연산하기
 	{
-		size1 = (rand() & 0x7) + 30; // size1 : 1~16
-		size2 = (rand() & 0x7) + 30; // size2 : 1~16
+		size1 = SIZE_1024;
+		size2 = SIZE_1024;
 
 		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
@@ -784,10 +784,10 @@ int karatsuba_multiplication_time()
 
 	printf("\n");
 	printf("\"Karatsuba Multiplication\"\n");
-	for (i = 0; i < 1; i++) //20번 카라추바 곱셈 연산하기
+	for (i = 0; i < TEST_COUNT; i++) //20번 카라추바 곱셈 연산하기
 	{
-		size1 = (rand() & 0x3) + 100;
-		size2 = (rand() & 0x3) + 100;
+		size1 = SIZE_1024;
+		size2 = SIZE_1024;
 
 		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
@@ -853,10 +853,10 @@ int binary_long_division_time()
 
 	printf("\n");
 	printf("\"Binary Long Division\"\n"); // 메모리 릭 잡음
-	for (i = 0; i < 50; i++)
+	for (i = 0; i < TEST_COUNT; i++)
 	{
-		size2 = (rand() & 0x7) + 20; // size2 : 1~4
-		size1 = size2 + (rand() & 0x7) + 30; // size1은 size2 보다 길이 더 길게
+		size2 = SIZE_1024;
+		size1 = SIZE_1024;
 
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
@@ -868,9 +868,9 @@ int binary_long_division_time()
 		size = BI_Compare(&bi_1, &bi_2); // size1 과 size2 비교
 		if (size == -1)
 		{
-			printf("print(\"B is larger than A\")\n");
 			BI_Delete(&bi_1);
 			BI_Delete(&bi_2);
+			i--;
 		}
 		else
 		{
@@ -906,13 +906,13 @@ int multi_long_division_time()
 	bigint* bi_q = NULL;
 
 	/* n번 Multi Long Division 연산하기 */ // 32, 64 (8이고 size가 클 경우 몇 개 False)
-	
+
 	printf("\n");
 	printf("\"Multi Long Division\"\n");
-	for (i = 0; i < 50; i++)
+	for (i = 0; i < TEST_COUNT; i++)
 	{
-		size2 = (rand() & 0x7) + 20; // size2 : 1~4
-		size1 = size2 + (rand() & 0x7) + 10;//size2 + (rand() & 3) + 1; // size1은 size2 보다 길이 더 길게
+		size2 = SIZE_1024;
+		size1 = SIZE_1024;
 
 		BI_New(&bi_1, size1); // size1 길이인 big integer인 bi_1 생성
 		BI_New(&bi_2, size2); // size2 길이인 big integer인 bi_2 생성
@@ -923,9 +923,9 @@ int multi_long_division_time()
 		size = BI_Compare(&bi_1, &bi_2); // size1 과 size2 비교
 		if (size == -1)
 		{
-			printf("print(\"B is larger than A\")\n");
 			BI_Delete(&bi_1); // 크기보다 더 썼을 때 [30]짜리 배열인데 사용자가 임의로 31크기만큼에 값을 주었을때도 예외처리? 1201
 			BI_Delete(&bi_2);
+			i--;
 		}
 		else
 		{
@@ -963,9 +963,9 @@ int squaring_time()
 
 	printf("\n");
 	printf("\"Squaring\"\n");
-	for (i = 0; i < 20; i++) //20번 squaring
+	for (i = 0; i < TEST_COUNT; i++) //20번 squaring
 	{
-		size1 = (rand() & 0xf) + 100;
+		size1 = SIZE_1024;
 		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성 //음수일 떄 안되는 것 같아보임 1201
 
 		clock_t start = clock();
@@ -1003,19 +1003,19 @@ int squaring_karatsuba_time()
 
 	printf("\n");
 	printf("print(\"Squaring Karatsuba\")\n");
-	for (i = 0; i < 1; i++)
+	for (i = 0; i < TEST_SIZE; i++)
 	{
 		//size1 = (rand() & 0xf) + 100;
-		size1 = 22;
+		size1 = SIZE_1024;
 
 		//BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 의 부호를 랜덤하게 만들어서 랜덤한 배열을 담은 bigint 생성
 		// A = 0xcf55c5
 		// A = 0x 02 c1 47 a1 b4 75 d1 b9 8e f6 22 a6 8b 2c 69 69 fa 8d 4e 31 1b e7
-		word arr[22] = { 0xe7, 0x1b, 0x31, 0x4e, 0x8d, 0xfa, 0x69, 0x69, 0x2c, 0x8b, 0xa6,
-						 0x22, 0xf6, 0x8e, 0xb9, 0xd1, 0x75, 0xb4, 0xa1, 0x47, 0xc1, 0x02 };
+		//word arr[22] = { 0xe7, 0x1b, 0x31, 0x4e, 0x8d, 0xfa, 0x69, 0x69, 0x2c, 0x8b, 0xa6,
+		//				 0x22, 0xf6, 0x8e, 0xb9, 0xd1, 0x75, 0xb4, 0xa1, 0x47, 0xc1, 0x02 };
 
 		BI_New(&bi_1, size1);
-		BI_Set_By_Array(&bi_1, NON_NEGATIVE, arr, size1);
+		//BI_Set_By_Array(&bi_1, NON_NEGATIVE, arr, size1);
 
 		len = (bi_1->wordlen + 1) >> 1;
 		len = 4 * len + 1;
