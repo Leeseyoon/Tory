@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include "config.h"
-#include "bigint.h"
+#include "BasicOperation.h"
+#include "Calculation.h"
+#include "test.h"
 
 int addition_test()
 {
@@ -17,33 +19,33 @@ int addition_test()
 	bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
 
-	/* në²ˆ ë§ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
+	/* n¹ø µ¡¼À ¿¬»êÇÏ±â */ // 8, 32, 64
 
 	printf("\n");
 	printf("print(\"Addition\")\n");
 
-	for (i = 0; i < 50; i++) // nì— 20 ëŒ€ì…
+	for (i = 0; i < 50; i++) // n¿¡ 20 ´ëÀÔ
 	{
 		size1 = (rand() & 0x7) + 30; // size1 : 1~16
 		size2 = (rand() & 0x7) + 30; // size2 : 1~16
 
-		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		size = MAX(bi_1->wordlen, bi_2->wordlen);
-		BI_New(&bi_re, size + 1); // ë” ê¸´ ê¸¸ì´ì¸ sizeë¡œ ë§ì…ˆ ì—°ì‚° ê²°ê³¼ì¸ big integer ìƒì„±
+		BI_New(&bi_re, size + 1); // ´õ ±ä ±æÀÌÀÎ size·Î µ¡¼À ¿¬»ê °á°úÀÎ big integer »ı¼º
 
-		// ì¶œë ¥ ë¶€ë¶„
+		// Ãâ·Â ºÎºĞ
 		printf("A = ");
 		BI_Show(bi_1, 16);
 		printf("B = ");
 		BI_Show(bi_2, 16);
-		ADD(&bi_re, &bi_1, &bi_2); // ADDí•¨ìˆ˜ì— ë§ì…ˆ ê²°ê³¼ì¸ bi_re , í”¼ì—°ì‚°ì 1ì¸ bi_1, í”¼ì—°ì‚°ì 2ì¸ bi_2
+		ADD(&bi_re, &bi_1, &bi_2); // ADDÇÔ¼ö¿¡ µ¡¼À °á°úÀÎ bi_re , ÇÇ¿¬»êÀÚ 1ÀÎ bi_1, ÇÇ¿¬»êÀÚ 2ÀÎ bi_2
 		printf("A + B == ");
 		BI_Show(bi_re, 16);
 		printf("\n");
 
-		// ë©”ëª¨ë¦¬ free
+		// ¸Ş¸ğ¸® free
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
 		BI_Delete(&bi_re);
@@ -64,20 +66,22 @@ int subtraction_test()
 	bigint* bi_re = NULL;
 	//bigint* bi_q = NULL;
 
-	/* në²ˆ ëº„ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
+	/* n¹ø »¬¼À ¿¬»êÇÏ±â */ // 8, 32, 64
 
 	printf("\n");
 	printf("print(\"Subtraction\")\n");
 
-	for (i = 0; i < 50; i++) // nì— 20 ëŒ€ì…
+	for (i = 0; i < 50; i++) // n¿¡ 20 ´ëÀÔ
 	{
-		size1 = (rand() & 0x7) + 30; // size1 : 1~16
-		size2 = (rand() & 0x7) + 30; // size2 : 1~16
+		//size1 = (rand() & 0x7) + 30; // size1 : 1~16
+		//size2 = (rand() & 0x7) + 30; // size2 : 1~16
+		size1 = 2;
+		size2 = 1;
 
-		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_2, 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
-		size = (size1 > size2) ? size1 : size2; // size1 ê³¼ size2 ë¹„êµí•´ì„œ size ë³€ìˆ˜ì— ëŒ€ì…
+		size = (size1 > size2) ? size1 : size2; // size1 °ú size2 ºñ±³ÇØ¼­ size º¯¼ö¿¡ ´ëÀÔ
 		BI_New(&bi_re, size + 1); //size + 1?
 
 		printf("A = ");
@@ -107,7 +111,7 @@ int multiplication_test()
 	bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
 
-	/* në²ˆ Schoolbook ê³±ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
+	/* n¹ø Schoolbook °ö¼À ¿¬»êÇÏ±â */ // 8, 32, 64
 
 	printf("\n");
 	if (FLAG_MUL == TEXTBOOK)
@@ -115,13 +119,13 @@ int multiplication_test()
 	else if (FLAG_MUL == KARATSUBA)
 		printf("print(\"Multiplication [Karatsuba ver]\")\n");
 
-	for (i = 0; i < TEST_COUNT; i++) //në²ˆ ê³±ì…ˆ ì—°ì‚°í•˜ê¸°
+	for (i = 0; i < TEST_COUNT; i++) //n¹ø °ö¼À ¿¬»êÇÏ±â
 	{
 		size1 = (rand() & 0xf) + 60;
 		size2 = (rand() & 0xf) + 60;
 
-		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		printf("A = ");
 		BI_Show(bi_1, 16);
@@ -152,7 +156,7 @@ int division_test()
 	bigint* bi_re = NULL;
 	bigint* bi_q = NULL;
 
-	/* në²ˆ Multi Long Division ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
+	/* n¹ø Multi Long Division ¿¬»êÇÏ±â */ // 8, 32, 64
 
 	printf("\n");
 	if (FLAG_DIV == BINARY_LONG)
@@ -163,17 +167,17 @@ int division_test()
 	for (i = 0; i < TEST_COUNT; i++)
 	{
 		size2 = (rand() & 0x7) + 20; // size2 : 1~4
-		size1 = size2 + (rand() & 0x7) + 10;//size2 + (rand() & 3) + 1; // size1ì€ size2 ë³´ë‹¤ ê¸¸ì´ ë” ê¸¸ê²Œ
+		size1 = size2 + (rand() & 0x7) + 10;//size2 + (rand() & 3) + 1; // size1Àº size2 º¸´Ù ±æÀÌ ´õ ±æ°Ô
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
-		BI_New(&bi_2, size2); // size2 ê¸¸ì´ì¸ big integerì¸ bi_2 ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
+		BI_New(&bi_2, size2); // size2 ±æÀÌÀÎ big integerÀÎ bi_2 »ı¼º
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		Division(&bi_q, &bi_re, bi_1, bi_2);
 
-		// ì¶œë ¥ ë¶€ë¶„
+		// Ãâ·Â ºÎºĞ
 		printf("A = ");
 		BI_Show(bi_1, 16);
 		printf("B = ");
@@ -186,7 +190,7 @@ int division_test()
 
 		printf("\n");
 
-		// ë©”ëª¨ë¦¬ free
+		// ¸Ş¸ğ¸® free
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
 		BI_Delete(&bi_re);
@@ -206,7 +210,7 @@ int squaring_test()
 	bigint* bi_1 = NULL;
 	bigint* bi_re = NULL;;
 
-	/* në²ˆ Squaring ê³±ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
+	/* n¹ø Squaring °ö¼À ¿¬»êÇÏ±â */ // 8, 32, 64
 
 	printf("\n");
 	if (FLAG_SQU == TEXTBOOK)
@@ -214,10 +218,10 @@ int squaring_test()
 	else if (FLAG_SQU == KARATSUBA)
 		printf("print(\"Squaring [Karatsuba ver]\")\n");
 
-	for (i = 0; i < TEST_COUNT; i++) //në²ˆ ê³±ì…ˆ ì—°ì‚°í•˜ê¸°
+	for (i = 0; i < TEST_COUNT; i++) //n¹ø °ö¼À ¿¬»êÇÏ±â
 	{
 		size1 = (rand() & 0xf) + 60;
-		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		printf("A = ");
 		BI_Show(bi_1, 16);
@@ -246,7 +250,7 @@ int squaring_karatsuba_test()
 	bigint* bi_re = NULL;
 	//bigint* bi_q = NULL;
 
-	/* në²ˆ Squaring Karatsuba ê³±ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64 ê¸¸ì´ 21 ì´ìƒë¶€í„° ì•ˆ ë¨
+	/* n¹ø Squaring Karatsuba °ö¼À ¿¬»êÇÏ±â */ // 8, 32, 64 ±æÀÌ 21 ÀÌ»óºÎÅÍ ¾È µÊ
 
 	printf("\n");
 	printf("print(\"Squaring Karatsuba\")\n");
@@ -255,7 +259,7 @@ int squaring_karatsuba_test()
 		//size1 = (rand() & 0xf) + 100;
 		size1 = 22;
 
-		//BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		//BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 		// A = 0xcf55c5
 		// A = 0x 02 c1 47 a1 b4 75 d1 b9 8e f6 22 a6 8b 2c 69 69 fa 8d 4e 31 1b e7
 		word arr[22] = { 0xe7, 0x1b, 0x31, 0x4e, 0x8d, 0xfa, 0x69, 0x69, 0x2c, 0x8b, 0xa6,
@@ -286,7 +290,7 @@ int squaring_karatsuba_test()
 	return 0;
 }
 
-int montgomery_ladder_Exponentiation_multiplication_test() // ë„ˆë¬´ ëŠë¦¼... ã… 
+int montgomery_ladder_Exponentiation_multiplication_test() // ³Ê¹« ´À¸²... ¤Ğ
 {
 	int i = 0;
 	int size1 = 0;
@@ -299,7 +303,7 @@ int montgomery_ladder_Exponentiation_multiplication_test() // ë„ˆë¬´ ëŠë¦¼... ã
 	bigint* bi_n = NULL;
 	bigint* bi_re = NULL;
 
-	/* në²ˆ Montgomery Ladder multiplacation ì—°ì‚°í•˜ê¸° */
+	/* n¹ø Montgomery Ladder multiplacation ¿¬»êÇÏ±â */
 	printf("\n");
 	printf("print(\"Montgomery Ladder exponentiation multiplacation\")\n");
 	for (i = 0; i < 20; i++)
@@ -310,7 +314,7 @@ int montgomery_ladder_Exponentiation_multiplication_test() // ë„ˆë¬´ ëŠë¦¼... ã
 		size1 = 2;
 		size_n = 1;
 
-		BI_Gen_Rand(&bi_1, NON_NEGATIVE, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, NON_NEGATIVE, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 		BI_Gen_Rand(&bi_n, NON_NEGATIVE, size_n);
 
 		printf("X = ");
@@ -346,7 +350,7 @@ int montgomery_ladder_Exponentiation_addtion_test()
 	bigint* bi_n = NULL;
 	bigint* bi_re = NULL;
 
-	/* në²ˆ Montgomery Ladder multiplacation ì—°ì‚°í•˜ê¸° */
+	/* n¹ø Montgomery Ladder multiplacation ¿¬»êÇÏ±â */
 	printf("\n");
 	printf("print(\"Montgomery Ladder exponentiation addition\")\n");
 	for (i = 0; i < 20; i++)
@@ -357,7 +361,7 @@ int montgomery_ladder_Exponentiation_addtion_test()
 		//size1 = 2;
 		//size_n = 2;
 
-		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 		BI_Gen_Rand(&bi_n, NON_NEGATIVE, size_n);
 
 		printf("X = ");
@@ -407,9 +411,9 @@ int modular_exponentiation_multiplication_test()
 		size_N = (rand() & 0xf) + 1;
 		size_M = (rand() & 0xf) + 5;
 
-		BI_Gen_Rand(&bi_1, NON_NEGATIVE, size1); // bi_1ì˜ ë¶€í˜¸ë¥¼ ì–‘ìˆ˜ë¡œ í•˜ì—¬ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_N, NON_NEGATIVE, size_N); // bi_nì˜ ë¶€í˜¸ë¥¼ ì–‘ìˆ˜ë¡œ í•˜ì—¬ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_M, NON_NEGATIVE, size_M); // bi_Mì˜ ë¶€í˜¸ë¥¼ ì–‘ìˆ˜ë¡œ í•˜ì—¬ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, NON_NEGATIVE, size1); // bi_1ÀÇ ºÎÈ£¸¦ ¾ç¼ö·Î ÇÏ¿© ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_N, NON_NEGATIVE, size_N); // bi_nÀÇ ºÎÈ£¸¦ ¾ç¼ö·Î ÇÏ¿© ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_M, NON_NEGATIVE, size_M); // bi_MÀÇ ºÎÈ£¸¦ ¾ç¼ö·Î ÇÏ¿© ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		printf("X = ");
 		BI_Show(bi_1, 16);
@@ -461,9 +465,9 @@ int modular_exponentiation_addition_test()
 		size_N = (rand() & 0xf) + 10;
 		size_M = (rand() & 0xf) + 5;
 
-		BI_Gen_Rand(&bi_1, NON_NEGATIVE, size1); // bi_1ì˜ ë¶€í˜¸ë¥¼ ì–‘ìˆ˜ë¡œ í•˜ì—¬ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_N, NON_NEGATIVE, size_N); // bi_nì˜ ë¶€í˜¸ë¥¼ ì–‘ìˆ˜ë¡œ í•˜ì—¬ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_M, NON_NEGATIVE, size_M); // bi_Mì˜ ë¶€í˜¸ë¥¼ ì–‘ìˆ˜ë¡œ í•˜ì—¬ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, NON_NEGATIVE, size1); // bi_1ÀÇ ºÎÈ£¸¦ ¾ç¼ö·Î ÇÏ¿© ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_N, NON_NEGATIVE, size_N); // bi_nÀÇ ºÎÈ£¸¦ ¾ç¼ö·Î ÇÏ¿© ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_M, NON_NEGATIVE, size_M); // bi_MÀÇ ºÎÈ£¸¦ ¾ç¼ö·Î ÇÏ¿© ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		printf("X = ");
 		BI_Show(bi_1, 16);
@@ -506,12 +510,12 @@ void Left_Right_EXP_ADD_test() // Only Exponentiation function L->R add
 		size1 = (rand() & 0x7) + 30;
 		len = 1;
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
 		BI_New(&bi_N, len);
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 		bi_N->a[0] = 0x0a;
-		//BI_Gen_Rand(&bi_N, 0, len); // bi_N ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		//BI_Gen_Rand(&bi_N, 0, len); // bi_N ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		EXP_LR_ADD(&bi_re, bi_1, bi_N);
 		printf("A = ");
@@ -543,11 +547,11 @@ void Left_Right_EXP_MUL_test() // Only Exponentiation function L->R mul
 		size1 = (rand() & 0x7) + 30;
 		len = 1;
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
-		BI_New(&bi_N, len); // len ê¸¸ì´ì¸ big integerì¸ bi_N ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
+		BI_New(&bi_N, len); // len ±æÀÌÀÎ big integerÀÎ bi_N »ı¼º
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		bi_N->a[0] = 0x0a; //BI_Gen_Rand(&bi_N, 0, len); // bi_N ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		bi_N->a[0] = 0x0a; //BI_Gen_Rand(&bi_N, 0, len); // bi_N ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		EXP_LR_MUL(&bi_re, bi_1, bi_N);
 		printf("A = ");
@@ -580,11 +584,11 @@ void Right_Left_EXP_ADD_test() // Only Exponentiation function R<-L add
 		size1 = (rand() & 0x7) + 30;
 		len = 1;
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
-		BI_New(&bi_N, len); // len ê¸¸ì´ì¸ big integerì¸ bi_N ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
+		BI_New(&bi_N, len); // len ±æÀÌÀÎ big integerÀÎ bi_N »ı¼º
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		bi_N->a[0] = 0x0a; //BI_Gen_Rand(&bi_N, 0, len); // bi_N ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		bi_N->a[0] = 0x0a; //BI_Gen_Rand(&bi_N, 0, len); // bi_N ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		EXP_RL_ADD(&bi_re, bi_1, bi_N);
 		printf("A = ");
@@ -611,17 +615,17 @@ void Right_Left_EXP_MUL_test()  // Only Exponentiation function R<-L mul
 	bigint* bi_re = NULL;
 
 	printf("\n");
-	printf("print(\"Right to Letf Exp MUL test\")\n"); // bi_1ì˜ sizeê°€ 0ì¼ ë–„ì˜ ì˜ˆì™¸ì²˜ë¦¬
+	printf("print(\"Right to Letf Exp MUL test\")\n"); // bi_1ÀÇ size°¡ 0ÀÏ ‹šÀÇ ¿¹¿ÜÃ³¸®
 	for (i = 0; i < 10; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		len = 1;
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
-		BI_New(&bi_N, len); // len ê¸¸ì´ì¸ big integerì¸ bi_N ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
+		BI_New(&bi_N, len); // len ±æÀÌÀÎ big integerÀÎ bi_N »ı¼º
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		bi_N->a[0] = 0x0a; //BI_Gen_Rand(&bi_N, 0, len); // bi_N ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		bi_N->a[0] = 0x0a; //BI_Gen_Rand(&bi_N, 0, len); // bi_N ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		EXP_RL_MUL(&bi_re, bi_1, bi_N);
 		printf("A = ");
@@ -652,27 +656,27 @@ int addition_time()
 	bigint* bi_re = NULL;
 	//bigint* bi_q = NULL;
 
-	/* në²ˆ ë§ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
+	/* n¹ø µ¡¼À ¿¬»êÇÏ±â */ // 8, 32, 64
 
 
 	printf("\"Addition Test\"\n");
 
-	for (i = 0; i < TEST_COUNT; i++) // nì— 20 ëŒ€ì…
+	for (i = 0; i < TEST_COUNT; i++) // n¿¡ 20 ´ëÀÔ
 	{
 		size1 = (rand() & 0x7) + 30; // size1 : 1~16
 		size2 = (rand() & 0x7) + 30; // size2 : 1~16
 
-		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		size = MAX(bi_1->wordlen, bi_2->wordlen);
-		BI_New(&bi_re, size + 1); // ë” ê¸´ ê¸¸ì´ì¸ sizeë¡œ ë§ì…ˆ ì—°ì‚° ê²°ê³¼ì¸ big integer ìƒì„±
+		BI_New(&bi_re, size + 1); // ´õ ±ä ±æÀÌÀÎ size·Î µ¡¼À ¿¬»ê °á°úÀÎ big integer »ı¼º
 
 		clock_t start = clock();
-		ADD(&bi_re, &bi_1, &bi_2); // ADDí•¨ìˆ˜ì— ë§ì…ˆ ê²°ê³¼ì¸ bi_re , í”¼ì—°ì‚°ì 1ì¸ bi_1, í”¼ì—°ì‚°ì 2ì¸ bi_2
+		ADD(&bi_re, &bi_1, &bi_2); // ADDÇÔ¼ö¿¡ µ¡¼À °á°úÀÎ bi_re , ÇÇ¿¬»êÀÚ 1ÀÎ bi_1, ÇÇ¿¬»êÀÚ 2ÀÎ bi_2
 		clock_t end = clock();
 		total_time += (end - start);
-		// ë©”ëª¨ë¦¬ free
+		// ¸Ş¸ğ¸® free
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_2);
 		BI_Delete(&bi_re);
@@ -696,20 +700,20 @@ int subtraction_time()
 	bigint* bi_re = NULL;
 	//bigint* bi_q = NULL;
 
-	/* në²ˆ ëº„ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
+	/* n¹ø »¬¼À ¿¬»êÇÏ±â */ // 8, 32, 64
 
 	printf("\n");
 	printf("\"Subtraction\"\n");
 
-	for (i = 0; i < TEST_COUNT; i++) // nì— 20 ëŒ€ì…
+	for (i = 0; i < TEST_COUNT; i++) // n¿¡ 20 ´ëÀÔ
 	{
 		size1 = (rand() & 0x7) + 30; // size1 : 1~16
 		size2 = (rand() & 0x7) + 30; // size2 : 1~16
 
-		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
-		size = (size1 > size2) ? size1 : size2; // size1 ê³¼ size2 ë¹„êµí•´ì„œ size ë³€ìˆ˜ì— ëŒ€ì…
+		size = (size1 > size2) ? size1 : size2; // size1 °ú size2 ºñ±³ÇØ¼­ size º¯¼ö¿¡ ´ëÀÔ
 		BI_New(&bi_re, size + 1); //size + 1?
 
 		clock_t start = clock();
@@ -741,16 +745,16 @@ int schoolbook_multiplication_time()
 	bigint* bi_re = NULL;
 	//bigint* bi_q = NULL;
 
-	/* në²ˆ Schoolbook ê³±ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
+	/* n¹ø Schoolbook °ö¼À ¿¬»êÇÏ±â */ // 8, 32, 64
 
 	printf("\"Schoolbook Multiplication\"\n");
-	for (i = 0; i < TEST_COUNT; i++) //në²ˆ ê³±ì…ˆ ì—°ì‚°í•˜ê¸°
+	for (i = 0; i < TEST_COUNT; i++) //n¹ø °ö¼À ¿¬»êÇÏ±â
 	{
 		size1 = SIZE_1024;
 		size2 = SIZE_1024;
 
-		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		BI_New(&bi_re, size1 + size2);
 
@@ -783,17 +787,17 @@ int karatsuba_multiplication_time()
 	bigint* bi_re = NULL;
 	//bigint* bi_q = NULL;
 
-	/* në²ˆ Karatsuba ê³±ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
+	/* n¹ø Karatsuba °ö¼À ¿¬»êÇÏ±â */ // 8, 32, 64
 
 	printf("\n");
 	printf("\"Karatsuba Multiplication\"\n");
-	for (i = 0; i < TEST_COUNT; i++) //20ë²ˆ ì¹´ë¼ì¶”ë°” ê³±ì…ˆ ì—°ì‚°í•˜ê¸°
+	for (i = 0; i < TEST_COUNT; i++) //20¹ø Ä«¶óÃß¹Ù °ö¼À ¿¬»êÇÏ±â
 	{
 		size1 = SIZE_1024;
 		size2 = SIZE_1024;
 
-		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_2, rand() & 1, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		len = (MAX(bi_1->wordlen, bi_2->wordlen) + 1) >> 1;
 		len = 4 * len + 1;
@@ -852,23 +856,23 @@ int binary_long_division_time()
 	bigint* bi_re = NULL;
 	bigint* bi_q = NULL;
 
-	/* në²ˆ Binary Long Division ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
+	/* n¹ø Binary Long Division ¿¬»êÇÏ±â */ // 8, 32, 64
 
 	printf("\n");
-	printf("\"Binary Long Division\"\n"); // ë©”ëª¨ë¦¬ ë¦­ ì¡ìŒ
+	printf("\"Binary Long Division\"\n"); // ¸Ş¸ğ¸® ¸¯ ÀâÀ½
 	for (i = 0; i < TEST_COUNT; i++)
 	{
 		size2 = SIZE_1024;
 		size1 = SIZE_1024;
 
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
-		BI_New(&bi_2, size2); // size2 ê¸¸ì´ì¸ big integerì¸ bi_2 ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
+		BI_New(&bi_2, size2); // size2 ±æÀÌÀÎ big integerÀÎ bi_2 »ı¼º
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
-		size = BI_Compare(&bi_1, &bi_2); // size1 ê³¼ size2 ë¹„êµ
+		size = BI_Compare(&bi_1, &bi_2); // size1 °ú size2 ºñ±³
 		if (size == 2)
 		{
 			BI_Delete(&bi_1);
@@ -882,7 +886,7 @@ int binary_long_division_time()
 			clock_t end = clock();
 			total_time += (float)(end - start);
 
-			// ë©”ëª¨ë¦¬ free
+			// ¸Ş¸ğ¸® free
 			BI_Delete(&bi_1);
 			BI_Delete(&bi_2);
 			BI_Delete(&bi_re);
@@ -908,7 +912,7 @@ int multi_long_division_time()
 	bigint* bi_re = NULL;
 	bigint* bi_q = NULL;
 
-	/* në²ˆ Multi Long Division ì—°ì‚°í•˜ê¸° */ // 32, 64 (8ì´ê³  sizeê°€ í´ ê²½ìš° ëª‡ ê°œ False)
+	/* n¹ø Multi Long Division ¿¬»êÇÏ±â */ // 32, 64 (8ÀÌ°í size°¡ Å¬ °æ¿ì ¸î °³ False)
 
 	printf("\n");
 	printf("\"Multi Long Division\"\n");
@@ -917,16 +921,16 @@ int multi_long_division_time()
 		size2 = SIZE_1024;
 		size1 = SIZE_1024;
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
-		BI_New(&bi_2, size2); // size2 ê¸¸ì´ì¸ big integerì¸ bi_2 ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
+		BI_New(&bi_2, size2); // size2 ±æÀÌÀÎ big integerÀÎ bi_2 »ı¼º
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
-		size = BI_Compare(&bi_1, &bi_2); // size1 ê³¼ size2 ë¹„êµ
+		size = BI_Compare(&bi_1, &bi_2); // size1 °ú size2 ºñ±³
 		if (size == 2)
 		{
-			BI_Delete(&bi_1); // í¬ê¸°ë³´ë‹¤ ë” ì¼ì„ ë•Œ [30]ì§œë¦¬ ë°°ì—´ì¸ë° ì‚¬ìš©ìê°€ ì„ì˜ë¡œ 31í¬ê¸°ë§Œí¼ì— ê°’ì„ ì£¼ì—ˆì„ë•Œë„ ì˜ˆì™¸ì²˜ë¦¬? 1201
+			BI_Delete(&bi_1); // Å©±âº¸´Ù ´õ ½èÀ» ¶§ [30]Â¥¸® ¹è¿­ÀÎµ¥ »ç¿ëÀÚ°¡ ÀÓÀÇ·Î 31Å©±â¸¸Å­¿¡ °ªÀ» ÁÖ¾úÀ»¶§µµ ¿¹¿ÜÃ³¸®? 1201
 			BI_Delete(&bi_2);
 			i--;
 		}
@@ -937,7 +941,7 @@ int multi_long_division_time()
 			clock_t end = clock();
 			total_time += (float)(end - start);
 
-			// ë©”ëª¨ë¦¬ free
+			// ¸Ş¸ğ¸® free
 			BI_Delete(&bi_1);
 			BI_Delete(&bi_2);
 			BI_Delete(&bi_re);
@@ -962,14 +966,14 @@ int squaring_time()
 	bigint* bi_1 = NULL;
 	bigint* bi_re = NULL;
 
-	/* në²ˆ Squaring ê³±ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64
+	/* n¹ø Squaring °ö¼À ¿¬»êÇÏ±â */ // 8, 32, 64
 
 	printf("\n");
 	printf("\"Squaring\"\n");
-	for (i = 0; i < TEST_COUNT; i++) //20ë²ˆ squaring
+	for (i = 0; i < TEST_COUNT; i++) //20¹ø squaring
 	{
 		size1 = SIZE_1024;
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„± //ìŒìˆ˜ì¼ ë–„ ì•ˆë˜ëŠ” ê²ƒ ê°™ì•„ë³´ì„ 1201
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º //À½¼öÀÏ ‹š ¾ÈµÇ´Â °Í °°¾Æº¸ÀÓ 1201
 
 		clock_t start = clock();
 		SQU(&bi_re, bi_1);
@@ -1002,7 +1006,7 @@ int squaring_karatsuba_time()
 	bigint* bi_re = NULL;
 	//bigint* bi_q = NULL;
 
-	/* në²ˆ Squaring Karatsuba ê³±ì…ˆ ì—°ì‚°í•˜ê¸° */ // 8, 32, 64 ê¸¸ì´ 21 ì´ìƒë¶€í„° ì•ˆ ë¨
+	/* n¹ø Squaring Karatsuba °ö¼À ¿¬»êÇÏ±â */ // 8, 32, 64 ±æÀÌ 21 ÀÌ»óºÎÅÍ ¾È µÊ
 
 	printf("\n");
 	printf("print(\"Squaring Karatsuba\")\n");
@@ -1011,7 +1015,7 @@ int squaring_karatsuba_time()
 		//size1 = (rand() & 0xf) + 100;
 		size1 = SIZE_1024;
 
-		//BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		//BI_Gen_Rand(&bi_1, rand() & 1, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 		// A = 0xcf55c5
 		// A = 0x 02 c1 47 a1 b4 75 d1 b9 8e f6 22 a6 8b 2c 69 69 fa 8d 4e 31 1b e7
 		//word arr[22] = { 0xe7, 0x1b, 0x31, 0x4e, 0x8d, 0xfa, 0x69, 0x69, 0x2c, 0x8b, 0xa6,
@@ -1059,7 +1063,7 @@ int montgomery_ladder_Exponentiation_multiplication_time()
 	//bigint* bi_q = NULL;
 	bigint* bi_N = NULL;
 
-	/* në²ˆ Montgomery Ladder multiplacation ì—°ì‚°í•˜ê¸° */
+	/* n¹ø Montgomery Ladder multiplacation ¿¬»êÇÏ±â */
 	printf("\n");
 	printf("\"Montgomery Ladder exponentiation multiplacation\"\n");
 	for (i = 0; i < 20; i++)
@@ -1067,7 +1071,7 @@ int montgomery_ladder_Exponentiation_multiplication_time()
 		size1 = (rand() & 0xf) + 1;
 		n = (rand() & 0xf) + 1;
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 		BI_Gen_Rand(&bi_N, 0, n);
 
 		clock_t start = clock();
@@ -1102,7 +1106,7 @@ int montgomery_ladder_Exponentiation_addtion_time()
 	//bigint* bi_q = NULL;
 	bigint* bi_N = NULL;
 
-	/* në²ˆ Montgomery Ladder addition ì—°ì‚°í•˜ê¸° */
+	/* n¹ø Montgomery Ladder addition ¿¬»êÇÏ±â */
 	printf("\n");
 	printf("\"Montgomery Ladder exponentiation addition\"\n");
 	for (i = 0; i < 20; i++)
@@ -1111,7 +1115,7 @@ int montgomery_ladder_Exponentiation_addtion_time()
 		//size1 = (rand() & 0xf) + 1;
 		n = (rand() & 0xf) + 1;
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 		BI_Gen_Rand(&bi_N, 0, n);
 
 		clock_t start = clock();
@@ -1144,7 +1148,7 @@ int montgomery_ladder_Modular_Exponentiation_multiplication_time()
 	bigint* bi_re = NULL;
 	bigint* bi_M = NULL;
 
-	/* në²ˆ Montgomery Ladder multiplacation ì—°ì‚°í•˜ê¸° */
+	/* n¹ø Montgomery Ladder multiplacation ¿¬»êÇÏ±â */
 	printf("\n");
 	printf("\"Montgomery Ladder modular exponentiation multiplacation\"\n");
 	for (i = 0; i < 10; i++)
@@ -1153,9 +1157,9 @@ int montgomery_ladder_Modular_Exponentiation_multiplication_time()
 		size_M = TEST_SIZE;
 		n = 1;
 
-		BI_Gen_Rand(&bi_1, NON_NEGATIVE, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_M, NON_NEGATIVE, size_M); // bi_M ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_N, NON_NEGATIVE, n); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, NON_NEGATIVE, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_M, NON_NEGATIVE, size_M); // bi_M ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_N, NON_NEGATIVE, n); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		clock_t start = clock();
 		MOD_EXP_Montgomery_MUL(&bi_re, bi_1, bi_N, bi_M);
@@ -1188,7 +1192,7 @@ int montgomery_ladder_Modular_Exponentiation_addtion_time()
 	bigint* bi_re = NULL;
 	bigint* bi_M = NULL;
 
-	/* në²ˆ Montgomery Ladder addition ì—°ì‚°í•˜ê¸° */
+	/* n¹ø Montgomery Ladder addition ¿¬»êÇÏ±â */
 	printf("\n");
 	printf("\"Montgomery Ladder odular exponentiation addition\"\n");
 	for (i = 0; i < 20; i++)
@@ -1197,9 +1201,9 @@ int montgomery_ladder_Modular_Exponentiation_addtion_time()
 		size_M = TEST_SIZE; // (rand() & 0xf) + 1;
 		n = 1;// (rand() & 0xf) + 1;
 
-		BI_Gen_Rand(&bi_1, NON_NEGATIVE, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_M, NON_NEGATIVE, size_M); // bi_M ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_N, NON_NEGATIVE, n); // bi_N ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, NON_NEGATIVE, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_M, NON_NEGATIVE, size_M); // bi_M ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_N, NON_NEGATIVE, n); // bi_N ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		clock_t start = clock();
 		MOD_EXP_Montgomery_ADD(&bi_re, bi_1, bi_N, bi_M);
@@ -1240,12 +1244,12 @@ void Left_Right_EXP_ADD_time() // Only Exponentiation function L->R add
 		size1 = (rand() & 0x7) + 30;
 		len = 1;
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
 		BI_New(&bi_N, len);
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		bi_N->a[0] = 0x0a; // ë„ˆë¬´ ì˜¤ë˜ê±¸ë ¤ì„œ
-		//BI_Gen_Rand(&bi_N, 0, len); // bi_N ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		bi_N->a[0] = 0x0a; // ³Ê¹« ¿À·¡°É·Á¼­
+		//BI_Gen_Rand(&bi_N, 0, len); // bi_N ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		sign1 = BI_Get_Sign(bi_1);
 		sign2 = BI_Get_Sign(bi_1);
@@ -1290,11 +1294,11 @@ void Left_Right_EXP_MUL_time() // Only Exponentiation function L->R mul
 		size1 = (rand() & 0x7) + 30;
 		len = 1;
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
-		BI_New(&bi_N, len); // len ê¸¸ì´ì¸ big integerì¸ bi_N ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
+		BI_New(&bi_N, len); // len ±æÀÌÀÎ big integerÀÎ bi_N »ı¼º
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		bi_N->a[0] = 0x0a; //BI_Gen_Rand(&bi_N, 0, len); // bi_N ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		bi_N->a[0] = 0x0a; //BI_Gen_Rand(&bi_N, 0, len); // bi_N ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		sign1 = BI_Get_Sign(bi_1);
 		sign2 = BI_Get_Sign(bi_1);
@@ -1339,12 +1343,12 @@ void Right_Left_EXP_ADD_time() // Only Exponentiation function R<-L add
 		size1 = (rand() & 0x7) + 30;
 		len = 1;
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
-		BI_New(&bi_N, len); // len ê¸¸ì´ì¸ big integerì¸ bi_N ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
+		BI_New(&bi_N, len); // len ±æÀÌÀÎ big integerÀÎ bi_N »ı¼º
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		bi_N->a[0] = 0x0a; // ê¸¸ì´ê°€ ê¸¸ì–´ì„œ ì›ë˜ëŠ” ì•„ë˜ì¤„
-		//BI_Gen_Rand(&bi_N, 0, len); // bi_N ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		bi_N->a[0] = 0x0a; // ±æÀÌ°¡ ±æ¾î¼­ ¿ø·¡´Â ¾Æ·¡ÁÙ
+		//BI_Gen_Rand(&bi_N, 0, len); // bi_N ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		sign1 = BI_Get_Sign(bi_1);
 		sign2 = BI_Get_Sign(bi_1);
@@ -1383,18 +1387,18 @@ void Right_Left_EXP_MUL_time()  // Only Exponentiation function R<-L mul
 	bigint* bi_re = NULL;
 
 	printf("\n");
-	printf("print(\"Right to Letf Exp MUL time\")\n"); // bi_1ì˜ sizeê°€ 0ì¼ ë–„ì˜ ì˜ˆì™¸ì²˜ë¦¬
+	printf("print(\"Right to Letf Exp MUL time\")\n"); // bi_1ÀÇ size°¡ 0ÀÏ ‹šÀÇ ¿¹¿ÜÃ³¸®
 	for (i = 0; i < 20; i++)
 	{
 		size1 = (rand() & 0x7) + 30;
 		len = 1;
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
-		BI_New(&bi_N, len); // len ê¸¸ì´ì¸ big integerì¸ bi_N ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
+		BI_New(&bi_N, len); // len ±æÀÌÀÎ big integerÀÎ bi_N »ı¼º
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		bi_N->a[0] = 0x0a; // testìš©. ì›ë˜ëŠ” ì•„ë« ì¤„
-		//BI_Gen_Rand(&bi_N, 0, len); // bi_N ì˜ ë¶€í˜¸ê°€ ì–‘ìˆ˜ì¸ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		bi_N->a[0] = 0x0a; // test¿ë. ¿ø·¡´Â ¾Æ·§ ÁÙ
+		//BI_Gen_Rand(&bi_N, 0, len); // bi_N ÀÇ ºÎÈ£°¡ ¾ç¼öÀÎ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		sign1 = BI_Get_Sign(bi_1);
 		sign2 = BI_Get_Sign(bi_1);
@@ -1444,13 +1448,13 @@ void Left_Right_EXP_ADD_MOD_time() // Modular Exponentiaition used Binary Long D
 			size2 = 1;
 		len = (rand() & 0x7) + 1;
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
 		BI_New(&bi_2, size2);
 		BI_New(&bi_N, len);
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_N, 0, len); // bi_N ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		sign1 = BI_Get_Sign(bi_1);
 		sign2 = BI_Get_Sign(bi_1);
@@ -1502,13 +1506,13 @@ void Left_Right_EXP_MUL_MOD_time() // Modular Exponentiaition used Binary Long D
 			size2 = 1;
 		len = (rand() & 0x7) + 1;
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
 		BI_New(&bi_2, size2);
 		BI_New(&bi_N, len);
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_N, 0, len); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_N, 0, len); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		sign1 = BI_Get_Sign(bi_1);
 		sign2 = BI_Get_Sign(bi_1);
@@ -1560,13 +1564,13 @@ void Right_Left_EXP_ADD_MOD_time() // Modular Exponentiaition used Binary Long D
 			size2 = 1;
 		len = (rand() & 0x7) + 1;
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
 		BI_New(&bi_2, size2);
 		BI_New(&bi_N, len);
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_N, 0, len); // bi_N ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		sign1 = BI_Get_Sign(bi_1);
 		sign2 = BI_Get_Sign(bi_1);
@@ -1618,13 +1622,13 @@ void Right_Left_EXP_MUL_MOD_time() // Modular Exponentiaition used Binary Long D
 			size2 = 1;
 		len = (rand() & 0x7) + 1;
 
-		BI_New(&bi_1, size1); // size1 ê¸¸ì´ì¸ big integerì¸ bi_1 ìƒì„±
+		BI_New(&bi_1, size1); // size1 ±æÀÌÀÎ big integerÀÎ bi_1 »ı¼º
 		BI_New(&bi_2, size2);
 		BI_New(&bi_N, len);
 
-		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
-		BI_Gen_Rand(&bi_N, 0, len); // bi_N ì˜ ë¶€í˜¸ë¥¼ ëœë¤í•˜ê²Œ ë§Œë“¤ì–´ì„œ ëœë¤í•œ ë°°ì—´ì„ ë‹´ì€ bigint ìƒì„±
+		BI_Gen_Rand(&bi_1, 0, size1); // bi_1 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_2, 0, size2); // bi_2 ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
+		BI_Gen_Rand(&bi_N, 0, len); // bi_N ÀÇ ºÎÈ£¸¦ ·£´ıÇÏ°Ô ¸¸µé¾î¼­ ·£´ıÇÑ ¹è¿­À» ´ãÀº bigint »ı¼º
 
 		sign1 = BI_Get_Sign(bi_1);
 		sign2 = BI_Get_Sign(bi_1);

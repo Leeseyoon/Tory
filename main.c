@@ -6,7 +6,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include "config.h"
-#include "bigint.h"
+#include "BasicOperation.h"
+#include "Calculation.h"
 #include "test.h"
 
 #ifndef _DEBUG
@@ -21,7 +22,7 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_crtBreakAlloc = 93;
 	//addition_test(); // Memory 0
-	//subtraction_test(); // Memory 0
+	subtraction_test(); // Memory 0
 	//multiplication_test(); // Memory 0
 	//squaring_test(); // Memory 0
 	//division_test(); // Memory 0
@@ -34,7 +35,7 @@ int main()
 	//Left_Right_EXP_MUL_test(); // Memory 0
 	//Right_Left_EXP_ADD_test(); // Memory 0
 	//Right_Left_EXP_MUL_test(); // Memory 0
-	
+
 	//addition_time(); // Memory 0
 	//subtraction_time(); // Memory 0
 	//schoolbook_multiplication_time(); // Memory 0

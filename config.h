@@ -1,7 +1,7 @@
 #ifndef _CONFIG_
 #define _CONFIG_
 
-#define NON_NEGATIVE		0
+#define NON_NEGATIVE	0
 #define NEGATIVE		1
 
 #define SUCCESS			0
@@ -9,7 +9,7 @@
 
 #define TRUE			0
 #define FALSE			-1
-
+		
 #define WORD_BIT_LEN	32   // 8 or 32 or 64
 
 #define KARATSUBA		10
@@ -20,15 +20,20 @@
 #define RTOL			15
 #define MONTGOMERY		16
 
-#define FLAG			3	
+#define WINDOW			10
+#define	LINUX			11
 
-#define TEST_COUNT		10
-#define TEST_SIZE		SIZE_2048
+#define OS				WINDOW
+
+#define FLAG			3	
 
 #define FLAG_MUL			KARATSUBA	// Multiplication flag: KARATSUBA, TEXTBOOK
 #define FLAG_DIV			MULTI_PRE	// Division flag: BINARY_LONG, MULTI_PRE
 #define FLAG_SQU			TEXTBOOK	// Squaring flag: KARATSUBA, TEXTBOOK
 #define FLAG_EXP			MONTGOMERY		// Modular exponentiation flag: LTOR, RTOL, MONTGOMERY
+
+#define TEST_COUNT		10
+#define TEST_SIZE		SIZE_2048
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
