@@ -935,7 +935,7 @@ void BI_Reduction(bigint** x, int r)
 unsigned int ADD_ABc(bigint** C, bigint** A, bigint** B, unsigned int c, int i)
 {
 	int carry = 0; // [line 1]
-	word temp = 0; 
+	word temp = 0;
 
 	if (i < 0) // 예외 처리
 		return ERROR;
@@ -1027,6 +1027,8 @@ int ADDC(bigint** C, bigint** A, bigint** B, int sign)
 		(*C)->sign = 0;
 	else
 		(*C)->sign = 1;
+
+	return SUCCESS;
 }
 
 /**
@@ -1082,6 +1084,8 @@ int ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign)
 		(*C)->sign = 0;
 	else
 		(*C)->sign = 1;
+
+	return SUCCESS;
 }
 
 /**
@@ -1137,10 +1141,10 @@ int ADD(bigint** C, bigint** A, bigint** B)
 		return ERROR;
 	if (B_sign == ERROR)
 		return ERROR;
-	
+
 	BI_Get_Word_Length(&A_Len, A);
 	BI_Get_Word_Length(&B_Len, B);
-	
+
 	if (BI_Is_Zero(A) == 0) // [line 1] A is zero
 	{
 		// [line 2] A + B에서 A가 0이면 B return
@@ -1238,10 +1242,10 @@ int ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 		return ERROR;
 	if (B_sign == ERROR)
 		return ERROR;;
-	
+
 	BI_Get_Word_Length(&A_Len, A);
 	BI_Get_Word_Length(&B_Len, B);
-	
+
 	if (BI_Is_Zero(A) == 0) // A is zero
 	{
 		(*C)->sign = (*B)->sign;
@@ -1373,13 +1377,13 @@ int SUB(bigint** C, bigint* A, bigint* B)
 	int i = 0;
 	bigint* d = NULL;
 	int ret = 0;
-	
+
 	if ((*C == NULL) | (B == NULL) | (A == NULL))
 		return ERROR;
 
 	if ((A->sign != 0) & (A->sign != 1))
 		return ERROR;
-	
+
 	if ((B->sign != 0) & (B->sign != 1))
 		return ERROR;
 
@@ -1394,7 +1398,7 @@ int SUB(bigint** C, bigint* A, bigint* B)
 
 	if ((*C)->wordlen <= 0)
 		return ERROR;
-	
+
 	BI_Get_Word_Length(&len, &A);   // A->wordlen을 len에 대입
 	BI_Get_Word_Length(&borrow, &B);// B->wordlen을 borrow에 대입 
 
@@ -1625,7 +1629,7 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 	int A_Len = 0;
 	int B_Len = 0;
 	int C_Len = 0;
-	
+
 	if ((B == NULL) | (A == NULL))
 		return ERROR;
 
@@ -1640,7 +1644,7 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 
 	if (B->wordlen <= 0)
 		return ERROR;
-	
+
 	BI_Get_Word_Length(&A_Len, &A); // A_Len = A의 워드열 길이
 	BI_Get_Word_Length(&B_Len, &B); // B_Len = B의 워드열 길이
 
@@ -2482,7 +2486,7 @@ int SQUC_Karatsuba(bigint** C, bigint* A)
 	BI_Delete(&R);
 	BI_Delete(&S);
 	BI_Delete(&T1_tmp);
-	
+
 	return SUCCESS;
 }
 
@@ -2512,7 +2516,7 @@ int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 		BI_Assign(R, A);
 		return ERROR;
 	}
-	
+
 	if (BI_Is_Zero(&B) == 0) // 나누는 수가 0 이므로
 	{
 		return ERROR;
@@ -2523,7 +2527,7 @@ int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 		return ERROR;
 	}
 
-	if(BI_Compare(&A, &B) < 0) // A >= B의 조건을 만족하지 않을 떄
+	if (BI_Compare(&A, &B) < 0) // A >= B의 조건을 만족하지 않을 떄
 	{
 		return ERROR;
 	}
@@ -2836,7 +2840,7 @@ int DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
 	result = BI_Compare(&A, &B);
 	if (result == -1) // A < B 보다 클 때
 	{
-		return SUCCESS; 
+		return SUCCESS;
 	}
 	BI_Assign(&AP, A); // 빅넘버 A' 에 빅넘버 A assing
 	BI_Assign(&BP, B); // 빅넘버 B' 에 빅넘버 B assing
@@ -3048,13 +3052,13 @@ int Modular_Exponentiation_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 		BI_Set_One(T);
 		return SUCCESS;
 	}
-	
+
 	if (BI_Is_Zero(&N) == 0) // T <- A ^ 0 (mod M) = 1
 	{
 		BI_Set_One(T);
 		return SUCCESS;
 	}
-	
+
 	if (FLAG_EXP == LTOR) // Left to Right
 		MOD_EXP_LR_MUL(T, X, N, M);
 
@@ -3108,7 +3112,7 @@ int Modular_Exponentiation_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 		BI_Set_Zero(T);
 		return SUCCESS;
 	}
-	
+
 	if (FLAG_EXP == LTOR) // Left to Right
 		MOD_EXP_LR_ADD(T, X, N, M);
 	else if (FLAG_EXP == RTOL) // Right to Left
@@ -3137,7 +3141,7 @@ int Modular_Exponentiation_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 	4 :		t(N_i) <- t(N_i) ^ 2
 	5 :	end for
 	6  T <- t0
-	
+
  * @param bigint** T 지수승 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint* X 지수승 연산을 수행할 bigint 형 포인터 변수
  * @param bigint* N 지수승 연산에서의 지수를 가리키는 bigint 형 포인터 변수
@@ -3717,7 +3721,7 @@ int EXP_RL_MUL(bigint** T, bigint* X, bigint* N)
 
 		if (result == 1)
 			Multiplication(&temp0, t0, t1);
-	
+
 		else
 		{
 			BI_Assign(&temp0, t0);
@@ -3879,7 +3883,7 @@ int MOD_EXP_LR_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 	}
 	BI_Assign(T, t0); // 반복문이 끝난 결과인 t0를 T에 assign
 	BI_Delete(&t0); // t0를 delete.
-	
+
 	return SUCCESS;
 }
 
@@ -3945,7 +3949,7 @@ int MOD_EXP_LR_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 	}
 	BI_Assign(T, t0); // 반복문이 끝난 최종 결과인 t0를 T에 assign
 	BI_Delete(&t0); // t0를 delete.
-	
+
 	return SUCCESS;
 }
 
@@ -4011,7 +4015,7 @@ int MOD_EXP_RL_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 
 		if (result == 1)// 해당 비트가 1이면,
 			Multiplication(&temp0, t0, t1); // temp0에 t0 * t1 을 연산
-		
+
 		else // 해당 비트가 0이면,
 		{
 			BI_Assign(&temp0, t0); // t0에 1을 곱하는 것이므로, temp0에 t0을 assign --> 반복문에서 t0로 연산을 진행할 수 있도록
