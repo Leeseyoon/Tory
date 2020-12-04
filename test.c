@@ -285,7 +285,7 @@ int squaring_karatsuba_test()
 	return 0;
 }
 
-int montgomery_Exponentiation_multiplication_test() // 너무 느림... ㅠ
+int montgomery_ladder_Exponentiation_multiplication_test() // 너무 느림... ㅠ
 {
 	int i = 0;
 	int size1 = 0;
