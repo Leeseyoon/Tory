@@ -9,9 +9,9 @@ int addition_test()
 
 	int i = 0;
 	int size, size1, size2 = 0;
-	int len = 0;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	//int len = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
@@ -55,14 +55,14 @@ int subtraction_test()
 {
 	int i = 0;
 	int size, size1, size2 = 0;
-	int len = 0;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	//int len = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
-	bigint* bi_q = NULL;
+	//bigint* bi_q = NULL;
 
 	/* n번 뺄셈 연산하기 */ // 8, 32, 64
 
@@ -145,7 +145,7 @@ int division_test()
 	int i = 0;
 	int size1 = 0;
 	int size2 = 0;
-	int re = 0;
+	//int re = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
@@ -198,10 +198,10 @@ int division_test()
 int squaring_test()
 {
 	int i = 0;
-	int size1, size2 = 0;
-	int len = 0;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	int size1 = 0;
+	//int len = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_re = NULL;;
@@ -230,20 +230,21 @@ int squaring_test()
 		BI_Delete(&bi_1);
 		BI_Delete(&bi_re);
 	}
+	return SUCCESS;
 }
 
 int squaring_karatsuba_test()
 {
 	int i = 0;
-	int size1, size2 = 0;
+	int size1 = 0;
 	int len = 0;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 
 	bigint* bi_1 = NULL;
-	bigint* bi_2 = NULL;
+	//bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
-	bigint* bi_q = NULL;
+	//bigint* bi_q = NULL;
 
 	/* n번 Squaring Karatsuba 곱셈 연산하기 */ // 8, 32, 64 길이 21 이상부터 안 됨
 
@@ -290,9 +291,9 @@ int montgomery_ladder_Exponentiation_multiplication_test() // 너무 느림... �
 	int i = 0;
 	int size1 = 0;
 	int size_n = 0;
-	int len = 0;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	//int len = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_n = NULL;
@@ -337,9 +338,9 @@ int montgomery_ladder_Exponentiation_addtion_test()
 {
 	int i = 0;
 	int size1, size_n = 0;
-	int len = 0;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	//int len = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_n = NULL;
@@ -431,6 +432,7 @@ int modular_exponentiation_multiplication_test()
 		BI_Delete(&bi_re);
 		BI_Delete(&bi_M);
 	}
+	return SUCCESS;
 }
 
 int modular_exponentiation_addition_test()
@@ -484,6 +486,7 @@ int modular_exponentiation_addition_test()
 		BI_Delete(&bi_re);
 		BI_Delete(&bi_M);
 	}
+	return SUCCESS;
 }
 
 void Left_Right_EXP_ADD_test() // Only Exponentiation function L->R add
@@ -640,14 +643,14 @@ int addition_time()
 
 	int i = 0;
 	int size, size1, size2 = 0;
-	int len = 0;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	//int len = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 	float total_time = 0;
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
-	bigint* bi_q = NULL;
+	//bigint* bi_q = NULL;
 
 	/* n번 덧셈 연산하기 */ // 8, 32, 64
 
@@ -684,14 +687,14 @@ int subtraction_time()
 {
 	int i = 0;
 	int size, size1, size2 = 0;
-	int len = 0;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	//int len = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 	float total_time = 0;
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
-	bigint* bi_q = NULL;
+	//bigint* bi_q = NULL;
 
 	/* n번 뺄셈 연산하기 */ // 8, 32, 64
 
@@ -728,15 +731,15 @@ int schoolbook_multiplication_time()
 {
 	int i = 0;
 	int size1, size2 = 0;
-	int len = 0;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	//int len = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 	float total_time = 0;
 
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
-	bigint* bi_q = NULL;
+	//bigint* bi_q = NULL;
 
 	/* n번 Schoolbook 곱셈 연산하기 */ // 8, 32, 64
 
@@ -778,7 +781,7 @@ int karatsuba_multiplication_time()
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
-	bigint* bi_q = NULL;
+	//bigint* bi_q = NULL;
 
 	/* n번 Karatsuba 곱셈 연산하기 */ // 8, 32, 64
 
@@ -839,9 +842,9 @@ int binary_long_division_time()
 {
 	int i = 0;
 	int size, size1, size2 = 0;
-	int len = 0;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	//int len = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 	float total_time = 0;
 
 	bigint* bi_1 = NULL;
@@ -896,9 +899,9 @@ int multi_long_division_time()
 {
 	int i = 0;
 	int size, size1, size2 = 0;
-	int len = 0;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	//int len = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 	float total_time = 0;
 	bigint* bi_1 = NULL;
 	bigint* bi_2 = NULL;
@@ -951,9 +954,9 @@ int squaring_time()
 {
 	int i = 0;
 	int size1, size2 = 0;
-	int len = 0;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	//int len = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 	float total_time = 0;
 
 	bigint* bi_1 = NULL;
@@ -988,16 +991,16 @@ int squaring_time()
 int squaring_karatsuba_time()
 {
 	int i = 0;
-	int size1, size2 = 0;
+	int size1 = 0;
 	int len = 0;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 	float total_time = 0;
 
 	bigint* bi_1 = NULL;
-	bigint* bi_2 = NULL;
+	//bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
-	bigint* bi_q = NULL;
+	//bigint* bi_q = NULL;
 
 	/* n번 Squaring Karatsuba 곱셈 연산하기 */ // 8, 32, 64 길이 21 이상부터 안 됨
 
@@ -1043,17 +1046,17 @@ int squaring_karatsuba_time()
 int montgomery_ladder_Exponentiation_multiplication_time()
 {
 	int i = 0;
-	int size1, size2 = 0;
-	int len = 0;
+	int size1 = 0;
+	//int len = 0;
 	int n;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 	float total_time = 0;
 
 	bigint* bi_1 = NULL;
-	bigint* bi_2 = NULL;
+	//bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
-	bigint* bi_q = NULL;
+	//bigint* bi_q = NULL;
 	bigint* bi_N = NULL;
 
 	/* n번 Montgomery Ladder multiplacation 연산하기 */
@@ -1086,17 +1089,17 @@ int montgomery_ladder_Exponentiation_multiplication_time()
 int montgomery_ladder_Exponentiation_addtion_time()
 {
 	int i = 0;
-	int size1, size2 = 0;
-	int len = 0;
+	int size1 = 0;
+	//int len = 0;
 	int n;
-	int sign_bi_1 = 0;
-	int sign_bi_2 = 0;
+	//int sign_bi_1 = 0;
+	//int sign_bi_2 = 0;
 	float total_time = 0;
 
 	bigint* bi_1 = NULL;
-	bigint* bi_2 = NULL;
+	//bigint* bi_2 = NULL;
 	bigint* bi_re = NULL;
-	bigint* bi_q = NULL;
+	//bigint* bi_q = NULL;
 	bigint* bi_N = NULL;
 
 	/* n번 Montgomery Ladder addition 연산하기 */
@@ -1132,7 +1135,7 @@ int montgomery_ladder_Modular_Exponentiation_multiplication_time()
 	int i = 0;
 	int size1 = 0;
 	int size_M = 0;
-	int len = 0;
+	//int len = 0;
 	int n;
 	float total_time = 0;
 
@@ -1176,7 +1179,7 @@ int montgomery_ladder_Modular_Exponentiation_addtion_time()
 	int i = 0;
 	int size1 = 0;
 	int size_M = 0;
-	int len = 0;
+	//int len = 0;
 	int n;
 	float total_time = 0;
 
