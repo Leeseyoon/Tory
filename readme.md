@@ -21,7 +21,7 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 |OS | Version | Compiler |
 |---|:---:|---:|
 |Window | 10 | Visual studio |
-|Ubuntu | 18.04 | gcc |
+|Ubuntu | 18.04 |gcc |
 
 ---
 
