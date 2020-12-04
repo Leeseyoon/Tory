@@ -456,7 +456,7 @@ void BI_Bit_Length(int* len, bigint* x)
 */
 int BI_j_th_Bit_of_BI(int j, bigint* x)
 {
-	char* z = NULL;
+	//char* z = NULL;
 	unsigned long long i = 0;
 	int k = 0;
 	int r = 0; // 서우 추가
@@ -739,8 +739,8 @@ void Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 	int q = 0;
 	int new_wordlen = 0;
 	int i = 0;
-	int wn = 0;
-	int count = 0;
+	//int wn = 0;
+	//int count = 0;
 	int r = 0;
 	word* temp = NULL;
 
@@ -1375,7 +1375,7 @@ int SUB(bigint** C, bigint* A, bigint* B)
 	unsigned int borrow = 0;
 	int len = 0;
 	int i = 0;
-	bigint* d = NULL;
+	//bigint* d = NULL;
 	int ret = 0;
 
 	if ((*C == NULL) | (B == NULL) | (A == NULL))
@@ -1804,7 +1804,7 @@ int MUL_Word(word* C, word* A, word* B) // 단일 워드 곱셈
 */
 int MUL_Multi(bigint** C, bigint* A, bigint* B)
 {
-	int i, j, len = 0;
+	int i, j = 0;
 	int size_a, size_b, size_c = 0;
 	int sign_a, sign_b = 0;
 	int ret = 0;
@@ -1920,7 +1920,7 @@ int MUL_Multi(bigint** C, bigint* A, bigint* B)
  */
 int MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 {
-	int i, j = 0;
+	int i = 0;
 	int len, A_Len, B_Len;
 	int S0_sign, S1_sign;
 
@@ -2217,7 +2217,7 @@ int SQUC(bigint** C, bigint* A)
 {
 	int i, j, k, m;
 	int wordlen_A;
-	int carry = 0;
+	//int carry = 0;
 	int len, c2_len;
 
 	bigint* C1 = NULL;
@@ -2831,7 +2831,7 @@ int DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorithm
 int DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
 {
 	int result = 0; // A, B 대소비교값을 담을 변수 result
-	int i = 0; // 반복문에 사용할 변수 i
+	//int i = 0; // 반복문에 사용할 변수 i
 	int k = 0; // line 4와 관련된 변수 k
 	int len = 0; // B의 wordlen을 저장해줄 변수 len
 	bigint* AP = NULL; // A를 left shift 해서 보관할 빅넘버 A'(AP, A Prime)
@@ -3154,8 +3154,8 @@ int EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N)
 {
 	int i, bit;
 	int N_bit_len;
-	int t0_len = 0;
-	int t1_len = 0;
+	//int t0_len = 0;
+	//int t1_len = 0;
 
 	bigint* t0 = NULL;
 	bigint* t1 = NULL;
@@ -3435,6 +3435,8 @@ int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 
 	BI_Delete(&t0);
 	BI_Delete(&t1);
+	
+	return SUCCESS;
 }
 
 
@@ -3551,6 +3553,8 @@ int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 
 	BI_Delete(&t0);
 	BI_Delete(&t1);
+	
+	return SUCCESS;
 }
 
 /**
@@ -3771,7 +3775,7 @@ int EXP_RL_ADD(bigint** T, bigint* X, bigint* N)
 	bigint* t0 = NULL;
 	bigint* t1 = NULL;
 	bigint* temp0 = NULL;
-	bigint* temp1 = NULL;
+	//bigint* temp1 = NULL;
 
 	BI_Set_Zero(&t0);
 	BI_Assign(&t1, X); //line. 1. 
