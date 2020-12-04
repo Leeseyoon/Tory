@@ -568,6 +568,7 @@ int SUB(bigint** C, bigint* A, bigint* B)
 		{
 			BI_Flip_Sign(A); // A의 부호가 음수이므로 부호 바꿔주기
 			BI_Flip_Sign(B); // B의 부호가 음수이므로 부호 바꿔주기
+			result = BI_Compare(&A, &B);
 			if (result == 2) // [line 12]
 			{
 				ret = SUBC(C, &B, &A); // [line 13]
@@ -665,22 +666,10 @@ int SUBC(bigint** C, bigint** A, bigint** B)
 		return ERROR;
 
 	BI_Get_Word_Length(&len, A); // b보다 큰 A의 길이를 구하자
-	BI_Get_Word_Length(&borrow, B); // b보다 큰 A의 길이를 구하자
+	
+	BI_New(&temp, len);  // A의 워드 길이와 같게 temp 를 생성
+	
 
-	if (len > borrow)
-	{
-		BI_New(&temp, len);  // A의 워드 길이와 같게 temp 를 생성
-		for (i = 0; i < (*B)->wordlen; i++)//
-			temp->a[i] = (*B)->a[i]; // b와 같은 값을 가지고 있어야하고, 더 길게 생성됐을 때는 0이 들어가있어야함.
-	}
-	else
-	{
-		BI_New(&temp3, borrow);
-		for (i = 0; i < (*A)->wordlen; i++)//
-			temp3->a[i] = (*A)->a[i]; // b와 같은 값을 가지고 있어야하고, 더 길게 생성됐을 때는 0이 들어가있어야함.
-		
-	}
-	borrow = 0;
 	result = BI_Compare(A, B);
 	if ((result == 0) | (result == 1))
 		(*C)->sign = 0; // 매개변수 C에 이미 부호가 들어가있을 때 바꿔주는 게 없어서
@@ -695,12 +684,12 @@ int SUBC(bigint** C, bigint** A, bigint** B)
 		BI_Assign(C, temp2);
 		BI_Delete(&temp2);
 	}
-	//for (i = 0; i < (*B)->wordlen; i++)//
-	//	temp->a[i] = (*B)->a[i]; // b와 같은 값을 가지고 있어야하고, 더 길게 생성됐을 때는 0이 들어가있어야함.
+	for (i = 0; i < (*B)->wordlen; i++)//
+		temp->a[i] = (*B)->a[i]; // b와 같은 값을 가지고 있어야하고, 더 길게 생성됐을 때는 0이 들어가있어야함.
 	// A가 b보다 길 때 b의 길이를 맞춰 줘야 하는데 b를 건들이면 b가 바뀌기 때문에 temp를 이용
 
 	//BI_New(&temp3, len); // A의 wordlen과 같은 len의 길이로 temp3 생성
-	//BI_Assign(&temp3, *A); // 이후 A와 동일하게
+	BI_Assign(&temp3, *A); // 이후 A와 동일하게
 	for (i = 0; i < len; i++) // [line 3]
 	{
 		(*C)->a[i] = temp3->a[i] - borrow; // [line 4] (*C)->a[i] = (*A)->a[i] - (borrow); // A - b의 값을 C 에 대입 // 처음 borrow값은 초기화된 0으로 들어옴
