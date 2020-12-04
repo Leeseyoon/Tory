@@ -17,12 +17,10 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 ─────────────────────────────────────────────────────────────────────
 
 ### [0] Development environment
-OS
----:
-OS | Compiler 
----|:---:
-Window 10 | Visual studio
-Ubuntu 18.04(Linux) | gcc
+ | Version | Compiler 
+---|:---:|---:
+Window | 10 |Visual studio
+Ubuntu | 18.04 |gcc
 ─────────────────────────────────────────────────────────────────────
 
 ### [1] Description of Tory.
