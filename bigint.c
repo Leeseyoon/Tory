@@ -624,26 +624,27 @@ int BI_Is_Zero(bigint** x)
 }
 
 // Chapter 2.9 Compare
-/*
-	Compare BigInt A with BigInt B
 
-	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-*/
+/**
+ * @brief Compare BigInt x with BigInt y
+ * @details
+	big integer x와 y의 크기 비교
+	x > y : 1
+	x = y : 0
+	x < y : 2
+ * @param bigint** x 비교할 bigint 형 더블포인터 변수
+ * @param bigint** y 비교할 bigint 형 더블포인터 변수
+ * @return 0 or 1 or 2
+ * @throws
+	ERROR 구조체 x(y) 미할당 시
+ */
 int BI_Compare(bigint** x, bigint** y) // return : 1(x > y), 0(x == y), 2(x < y) 
 {
 	int i = 0;
 	int len_x, len_y = 0;
+
+	if (*x == NULL | *y == NULL)
+		return ERROR;
 
 	if ((*x)->sign < (*y)->sign) // A가 양수, B가 음수면 당연히 A가 크므로
 		return 1;
@@ -658,7 +659,7 @@ int BI_Compare(bigint** x, bigint** y) // return : 1(x > y), 0(x == y), 2(x < y)
 			if (len_x > len_y) // x의 길이가 y보다 길면
 				return 1;	   // x가 길다는 1을 출력
 			else if (len_x < len_y) // y의 길이가 x보다 길면
-				return 2;			// y가 길다는 -1 출력
+				return 2;			// y가 길다는 2 출력
 			else // x의 길이 = y의 길이
 			{
 				for (i = len_x - 1; i >= 0; i--) //(int)len_x --> len_x로 바꿈.20.11.23.sy // 값 비교
@@ -666,7 +667,7 @@ int BI_Compare(bigint** x, bigint** y) // return : 1(x > y), 0(x == y), 2(x < y)
 					if ((*x)->a[i] > (*y)->a[i])
 						return 1;
 					else if ((*x)->a[i] < (*y)->a[i])
-						return -1;
+						return 2;
 				}
 				return 0;
 			}
@@ -695,22 +696,17 @@ int BI_Compare(bigint** x, bigint** y) // return : 1(x > y), 0(x == y), 2(x < y)
 }
 
 // Chapter 2.10 BI_Left/BI_Right Shift
-/*
-	BigInt << r
 
-	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-*/
+/**
+ * @brief Left shift
+ * @details big integer << len
+ * @param bigint* x shift 시킬 bigint 형 포인터 변수
+ * @param int len shift 시킬 비트 수
+ * @return SUCCESS
+ * @throws
+	ERROR 구조체 미할당 시
+	ERROR realloc 에러 시
+ */
 int BI_Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 {
 	int length = 0;
@@ -776,39 +772,34 @@ int BI_Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 				x->a[i + q] = (cp->a[i] << r) | (cp->a[i - 1] >> (WORD_BIT_LEN - r));
 
 			x->a[x->wordlen - 1] = (cp->a[cp->wordlen - 1] >> (WORD_BIT_LEN - r)); // 마지막 배열 = An-1 >> (WORD_BIT_LEN - r)
-		}
-		
-		
+		}		
 	}
+
 	BI_Delete(&cp);
 	BI_Refine(x);
 
 	return SUCCESS;
 }
 
-/*
-	BigInt >> r
-
-	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-*/
-void BI_Right_Shift(bigint* x, int len)
+/**
+ * @brief Right shift
+ * @details big integer >> len
+ * @param bigint* x shift 시킬 bigint 형 포인터 변수
+ * @param int len shift 시킬 비트 수
+ * @return SUCCESS
+ * @throws
+	ERROR 구조체 미할당 시
+ */
+int BI_Right_Shift(bigint* x, int len)
 {
 	int i = 0;
 	int wn = 0;
 	int count = 0;
 	int r = 0;
 	int q = 0;
+
+	if (x == NULL)
+		return ERROR;
 
 	wn = WORD_BIT_LEN * x->wordlen;
 	q = len / WORD_BIT_LEN;
@@ -839,40 +830,37 @@ void BI_Right_Shift(bigint* x, int len)
 
 		x->a[x->wordlen - 1] = cp->a[cp->wordlen - 1] >> r; // 나머지만큼 이동
 	}
+
 	BI_Delete(&cp);
 	BI_Refine(x);
 }
 
 // Chapter 2.11 Reduction
-/*
-	Reduction BigInt
 
-	[pseudo code]
-	Input  :
-	Output :
-	1 :
-	2 :
-	3 :
-	4 :
-	5 :
-	6 :
-	7 :
-	8 :
-	9 :
-*/
-void BI_Reduction(bigint** x, int r)
+/**
+ * @brief Reduction
+ * @details big integer mod r
+ * @param bigint* x modular 시킬 bigint 형 더블포인터 변수
+ * @param int r 모듈러를 취하는 수
+ * @return SUCCESS
+ * @throws ERROR 구조체 미할당 시
+ */
+int BI_Reduction(bigint** x, int r)
 {
 	int i = 0;
 	int wn = 0;
 	int count = 0;
 	int size = 0;
 
+	if (*x == NULL)
+		return ERROR;
+
 	size = (*x)->wordlen;
 	wn = WORD_BIT_LEN * size;
 
 	if (r >= wn)
 	{
-		return;
+		return SUCCESS;
 	}
 	else if ((r < wn) && (r % WORD_BIT_LEN == 0))
 	{
@@ -884,15 +872,15 @@ void BI_Reduction(bigint** x, int r)
 	else
 	{
 		count = r / WORD_BIT_LEN;
-		/*for (i = 0; i < count; i++)
-			(*x)->a[i] = (*x)->a[i] & word_mask;*/ //(추가)주석처리해도 될 것 같아서 함
 		r = r % WORD_BIT_LEN;
 		(*x)->a[i] = (*x)->a[i] & (((word)1 << r) - 1);
 		for (i = count + 1; i < size; i++) // 해당 워드의 다음부터 최상위 워드까지 0으로 변경
 			(*x)->a[i] = 0;
 	}
 
-	BI_Refine(*x); // 추가
+	BI_Refine(*x); 
+
+	return SUCCESS;
 }
 
 //Chapter 3 Addition
