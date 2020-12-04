@@ -3821,7 +3821,7 @@ int EXP_RL_ADD(bigint** T, bigint* X, bigint* N)
 * @param bigint** T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
 * @param bigint* X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
 * @param bigint* N Modular 지수 연산에서 지수에 해당하는 bigint 포인터형 변수
-* @param M Modular 지수 연산에서 X^N 과 T를 합동해주는 bigint 포인터형 변수
+* @param bigint* M Modular 지수 연산에서 X^N 과 T를 합동해주는 bigint 포인터형 변수
 * @return SUCCESS 성공 시
 */
 int MOD_EXP_LR_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
