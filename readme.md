@@ -18,13 +18,11 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 
 ### [0] Development environment
 
-1.  
-    - OS : Window 10
-    - Compiler : Visual studio
----
-2.  
-    - OS : Ubuntu 18.04
-    - Compiler : gcc
+OS | Compiler 
+---|:---:
+Window 10 | Visual studio
+Ubuntu 18.04(Linux) | gcc
+asdf|asdf|asdf|asdf
 
 ─────────────────────────────────────────────────────────────────────
 
