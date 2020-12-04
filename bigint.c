@@ -1461,7 +1461,7 @@ int SUB(bigint** C, bigint* A, bigint* B)
 		if (A->sign == 0) // [line 17] A가 양수, B가 음수
 		{
 			BI_Flip_Sign(B); // B의 부호를 바꿔주고
-			ADD(C, &A, &B);  // [line 18] ADD 연산
+			ret = ADD(C, &A, &B);  // [line 18] ADD 연산
 			if (ret == -1)
 				return ERROR;
 			BI_Flip_Sign(B); // 부호 원위치
@@ -1471,7 +1471,7 @@ int SUB(bigint** C, bigint* A, bigint* B)
 		else // [line 19]
 		{
 			BI_Flip_Sign(A); // A => |A|
-			ADD(C, &A, &B); // [line 20]
+			ret = ADD(C, &A, &B); // [line 20]
 			if (ret == -1)
 				return ERROR;
 
