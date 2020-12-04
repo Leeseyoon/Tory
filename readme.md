@@ -14,16 +14,16 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 3. Compiling Tory.
 4. Description of Tory's function.
 
-─────────────────────────────────────────────────────────────────────
+---
 
 ### [0] Development environment
 
-|OS | Version | Compiler _
+|OS | Version | Compiler |
 |---|:---:|---:|
-|Window | 10 |Visual studio |
+|Window | 10 | Visual studio |
 |Ubuntu | 18.04 | gcc |
 
-─────────────────────────────────────────────────────────────────────
+---
 
 ### [1] Description of Tory.
 
@@ -36,7 +36,7 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 `test.c` | 빅넘버 관련 연산 함수들을 이용한 **테스트 벡터 생성** 및 **시간 측정 함수 구현**
 `config.h` | 라이브러리의 특성을 반영한 헤더
 
-─────────────────────────────────────────────────────────────────────
+---
 
 ### [2] Getting Tory.
 
@@ -46,7 +46,7 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 
     ` $ git clone https://github.com/Leeseyoon/Tory.git `
 
-─────────────────────────────────────────────────────────────────────
+---
 
 ### [3] Compiling Tory.
 
@@ -62,7 +62,8 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
     4.  사용자가 빅넘버 함수들을 이용해 코드를 짠 후 컴파일한다면, ` $ gcc -o [ File name ] main.c bigint.c config.h bigint.h `
     5.  ` $ ./[ File name ] ` 
 
-─────────────────────────────────────────────────────────────────────
+---
+
 ### [4] Description of Tory's function.
 
 - define
