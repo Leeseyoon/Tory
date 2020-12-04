@@ -31,8 +31,16 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 ### [1] Description of Tory.
 
 - main.c --> 빅넘버 연산 함수들을 테스트 해볼 수 있는 테스트 벡터들을 생성
-- bigint.h --> 빅넘버 관련 연산 함수들의 헤더 파일
-- bigint.c --> 빅넘버 관련 연산 함수들이 구현
+
+- bigint.h --> 빅넘버 관련 연산 함수의 헤더 파일
+
+- bigint.c --> 빅넘버 관련 연산 함수 구현
+
+- test.h -->빅넘버 관련 연산 함수들을 이용한 테스트 벡터 생성 및 시간 측정 함수의 헤더 파일
+
+- test.c --> 빅넘버 관련 연산 함수들을 이용한 테스트 벡터 생성 및 시간 측정 함수 구현
+
+- config.h --> 라이브러리의 특성을 반영한 헤더
 
 ─────────────────────────────────────────────────────────────────────
 
@@ -52,8 +60,8 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 
 2. Use gcc Compiler in linux
 
-
-` $ gcc -o [ File name ] main.c bigint.c bigint.h `
+    2.1 ` $ gcc -o [ File name ] main.c bigint.c bigint.h `
+    2.2 ㄴㄻㄴㅇㄹ
 
 ─────────────────────────────────────────────────────────────────────
 ### [4] Description of Tory's function.
