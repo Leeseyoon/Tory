@@ -84,14 +84,13 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 ```c
 #define WORD_BIT_LEN : 워드 단위에 대한 값(8, 32, 64-bit)
 
-#define TEST_COUNT       // Test 하고자하는 횟수 입력 ex) 100, 1000, ...
-#define TEST_SIZE        // Big Integer의 크기 입력. ex) SIZE_1024, SIZE_2048
+#define TEST_COUNT      // Test 하고자하는 횟수 입력 ex) 100, 1000, ...
+#define TEST_SIZ        // Big Integer의 크기 입력. ex) SIZE_1024, SIZE_2048
 
-#define FLAG_MUL		 // Multiplication flag: KARATSUBA, TEXTBOOK
-#define FLAG_DIV		 // Division flag: BINARY_LONG, MULTI_PRE
-#define FLAG_SQU	     // Squaring flag: KARATSUBA, TEXTBOOK
-#define FLAG_EXP         // Modular exponentiation flag: LTOR, RTOL, MONTGOMERY
-
+#define FLAG_MUL        // Multiplication flag: KARATSUBA, TEXTBOOK
+#define FLAG_DIV        // Division flag: BINARY_LONG, MULTI_PRE
+#define FLAG_SQU        // Squaring flag: KARATSUBA, TEXTBOOK
+#define FLAG_EXP        // Modular exponentiation flag: LTOR, RTOL, MONTGOMERY
 ```
 ---
 #### Chapter 2.1
