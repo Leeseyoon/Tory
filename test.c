@@ -1028,9 +1028,6 @@ int squaring_karatsuba_time()
 		total_time += (float)(end - start);
 		BI_Refine(bi_re);
 
-		printf("A * A == ");
-		BI_Show(bi_re, 16);
-
 		printf("\n");
 
 		BI_Delete(&bi_1);
