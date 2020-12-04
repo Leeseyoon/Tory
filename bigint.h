@@ -45,10 +45,10 @@ int BI_Compare(bigint** x, bigint** y);
 
 // Chapter 2.10 Left/Right Shift
 int BI_Left_Shift(bigint* x, int len);
-void BI_Right_Shift(bigint* x, int r);
+int BI_Right_Shift(bigint* x, int r);
 
 // Chapter 2.11 Reduction
-void BI_Reduction(bigint** x, int r);
+int BI_Reduction(bigint** x, int r);
 
 // Chapter 3 Additon
 unsigned int ADD_ABc(bigint** C, bigint** A, bigint** B, unsigned int c, int i);
