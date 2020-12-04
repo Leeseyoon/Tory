@@ -1519,7 +1519,6 @@ int SUB(bigint** C, bigint* A, bigint* B)
 	15: l <- min{j : C_{n-1} = C_{n-2} = ... = C_{j} = 0}
 	16: C <- len(l)
 
-* @param unsigned int* borrow 단일 뺄셈 연산에서 return 되는 borrow에 해당하는 unsigned int 형 포인터 변수
 * @param bigint** C 단일 뺄셈 연산의(A - B) 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint** A 단일 뺄셈 연산의(A - B) A에 해당하는 bigint 형 포인터 변수
 * @param bigint** B 단일 뺄셈 연산의(A - B) B에 해당하는 bigint 형 포인터 변수
