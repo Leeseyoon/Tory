@@ -36,7 +36,7 @@ int multi_long_division_time();
 int squaring_time();
 int squaring_karatsuba_time();
 
-int montgomery_Exponentiation_multiplication_time();
+int montgomery_ladder_Exponentiation_multiplication_time();
 int montgomery_ladder_Exponentiation_addtion_time();
 int montgomery_ladder_Modular_Exponentiation_multiplication_time();
 int montgomery_ladder_Modular_Exponentiation_addtion_time();
