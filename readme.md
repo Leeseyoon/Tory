@@ -345,12 +345,12 @@ int Reduction_BI(bigint **x, int r) //Reduction Integer
 #### Chapter 3 Addition
 ##### Addition (A + B + carry) function
 ```c
-unsigned int ADD_ABc(bigint** C, bigint** A, bigint** B, unsigned int c, int i)
+int ADD_ABc(bigint** C, bigint** A, bigint** B, int c, int i)
     
     bigint** C : 덧셈 결과를 저장할 bigint 형 더블포인터 변수
     bigint** A : 덧셈을 수행할 bigint 형 더블포인터 변수
     bigint** B : 덧셈을 수행할 bigint 형 더블포인터 변수
-    unsigned int c : 이전 연산에서 받아 온 캐리 (0 또는 1)
+    int c : 이전 연산에서 받아 온 캐리 (0 또는 1)
     int i : 덧셈을 수행할 배열의 index
 
     return carry;(캐리 여부 0 or 1)
