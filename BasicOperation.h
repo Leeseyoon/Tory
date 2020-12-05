@@ -50,4 +50,6 @@ int BI_Right_Shift(bigint* x, int r);
 // Chapter 2.11 Reduction
 int BI_Reduction(bigint** x, int r);
 
+int Compare_WordLen(bigint* A, bigint* B); // return wordlen 큰 사이즈
+
 #endif

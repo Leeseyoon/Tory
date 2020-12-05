@@ -14,14 +14,6 @@ int squaring_karatsuba_test();
 int modular_exponentiation_multiplication_test();
 int modular_exponentiation_addition_test();
 
-int montgomery_ladder_Exponentiation_multiplication_test();
-int montgomery_ladder_Exponentiation_addtion_test();
-
-void Left_Right_EXP_ADD_test(); // Test of 'Only Exponentiation function L->R +'
-void Left_Right_EXP_MUL_test(); // Test of 'Only Exponentiation function L->R *'
-void Right_Left_EXP_ADD_test(); // Test of 'Only Exponentiation function L<-R +'
-void Right_Left_EXP_MUL_test(); // Test of 'Only Exponentiation function L<-R *'
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 int addition_time();
@@ -40,15 +32,5 @@ int montgomery_ladder_Exponentiation_multiplication_time();
 int montgomery_ladder_Exponentiation_addtion_time();
 int montgomery_ladder_Modular_Exponentiation_multiplication_time();
 int montgomery_ladder_Modular_Exponentiation_addtion_time();
-
-void Left_Right_EXP_ADD_time(); // Test of 'Only Exponentiation function L->R +'
-void Left_Right_EXP_MUL_time(); // Test of 'Only Exponentiation function L->R *'
-void Right_Left_EXP_ADD_time(); // Test of 'Only Exponentiation function L<-R +'
-void Right_Left_EXP_MUL_time(); // Test of 'Only Exponentiation function L<-R *'
-
-void Left_Right_EXP_ADD_MOD_time(); // Test of 'Modular Exponentiaition used Binary Long Division L->R +'
-void Left_Right_EXP_MUL_MOD_time(); // Test of 'Modular Exponentiaition used Binary Long Division L->R *'
-void Right_Left_EXP_ADD_MOD_time(); // Test of 'Modular Exponentiaition used Binary Long Division L<-R +'
-void Right_Left_EXP_MUL_MOD_time(); // Test of 'Modular Exponentiaition used Binary Long Division L<-R *'
 
 #endif

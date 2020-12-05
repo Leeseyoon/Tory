@@ -20,21 +20,15 @@ int main()
 {
 	srand((unsigned)time(NULL));
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_crtBreakAlloc = 93;
-	//addition_test(); // Memory 0
-	subtraction_test(); // Memory 0
-	//multiplication_test(); // Memory 0
-	//squaring_test(); // Memory 0
-	//division_test(); // Memory 0
-	//modular_exponentiation_multiplication_test(); // Memory 0
-	//modular_exponentiation_addition_test(); // Memory 0
+	//_crtBreakAlloc = 108;
 
-	//montgomery_Exponentiation_multiplication_test(); // Memory 0
-	//montgomery_ladder_Exponentiation_addtion_test(); // Memory 0
-	//Left_Right_EXP_ADD_test(); // Memory 0 
-	//Left_Right_EXP_MUL_test(); // Memory 0
-	//Right_Left_EXP_ADD_test(); // Memory 0
-	//Right_Left_EXP_MUL_test(); // Memory 0
+	addition_test(); // Memory 0
+	subtraction_test(); // Memory 0
+	multiplication_test(); // Memory 0
+	squaring_test(); // Memory 0
+	division_test(); // Memory 0
+	modular_exponentiation_multiplication_test(); // Memory 0
+	modular_exponentiation_addition_test(); // Memory 0
 
 	//addition_time(); // Memory 0
 	//subtraction_time(); // Memory 0

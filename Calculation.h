@@ -3,69 +3,38 @@
 
 #include "config.h"
 
-// Chapter 3 Additon
-unsigned int ADD_ABc(bigint** C, bigint** A, bigint** B, unsigned int c, int i);
-int ADDC(bigint** C, bigint** A, bigint** B, int sign);
-int ADD(bigint** C, bigint** A, bigint** B); // ****
-int ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign);
-int ADD_AAB(bigint** C, bigint** A, bigint** B);
+// Additon
+int ADD(bigint** C, bigint** A, bigint** B);
 
-int Compare_WordLen(bigint* A, bigint* B);
+// Subtraction
+int SUB(bigint** c, bigint* a, bigint* b);
 
-// Chapter 4 Subtraction
-int SUBC(bigint** c, bigint** a, bigint** b);
-int SUB(bigint** c, bigint* a, bigint* b); // ****
-
-// Chapter 5 Multiplication
-int Multiplication(bigint** C, bigint* A, bigint* B); // ****
-
-int MUL_Word(word* c, word* a, word* b);
-int MUL_Multi(bigint** result, bigint* A, bigint* B); // ****
-
-// Karatsuba multiplication
-int MUL_Karatsuba(bigint** C, bigint* A, bigint* B); // ****
+// Multiplication
+int Multiplication(bigint** C, bigint* A, bigint* B); // Select (Textbook Multiplication / Karatsuba Multiplication)
+int MUL_Multi(bigint** result, bigint* A, bigint* B); // Textbook Multiplication
+int MUL_Karatsuba(bigint** C, bigint* A, bigint* B); // Karatsuba Multiplication
 
 // Squaring
-int Squaring(bigint** C, bigint* A); // ****
-
-int Single_Squaring(bigint* C, bigint* A);
-int SQU(bigint** C, bigint* A); // ****
-int SQUC(bigint** C, bigint* A);
-int SQUC_Karatsuba(bigint** C, bigint* A); // ****
+int Squaring(bigint** C, bigint* A); // Select (Textbook Squaring / Karatsuba Squaring)
+int SQU(bigint** C, bigint* A); // Textbook Squaring
+int SQUC_Karatsuba(bigint** C, bigint* A); // Karatsuba Squaring
 
 // Division
-int Division(bigint** Q, bigint** R, bigint* A, bigint* B); // ****
-
-// Binary Division
-int Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B); // ****
-int ADDC_DIV(bigint** C, bigint** A, bigint** B, int sign); // 프로토타입으로
-int ADD_DIV(bigint** C, bigint** A, bigint** B); // 프로토타입으로
-
-// Multi Division
-int DIV(bigint** Q, bigint** R, bigint* A, bigint* B); // ****
-int DIVC(bigint** Q, bigint** R, bigint* A, bigint* B);
-int DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B);
-int DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m); // 프로토타입으로
-int DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m); // 프로토타입으로
+int Division(bigint** Q, bigint** R, bigint* A, bigint* B); // Select (Binary Long Division / Multi Long Division)
+int Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B); // Binary Long Division
+int DIV(bigint** Q, bigint** R, bigint* A, bigint* B); // Multi Long Division
 
 // Modular Exponentiation
-int Modular_Exponentiation_MUL(bigint** C, bigint* A, bigint* N, bigint* M); // ****
-int Modular_Exponentiation_ADD(bigint** C, bigint* A, bigint* N, bigint* M); // ****
+int Modular_Exponentiation_MUL(bigint** C, bigint* A, bigint* N, bigint* M); // Select (Montgomery / Left to Right / Right to Left) (MUL ver)
+int Modular_Exponentiation_ADD(bigint** C, bigint* A, bigint* N, bigint* M); // Select (Montgomery / Left to Right / Right to Left) (ADD ver)
 
-int EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N); // 프로토타입으로
-int EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N); // 프로토타입으로
-int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M); // ****
-int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M); // ****
+int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M); // Montgomery Modular Exponentiaition (MUL ver)
+int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M); // Montgomery Modular Exponentiaition (ADD ver)
 
-int EXP_LR_MUL(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L->R * func
-int EXP_LR_ADD(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L->R + func
-int EXP_RL_MUL(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L<-R * func
-int EXP_RL_ADD(bigint** T, bigint* X, bigint* N); // Only Exponentiation function L<-R + func
-// 프로토타입으로
+int MOD_EXP_LR_MUL(bigint** T, bigint* X, bigint* N, bigint* M); // Left to Right Modular Exponentiaition (MUL ver)
+int MOD_EXP_LR_ADD(bigint** T, bigint* X, bigint* N, bigint* M); // Left to Right Modular Exponentiaition (ADD ver)
 
-int MOD_EXP_LR_MUL(bigint** T, bigint* X, bigint* N, bigint* M);  // Modular Exponentiaition L->R * func // ****
-int MOD_EXP_LR_ADD(bigint** T, bigint* X, bigint* N, bigint* M);  // Modular Exponentiaition L->R + func // ****
-int MOD_EXP_RL_MUL(bigint** T, bigint* X, bigint* N, bigint* M);  // Modular Exponentiaition L<-R * func // ****
-int MOD_EXP_RL_ADD(bigint** T, bigint* X, bigint* N, bigint* M);  // Modular Exponentiaition L<-R + func // ****
+int MOD_EXP_RL_MUL(bigint** T, bigint* X, bigint* N, bigint* M); // Right to Left Modular Exponentiaition (MUL ver)
+int MOD_EXP_RL_ADD(bigint** T, bigint* X, bigint* N, bigint* M); // Right to Left Modular Exponentiaition (ADD ver)
 
 #endif

@@ -4,8 +4,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-// Chpater 2.1
-
 /**
  * @brief Initialize Array
  * @details 배열을 입력 길이만큼 0으로 초기화
@@ -41,6 +39,7 @@ int BI_New(bigint** x, int wordlen)
 	(*x)->sign = NON_NEGATIVE; // 양수이고
 	(*x)->wordlen = wordlen;   // 2번째 매개변수와 같은 길이인
 	(*x)->a = (word*)calloc(wordlen, sizeof(word)); // bigint x 내부의 배열 a 할당
+	
 	if (x == NULL)
 		return ERROR;
 
@@ -68,7 +67,6 @@ int BI_Delete(bigint** x)
 	return SUCCESS;
 }
 
-// Chapter 2.2 Show BigInt
 /**
  * @brief Set Bigint by Array
  * @details 입력받은 배열로 big integer 설정
@@ -156,11 +154,6 @@ int BI_Set_By_String(bigint** x, int sign, char* str, word base)
 		}
 	}
 
-	else if (base == 10) // "123456789" -> ??
-	{
-
-	}
-
 	else if (base == 16) // "123456789" -> {0x89, 0x67, 0x45, 0x23, 0x01} / {0x6789, 0x2345, 0x0001}
 	{
 		// '0x89' 이런 식으로 숫자 2개가 1 byte이므로 WORD_BIT_LEN이 8 -> 4, 32 -> 8, 64 -> 16개의 숫자니까 WORD_BIT_LEN / 4
@@ -190,7 +183,6 @@ int BI_Set_By_String(bigint** x, int sign, char* str, word base)
 	}
 
 	return SUCCESS;
-
 }
 
 /**
@@ -204,9 +196,11 @@ int BI_Set_By_String(bigint** x, int sign, char* str, word base)
 int Ascii_To_Hex(char* str, char* hex)
 {
 	int len = 0;
+	int i;
+
 	len = strlen(str);
 
-	for (int i = 0; i < len; i++)
+	for (i = 0; i < len; i++)
 	{
 		if (str[i] > 0x29 && str[i] < 0x40) // 0x30~0x39 -> 0~9
 			hex[i] = str[i] - 0x30; // 0 ~ 9는 -0x30
@@ -215,6 +209,7 @@ int Ascii_To_Hex(char* str, char* hex)
 		else
 			return ERROR;
 	}
+
 	return SUCCESS;
 }
 
@@ -284,7 +279,6 @@ int BI_Show(bigint* x, int base)
 	return SUCCESS;
 }
 
-//Chapter 2.3
 /**
  * @brief Refine Big Integer (Remove Last Zero Words)
  * @details 구조체 재할당 (구조체 내부 배열에서 MSB에서 0으로 채워진 워드열 제거)
@@ -327,7 +321,6 @@ int BI_Refine(bigint* x)
 	return SUCCESS;
 }
 
-// Chapter 2.4 Assign BigInt
 /**
  * @brief Assign Big Integer
  * @details bigint 구조체 복사
@@ -352,7 +345,6 @@ int BI_Assign(bigint** y, bigint* x)
 	return SUCCESS;
 }
 
-// Chapter 2.5 Generate Random BigInt
 /**
  * @brief Generate Random Number Big Integer
  * @details 랜덤한 big integer 생성
@@ -370,6 +362,7 @@ int BI_Gen_Rand(bigint** x, int sign, int wordlen)
 
 	BI_New(x, wordlen); // bigint 구조체 생성
 	(*x)->sign = sign; // 부호 결정
+	
 	re = Array_Rand((*x)->a, wordlen); // random으로 배열 설정
 	if (re == ERROR)
 		return ERROR;
@@ -397,6 +390,7 @@ int Array_Rand(word* dst, int wordlen)
 
 	unsigned char* p = (unsigned char*)dst; // rand() 함수의 출력값이 15bit이므로 워드 단위가 아닌 한 바이트 단위로 배열에 랜덤값 설정
 	int cnt = wordlen * sizeof(word);
+	
 	while (cnt > 0)
 	{
 		*p = rand() & 0xff; // cnt만큼 random한 값 생성해서 배열에 저장
@@ -406,8 +400,6 @@ int Array_Rand(word* dst, int wordlen)
 
 	return SUCCESS;
 }
-
-// Chapter 2.6 Get Word Length / Bit Length / j-th Bit of Big-Int
 
 /**
  * @brief Get Word Length
@@ -452,6 +444,7 @@ int BI_Get_Bit_Length(int* len, bigint* x)
 		if ((x->a[i] & k) != 0)
 			break; // 값이 들어가 있으면( != 0) break;
 	}
+	
 	j += i * WORD_BIT_LEN + 1; // 최상위 워드의 몇번째 비트의 길이인지 출력하도록 j에 대입
 	*len = j;
 
@@ -491,8 +484,6 @@ int BI_Get_j_th_Bit_of_BI(int j, bigint* x)
 		return 0;
 }
 
-// Chapter 2.7 /* negative: 1, non-negative: 0 */
-
 /**
  * @brief Get Sign of Big Integer
  * @details big integer의 부호 판별
@@ -506,6 +497,7 @@ int BI_Get_Sign(bigint* x)
 {
 	if (x == NULL)
 		return ERROR;
+	
 	if ((x->sign) == NON_NEGATIVE) // bigint 구조체의 부호가 NON_NEGATIVE면 NON_NEGATIVE return
 		return NON_NEGATIVE;
 	else if ((x->sign) == NEGATIVE) // bigint 구조체의 부호가 NEGATIVE면 NEGATIVE return
@@ -537,8 +529,6 @@ int BI_Flip_Sign(bigint* x)
 
 	return SUCCESS;
 }
-
-// Chapter2.8 Set One, Set Zero, Is Zero, Is One
 
 /**
  * @brief Set Big Integer to 1
@@ -593,6 +583,7 @@ int BI_Is_One(bigint** x)
 		if ((*x)->a[i] != 0)
 			return FALSE;
 	}
+	
 	return TRUE;
 }
 
@@ -619,10 +610,9 @@ int BI_Is_Zero(bigint** x)
 		if ((*x)->a[i] != 0)
 			return FALSE;
 	}
+	
 	return TRUE;
 }
-
-// Chapter 2.9 Compare
 
 /**
  * @brief Compare BigInt x with BigInt y
@@ -647,12 +637,15 @@ int BI_Compare(bigint** x, bigint** y) // return : 1(x > y), 0(x == y), 2(x < y)
 
 	if ((*x)->sign < (*y)->sign) // A가 양수, B가 음수면 당연히 A가 크므로
 		return 1;
+
 	else if ((*x)->sign > (*y)->sign) // A가 음수, B가 양수면 당연히 B가 크므로
 		return 2;
+
 	else // A, B 부호가 같을 때
 	{
 		BI_Get_Word_Length(&len_x, x); //len_x = x->wordlen
 		BI_Get_Word_Length(&len_y, y); //len_y = y->wordlen
+
 		if ((*x)->sign == 0) // A, B 부호가 양수일 때 (부호가 서로 같으므로, if 문을 통해 하나만 비교)
 		{
 			if (len_x > len_y) // x의 길이가 y보다 길면
@@ -668,9 +661,11 @@ int BI_Compare(bigint** x, bigint** y) // return : 1(x > y), 0(x == y), 2(x < y)
 					else if ((*x)->a[i] < (*y)->a[i])
 						return 2;
 				}
+
 				return 0;
 			}
 		}
+
 		else // A, B 부호가 음수일 때
 		{
 			// 양수일 때와는 반대가 되도록 return
@@ -687,14 +682,12 @@ int BI_Compare(bigint** x, bigint** y) // return : 1(x > y), 0(x == y), 2(x < y)
 					else if ((*x)->a[i] < (*y)->a[i])
 						return 2;
 				}
+
 				return 0;
 			}
 		}
-
 	}
 }
-
-// Chapter 2.10 BI_Left/BI_Right Shift
 
 /**
  * @brief Left shift
@@ -717,17 +710,15 @@ int BI_Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 	int count = 0;
 	int r = 0;
 
-	word* temp = NULL;
-
 	if (x == NULL)
 		return ERROR;
 
-	length = x->wordlen;
-
+	word* temp = NULL;
 	bigint* cp = NULL;
 	BI_Assign(&cp, x); // bigint x를 bigint cp에 복사
 
-	wn = WORD_BIT_LEN * x->wordlen;
+	length = x->wordlen;
+	wn = WORD_BIT_LEN * length;
 
 	if ((len % WORD_BIT_LEN) == 0) // 이동할 비트 수가 WORD_BIT_LEN의 배수이면
 		add_len = len / WORD_BIT_LEN; // 이동할 비트 수를 WORD_BIT_LEN로 나눈 몫만큼 워드 길이 추가
@@ -739,7 +730,7 @@ int BI_Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 #if OS == LINUX
 	temp = (word*)realloc(x->a, sizeof(word) * new_wordlen); // new_wordlen만큼 bigint 구조체 재할당
 #elif OS == WINDOW
-	temp = (word*)_recalloc(x->a, sizeof(word) * new_wordlen, sizeof(word));
+	temp = (word*)_recalloc(x->a, new_wordlen, sizeof(word));
 	// _recalloc은 window에서만 돌아가는 함수 (visual studio에서 realloc 쓰면 warning이 뜸)
 #endif
 
@@ -749,10 +740,7 @@ int BI_Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 		return ERROR;
 
 	x->wordlen = new_wordlen; // 재할당한 구조체 길이 설정
-
-	//for (i = 0; i < add_len; i++)
-	//	x->a[length + i] = 0; // 추가된 워드 길이만큼 0으로 초기화
-	memset(&x->a[length], 0x00, add_len);
+	memset(&x->a[length], 0x00, add_len); // 추가된 워드 길이만큼 0으로 초기화
 
 	q = len / WORD_BIT_LEN; // 이동할 비트 수를 WORD_BIT_LEN으로 나눈 몫
 	r = len % WORD_BIT_LEN; // 이동할 비트 수를 WORD_BIT_LEN으로 나눈 나머지
@@ -772,13 +760,10 @@ int BI_Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 
 		x->a[q] = cp->a[0] << r; // q번째 배열에 원래 배열 중 0번째 배열을 r만큼 왼쪽으로 이동한 것 대입
 
-		if ((sizeof(x->a) == new_wordlen) && (x->wordlen > cp->wordlen))
-		{
-			for (i = 1; i <= cp->wordlen - 1; i++) // 1번째 배열 ~ 배열의 끝 바로 앞 = (Aj << r) || (Aj-1 >> (WORD_BIT_LEN - r))
-				x->a[i + q] = (cp->a[i] << r) | (cp->a[i - 1] >> (WORD_BIT_LEN - r));
+		for (i = 1; i <= cp->wordlen - 1; i++) // 1번째 배열 ~ 배열의 끝 바로 앞 = (Aj << r) || (Aj-1 >> (WORD_BIT_LEN - r))
+			x->a[i + q] = (cp->a[i] << r) | (cp->a[i - 1] >> (WORD_BIT_LEN - r));
 
-			x->a[x->wordlen - 1] = (cp->a[cp->wordlen - 1] >> (WORD_BIT_LEN - r)); // 마지막 배열 = An-1 >> (WORD_BIT_LEN - r)
-		}
+		x->a[x->wordlen - 1] = (cp->a[cp->wordlen - 1] >> (WORD_BIT_LEN - r)); // 마지막 배열 = An-1 >> (WORD_BIT_LEN - r)
 	}
 
 	BI_Delete(&cp);
@@ -818,17 +803,16 @@ int BI_Right_Shift(bigint* x, int len)
 	{
 		for (i = 0; i < x->wordlen; i++)
 			x->a[i] = 0;
-		return SUCCESS;
 	}
 
 	else if ((len < wn) && (len % WORD_BIT_LEN == 0)) // 오른쪽으로 시프트시킬 길이가 배열의 길이보다 작고 WORD_BIT_LEN의 배수면
 	{
 		count = len / WORD_BIT_LEN; // 오른쪽으로 시프트시킬 워드 길이
+		
 		for (i = 0; i < x->wordlen - count; i++) // 이동할 워드 길이만큼 이동
 			x->a[i] = x->a[i + count]; // 
 		for (i = x->wordlen - count; i < x->wordlen; i++) // 나머지 0으로 설정
 			x->a[i] = 0;
-		return SUCCESS;
 	}
 
 	else if ((len < wn) && (len % WORD_BIT_LEN != 0)) // 오른쪽으로 시프트시킬 길이가 배열의 길이보다 작고 WORD_BIT_LEN의 배수가 아니면
@@ -837,16 +821,20 @@ int BI_Right_Shift(bigint* x, int len)
 			x->a[i] = (cp->a[i + 1] << ((WORD_BIT_LEN - r)) | (cp->a[i] >> r)); // 이동할 워드 길이만큼 이동
 
 		x->a[x->wordlen - 1] = cp->a[cp->wordlen - 1] >> r; // 나머지만큼 이동
-		return SUCCESS;
 	}
 	else
+	{
+		BI_Delete(&cp);
+		BI_Refine(x);
+
 		return ERROR;
+	}
 
 	BI_Delete(&cp);
 	BI_Refine(x);
-}
 
-// Chapter 2.11 Reduction
+	return SUCCESS;
+}
 
 /**
  * @brief Reduction
@@ -883,8 +871,10 @@ int BI_Reduction(bigint** x, int r)
 	else
 	{
 		count = r / WORD_BIT_LEN;
+		
 		r = r % WORD_BIT_LEN;
 		(*x)->a[i] = (*x)->a[i] & (((word)1 << r) - 1);
+		
 		for (i = count + 1; i < size; i++) // 해당 워드의 다음부터 최상위 워드까지 0으로 변경
 			(*x)->a[i] = 0;
 	}
@@ -892,4 +882,31 @@ int BI_Reduction(bigint** x, int r)
 	BI_Refine(*x);
 
 	return SUCCESS;
+}
+
+/**
+ * @brief Compare and return longer word length
+ * @details
+	두 bigint의 워드열 길이를 비교하여 더 긴 워드열의 길이 반환
+ * @param bigint* A 워드 길이 비교를 수행할 bigint 형 포인터 변수
+ * @param bigint* B 워드 길이 비교를 수행할 bigint 형 포인터 변수
+ * @return int MAX(WordLen(A), WordLen(B)) 더 긴 워드열 길이
+ * @throws ERROR A(B)의 word length가 양수가 아닌 경우
+ */
+int Compare_WordLen(bigint* A, bigint* B) // return wordlen 큰 사이즈
+{
+	int A_Len, B_Len;
+
+	BI_Get_Word_Length(&A_Len, &A); // A의 워드열 길이
+	BI_Get_Word_Length(&B_Len, &B); // B의 워드열 길이
+
+	if (A_Len <= 0)
+		return ERROR;
+	if (B_Len <= 0)
+		return ERROR;
+
+	if (A_Len > B_Len) // A의 워드열의 길이가 더 길면
+		return A_Len; // A의 워드열 길이 return
+	else // B의 워드열의 길이가 더 길면
+		return B_Len; // B의 워드열 길이 return
 }

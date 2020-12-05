@@ -10,8 +10,6 @@
 #define TRUE			0
 #define FALSE			-1
 		
-#define WORD_BIT_LEN	32   // 8 or 32 or 64
-
 #define KARATSUBA		10
 #define TEXTBOOK		11
 #define BINARY_LONG		12
@@ -23,17 +21,20 @@
 #define WINDOW			10
 #define	LINUX			11
 
+/* --------------------------------- 사용자가 설정 가능한 부분 --------------------------------- */
+#define WORD_BIT_LEN	32   // 8 or 32 or 64													
+#define FLAG			3
+
 #define OS				WINDOW
 
-#define FLAG			3	
-
-#define FLAG_MUL			KARATSUBA	// Multiplication flag: KARATSUBA, TEXTBOOK
-#define FLAG_DIV			MULTI_PRE	// Division flag: BINARY_LONG, MULTI_PRE
+#define FLAG_MUL			TEXTBOOK	// Multiplication flag: KARATSUBA, TEXTBOOK
+#define FLAG_DIV			BINARY_LONG	// Division flag: BINARY_LONG, MULTI_PRE
 #define FLAG_SQU			TEXTBOOK	// Squaring flag: KARATSUBA, TEXTBOOK
-#define FLAG_EXP			MONTGOMERY		// Modular exponentiation flag: LTOR, RTOL, MONTGOMERY
+#define FLAG_EXP			MONTGOMERY	// Modular exponentiation flag: LTOR, RTOL, MONTGOMERY
 
 #define TEST_COUNT		10
-#define TEST_SIZE		SIZE_2048
+#define TEST_SIZE		SIZE_1024
+/* -------------------------------------------------------------------------------------------- */
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
