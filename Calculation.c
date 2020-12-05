@@ -30,7 +30,7 @@ int EXP_RL_MUL(bigint** T, bigint* X, bigint* N); // Only Exponentiation functio
 int EXP_RL_ADD(bigint** T, bigint* X, bigint* N); // Only Exponentiation function used Right to Left (ADD ver)
 
 /**
- * @brief Addition (Ä³¸®¸¦ Æ÷ÇÔÇÑ ´ÜÀÏ µ¡¼À)
+ * @brief Addition (ìºë¦¬ë¥¼ í¬í•¨í•œ ë‹¨ì¼ ë§ì…ˆ)
  * @details
 
 	 [pseudo code]
@@ -47,32 +47,32 @@ int EXP_RL_ADD(bigint** T, bigint* X, bigint* N); // Only Exponentiation functio
 	 9 : end if
 	10 : return carry
 
- * @param bigint** C µ¡¼À °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint** A µ¡¼ÀÀ» ¼öÇàÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint** B µ¡¼ÀÀ» ¼öÇàÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param int c ÀÌÀü ¿¬»ê¿¡¼­ ¹Ş¾Æ ¿Â Ä³¸® (0 ¶Ç´Â 1)
- * @param int i µ¡¼ÀÀ» ¼öÇàÇÒ ¹è¿­ÀÇ index
+ * @param bigint** C ë§ì…ˆ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint** A ë§ì…ˆì„ ìˆ˜í–‰í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint** B ë§ì…ˆì„ ìˆ˜í–‰í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param int c ì´ì „ ì—°ì‚°ì—ì„œ ë°›ì•„ ì˜¨ ìºë¦¬ (0 ë˜ëŠ” 1)
+ * @param int i ë§ì…ˆì„ ìˆ˜í–‰í•  ë°°ì—´ì˜ index
 
- * @return carry Ä³¸® ¿©ºÎ (0 ¶Ç´Â 1)
- * @throws ERROR ¹è¿­ÀÇ index°¡ À½¼öÀÎ °æ¿ì
+ * @return carry ìºë¦¬ ì—¬ë¶€ (0 ë˜ëŠ” 1)
+ * @throws ERROR ë°°ì—´ì˜ indexê°€ ìŒìˆ˜ì¸ ê²½ìš°
  */
 int ADD_ABc(bigint** C, bigint** A, bigint** B, int c, int i)
 {
 	int carry = 0; // [line 1]
 	word temp = 0;
 
-	if (i < 0) // ¿¹¿Ü Ã³¸®
+	if (i < 0) // ì˜ˆì™¸ ì²˜ë¦¬
 		return ERROR;
 
 	temp = (*A)->a[i];
-	(*C)->a[i] = (*A)->a[i] + (*B)->a[i]; // [line 2] A, B °¢°¢ÀÇ i¹øÂ° °ª ´õÇØ¼­ CÀÇ i¹øÂ° ¹è¿­¿¡ ´ëÀÔ
+	(*C)->a[i] = (*A)->a[i] + (*B)->a[i]; // [line 2] A, B ê°ê°ì˜ ië²ˆì§¸ ê°’ ë”í•´ì„œ Cì˜ ië²ˆì§¸ ë°°ì—´ì— ëŒ€ì…
 
-	if ((*C)->a[i] < temp) // [line 3] ¿ø·¡ÀÇ AÀÇ i¹øÂ° °ªÀÌ ¾Õ¿¡¼­ °è»êÇÑ °á°úº¸´Ù ÀÛÀ¸¸é Ä³¸®°¡ ¹ß»ıÇÑ °Í
+	if ((*C)->a[i] < temp) // [line 3] ì›ë˜ì˜ Aì˜ ië²ˆì§¸ ê°’ì´ ì•ì—ì„œ ê³„ì‚°í•œ ê²°ê³¼ë³´ë‹¤ ì‘ìœ¼ë©´ ìºë¦¬ê°€ ë°œìƒí•œ ê²ƒ
 		carry = 1; // [line 4]
 
-	(*C)->a[i] = (*C)->a[i] + c; // [line 6] ÀÎÀÚ·Î ¹Ş¾Æ¿Â Ä³¸® °ª(c) ´õÇØ ÁÖ±â
+	(*C)->a[i] = (*C)->a[i] + c; // [line 6] ì¸ìë¡œ ë°›ì•„ì˜¨ ìºë¦¬ ê°’(c) ë”í•´ ì£¼ê¸°
 
-	if ((*C)->a[i] < (unsigned int)c) // [line 7] ¾ÕÀÇ °á°ú°¡ cº¸´Ù ÀÛÀ¸¸é Ä³¸®°¡ ¹ß»ıÇÑ °Í
+	if ((*C)->a[i] < (unsigned int)c) // [line 7] ì•ì˜ ê²°ê³¼ê°€ cë³´ë‹¤ ì‘ìœ¼ë©´ ìºë¦¬ê°€ ë°œìƒí•œ ê²ƒ
 		carry = carry + 1; // [line 8]
 
 	return carry; // [line 10]
@@ -97,14 +97,14 @@ int ADD_ABc(bigint** C, bigint** A, bigint** B, int c, int i)
 	10 :	C <- (-1)^sign * sum(C[j] * W^j) for j = 0 to n - 1
 	11 : end if
 
- * @param bigint** C µ¡¼À °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint** A µ¡¼ÀÀ» ¼öÇàÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint** B µ¡¼ÀÀ» ¼öÇàÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param int sign µ¡¼À °á°ú CÀÇ ºÎÈ£
+ * @param bigint** C ë§ì…ˆ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint** A ë§ì…ˆì„ ìˆ˜í–‰í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint** B ë§ì…ˆì„ ìˆ˜í–‰í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param int sign ë§ì…ˆ ê²°ê³¼ Cì˜ ë¶€í˜¸
  * @return SUCCESS
  * @throws
-	ERROR A(B)ÀÇ word length°¡ ¾ç¼ö°¡ ¾Æ´Ñ °æ¿ì
-	ERROR bigint ±¸Á¶Ã¼ ³»ºÎ¿¡ ÀÖ´Â ¹è¿­ ÀçÇÒ´ç ½ÇÆĞ ½Ã
+	ERROR A(B)ì˜ word lengthê°€ ì–‘ìˆ˜ê°€ ì•„ë‹Œ ê²½ìš°
+	ERROR bigint êµ¬ì¡°ì²´ ë‚´ë¶€ì— ìˆëŠ” ë°°ì—´ ì¬í• ë‹¹ ì‹¤íŒ¨ ì‹œ
  */
 int ADDC(bigint** C, bigint** A, bigint** B, int sign)
 {
@@ -123,7 +123,7 @@ int ADDC(bigint** C, bigint** A, bigint** B, int sign)
 
 	word* temp;
 
-	// AÀÇ ¿öµå¿­ ±æÀÌ°¡ BÀÇ ¿öµå¿­ ±æÀÌº¸´Ù Å« °æ¿ìÀÌ¹Ç·Î BÀÇ ¿öµå¿­ ±æÀÌ¸¦ AÀÇ ¿öµå¿­ ±æÀÌ¸¸Å­ ´Ã·Á¼­ realloc
+	// Aì˜ ì›Œë“œì—´ ê¸¸ì´ê°€ Bì˜ ì›Œë“œì—´ ê¸¸ì´ë³´ë‹¤ í° ê²½ìš°ì´ë¯€ë¡œ Bì˜ ì›Œë“œì—´ ê¸¸ì´ë¥¼ Aì˜ ì›Œë“œì—´ ê¸¸ì´ë§Œí¼ ëŠ˜ë ¤ì„œ realloc
 	(*B)->wordlen = A_Len;
 	temp = (word*)realloc((*B)->a, sizeof(word) * (*B)->wordlen);
 	
@@ -132,19 +132,19 @@ int ADDC(bigint** C, bigint** A, bigint** B, int sign)
 	else
 		return ERROR;
 
-	memset(&(*B)->a[B_Len], 0x00, (A_Len - B_Len) * sizeof(word)); // [line 1] ´Ã¾î³­ ±æÀÌ¸¸Å­ 0À¸·Î ÃÊ±âÈ­
+	memset(&(*B)->a[B_Len], 0x00, (A_Len - B_Len) * sizeof(word)); // [line 1] ëŠ˜ì–´ë‚œ ê¸¸ì´ë§Œí¼ 0ìœ¼ë¡œ ì´ˆê¸°í™”
 
 	carry = 0; // [line 2]
 
 	for (i = 0; i < A_Len; i++) // [line 3]
-		carry = ADD_ABc(C, A, B, carry, i); // [line 4] ´ÜÀÏ µ¡¼À AÀÇ ¿öµå¿­ ±æÀÌ¸¸Å­ ½ÇÇà
+		carry = ADD_ABc(C, A, B, carry, i); // [line 4] ë‹¨ì¼ ë§ì…ˆ Aì˜ ì›Œë“œì—´ ê¸¸ì´ë§Œí¼ ì‹¤í–‰
 
-	if (carry == 1) // [line 7] ¸¶Áö¸· carry°¡ 1ÀÌ¸é
-		(*C)->a[A_Len] = 1; // [line 8] °á°ú°ªÀÇ MSB¿¡ 1 ¼³Á¤
+	if (carry == 1) // [line 7] ë§ˆì§€ë§‰ carryê°€ 1ì´ë©´
+		(*C)->a[A_Len] = 1; // [line 8] ê²°ê³¼ê°’ì˜ MSBì— 1 ì„¤ì •
 
 	BI_Refine(*C);
 
-	// [line 8, 10] ºÎÈ£ ¼³Á¤
+	// [line 8, 10] ë¶€í˜¸ ì„¤ì •
 	if (sign == 0)
 		(*C)->sign = 0;
 	else
@@ -156,16 +156,16 @@ int ADDC(bigint** C, bigint** A, bigint** B, int sign)
 /**
  * @brief Addition Core (WordLen(A) >= WordLen(B), Sign(A) = Sign(B), A = A + B)
  * @details
-	ADDC ÇÔ¼ö¿Í µ¿ÀÏÇÏ°Ô µ¿ÀÛ
-	µ¡¼ÀÀ» ¼öÇàÇÑ °á°ú¸¦ ´Ù½Ã A¿¡ ÀúÀå (A <- A + B)
- * @param bigint** C µ¡¼À °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint** A µ¡¼ÀÀ» ¼öÇàÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint** B µ¡¼ÀÀ» ¼öÇàÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param int sign µ¡¼À °á°ú CÀÇ ºÎÈ£
+	ADDC í•¨ìˆ˜ì™€ ë™ì¼í•˜ê²Œ ë™ì‘
+	ë§ì…ˆì„ ìˆ˜í–‰í•œ ê²°ê³¼ë¥¼ ë‹¤ì‹œ Aì— ì €ì¥ (A <- A + B)
+ * @param bigint** C ë§ì…ˆ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint** A ë§ì…ˆì„ ìˆ˜í–‰í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint** B ë§ì…ˆì„ ìˆ˜í–‰í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param int sign ë§ì…ˆ ê²°ê³¼ Cì˜ ë¶€í˜¸
  * @return SUCCESS
  * @throws
-	ERROR A(B)ÀÇ word length°¡ ¾ç¼ö°¡ ¾Æ´Ñ °æ¿ì
-	ERROR bigint ±¸Á¶Ã¼ ³»ºÎ¿¡ ÀÖ´Â ¹è¿­ ÀçÇÒ´ç ½ÇÆĞ ½Ã
+	ERROR A(B)ì˜ word lengthê°€ ì–‘ìˆ˜ê°€ ì•„ë‹Œ ê²½ìš°
+	ERROR bigint êµ¬ì¡°ì²´ ë‚´ë¶€ì— ìˆëŠ” ë°°ì—´ ì¬í• ë‹¹ ì‹¤íŒ¨ ì‹œ
  */
 int ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign)
 {
@@ -234,13 +234,13 @@ int ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign)
 	16 :	C <- ADDC(B, A)
 	17 : end if
 
- * @param bigint** C µ¡¼À °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint** A µ¡¼ÀÀ» ¼öÇàÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint** B µ¡¼ÀÀ» ¼öÇàÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @return SUCCESS ¼º°ø ½Ã
+ * @param bigint** C ë§ì…ˆ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint** A ë§ì…ˆì„ ìˆ˜í–‰í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint** B ë§ì…ˆì„ ìˆ˜í–‰í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @return SUCCESS ì„±ê³µ ì‹œ
  * @throws
-	ERROR A(B)ÀÇ bigint ±¸Á¶Ã¼ ¹ÌÇÒ´ç ½Ã
-	ERROR A(B)ÀÇ ºÎÈ£ °¡Á®¿À±â ½ÇÆĞ ½Ã
+	ERROR A(B)ì˜ bigint êµ¬ì¡°ì²´ ë¯¸í• ë‹¹ ì‹œ
+	ERROR A(B)ì˜ ë¶€í˜¸ ê°€ì ¸ì˜¤ê¸° ì‹¤íŒ¨ ì‹œ
  */
 int ADD(bigint** C, bigint** A, bigint** B)
 {
@@ -269,7 +269,7 @@ int ADD(bigint** C, bigint** A, bigint** B)
 
 	if (BI_Is_Zero(A) == 0) // [line 1] A is zero
 	{
-		// [line 2] A + B¿¡¼­ A°¡ 0ÀÌ¸é B return
+		// [line 2] A + Bì—ì„œ Aê°€ 0ì´ë©´ B return
 		(*C)->sign = (*B)->sign;
 		(*C)->wordlen = (*B)->wordlen;
 		for (i = 0; i < (*C)->wordlen; i++)
@@ -280,7 +280,7 @@ int ADD(bigint** C, bigint** A, bigint** B)
 
 	if (BI_Is_Zero(B) == 0) // [line 4] B is zero
 	{
-		// [line 5] A + B¿¡¼­ B°¡ 0ÀÌ¸é A return
+		// [line 5] A + Bì—ì„œ Bê°€ 0ì´ë©´ A return
 		(*C)->sign = (*A)->sign;
 		(*C)->wordlen = (*A)->wordlen;
 		for (i = 0; i < (*C)->wordlen; i++)
@@ -289,7 +289,7 @@ int ADD(bigint** C, bigint** A, bigint** B)
 		return SUCCESS;
 	}
 
-	if ((A_sign == NON_NEGATIVE) && (B_sign == NEGATIVE)) // [line 7] A°¡ ¾ç¼ö, B°¡ À½¼öÀÌ¸é
+	if ((A_sign == NON_NEGATIVE) && (B_sign == NEGATIVE)) // [line 7] Aê°€ ì–‘ìˆ˜, Bê°€ ìŒìˆ˜ì´ë©´
 	{
 		bigint* temp = NULL;
 		BI_Assign(&temp, *B); // temp = B
@@ -305,7 +305,7 @@ int ADD(bigint** C, bigint** A, bigint** B)
 		return SUCCESS;
 	}
 
-	if ((A_sign == NEGATIVE) && (B_sign == NON_NEGATIVE)) // [line 10] A°¡ À½¼ö, B°¡ ¾ç¼öÀÌ¸é
+	if ((A_sign == NEGATIVE) && (B_sign == NON_NEGATIVE)) // [line 10] Aê°€ ìŒìˆ˜, Bê°€ ì–‘ìˆ˜ì´ë©´
 	{
 		bigint* temp = NULL;
 		BI_Assign(&temp, *A); // temp = A
@@ -321,18 +321,18 @@ int ADD(bigint** C, bigint** A, bigint** B)
 		return SUCCESS;
 	}
 
-	// A, B°¡ µ¿ÀÏÇÑ ºÎÈ£ÀÏ ¶§
-	if (A_Len >= B_Len) // [line 13] AÀÇ ¿öµå¿­ÀÇ ±æÀÌ°¡ BÀÇ ¿öµå¿­ÀÇ ±æÀÌº¸´Ù ±æ ¶§
+	// A, Bê°€ ë™ì¼í•œ ë¶€í˜¸ì¼ ë•Œ
+	if (A_Len >= B_Len) // [line 13] Aì˜ ì›Œë“œì—´ì˜ ê¸¸ì´ê°€ Bì˜ ì›Œë“œì—´ì˜ ê¸¸ì´ë³´ë‹¤ ê¸¸ ë•Œ
 	{
-		re = ADDC(C, A, B, A_sign); // [line 14] µ¡¼À ½ÇÇà
+		re = ADDC(C, A, B, A_sign); // [line 14] ë§ì…ˆ ì‹¤í–‰
 		if (re == ERROR)
 			return ERROR;
 
 		return SUCCESS;
 	}
-	else // [line 15] BÀÇ ¿öµå¿­ÀÇ ±æÀÌ°¡ AÀÇ ¿öµå¿­ÀÇ ±æÀÌº¸´Ù ±æ ¶§
+	else // [line 15] Bì˜ ì›Œë“œì—´ì˜ ê¸¸ì´ê°€ Aì˜ ì›Œë“œì—´ì˜ ê¸¸ì´ë³´ë‹¤ ê¸¸ ë•Œ
 	{
-		re = ADDC(C, B, A, A_sign); // [line 16] µ¡¼À ½ÇÇà
+		re = ADDC(C, B, A, A_sign); // [line 16] ë§ì…ˆ ì‹¤í–‰
 		if (re == ERROR)
 			return ERROR;
 
@@ -343,15 +343,15 @@ int ADD(bigint** C, bigint** A, bigint** B)
 /**
  * @brief Addition (A = A + B)
  * @details
-	ADD ÇÔ¼ö¿Í µ¿ÀÏÇÏ°Ô µ¿ÀÛ
-	µ¡¼ÀÀ» ¼öÇàÇÑ °á°ú¸¦ ´Ù½Ã A¿¡ ÀúÀå (A <- A + B)
- * @param bigint** C µ¡¼À °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint** A µ¡¼ÀÀ» ¼öÇàÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint** B µ¡¼ÀÀ» ¼öÇàÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @return SUCCESS ¼º°ø ½Ã
+	ADD í•¨ìˆ˜ì™€ ë™ì¼í•˜ê²Œ ë™ì‘
+	ë§ì…ˆì„ ìˆ˜í–‰í•œ ê²°ê³¼ë¥¼ ë‹¤ì‹œ Aì— ì €ì¥ (A <- A + B)
+ * @param bigint** C ë§ì…ˆ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint** A ë§ì…ˆì„ ìˆ˜í–‰í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint** B ë§ì…ˆì„ ìˆ˜í–‰í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @return SUCCESS ì„±ê³µ ì‹œ
  * @throws
-	ERROR A(B)ÀÇ bigint ±¸Á¶Ã¼ ¹ÌÇÒ´ç ½Ã
-	ERROR A(B)ÀÇ ºÎÈ£ °¡Á®¿À±â ½ÇÆĞ ½Ã
+	ERROR A(B)ì˜ bigint êµ¬ì¡°ì²´ ë¯¸í• ë‹¹ ì‹œ
+	ERROR A(B)ì˜ ë¶€í˜¸ ê°€ì ¸ì˜¤ê¸° ì‹¤íŒ¨ ì‹œ
  */
 int ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 {
@@ -404,7 +404,7 @@ int ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 		BI_Assign(&temp, *B);
 
 		BI_Flip_Sign(temp);
-		re = SUB(C, *A, temp); // SUB ÇÔ¼ö
+		re = SUB(C, *A, temp); // SUB í•¨ìˆ˜
 		if (re == ERROR)
 			return ERROR;
 
@@ -419,7 +419,7 @@ int ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 		BI_Assign(&temp, *A);
 
 		BI_Flip_Sign(temp);
-		re = SUB(C, *B, temp); // SUB ÇÔ¼ö
+		re = SUB(C, *B, temp); // SUB í•¨ìˆ˜
 		if (re == ERROR)
 			return ERROR;
 
@@ -428,7 +428,7 @@ int ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 		return SUCCESS;
 	}
 
-	// A, B°¡ µ¿ÀÏÇÑ ºÎÈ£ÀÏ ¶§
+	// A, Bê°€ ë™ì¼í•œ ë¶€í˜¸ì¼ ë•Œ
 	if (A_Len >= B_Len)
 	{
 		re = ADDC_AAB(C, A, B, A_sign);
@@ -476,13 +476,13 @@ int ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 	20:		return -ADD(|A|, B)
 	21:	end if
 
-* @param bigint** C »¬¼À ¿¬»êÀÇ(A - B) °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºí Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint** A »¬¼À ¿¬»êÀÇ(A - B) A¿¡ ÇØ´çÇÏ´Â bigint Çü Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint** B »¬¼À ¿¬»êÀÇ(A - B) B¿¡ ÇØ´çÇÏ´Â bigint Çü Æ÷ÀÎÅÍ º¯¼ö
-* @return SUCCESS ¼º°ø ½Ã
+* @param bigint** C ëº„ì…ˆ ì—°ì‚°ì˜(A - B) ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸” í¬ì¸í„° ë³€ìˆ˜
+* @param bigint** A ëº„ì…ˆ ì—°ì‚°ì˜(A - B) Aì— í•´ë‹¹í•˜ëŠ” bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+* @param bigint** B ëº„ì…ˆ ì—°ì‚°ì˜(A - B) Bì— í•´ë‹¹í•˜ëŠ” bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+* @return SUCCESS ì„±ê³µ ì‹œ
 * @throws
-	ERROR A, B, C ÀÇ bigint ±¸Á¶Ã¼ ¹ÌÇÒ´ç ½Ã
-	ERROR A, B, CÀÇ word length°¡ ¾ç¼ö°¡ ¾Æ´Ñ °æ¿ì
+	ERROR A, B, C ì˜ bigint êµ¬ì¡°ì²´ ë¯¸í• ë‹¹ ì‹œ
+	ERROR A, B, Cì˜ word lengthê°€ ì–‘ìˆ˜ê°€ ì•„ë‹Œ ê²½ìš°
 */
 int SUB(bigint** C, bigint* A, bigint* B)
 {
@@ -495,8 +495,8 @@ int SUB(bigint** C, bigint* A, bigint* B)
 	if ((*C == NULL) | (B == NULL) | (A == NULL))
 		return ERROR;
 
-	BI_Get_Word_Length(&len, &A);   // A->wordlenÀ» len¿¡ ´ëÀÔ
-	BI_Get_Word_Length(&borrow, &B);// B->wordlenÀ» borrow¿¡ ´ëÀÔ
+	BI_Get_Word_Length(&len, &A);   // A->wordlenì„ lenì— ëŒ€ì…
+	BI_Get_Word_Length(&borrow, &B);// B->wordlenì„ borrowì— ëŒ€ì…
 
 	if (len < 0)
 		return ERROR;
@@ -507,47 +507,47 @@ int SUB(bigint** C, bigint* A, bigint* B)
 
 	if (BI_Is_Zero(&A) == 0) // [line 1] 0-B --> -B
 	{
-		BI_Assign(C, B); // [line 2] BÀÇ °ª ±×´ë·Î
-		(*C)->sign = NEGATIVE; // [line 2] ºÎÈ£¸¸ ¹İ´ë·Î
+		BI_Assign(C, B); // [line 2] Bì˜ ê°’ ê·¸ëŒ€ë¡œ
+		(*C)->sign = NEGATIVE; // [line 2] ë¶€í˜¸ë§Œ ë°˜ëŒ€ë¡œ
 
 		return SUCCESS; // memory leackege X
 	}
 
 	if (BI_Is_Zero(&B) == 0) // [line 4] A - 0 --> A
 	{
-		if (&A == C) // 1st arg == 2nd arg(AAB)ÀÎ °æ¿ì
-			return SUCCESS; // ÀÌ¹Ì 1st arg = 2nd arg ÀÌ¹Ç·Î returnÀ¸·Î Á¾·á.
-		BI_Assign(C, A); // [line 5] 1st arg != 2nd arg(AAB)ÀÎ °æ¿ì C¿¡ A¸¦ assign
+		if (&A == C) // 1st arg == 2nd arg(AAB)ì¸ ê²½ìš°
+			return SUCCESS; // ì´ë¯¸ 1st arg = 2nd arg ì´ë¯€ë¡œ returnìœ¼ë¡œ ì¢…ë£Œ.
+		BI_Assign(C, A); // [line 5] 1st arg != 2nd arg(AAB)ì¸ ê²½ìš° Cì— Aë¥¼ assign
 		return SUCCESS;
 	}
 
-	if ((A->sign ^ B->sign) == 0) // A, B ºÎÈ£°¡ °°À» ¶§
+	if ((A->sign ^ B->sign) == 0) // A, B ë¶€í˜¸ê°€ ê°™ì„ ë•Œ
 	{
-		if ((A->sign & B->sign) == 0) // [line 7] A, BÀÇ ºÎÈ£°¡ ¸ğµÎ ¾ç¼öÀÏ ¶§
+		if ((A->sign & B->sign) == 0) // [line 7] A, Bì˜ ë¶€í˜¸ê°€ ëª¨ë‘ ì–‘ìˆ˜ì¼ ë•Œ
 		{
-			if (result == 2) // [line 9] A, B¸¦ ºñ±³ÇØ¼­ A < BÀÏ ¶§. (BI_Compare(A, B)ÀÇ return : 2)
+			if (result == 2) // [line 9] A, Bë¥¼ ë¹„êµí•´ì„œ A < Bì¼ ë•Œ. (BI_Compare(A, B)ì˜ return : 2)
 			{
-				ret = SUBC(C, &B, &A); // [line 10] B - A ¸¦ ÇÏ°í
+				ret = SUBC(C, &B, &A); // [line 10] B - A ë¥¼ í•˜ê³ 
 				if (ret == -1)
 					return ERROR;
 				
-				BI_Flip_Sign(*C); // [line 10] »¬¼À ¿¬»êÀÌ Á¾·áµÇ¾úÀ¸¹Ç·Î ¿ø·¡´ë·Î ºÎÈ£ ¹Ù²ãÁÖ±â
+				BI_Flip_Sign(*C); // [line 10] ëº„ì…ˆ ì—°ì‚°ì´ ì¢…ë£Œë˜ì—ˆìœ¼ë¯€ë¡œ ì›ë˜ëŒ€ë¡œ ë¶€í˜¸ ë°”ê¿”ì£¼ê¸°
 
 				return SUCCESS;
 			}
-			else if (result == 0) // A = BÀÏ ¶§, CÀÇ °ªÀº 0ÀÌ µÇ¾î¾ßÇÑ´Ù.
+			else if (result == 0) // A = Bì¼ ë•Œ, Cì˜ ê°’ì€ 0ì´ ë˜ì–´ì•¼í•œë‹¤.
 			{
-				// BI_Set_Zero(C); ·Î ¹Ù²Ù´Â°Ô ¾î¶³±î?
-				for (i = 0; i < (*C)->wordlen; i++) // CÀÇ ±æÀÌ¸¸Å­
-					(*C)->a[i] = 0;  // 0À» ´ëÀÔ
+				// BI_Set_Zero(C); ë¡œ ë°”ê¾¸ëŠ”ê²Œ ì–´ë–¨ê¹Œ?
+				for (i = 0; i < (*C)->wordlen; i++) // Cì˜ ê¸¸ì´ë§Œí¼
+					(*C)->a[i] = 0;  // 0ì„ ëŒ€ì…
 				
-				(*C)->sign = 0; // CÀÇ ºÎÈ£µµ NON-NEGATIVE·Î º¯°æ
+				(*C)->sign = 0; // Cì˜ ë¶€í˜¸ë„ NON-NEGATIVEë¡œ ë³€ê²½
 
 				return SUCCESS;
 			}
-			else if (result == 1)// [line 7] A, B ¸¦ ºñ±³ÇØ¼­ A >= BÀÏ ¶§. BI_Compare(A, B)'s return : 0, 1
+			else if (result == 1)// [line 7] A, B ë¥¼ ë¹„êµí•´ì„œ A >= Bì¼ ë•Œ. BI_Compare(A, B)'s return : 0, 1
 			{
-				ret = SUBC(C, &A, &B); // [line 8] A - B ¿¬»ê
+				ret = SUBC(C, &A, &B); // [line 8] A - B ì—°ì‚°
 				if (ret == -1)
 					return ERROR;
 				
@@ -557,10 +557,10 @@ int SUB(bigint** C, bigint* A, bigint* B)
 				return ERROR;
 		}
 
-		else // A, BÀÇ ºÎÈ£°¡ ¸ğµÎ À½¼öÀÏ ¶§
+		else // A, Bì˜ ë¶€í˜¸ê°€ ëª¨ë‘ ìŒìˆ˜ì¼ ë•Œ
 		{
-			BI_Flip_Sign(A); // AÀÇ ºÎÈ£°¡ À½¼öÀÌ¹Ç·Î ºÎÈ£ ¹Ù²ãÁÖ±â
-			BI_Flip_Sign(B); // BÀÇ ºÎÈ£°¡ À½¼öÀÌ¹Ç·Î ºÎÈ£ ¹Ù²ãÁÖ±â
+			BI_Flip_Sign(A); // Aì˜ ë¶€í˜¸ê°€ ìŒìˆ˜ì´ë¯€ë¡œ ë¶€í˜¸ ë°”ê¿”ì£¼ê¸°
+			BI_Flip_Sign(B); // Bì˜ ë¶€í˜¸ê°€ ìŒìˆ˜ì´ë¯€ë¡œ ë¶€í˜¸ ë°”ê¿”ì£¼ê¸°
 			
 			result = BI_Compare(&A, &B);
 			if (result == 2) // [line 12]
@@ -569,8 +569,8 @@ int SUB(bigint** C, bigint* A, bigint* B)
 				if (ret == -1)
 					return ERROR;
 				
-				BI_Flip_Sign(A); // »¬¼À ¿¬»êÀÌ Á¾·áµÇ¾úÀ¸¹Ç·Î ¿ø·¡´ë·Î ºÎÈ£ ¿øÀ§Ä¡
-				BI_Flip_Sign(B); // »¬¼À ¿¬»êÀÌ Á¾·áµÇ¾úÀ¸¹Ç·Î ¿ø·¡´ë·Î ºÎÈ£ ¿øÀ§Ä¡
+				BI_Flip_Sign(A); // ëº„ì…ˆ ì—°ì‚°ì´ ì¢…ë£Œë˜ì—ˆìœ¼ë¯€ë¡œ ì›ë˜ëŒ€ë¡œ ë¶€í˜¸ ì›ìœ„ì¹˜
+				BI_Flip_Sign(B); // ëº„ì…ˆ ì—°ì‚°ì´ ì¢…ë£Œë˜ì—ˆìœ¼ë¯€ë¡œ ì›ë˜ëŒ€ë¡œ ë¶€í˜¸ ì›ìœ„ì¹˜
 
 				return SUCCESS;
 			}
@@ -580,9 +580,9 @@ int SUB(bigint** C, bigint* A, bigint* B)
 				if (ret == -1)
 					return ERROR;
 				
-				BI_Flip_Sign(*C); // [line 15]¿¡¼­ °á°úÀÇ ºÎÈ£ ¹Ù²ãÁÖ±â
-				BI_Flip_Sign(A); // »¬¼À ¿¬»êÀÌ Á¾·áµÇ¾úÀ¸¹Ç·Î ¿ø·¡´ë·Î ºÎÈ£ ¿øÀ§Ä¡
-				BI_Flip_Sign(B); // »¬¼À ¿¬»êÀÌ Á¾·áµÇ¾úÀ¸¹Ç·Î ¿ø·¡´ë·Î ºÎÈ£ ¿øÀ§Ä¡
+				BI_Flip_Sign(*C); // [line 15]ì—ì„œ ê²°ê³¼ì˜ ë¶€í˜¸ ë°”ê¿”ì£¼ê¸°
+				BI_Flip_Sign(A); // ëº„ì…ˆ ì—°ì‚°ì´ ì¢…ë£Œë˜ì—ˆìœ¼ë¯€ë¡œ ì›ë˜ëŒ€ë¡œ ë¶€í˜¸ ì›ìœ„ì¹˜
+				BI_Flip_Sign(B); // ëº„ì…ˆ ì—°ì‚°ì´ ì¢…ë£Œë˜ì—ˆìœ¼ë¯€ë¡œ ì›ë˜ëŒ€ë¡œ ë¶€í˜¸ ì›ìœ„ì¹˜
 
 				return SUCCESS;
 			}
@@ -591,16 +591,16 @@ int SUB(bigint** C, bigint* A, bigint* B)
 		}
 	}
 
-	else // A,B ºÎÈ£°¡ ´Ù¸¦ ¶§
+	else // A,B ë¶€í˜¸ê°€ ë‹¤ë¥¼ ë•Œ
 	{
-		if (A->sign == 0) // [line 17] A°¡ ¾ç¼ö, B°¡ À½¼ö
+		if (A->sign == 0) // [line 17] Aê°€ ì–‘ìˆ˜, Bê°€ ìŒìˆ˜
 		{
-			BI_Flip_Sign(B); // BÀÇ ºÎÈ£¸¦ ¹Ù²ãÁÖ°í
-			ret = ADD(C, &A, &B);  // [line 18] ADD ¿¬»ê
+			BI_Flip_Sign(B); // Bì˜ ë¶€í˜¸ë¥¼ ë°”ê¿”ì£¼ê³ 
+			ret = ADD(C, &A, &B);  // [line 18] ADD ì—°ì‚°
 			if (ret == -1)
 				return ERROR;
 			
-			BI_Flip_Sign(B); // ºÎÈ£ ¿øÀ§Ä¡
+			BI_Flip_Sign(B); // ë¶€í˜¸ ì›ìœ„ì¹˜
 
 			return SUCCESS;
 		}
@@ -611,8 +611,8 @@ int SUB(bigint** C, bigint* A, bigint* B)
 			if (ret == -1)
 				return ERROR;
 
-			BI_Flip_Sign(A); // ºÎÈ£ ¿øÀ§Ä¡
-			BI_Flip_Sign(*C); // ºÎÈ£ ¿øÀ§Ä¡
+			BI_Flip_Sign(A); // ë¶€í˜¸ ì›ìœ„ì¹˜
+			BI_Flip_Sign(*C); // ë¶€í˜¸ ì›ìœ„ì¹˜
 
 			return SUCCESS;
 		}
@@ -643,13 +643,13 @@ int SUB(bigint** C, bigint* A, bigint* B)
 	15: l <- min{j : C_{n-1} = C_{n-2} = ... = C_{j} = 0}
 	16: C <- len(l)
 
-* @param bigint** C ´ÜÀÏ »¬¼À ¿¬»êÀÇ(A - B) °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºí Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint** A ´ÜÀÏ »¬¼À ¿¬»êÀÇ(A - B) A¿¡ ÇØ´çÇÏ´Â bigint Çü Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint** B ´ÜÀÏ »¬¼À ¿¬»êÀÇ(A - B) B¿¡ ÇØ´çÇÏ´Â bigint Çü Æ÷ÀÎÅÍ º¯¼ö
-* @return SUCCESS ¼º°ø ½Ã
+* @param bigint** C ë‹¨ì¼ ëº„ì…ˆ ì—°ì‚°ì˜(A - B) ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸” í¬ì¸í„° ë³€ìˆ˜
+* @param bigint** A ë‹¨ì¼ ëº„ì…ˆ ì—°ì‚°ì˜(A - B) Aì— í•´ë‹¹í•˜ëŠ” bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+* @param bigint** B ë‹¨ì¼ ëº„ì…ˆ ì—°ì‚°ì˜(A - B) Bì— í•´ë‹¹í•˜ëŠ” bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+* @return SUCCESS ì„±ê³µ ì‹œ
 * @throws
-	ERROR A, B, C ÀÇ bigint ±¸Á¶Ã¼ ¹ÌÇÒ´ç ½Ã
-	ERROR A, B, CÀÇ word length°¡ ¾ç¼ö°¡ ¾Æ´Ñ °æ¿ì
+	ERROR A, B, C ì˜ bigint êµ¬ì¡°ì²´ ë¯¸í• ë‹¹ ì‹œ
+	ERROR A, B, Cì˜ word lengthê°€ ì–‘ìˆ˜ê°€ ì•„ë‹Œ ê²½ìš°
 */
 int SUBC(bigint** C, bigint** A, bigint** B)
 {
@@ -657,28 +657,28 @@ int SUBC(bigint** C, bigint** A, bigint** B)
 	int result = 0;
 	unsigned int borrow = 0;
 
-	bigint* temp = NULL; // A¿Í bÀÇ ±æÀÌ°¡ ´Ù¸¦ ¶§ -> bigint** bÀÇ ±æÀÌ¸¦ ¹Ù²Ü ¼ö ¾øÀ¸¹Ç·Î temp¸¦ ¸¸µé¾îÁÜ
-	bigint* temp3 = NULL; // C¶û A¶û °°À» ¶§¸¦ ´ëºñÇÏ¿©
+	bigint* temp = NULL; // Aì™€ bì˜ ê¸¸ì´ê°€ ë‹¤ë¥¼ ë•Œ -> bigint** bì˜ ê¸¸ì´ë¥¼ ë°”ê¿€ ìˆ˜ ì—†ìœ¼ë¯€ë¡œ tempë¥¼ ë§Œë“¤ì–´ì¤Œ
+	bigint* temp3 = NULL; // Cë‘ Aë‘ ê°™ì„ ë•Œë¥¼ ëŒ€ë¹„í•˜ì—¬
 
 	if ((*C == NULL) | (B == NULL) | (A == NULL))
 		return ERROR;
 
-	BI_Get_Word_Length(&len, A); // bº¸´Ù Å« AÀÇ ±æÀÌ¸¦ ±¸ÇÏÀÚ	
-	BI_New(&temp, len);  // AÀÇ ¿öµå ±æÀÌ¿Í °°°Ô temp ¸¦ »ı¼º
+	BI_Get_Word_Length(&len, A); // bë³´ë‹¤ í° Aì˜ ê¸¸ì´ë¥¼ êµ¬í•˜ì	
+	BI_New(&temp, len);  // Aì˜ ì›Œë“œ ê¸¸ì´ì™€ ê°™ê²Œ temp ë¥¼ ìƒì„±
 
 	result = BI_Compare(A, B);
 	if ((result == 0) | (result == 1))
-		(*C)->sign = 0; // ¸Å°³º¯¼ö C¿¡ ÀÌ¹Ì ºÎÈ£°¡ µé¾î°¡ÀÖÀ» ¶§ ¹Ù²ãÁÖ´Â °Ô ¾ø¾î¼­
+		(*C)->sign = 0; // ë§¤ê°œë³€ìˆ˜ Cì— ì´ë¯¸ ë¶€í˜¸ê°€ ë“¤ì–´ê°€ìˆì„ ë•Œ ë°”ê¿”ì£¼ëŠ” ê²Œ ì—†ì–´ì„œ
 	
 	if (result == 2)
 		(*C)->sign = 1;
 	
-	if ((*C)->wordlen < len) // Binary Long Division¿¡¼­ CÀÇ ±æÀÌ°¡ 1ÀÌ°í, A, BÀÇ ±æÀÌ°¡ 2ÀÏ ¶§°¡ ÀÖ¾î¼­. //A = 0x40bd
+	if ((*C)->wordlen < len) // Binary Long Divisionì—ì„œ Cì˜ ê¸¸ì´ê°€ 1ì´ê³ , A, Bì˜ ê¸¸ì´ê°€ 2ì¼ ë•Œê°€ ìˆì–´ì„œ. //A = 0x40bd
 	{
 		bigint* temp2 = NULL;
-		BI_New(&temp2, len); // Cº¸´Ù ´õ Å« ±æÀÌÀÎ lenÀ» °¡Áö´Â temp2¸¦ »ı¼º
+		BI_New(&temp2, len); // Cë³´ë‹¤ ë” í° ê¸¸ì´ì¸ lenì„ ê°€ì§€ëŠ” temp2ë¥¼ ìƒì„±
 		
-		for (i = 0; i < (*C)->wordlen; i++) // C->wordleÀÇ ±æÀÌ¸¸Å­¸¸ temp2¿¡ ´ëÀÔ. ¾ÈÃ¤¿öÁø ºÎºĞÀº 0À¸·Î ±×´ë·Î
+		for (i = 0; i < (*C)->wordlen; i++) // C->wordleì˜ ê¸¸ì´ë§Œí¼ë§Œ temp2ì— ëŒ€ì…. ì•ˆì±„ì›Œì§„ ë¶€ë¶„ì€ 0ìœ¼ë¡œ ê·¸ëŒ€ë¡œ
 			temp2->a[i] = (*C)->a[i];
 		
 		BI_Assign(C, temp2);
@@ -686,26 +686,26 @@ int SUBC(bigint** C, bigint** A, bigint** B)
 	}
 	
 	for (i = 0; i < (*B)->wordlen; i++)//
-		temp->a[i] = (*B)->a[i]; // b¿Í °°Àº °ªÀ» °¡Áö°í ÀÖ¾î¾ßÇÏ°í, ´õ ±æ°Ô »ı¼ºµÆÀ» ¶§´Â 0ÀÌ µé¾î°¡ÀÖ¾î¾ßÇÔ.
-		// A°¡ bº¸´Ù ±æ ¶§ bÀÇ ±æÀÌ¸¦ ¸ÂÃç Áà¾ß ÇÏ´Âµ¥ b¸¦ °ÇµéÀÌ¸é b°¡ ¹Ù²î±â ¶§¹®¿¡ temp¸¦ ÀÌ¿ë
+		temp->a[i] = (*B)->a[i]; // bì™€ ê°™ì€ ê°’ì„ ê°€ì§€ê³  ìˆì–´ì•¼í•˜ê³ , ë” ê¸¸ê²Œ ìƒì„±ëì„ ë•ŒëŠ” 0ì´ ë“¤ì–´ê°€ìˆì–´ì•¼í•¨.
+		// Aê°€ bë³´ë‹¤ ê¸¸ ë•Œ bì˜ ê¸¸ì´ë¥¼ ë§ì¶° ì¤˜ì•¼ í•˜ëŠ”ë° bë¥¼ ê±´ë“¤ì´ë©´ bê°€ ë°”ë€Œê¸° ë•Œë¬¸ì— tempë¥¼ ì´ìš©
 
-	BI_Assign(&temp3, *A); // ÀÌÈÄ A¿Í µ¿ÀÏÇÏ°Ô
+	BI_Assign(&temp3, *A); // ì´í›„ Aì™€ ë™ì¼í•˜ê²Œ
 	
 	for (i = 0; i < len; i++) // [line 3]
 	{
-		(*C)->a[i] = temp3->a[i] - borrow; // [line 4] (*C)->a[i] = (*A)->a[i] - (borrow); // A - bÀÇ °ªÀ» C ¿¡ ´ëÀÔ // Ã³À½ borrow°ªÀº ÃÊ±âÈ­µÈ 0À¸·Î µé¾î¿È
+		(*C)->a[i] = temp3->a[i] - borrow; // [line 4] (*C)->a[i] = (*A)->a[i] - (borrow); // A - bì˜ ê°’ì„ C ì— ëŒ€ì… // ì²˜ìŒ borrowê°’ì€ ì´ˆê¸°í™”ëœ 0ìœ¼ë¡œ ë“¤ì–´ì˜´
 		(*C)->a[i] = (*C)->a[i] & word_mask; // mod 2 ^ (WORD_BIT_LEN)
 		
-		if (temp3->a[i] < borrow) // [line 5] if ((*A)->a[i] < borrow) // borrow°¡ »ı±æ ¶§
+		if (temp3->a[i] < borrow) // [line 5] if ((*A)->a[i] < borrow) // borrowê°€ ìƒê¸¸ ë•Œ
 			borrow = 1;// [line 6] *borrow = 1;
-		else // [line 7] borrow ¾ÈµÉ ¶§
+		else // [line 7] borrow ì•ˆë  ë•Œ
 		{
 			borrow = 0;// [line 8] *borrow = 0;
 			if ((*C)->a[i] < temp->a[i]) // [line 10]
 				borrow += 1;// [line 11] borrow = borrow + 1;
 		}
 		
-		(*C)->a[i] -= temp->a[i]; // [line 13] temp¿¡ ³Ö¾î³õÀº b¿Í »¬¼À ¿¬»ê
+		(*C)->a[i] -= temp->a[i]; // [line 13] tempì— ë„£ì–´ë†“ì€ bì™€ ëº„ì…ˆ ì—°ì‚°
 		(*C)->a[i] = (*C)->a[i] & word_mask; // mod 2 ^ (WORD_BIT_LEN)
 	}
 
@@ -719,17 +719,17 @@ int SUBC(bigint** C, bigint** A, bigint** B)
 /**
  * @brief Multiplication
  * @details
-	flag¿¡ µû¶ó °ö¼À ¿¬»ê ¼öÇà(Karatsuba multiplication / textbook multiplication)
+	flagì— ë”°ë¼ ê³±ì…ˆ ì—°ì‚° ìˆ˜í–‰(Karatsuba multiplication / textbook multiplication)
 	Input  : A
 	Output : C = A * B
- * @param bigint* C °ö¼À ¿¬»êÀ» ¼öÇàÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint* A °ö¼À ¿¬»êÀ» ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @param bigint* B °ö¼À ¿¬»êÀ» ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+ * @param bigint* C ê³±ì…ˆ ì—°ì‚°ì„ ìˆ˜í–‰í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* A ê³±ì…ˆ ì—°ì‚°ì„ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* B ê³±ì…ˆ ì—°ì‚°ì„ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
  * @return SUCCESS
  * @throws
-	ERROR flag ¹ÌÁöÁ¤ ½Ã
-	ERROR A(B)ÀÇ bigint ±¸Á¶Ã¼ ¹ÌÇÒ´ç ½Ã
-	ERROR A(B)ÀÇ ±æÀÌ°¡ ¾ç¼ö°¡ ¾Æ´Ñ °æ¿ì
+	ERROR flag ë¯¸ì§€ì • ì‹œ
+	ERROR A(B)ì˜ bigint êµ¬ì¡°ì²´ ë¯¸í• ë‹¹ ì‹œ
+	ERROR A(B)ì˜ ê¸¸ì´ê°€ ì–‘ìˆ˜ê°€ ì•„ë‹Œ ê²½ìš°
  */
 int Multiplication(bigint** C, bigint* A, bigint* B)
 {
@@ -741,8 +741,8 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 	if ((B == NULL) | (A == NULL))
 		return ERROR;
 
-	BI_Get_Word_Length(&A_Len, &A); // A_Len = AÀÇ ¿öµå¿­ ±æÀÌ
-	BI_Get_Word_Length(&B_Len, &B); // B_Len = BÀÇ ¿öµå¿­ ±æÀÌ
+	BI_Get_Word_Length(&A_Len, &A); // A_Len = Aì˜ ì›Œë“œì—´ ê¸¸ì´
+	BI_Get_Word_Length(&B_Len, &B); // B_Len = Bì˜ ì›Œë“œì—´ ê¸¸ì´
 
 	if (A_Len < 0)
 		return ERROR;
@@ -751,8 +751,8 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 
 	if (FLAG_MUL == TEXTBOOK) // textbook multiplication
 	{
-		C_Len = A_Len + B_Len; // CÀÇ ±æÀÌ Á¤ÇØ ÁØ µÚ bigint »ı¼º
-		BI_New(C, C_Len); // bigint »ı¼º
+		C_Len = A_Len + B_Len; // Cì˜ ê¸¸ì´ ì •í•´ ì¤€ ë’¤ bigint ìƒì„±
+		BI_New(C, C_Len); // bigint ìƒì„±
 		ret = MUL_Multi(C, A, B);
 		
 		if (ret == ERROR)
@@ -761,19 +761,19 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 	else if (FLAG_MUL == KARATSUBA) // karatsuba multiplication
 	{
 		C_Len = (MAX(A->wordlen, B->wordlen) + 1) >> 1;
-		C_Len = 4 * C_Len + 1; // CÀÇ ±æÀÌ Á¤ÇØ ÁØ µÚ
-		BI_New(C, C_Len); // bigint »ı¼º
+		C_Len = 4 * C_Len + 1; // Cì˜ ê¸¸ì´ ì •í•´ ì¤€ ë’¤
+		BI_New(C, C_Len); // bigint ìƒì„±
 
-		int sign_A = BI_Get_Sign(A); // sign_A = AÀÇ ºÎÈ£
-		int sign_B = BI_Get_Sign(B); // sign_B = BÀÇ ºÎÈ£
+		int sign_A = BI_Get_Sign(A); // sign_A = Aì˜ ë¶€í˜¸
+		int sign_B = BI_Get_Sign(B); // sign_B = Bì˜ ë¶€í˜¸
 
-		if (sign_A == ERROR || sign_B == ERROR) // ºÎÈ£ °¡Á®¿À±â ½ÇÆĞ ½Ã ¿¡·¯ ¹İÇÑ
+		if (sign_A == ERROR || sign_B == ERROR) // ë¶€í˜¸ ê°€ì ¸ì˜¤ê¸° ì‹¤íŒ¨ ì‹œ ì—ëŸ¬ ë°˜í•œ
 		{
 			printf("get sign error\n");
 			return ERROR;
 		}
 
-		// karatsuba ÀÎÀÚ´Â ¾ç¼ö°ªÀÌ¹Ç·Î Àı´ñ°ª ÃëÇØ ÁÖ±â
+		// karatsuba ì¸ìëŠ” ì–‘ìˆ˜ê°’ì´ë¯€ë¡œ ì ˆëŒ“ê°’ ì·¨í•´ ì£¼ê¸°
 		if (sign_A == NEGATIVE)
 			BI_Flip_Sign(A);
 
@@ -785,7 +785,7 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 			return ERROR;
 		BI_Refine(*C);
 
-		if ((sign_A ^ sign_B) == 1) // CÀÇ ºÎÈ£ °áÁ¤
+		if ((sign_A ^ sign_B) == 1) // Cì˜ ë¶€í˜¸ ê²°ì •
 			(*C)->sign = NEGATIVE;
 		else
 			(*C)->sign = NON_NEGATIVE;
@@ -818,56 +818,56 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 	13: MUL1 <- MUL1 + SUM1 + carry0 + (carry1 << (w/2)) (mod W)
 	14: C = (00.. || MUL1 || MUL0 || ..00)
 
-* @param word* C ´ÜÀÏ ¿öµå °ö¼À ¿¬»êÀÇ °á°ú¸¦ ÀúÀåÇÒ word Çü Æ÷ÀÎÅÍ º¯¼ö
-* @param word* A ´ÜÀÏ ¿öµå °ö¼À ¿¬»êÀÇ °öÇÏ´Â ¼öÀÎ word Çü Æ÷ÀÎÅÍ º¯¼ö
-* @param word* B ´ÜÀÏ ¿öµå °ö¼À ¿¬»êÀÇ °öÇÏ´Â ¼öÀÎ word Çü Æ÷ÀÎÅÍ º¯¼ö
-* @return SUCCESS ¼º°ø ½Ã
-* @throws ERROR A, B, C°¡ ¹ÌÇÒ´ç ½Ã
+* @param word* C ë‹¨ì¼ ì›Œë“œ ê³±ì…ˆ ì—°ì‚°ì˜ ê²°ê³¼ë¥¼ ì €ì¥í•  word í˜• í¬ì¸í„° ë³€ìˆ˜
+* @param word* A ë‹¨ì¼ ì›Œë“œ ê³±ì…ˆ ì—°ì‚°ì˜ ê³±í•˜ëŠ” ìˆ˜ì¸ word í˜• í¬ì¸í„° ë³€ìˆ˜
+* @param word* B ë‹¨ì¼ ì›Œë“œ ê³±ì…ˆ ì—°ì‚°ì˜ ê³±í•˜ëŠ” ìˆ˜ì¸ word í˜• í¬ì¸í„° ë³€ìˆ˜
+* @return SUCCESS ì„±ê³µ ì‹œ
+* @throws ERROR A, B, Cê°€ ë¯¸í• ë‹¹ ì‹œ
 */
-int MUL_Word(word* C, word* A, word* B) // ´ÜÀÏ ¿öµå °ö¼À
+int MUL_Word(word* C, word* A, word* B) // ë‹¨ì¼ ì›Œë“œ ê³±ì…ˆ
 {
-	int carry0 = 0; // ¿öµå°£ÀÇ µ¡¼ÀÀ» ÅëÇØ »ı¼ºµÇ´Â carry¸¦ ´ãÀ» int Çü º¯¼ö carry0
-	int carry1 = 0; // ¿öµå°£ÀÇ µ¡¼ÀÀ» ÅëÇØ »ı¼ºµÇ´Â carry¸¦ ´ãÀ» int Çü º¯¼ö carry1
+	int carry0 = 0; // ì›Œë“œê°„ì˜ ë§ì…ˆì„ í†µí•´ ìƒì„±ë˜ëŠ” carryë¥¼ ë‹´ì„ int í˜• ë³€ìˆ˜ carry0
+	int carry1 = 0; // ì›Œë“œê°„ì˜ ë§ì…ˆì„ í†µí•´ ìƒì„±ë˜ëŠ” carryë¥¼ ë‹´ì„ int í˜• ë³€ìˆ˜ carry1
 
-	word sum0 = 0; // ¿öµå°£ÀÇ µ¡¼ÀÀ» ´ãÀ» wordÇü º¯¼ö sum0
-	word sum1 = 0; // ¿öµå°£ÀÇ µ¡¼ÀÀ» ´ãÀ» wordÇü º¯¼ö sum1
-	word sum2 = 0; // ¿öµå°£ÀÇ µ¡¼ÀÀ» ´ãÀ» wordÇü º¯¼ö sum2
-	word mul0 = 0; // ´ÜÀÏ ¿öµå °ö¼À °á°ú Áß ÇÏÀ§ ¿öµå¸¦ ´ãÀ» wordÇü º¯¼ö mul0
-	word mul1 = 0; // ´ÜÀÏ ¿öµå °ö¼À °á°ú Áß »óÀ§ ¿öµå¸¦ ´ãÀ» wordÇü º¯¼ö mul1
-	word A1 = 0; // AÀÇ ÃÖ»óÀ§ºñÆ®ºÎÅÍ Áß°£ºñÆ®±îÁö ´ãÀ» wordÇü º¯¼ö A1
-	word B1 = 0; // BÀÇ ÃÖ»óÀ§ºñÆ®ºÎÅÍ Áß°£ºñÆ®±îÁö ´ãÀ» wordÇü º¯¼ö B1
-	word A0 = 0; // AÀÇ Áß°£ºñÆ®ºÎÅÍ ÃÖÇÏÀ§ ºñÆ®±îÁö ´ãÀ» wordÇü º¯¼ö A0
-	word B0 = 0; // BÀÇ Áß°£ºñÆ®ºÎÅÍ ÃÖÇÏÀ§ ºñÆ®±îÁö ´ãÀ» wordÇü º¯¼ö B0
+	word sum0 = 0; // ì›Œë“œê°„ì˜ ë§ì…ˆì„ ë‹´ì„ wordí˜• ë³€ìˆ˜ sum0
+	word sum1 = 0; // ì›Œë“œê°„ì˜ ë§ì…ˆì„ ë‹´ì„ wordí˜• ë³€ìˆ˜ sum1
+	word sum2 = 0; // ì›Œë“œê°„ì˜ ë§ì…ˆì„ ë‹´ì„ wordí˜• ë³€ìˆ˜ sum2
+	word mul0 = 0; // ë‹¨ì¼ ì›Œë“œ ê³±ì…ˆ ê²°ê³¼ ì¤‘ í•˜ìœ„ ì›Œë“œë¥¼ ë‹´ì„ wordí˜• ë³€ìˆ˜ mul0
+	word mul1 = 0; // ë‹¨ì¼ ì›Œë“œ ê³±ì…ˆ ê²°ê³¼ ì¤‘ ìƒìœ„ ì›Œë“œë¥¼ ë‹´ì„ wordí˜• ë³€ìˆ˜ mul1
+	word A1 = 0; // Aì˜ ìµœìƒìœ„ë¹„íŠ¸ë¶€í„° ì¤‘ê°„ë¹„íŠ¸ê¹Œì§€ ë‹´ì„ wordí˜• ë³€ìˆ˜ A1
+	word B1 = 0; // Bì˜ ìµœìƒìœ„ë¹„íŠ¸ë¶€í„° ì¤‘ê°„ë¹„íŠ¸ê¹Œì§€ ë‹´ì„ wordí˜• ë³€ìˆ˜ B1
+	word A0 = 0; // Aì˜ ì¤‘ê°„ë¹„íŠ¸ë¶€í„° ìµœí•˜ìœ„ ë¹„íŠ¸ê¹Œì§€ ë‹´ì„ wordí˜• ë³€ìˆ˜ A0
+	word B0 = 0; // Bì˜ ì¤‘ê°„ë¹„íŠ¸ë¶€í„° ìµœí•˜ìœ„ ë¹„íŠ¸ê¹Œì§€ ë‹´ì„ wordí˜• ë³€ìˆ˜ B0
 
 	if ((C == NULL) | (B == NULL) | (A == NULL))
 		return ERROR;
 
-	A1 = ((*A) >> (WORD_BIT_LEN >> 1)); // AÀÇ ÃÖ»óÀ§ºñÆ®ºÎÅÍ Áß°£ºñÆ®±îÁö
-	B1 = ((*B) >> (WORD_BIT_LEN >> 1)); // BÀÇ ÃÖ»óÀ§ºñÆ®ºÎÅÍ Áß°£ºñÆ®±îÁö
-	A0 = (*A) & (((word)1 << (WORD_BIT_LEN >> 1)) - 1); // AÀÇ Áß°£ºñÆ®ºÎÅÍ ÃÖÇÏÀ§ ºñÆ®±îÁö
-	B0 = (*B) & (((word)1 << (WORD_BIT_LEN >> 1)) - 1); // BÀÇ Áß°£ºñÆ®ºÎÅÍ ÃÖÇÏÀ§ ºñÆ®±îÁö
+	A1 = ((*A) >> (WORD_BIT_LEN >> 1)); // Aì˜ ìµœìƒìœ„ë¹„íŠ¸ë¶€í„° ì¤‘ê°„ë¹„íŠ¸ê¹Œì§€
+	B1 = ((*B) >> (WORD_BIT_LEN >> 1)); // Bì˜ ìµœìƒìœ„ë¹„íŠ¸ë¶€í„° ì¤‘ê°„ë¹„íŠ¸ê¹Œì§€
+	A0 = (*A) & (((word)1 << (WORD_BIT_LEN >> 1)) - 1); // Aì˜ ì¤‘ê°„ë¹„íŠ¸ë¶€í„° ìµœí•˜ìœ„ ë¹„íŠ¸ê¹Œì§€
+	B0 = (*B) & (((word)1 << (WORD_BIT_LEN >> 1)) - 1); // Bì˜ ì¤‘ê°„ë¹„íŠ¸ë¶€í„° ìµœí•˜ìœ„ ë¹„íŠ¸ê¹Œì§€
 
-	mul1 = A1 * B1; //  [line 3] A1°ú B1À» °öÇØ mul1¿¡ ´ëÀÔ
-	mul0 = A0 * B0; //  [line 3] A0¿Í B0¸¦ °öÇØ mul0¿¡ ´ëÀÔ
-	sum0 = A1 * B0; //  [line 4] A1°ú B0¸¦ °öÇØ sum0¿¡ ´ëÀÔ
-	sum1 = A0 * B1; //	[line 4] A0¿Í B1À» °öÇØ sum1¿¡ ´ëÀÔ
-	sum1 += sum0; //	[line 5] sum1¿¡ sum0¸¦ µ¡¼À
+	mul1 = A1 * B1; //  [line 3] A1ê³¼ B1ì„ ê³±í•´ mul1ì— ëŒ€ì…
+	mul0 = A0 * B0; //  [line 3] A0ì™€ B0ë¥¼ ê³±í•´ mul0ì— ëŒ€ì…
+	sum0 = A1 * B0; //  [line 4] A1ê³¼ B0ë¥¼ ê³±í•´ sum0ì— ëŒ€ì…
+	sum1 = A0 * B1; //	[line 4] A0ì™€ B1ì„ ê³±í•´ sum1ì— ëŒ€ì…
+	sum1 += sum0; //	[line 5] sum1ì— sum0ë¥¼ ë§ì…ˆ
 	
-	if (sum1 < sum0) // [line 6] carry ¹ß»ıÇßÀ¸¸é,
-		carry1 = 1; // [line 7] carr1°¡ 1ÀÌ µÇµµ·Ï ´ëÀÔ
+	if (sum1 < sum0) // [line 6] carry ë°œìƒí–ˆìœ¼ë©´,
+		carry1 = 1; // [line 7] carr1ê°€ 1ì´ ë˜ë„ë¡ ëŒ€ì…
 	
-	sum2 = (sum1 & (((word)1 << (WORD_BIT_LEN >> 1)) - 1));  // sum1ÀÇ µŞºÎºĞ(Áß°£ºñÆ® ~ ÃÖÇÏÀ§ºñÆ®)À» ¸¸µé¾î¼­ sum2¿¡ ´ëÀÔ
-	sum2 = sum2 << (WORD_BIT_LEN >> 1); // [line 8] sum1ÀÇ µŞºÎºĞ(Áß°£ºñÆ® ~ ÃÖÇÏÀ§ºñÆ®)´Â mul0¿Í ´õÇÒ ¶§ ÀÚ¸®¸¦ ¸ÂÃçÁà¾ßÇÏ¹Ç·Î
-	sum1 = sum1 >> (WORD_BIT_LEN >> 1); // [line 9] sum1ÀÇ ¾ÕºÎºĞ(ÃÖ»óÀ§ºñÆ® ~ Áß°£ºñÆ®)À» ¸¸µé¾îÁÖ±â
-	mul0 = sum2 + mul0; // [line 10] °ö¼À °á°úÀÇ ´ÜÀÏ ¿öµå Áß ÇÏÀ§ ¿öµå ºÎºĞ µ¡¼À ¿¬»ê
+	sum2 = (sum1 & (((word)1 << (WORD_BIT_LEN >> 1)) - 1));  // sum1ì˜ ë’·ë¶€ë¶„(ì¤‘ê°„ë¹„íŠ¸ ~ ìµœí•˜ìœ„ë¹„íŠ¸)ì„ ë§Œë“¤ì–´ì„œ sum2ì— ëŒ€ì…
+	sum2 = sum2 << (WORD_BIT_LEN >> 1); // [line 8] sum1ì˜ ë’·ë¶€ë¶„(ì¤‘ê°„ë¹„íŠ¸ ~ ìµœí•˜ìœ„ë¹„íŠ¸)ëŠ” mul0ì™€ ë”í•  ë•Œ ìë¦¬ë¥¼ ë§ì¶°ì¤˜ì•¼í•˜ë¯€ë¡œ
+	sum1 = sum1 >> (WORD_BIT_LEN >> 1); // [line 9] sum1ì˜ ì•ë¶€ë¶„(ìµœìƒìœ„ë¹„íŠ¸ ~ ì¤‘ê°„ë¹„íŠ¸)ì„ ë§Œë“¤ì–´ì£¼ê¸°
+	mul0 = sum2 + mul0; // [line 10] ê³±ì…ˆ ê²°ê³¼ì˜ ë‹¨ì¼ ì›Œë“œ ì¤‘ í•˜ìœ„ ì›Œë“œ ë¶€ë¶„ ë§ì…ˆ ì—°ì‚°
 	
-	if (mul0 < sum2) // [line 11] µ¡¼À ¿¬»ê¿¡¼­ carry°¡ ¹ß»ıÇßÀ¸¸é,
+	if (mul0 < sum2) // [line 11] ë§ì…ˆ ì—°ì‚°ì—ì„œ carryê°€ ë°œìƒí–ˆìœ¼ë©´,
 		carry0 = 1; // [line 12] carry1 = 1
 	
-	mul1 = sum1 + mul1 + carry0 + ((word)carry1 << (WORD_BIT_LEN >> 1)); // [line 13] °ö¼À °á°úÀÇ ´ÜÀÏ ¿öµå Áß »óÀ§ ¿öµå ºÎºĞ µ¡¼À ¿¬»ê
+	mul1 = sum1 + mul1 + carry0 + ((word)carry1 << (WORD_BIT_LEN >> 1)); // [line 13] ê³±ì…ˆ ê²°ê³¼ì˜ ë‹¨ì¼ ì›Œë“œ ì¤‘ ìƒìœ„ ì›Œë“œ ë¶€ë¶„ ë§ì…ˆ ì—°ì‚°
 
-	*C = mul0; // [line 14] °ö¼À °á°ú ÈÄÀÇ ´ÜÀÏ ¿öµå Áß ÇÏÀ§¿¡ ´ëÀÔ
-	*(C + 1) = mul1; // [line 14] °ö¼À °á°ú ÈÄÀÇ ´ÜÀÏ ¿öµå Áß »óÀ§¿¡ ´ëÀÔ
+	*C = mul0; // [line 14] ê³±ì…ˆ ê²°ê³¼ í›„ì˜ ë‹¨ì¼ ì›Œë“œ ì¤‘ í•˜ìœ„ì— ëŒ€ì…
+	*(C + 1) = mul1; // [line 14] ê³±ì…ˆ ê²°ê³¼ í›„ì˜ ë‹¨ì¼ ì›Œë“œ ì¤‘ ìƒìœ„ì— ëŒ€ì…
 
 	return SUCCESS;
 }
@@ -903,14 +903,14 @@ int MUL_Word(word* C, word* A, word* B) // ´ÜÀÏ ¿öµå °ö¼À
 	23: end for
 	24: Sign(C) = Sign(A) ^ Sign(B)
 
-* @param bigint** C ´ÙÁß ¿öµå °ö¼À ¿¬»êÀÇ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºí Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* A ´ÙÁß ¿öµå °ö¼À ¿¬»êÀÇ °öÇÏ´Â ¼öÀÎ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* B ´ÙÁß ¿öµå °ö¼À ¿¬»êÀÇ °öÇÏ´Â ¼öÀÎ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
-* @return SUCCESS ¼º°ø ½Ã
+* @param bigint** C ë‹¤ì¤‘ ì›Œë“œ ê³±ì…ˆ ì—°ì‚°ì˜ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸” í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* A ë‹¤ì¤‘ ì›Œë“œ ê³±ì…ˆ ì—°ì‚°ì˜ ê³±í•˜ëŠ” ìˆ˜ì¸ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* B ë‹¤ì¤‘ ì›Œë“œ ê³±ì…ˆ ì—°ì‚°ì˜ ê³±í•˜ëŠ” ìˆ˜ì¸ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+* @return SUCCESS ì„±ê³µ ì‹œ
 * @throws
 	ERROR
-	ERROR A, B, CÀÇ ºÎÈ£ °¡Á®¿À±â ½ÇÆĞ ½Ã
-	ERROR A, B, CÀÇ word length°¡ ¾ç¼ö°¡ ¾Æ´Ñ °æ¿ì
+	ERROR A, B, Cì˜ ë¶€í˜¸ ê°€ì ¸ì˜¤ê¸° ì‹¤íŒ¨ ì‹œ
+	ERROR A, B, Cì˜ word lengthê°€ ì–‘ìˆ˜ê°€ ì•„ë‹Œ ê²½ìš°
 */
 int MUL_Multi(bigint** C, bigint* A, bigint* B)
 {
@@ -927,72 +927,72 @@ int MUL_Multi(bigint** C, bigint* A, bigint* B)
 	if (sign_b == ERROR)
 		return ERROR;
 
-	if ((BI_Is_Zero(&A) & BI_Is_Zero(&B)) == 0) // [line 1] ÇÇ¿¬»êÀÚÁß ÇÏ³ª¶óµµ 0ÀÌ¸é,
+	if ((BI_Is_Zero(&A) & BI_Is_Zero(&B)) == 0) // [line 1] í”¼ì—°ì‚°ìì¤‘ í•˜ë‚˜ë¼ë„ 0ì´ë©´,
 	{
-		BI_Set_Zero(C); // [line 2] °ö¼À °á°ú´Â 0ÀÌ¹Ç·Î, ¿¬»ê ÁøÇàÇÏÁö ¾Ê°í 0 Ãâ·Â ÈÄ
-		return SUCCESS; // return;Ã³¸®
+		BI_Set_Zero(C); // [line 2] ê³±ì…ˆ ê²°ê³¼ëŠ” 0ì´ë¯€ë¡œ, ì—°ì‚° ì§„í–‰í•˜ì§€ ì•Šê³  0 ì¶œë ¥ í›„
+		return SUCCESS; // return;ì²˜ë¦¬
 	}
 
 	if (BI_Is_One(&A) == 0) // [line 4]
 	{
-		BI_Assign(C, B); // C <- 1 * B ÀÌ¹Ç·Î C¿¡ B assign
-		if (sign_a == 0) // [line 5] 1ÀÌ ¾ç¼öÀÎ +1ÀÌ¸é,
-			(*C)->sign = sign_b; // [line 6] CÀÇ ºÎÈ£°¡ BÀÇ ºÎÈ£¿Í µ¿ÀÏÇÏ°Ô
-		else // [line 7] 1ÀÌ À½¼öÀÎ -1ÀÌ¸é, 
-			(*C)->sign = !sign_b; // [line 8] CÀÇ ºÎÈ£°¡ BÀÇ ºÎÈ£¿Í ¹İ´ë·Î
+		BI_Assign(C, B); // C <- 1 * B ì´ë¯€ë¡œ Cì— B assign
+		if (sign_a == 0) // [line 5] 1ì´ ì–‘ìˆ˜ì¸ +1ì´ë©´,
+			(*C)->sign = sign_b; // [line 6] Cì˜ ë¶€í˜¸ê°€ Bì˜ ë¶€í˜¸ì™€ ë™ì¼í•˜ê²Œ
+		else // [line 7] 1ì´ ìŒìˆ˜ì¸ -1ì´ë©´, 
+			(*C)->sign = !sign_b; // [line 8] Cì˜ ë¶€í˜¸ê°€ Bì˜ ë¶€í˜¸ì™€ ë°˜ëŒ€ë¡œ
 		
 		return SUCCESS;
 	}
 
 	if (BI_Is_One(&B) == 0) // [line 11]
 	{
-		BI_Assign(C, A); // C <- A * 1 ÀÌ¹Ç·Î C¿¡ B assign
-		if (sign_a == 0) // [line 12] 1ÀÌ ¾ç¼öÀÎ +1ÀÌ¸é,
-			(*C)->sign = sign_a; // [line 13] CÀÇ ºÎÈ£°¡ BÀÇ ºÎÈ£¿Í µ¿ÀÏÇÏ°Ô
-		else // [line 14] 1ÀÌ À½¼öÀÎ -1ÀÌ¸é, 
-			(*C)->sign = !sign_a; // [line 15] CÀÇ ºÎÈ£°¡ BÀÇ ºÎÈ£¿Í ¹İ´ë·Î
+		BI_Assign(C, A); // C <- A * 1 ì´ë¯€ë¡œ Cì— B assign
+		if (sign_a == 0) // [line 12] 1ì´ ì–‘ìˆ˜ì¸ +1ì´ë©´,
+			(*C)->sign = sign_a; // [line 13] Cì˜ ë¶€í˜¸ê°€ Bì˜ ë¶€í˜¸ì™€ ë™ì¼í•˜ê²Œ
+		else // [line 14] 1ì´ ìŒìˆ˜ì¸ -1ì´ë©´, 
+			(*C)->sign = !sign_a; // [line 15] Cì˜ ë¶€í˜¸ê°€ Bì˜ ë¶€í˜¸ì™€ ë°˜ëŒ€ë¡œ
 		
 		return SUCCESS;
 	}
 
-	BI_Get_Word_Length(&size_a, &A); // AÀÇ word ±æÀÌ¸¦ size_a¿¡ ´ëÀÔ
-	BI_Get_Word_Length(&size_b, &B); // BÀÇ word ±æÀÌ¸¦ size_b¿¡ ´ëÀÔ
+	BI_Get_Word_Length(&size_a, &A); // Aì˜ word ê¸¸ì´ë¥¼ size_aì— ëŒ€ì…
+	BI_Get_Word_Length(&size_b, &B); // Bì˜ word ê¸¸ì´ë¥¼ size_bì— ëŒ€ì…
 
 	if ((size_a < 0) | (size_b < 0))
 		return ERROR;
 
-	bigint* Temp = NULL; // ´ÜÀÏ ¿öµå °ö¼À ¿¬»êÀÇ °á°ú¸¦ ÀúÀåÇØ C¿Í µ¡¼À ¿¬»êÀ» ÁøÇàÇÒ big integerÇü Æ÷ÀÎÅÍ
+	bigint* Temp = NULL; // ë‹¨ì¼ ì›Œë“œ ê³±ì…ˆ ì—°ì‚°ì˜ ê²°ê³¼ë¥¼ ì €ì¥í•´ Cì™€ ë§ì…ˆ ì—°ì‚°ì„ ì§„í–‰í•  big integerí˜• í¬ì¸í„°
 	
-	BI_Get_Word_Length(&size_c, C); // CÀÇ word ±æÀÌ¸¦ size_r¿¡ ´ëÀÔ
-	BI_New(&Temp, size_c); // C¿Í µ¡¼À ¿¬»êÀ» ÁøÇàÇØ¾ßÇÏ¹Ç·Î C¿Í µ¿ÀÏÇÑ wordlenÀ¸·Î »ı¼º
+	BI_Get_Word_Length(&size_c, C); // Cì˜ word ê¸¸ì´ë¥¼ size_rì— ëŒ€ì…
+	BI_New(&Temp, size_c); // Cì™€ ë§ì…ˆ ì—°ì‚°ì„ ì§„í–‰í•´ì•¼í•˜ë¯€ë¡œ Cì™€ ë™ì¼í•œ wordlenìœ¼ë¡œ ìƒì„±
 
 	for (i = 0; i < B->wordlen; i++) // [line 17]
 	{
 		for (j = 0; j < A->wordlen; j++) // [line 18]
 		{
-			ret = MUL_Word(&Temp->a[i + j], &A->a[j], &B->a[i]); // [line 19, 20] AÀÇ ´ÜÀÏ¿öµå¿Í BÀÇ ´ÜÀÏ¿öµå ¿¬»ê ÈÄ TempÀÇ ´ÜÀÏ ¿öµå¿¡ ´ëÀÔ
+			ret = MUL_Word(&Temp->a[i + j], &A->a[j], &B->a[i]); // [line 19, 20] Aì˜ ë‹¨ì¼ì›Œë“œì™€ Bì˜ ë‹¨ì¼ì›Œë“œ ì—°ì‚° í›„ Tempì˜ ë‹¨ì¼ ì›Œë“œì— ëŒ€ì…
 			if (ret == -1)
 			{
 				BI_Delete(&Temp);
 				return ERROR;
 			}
 				
-			ret = ADDC_AAB(C, C, &Temp, 0); // [line 21] ´ÜÀÏ¿öµå °ö¼ÀÇÑ Temp¿Í C¸¦ µ¡¼À¿¬»ê ÁøÇà
+			ret = ADDC_AAB(C, C, &Temp, 0); // [line 21] ë‹¨ì¼ì›Œë“œ ê³±ì…ˆí•œ Tempì™€ Cë¥¼ ë§ì…ˆì—°ì‚° ì§„í–‰
 			if (ret == -1)
 			{
 				BI_Delete(&Temp);
 				return ERROR;
 			}
 			
-			Temp->a[i + j] = 0; // °ö¼À ¿¬»ê¿¡ »ç¿ëµÈ ¿öµå ºÎºĞ ÃÊ±âÈ­
-			Temp->a[i + j + 1] = 0; // À§¿Í µ¿ÀÏ
+			Temp->a[i + j] = 0; // ê³±ì…ˆ ì—°ì‚°ì— ì‚¬ìš©ëœ ì›Œë“œ ë¶€ë¶„ ì´ˆê¸°í™”
+			Temp->a[i + j + 1] = 0; // ìœ„ì™€ ë™ì¼
 		}
 	}
 	
-	BI_Delete(&Temp); // ÇÒ´çµÈ Temp¸¦ delete.
+	BI_Delete(&Temp); // í• ë‹¹ëœ Tempë¥¼ delete.
 	
-	(*C)->sign = A->sign ^ B->sign; // °á°ú°ª CÀÇ ºÎÈ£¸¦ °áÁ¤ [line 24]
-	BI_Refine(*C); // Refine ½ÃÄÑÁÖ±â
+	(*C)->sign = A->sign ^ B->sign; // ê²°ê³¼ê°’ Cì˜ ë¶€í˜¸ë¥¼ ê²°ì • [line 24]
+	BI_Refine(*C); // Refine ì‹œì¼œì£¼ê¸°
 	
 	return SUCCESS;
 }
@@ -1024,13 +1024,13 @@ int MUL_Multi(bigint** C, bigint* A, bigint* B)
 	 16 :	C <- R
 	 17 : end procedure
 
- * @param bigint** C Ä«¶óÃß¹Ù °ö¼À °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint** A Ä«¶óÃß¹Ù °ö¼ÀÀ» ¼öÇàÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint** B Ä«¶óÃß¹Ù °ö¼ÀÀ» ¼öÇàÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
+ * @param bigint** C ì¹´ë¼ì¶”ë°” ê³±ì…ˆ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint** A ì¹´ë¼ì¶”ë°” ê³±ì…ˆì„ ìˆ˜í–‰í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint** B ì¹´ë¼ì¶”ë°” ê³±ì…ˆì„ ìˆ˜í–‰í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
  * @return SUCCESS
  * @throws
-	ERROR A(B)ÀÇ word length °¡Á®¿À±â ½ÇÆĞ ½Ã
-	ERROR S0(S1)ÀÇ ºÎÈ£ °¡Á®¿À±â ½ÇÆĞ ½Ã
+	ERROR A(B)ì˜ word length ê°€ì ¸ì˜¤ê¸° ì‹¤íŒ¨ ì‹œ
+	ERROR S0(S1)ì˜ ë¶€í˜¸ ê°€ì ¸ì˜¤ê¸° ì‹¤íŒ¨ ì‹œ
  */
 int MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 {
@@ -1039,18 +1039,18 @@ int MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 	int S0_sign, S1_sign;
 	int ret;
 
-	BI_Get_Word_Length(&A_Len, &A); // A_Len = AÀÇ ¿öµå¿­ ±æÀÌ
-	BI_Get_Word_Length(&B_Len, &B); // B_Len = BÀÇ ¿öµå¿­ ±æÀÌ
+	BI_Get_Word_Length(&A_Len, &A); // A_Len = Aì˜ ì›Œë“œì—´ ê¸¸ì´
+	BI_Get_Word_Length(&B_Len, &B); // B_Len = Bì˜ ì›Œë“œì—´ ê¸¸ì´
 
-	// ¿¹¿Ü Ã³¸®
+	// ì˜ˆì™¸ ì²˜ë¦¬
 	if (A_Len < 0)
 		return ERROR;
 	if (B_Len < 0)
 		return ERROR;
 
-	if (FLAG >= MIN(A_Len, B_Len)) // [line 2] AÀÇ ¿öµå¿­ÀÇ ±æÀÌ¿Í BÀÇ ¿öµå¿­ÀÇ ±æÀÌ Áß ´õ ÀÛÀº °ÍÀÌ flagº¸´Ù ÀÛÀ¸¸é
+	if (FLAG >= MIN(A_Len, B_Len)) // [line 2] Aì˜ ì›Œë“œì—´ì˜ ê¸¸ì´ì™€ Bì˜ ì›Œë“œì—´ì˜ ê¸¸ì´ ì¤‘ ë” ì‘ì€ ê²ƒì´ flagë³´ë‹¤ ì‘ìœ¼ë©´
 	{
-		ret = MUL_Multi(C, A, B); // [line 3] textbook multiplication ½ÇÇà
+		ret = MUL_Multi(C, A, B); // [line 3] textbook multiplication ì‹¤í–‰
 		if (ret == ERROR)
 			return ERROR;
 		
@@ -1079,15 +1079,15 @@ int MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 	BI_Assign(&B1, B);
 	BI_Assign(&B0, B);
 
-	BI_Right_Shift(A1, len * WORD_BIT_LEN); // [line 6] A1 = A >> len word (A¸¦ len ¿öµå¸¸Å­ ¿À¸¥ÂÊÀ¸·Î ÀÌµ¿)
-	BI_Reduction(&A0, len * WORD_BIT_LEN); // [line 6] A0 = A mod (2^(len * wordlen)) (A¸¦ len ¿öµå¸¸Å­ modular ¿¬»ê ¼öÇà)
-	BI_Right_Shift(B1, len * WORD_BIT_LEN); // [line 7] B1 = A >> len word (A¸¦ len ¿öµå¸¸Å­ ¿À¸¥ÂÊÀ¸·Î ÀÌµ¿)
-	BI_Reduction(&B0, len * WORD_BIT_LEN); // [line 7] B0 = A mod (2^(len * wordlen)) (A¸¦ len ¿öµå¸¸Å­ modular ¿¬»ê ¼öÇà)
+	BI_Right_Shift(A1, len * WORD_BIT_LEN); // [line 6] A1 = A >> len word (Aë¥¼ len ì›Œë“œë§Œí¼ ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™)
+	BI_Reduction(&A0, len * WORD_BIT_LEN); // [line 6] A0 = A mod (2^(len * wordlen)) (Aë¥¼ len ì›Œë“œë§Œí¼ modular ì—°ì‚° ìˆ˜í–‰)
+	BI_Right_Shift(B1, len * WORD_BIT_LEN); // [line 7] B1 = A >> len word (Aë¥¼ len ì›Œë“œë§Œí¼ ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™)
+	BI_Reduction(&B0, len * WORD_BIT_LEN); // [line 7] B0 = A mod (2^(len * wordlen)) (Aë¥¼ len ì›Œë“œë§Œí¼ modular ì—°ì‚° ìˆ˜í–‰)
 
 	BI_New(&T0, len * 2);
 	BI_New(&T1, len * 2);
-	BI_New(&S0, Compare_WordLen(B0, B1)); // S0 = B1 - B0ÀÌ´Ï±î B1°ú B0 Áß ´õ Å« ¿öµå ±æÀÌ¸¸Å­ bigint »ı¼º
-	BI_New(&S1, Compare_WordLen(A0, A1)); // S1 = A0 - A1ÀÌ´Ï±î A0°ú A1 Áß ´õ Å« ¿öµå ±æÀÌ¸¸Å­ bigint »ı¼º
+	BI_New(&S0, Compare_WordLen(B0, B1)); // S0 = B1 - B0ì´ë‹ˆê¹Œ B1ê³¼ B0 ì¤‘ ë” í° ì›Œë“œ ê¸¸ì´ë§Œí¼ bigint ìƒì„±
+	BI_New(&S1, Compare_WordLen(A0, A1)); // S1 = A0 - A1ì´ë‹ˆê¹Œ A0ê³¼ A1 ì¤‘ ë” í° ì›Œë“œ ê¸¸ì´ë§Œí¼ bigint ìƒì„±
 	BI_New(&R, len * 4);
 	BI_New(&S, len * 2);
 
@@ -1132,7 +1132,7 @@ int MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 
 	bigint* T1_tmp = NULL;
 	BI_Assign(&T1_tmp, T1);
-	BI_Left_Shift(T1_tmp, 2 * WORD_BIT_LEN * len); // T1_tmp = T1À» 2 * len ¿öµå¸¸Å­ ¿À¸¥ÂÊÀ¸·Î ÀÌµ¿
+	BI_Left_Shift(T1_tmp, 2 * WORD_BIT_LEN * len); // T1_tmp = T1ì„ 2 * len ì›Œë“œë§Œí¼ ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™
 
 	// [line 9] R = T1 || T0
 	for (i = 0; i < T1->wordlen; i++)
@@ -1186,7 +1186,7 @@ int MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 	S0_sign = BI_Get_Sign(S0);
 	S1_sign = BI_Get_Sign(S1);
 
-	// ¿¹¿Ü Ã³¸®
+	// ì˜ˆì™¸ ì²˜ë¦¬
 	if ((S0_sign == ERROR) | (S1_sign == ERROR))
 	{
 		BI_Delete(&A0);
@@ -1206,7 +1206,7 @@ int MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 		return ERROR;
 	}
 
-	// S0, S1Àº À½¼öÀÏ ¼ö ÀÖÀ¸¹Ç·Î Àı´ñ°ª ÃëÇØ ÁÖ±â
+	// S0, S1ì€ ìŒìˆ˜ì¼ ìˆ˜ ìˆìœ¼ë¯€ë¡œ ì ˆëŒ“ê°’ ì·¨í•´ ì£¼ê¸°
 	if (S1_sign == S0_sign)
 	{
 		if (S1_sign == NEGATIVE)
@@ -1245,7 +1245,7 @@ int MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 
 	BI_Refine(S);
 
-	// S ºÎÈ£ Á¤ÇØ ÁÖ±â
+	// S ë¶€í˜¸ ì •í•´ ì£¼ê¸°
 	if (S1_sign ^ S0_sign)
 		S->sign = NEGATIVE;
 	else
@@ -1299,7 +1299,7 @@ int MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 		return ERROR;
 	}
 	
-	BI_Left_Shift(ADD_result2, len * WORD_BIT_LEN); // [line 14] ADD_result2 << len ¿öµå
+	BI_Left_Shift(ADD_result2, len * WORD_BIT_LEN); // [line 14] ADD_result2 << len ì›Œë“œ
 	
 	ret = ADD_AAB(C, &R, &ADD_result2); // [line 15] C = R + ADD_result2
 	if (ret == ERROR)
@@ -1347,29 +1347,29 @@ int MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 /**
  * @brief Squaring
  * @details
-	flag¿¡ µû¶ó Á¦°ö ¿¬»ê ¼öÇà(Karatsuba sqauring / textbook sqauring)
+	flagì— ë”°ë¼ ì œê³± ì—°ì‚° ìˆ˜í–‰(Karatsuba sqauring / textbook sqauring)
 	Input  : A
 	Output : C = A ^ 2
- * @param bigint** C Á¦°ö ¿¬»êÀ» ¼öÇàÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint* A Á¦°ö ¿¬»êÀ» ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+ * @param bigint** C ì œê³± ì—°ì‚°ì„ ìˆ˜í–‰í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* A ì œê³± ì—°ì‚°ì„ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
  * @return SUCCESS
  * @throws
-	ERROR AÀÇ bigint ±¸Á¶Ã¼ ¹ÌÇÒ´ç ½Ã
-	ERROR AÀÇ word length°¡ ¾ç¼ö°¡ ¾Æ´Ñ °æ¿ì
-	ERROR flag ¹ÌÁöÁ¤ ½Ã
+	ERROR Aì˜ bigint êµ¬ì¡°ì²´ ë¯¸í• ë‹¹ ì‹œ
+	ERROR Aì˜ word lengthê°€ ì–‘ìˆ˜ê°€ ì•„ë‹Œ ê²½ìš°
+	ERROR flag ë¯¸ì§€ì • ì‹œ
  */
 int Squaring(bigint** C, bigint* A)
 {
 	int A_Len = 0;
 	int ret;
 
-	// ¿¹¿Ü Ã³¸®
+	// ì˜ˆì™¸ ì²˜ë¦¬
 	if (A == NULL)
 		return ERROR;
 
-	BI_Get_Word_Length(&A_Len, &A); // A_Len = AÀÇ ¿öµå¿­ ±æÀÌ
+	BI_Get_Word_Length(&A_Len, &A); // A_Len = Aì˜ ì›Œë“œì—´ ê¸¸ì´
 
-	// ¿¹¿Ü Ã³¸®
+	// ì˜ˆì™¸ ì²˜ë¦¬
 	if (A_Len <= 0)
 		return ERROR;
 
@@ -1394,7 +1394,7 @@ int Squaring(bigint** C, bigint* A)
 		
 		BI_Refine(*C);
 	}
-	else // ¿¹¿Ü Ã³¸®
+	else // ì˜ˆì™¸ ì²˜ë¦¬
 		return ERROR;
 
 	return SUCCESS;
@@ -1414,12 +1414,12 @@ int Squaring(bigint** C, bigint* A)
 	  5 : T <- T << (w/2 + 1)
 	  6 : C <- C + T
 
- * @param bigint* C Á¦°ö ¿¬»êÀ» ¼öÇàÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @param bigint* A Á¦°ö ¿¬»êÀ» ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+ * @param bigint* C ì œê³± ì—°ì‚°ì„ ìˆ˜í–‰í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* A ì œê³± ì—°ì‚°ì„ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
 
  * @return SUCCESS
  * @throws
-	ERROR AÀÇ ºÎÈ£ °¡Á®¿À±â ½ÇÆĞ ½Ã
+	ERROR Aì˜ ë¶€í˜¸ ê°€ì ¸ì˜¤ê¸° ì‹¤íŒ¨ ì‹œ
  */
 int Single_Squaring(bigint* C, bigint* A)
 {
@@ -1427,7 +1427,7 @@ int Single_Squaring(bigint* C, bigint* A)
 	int ret;
 
 	A_Sign = BI_Get_Sign(A);
-	if (A_Sign == ERROR) // ¿¹¿Ü Ã³¸®
+	if (A_Sign == ERROR) // ì˜ˆì™¸ ì²˜ë¦¬
 		return ERROR;
 
 	bigint* A1 = NULL;
@@ -1443,7 +1443,7 @@ int Single_Squaring(bigint* C, bigint* A)
 	BI_New(&C0, 1);
 	BI_New(&T, 2);
 
-	// A1 = |A| >> WORD_BIT_LEN / 2, A0 = |A| mod (WORD_BIT_LEN / 2) ¸¦ À§ÇÑ |A| Ã³¸®
+	// A1 = |A| >> WORD_BIT_LEN / 2, A0 = |A| mod (WORD_BIT_LEN / 2) ë¥¼ ìœ„í•œ |A| ì²˜ë¦¬
 	if (A_Sign == NEGATIVE)
 	{
 		BI_Flip_Sign(A1);
@@ -1516,12 +1516,12 @@ int Single_Squaring(bigint* C, bigint* A)
 	 12 : C2 <- C2 << 1
 	 13 : C <- ADD(C1, C2)
 
- * @param bigint** C Á¦°ö ¿¬»êÀ» ¼öÇàÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint* A Á¦°ö ¿¬»êÀ» ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+ * @param bigint** C ì œê³± ì—°ì‚°ì„ ìˆ˜í–‰í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* A ì œê³± ì—°ì‚°ì„ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
  * @return SUCCESS
  * @throws
-	ERROR AÀÇ word length°¡ ¾ç¼ö°¡ ¾Æ´Ñ °æ¿ì
-	ERROR bigint ±¸Á¶Ã¼ ³»ºÎ¿¡ ÀÖ´Â ¹è¿­ ÀçÇÒ´ç ½ÇÆĞ ½Ã
+	ERROR Aì˜ word lengthê°€ ì–‘ìˆ˜ê°€ ì•„ë‹Œ ê²½ìš°
+	ERROR bigint êµ¬ì¡°ì²´ ë‚´ë¶€ì— ìˆëŠ” ë°°ì—´ ì¬í• ë‹¹ ì‹¤íŒ¨ ì‹œ
  */
 int SQUC(bigint** C, bigint* A)
 {
@@ -1553,8 +1553,8 @@ int SQUC(bigint** C, bigint* A)
 	A_j->sign = A->sign;
 
 	BI_New(C, wordlen_A * 2 + 1);
-	BI_New(&C1, 2 * wordlen_A); // [line 1] Å©±â¸¸ Å©°Ô Àâ°í 0À¸·Î ¼³Á¤
-	BI_New(&C2, 2 * wordlen_A); // [line 1] Å©±â¸¸ Å©°Ô Àâ°í 0À¸·Î ¼³Á¤
+	BI_New(&C1, 2 * wordlen_A); // [line 1] í¬ê¸°ë§Œ í¬ê²Œ ì¡ê³  0ìœ¼ë¡œ ì„¤ì •
+	BI_New(&C2, 2 * wordlen_A); // [line 1] í¬ê¸°ë§Œ í¬ê²Œ ì¡ê³  0ìœ¼ë¡œ ì„¤ì •
 
 	for (j = 0; j < wordlen_A; j++)
 	{
@@ -1580,13 +1580,13 @@ int SQUC(bigint** C, bigint* A)
 		if (j == 0)
 		{
 			for (k = 0; k < temp1->wordlen; k++)
-				C1->a[k] = temp1->a[k]; // j = 0ÀÏ ¶§´Â C1 = T1 || C1 = T1 (C1ÀÌ Ã³À½¿¡ 0ÀÌ´Ï±î)
+				C1->a[k] = temp1->a[k]; // j = 0ì¼ ë•ŒëŠ” C1 = T1 || C1 = T1 (C1ì´ ì²˜ìŒì— 0ì´ë‹ˆê¹Œ)
 		}
 		else
 		{
 			for (k = 0; k < (temp1->wordlen - (2 * j)); k++)
 			{
-				C1->a[2 * j + k] = temp1->a[2 * j + k]; // ±× ´ÙÀ½ºÎÅÍ´Â T1ÀÌ 2 ¿öµå ´ÜÀ§·Î ¿ŞÂÊÀ¸·Î ½ÃÇÁÆ® ¿¬»êÇÑ °á°úÀÌ¹Ç·Î 2 * j¹øÂ°ºÎÅÍ ³Ö¾î ÁÖ±â
+				C1->a[2 * j + k] = temp1->a[2 * j + k]; // ê·¸ ë‹¤ìŒë¶€í„°ëŠ” T1ì´ 2 ì›Œë“œ ë‹¨ìœ„ë¡œ ì™¼ìª½ìœ¼ë¡œ ì‹œí”„íŠ¸ ì—°ì‚°í•œ ê²°ê³¼ì´ë¯€ë¡œ 2 * jë²ˆì§¸ë¶€í„° ë„£ì–´ ì£¼ê¸°
 
 			}
 		}
@@ -1616,9 +1616,9 @@ int SQUC(bigint** C, bigint* A)
 
 			c2_len = C2->wordlen;
 
-			len = MAX(C2->wordlen, temp2->wordlen) + 1; // C2 = C2 + temp2¸¦ ÇÏ±â À§ÇØ C2¿Í temp2 Áß ´õ ±ä ¿öµå¿­ÀÇ ±æÀÌ ±¸ÇÏ±â
+			len = MAX(C2->wordlen, temp2->wordlen) + 1; // C2 = C2 + temp2ë¥¼ í•˜ê¸° ìœ„í•´ C2ì™€ temp2 ì¤‘ ë” ê¸´ ì›Œë“œì—´ì˜ ê¸¸ì´ êµ¬í•˜ê¸°
 			C2->wordlen = len;
-			temp = (word*)realloc(C2->a, sizeof(word) * len); // new_wordlen¸¸Å­ bigint ±¸Á¶Ã¼ ÀçÇÒ´ç
+			temp = (word*)realloc(C2->a, sizeof(word) * len); // new_wordlenë§Œí¼ bigint êµ¬ì¡°ì²´ ì¬í• ë‹¹
 			
 			if (temp != NULL)
 				C2->a = temp;
@@ -1635,7 +1635,7 @@ int SQUC(bigint** C, bigint* A)
 			}
 
 			for (m = c2_len; m < len; m++)
-				C2->a[m] = 0; // ´Ã¾î³­ ±æÀÌ¸¸Å­ 0À¸·Î ÃÊ±âÈ­
+				C2->a[m] = 0; // ëŠ˜ì–´ë‚œ ê¸¸ì´ë§Œí¼ 0ìœ¼ë¡œ ì´ˆê¸°í™”
 
 			ret = ADD_AAB(&C2, &C2, &temp2); // [line 9]
 			if (ret == ERROR)
@@ -1691,18 +1691,18 @@ int SQUC(bigint** C, bigint* A)
 	  3 : end if
 	  4 : C <- SQUC(A)
 
- * @param bigint** C Á¦°ö ¿¬»êÀ» ¼öÇàÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint* A Á¦°ö ¿¬»êÀ» ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+ * @param bigint** C ì œê³± ì—°ì‚°ì„ ìˆ˜í–‰í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* A ì œê³± ì—°ì‚°ì„ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
 
  * @return SUCCESS
  * @throws
-	ERROR AÀÇ ºÎÈ£ °¡Á®¿À±â ½ÇÆĞ ½Ã
+	ERROR Aì˜ ë¶€í˜¸ ê°€ì ¸ì˜¤ê¸° ì‹¤íŒ¨ ì‹œ
  */
 int SQU(bigint** C, bigint* A)
 {
-	int flag0; // A°¡ 0ÀÎÁö ÆÇº°ÇÏ´Â flag
-	int flag1; // A°¡ 1ÀÎÁö ÆÇº°ÇÏ´Â flag
-	int flag2 = -1; // A°¡ À½¼öÀÏ ¶§ -1ÀÎÁö ÆÇº°ÇÏ´Â flag
+	int flag0; // Aê°€ 0ì¸ì§€ íŒë³„í•˜ëŠ” flag
+	int flag1; // Aê°€ 1ì¸ì§€ íŒë³„í•˜ëŠ” flag
+	int flag2 = -1; // Aê°€ ìŒìˆ˜ì¼ ë•Œ -1ì¸ì§€ íŒë³„í•˜ëŠ” flag
 	int sign;
 	int ret;
 
@@ -1717,30 +1717,30 @@ int SQU(bigint** C, bigint* A)
 		return ERROR;
 	}
 
-	if (sign == NEGATIVE) // AÀÇ ºÎÈ£°¡ À½¼öÀÎ °æ¿ì
+	if (sign == NEGATIVE) // Aì˜ ë¶€í˜¸ê°€ ìŒìˆ˜ì¸ ê²½ìš°
 	{
-		BI_Flip_Sign(temp); // ºÎÈ£ ¹Ù²Û µÚ
-		flag2 = BI_Is_One(&temp); // 1ÀÎÁö ÆÇº° (Áï, -1ÀÎÁö ÆÇº°)
+		BI_Flip_Sign(temp); // ë¶€í˜¸ ë°”ê¾¼ ë’¤
+		flag2 = BI_Is_One(&temp); // 1ì¸ì§€ íŒë³„ (ì¦‰, -1ì¸ì§€ íŒë³„)
 	}
 
-	flag0 = BI_Is_Zero(&A); // A°¡ 0ÀÎÁö ÆÇº°
-	flag1 = BI_Is_One(&A); // A°¡ 1ÀÎÁö ÆÇº°
+	flag0 = BI_Is_Zero(&A); // Aê°€ 0ì¸ì§€ íŒë³„
+	flag1 = BI_Is_One(&A); // Aê°€ 1ì¸ì§€ íŒë³„
 
-	if (flag0 == 0) // [line 1] A = 0ÀÎ °æ¿ì, A^2 = 0 return
-	{
-		BI_Assign(C, A); // [line 2]
-		BI_Delete(&temp);
-
-		return SUCCESS;
-	}
-	if (flag1 == 0) // [line 1] A = 1ÀÎ °æ¿ì, A^2 = 1 return
+	if (flag0 == 0) // [line 1] A = 0ì¸ ê²½ìš°, A^2 = 0 return
 	{
 		BI_Assign(C, A); // [line 2]
 		BI_Delete(&temp);
 
 		return SUCCESS;
 	}
-	if (flag2 == 0) // [line 1] A = -1ÀÎ °æ¿ì, A^2 = 1 return
+	if (flag1 == 0) // [line 1] A = 1ì¸ ê²½ìš°, A^2 = 1 return
+	{
+		BI_Assign(C, A); // [line 2]
+		BI_Delete(&temp);
+
+		return SUCCESS;
+	}
+	if (flag2 == 0) // [line 1] A = -1ì¸ ê²½ìš°, A^2 = 1 return
 	{
 		BI_Assign(C, temp); // [line 2]
 		BI_Delete(&temp);
@@ -1751,7 +1751,7 @@ int SQU(bigint** C, bigint* A)
 	BI_Delete(&temp);
 	BI_New(C, A->wordlen * 2 + 1);
 	
-	ret = SQUC(C, A); // A = 0. -1, 1ÀÌ ¾Æ´Ñ °æ¿ì SQUC ½ÇÇà
+	ret = SQUC(C, A); // A = 0. -1, 1ì´ ì•„ë‹Œ ê²½ìš° SQUC ì‹¤í–‰
 	if (ret == ERROR)
 		return ERROR;
 
@@ -1779,12 +1779,12 @@ int SQU(bigint** C, bigint* A)
 	 12 :	C <- R
 	 13 : end procedure
 
- * @param bigint** C Á¦°ö ¿¬»êÀ» ¼öÇàÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint* A Á¦°ö ¿¬»êÀ» ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+ * @param bigint** C ì œê³± ì—°ì‚°ì„ ìˆ˜í–‰í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* A ì œê³± ì—°ì‚°ì„ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
 
  * @return SUCCESS
  * @throws
-	ERROR AÀÇ word length°¡ ¾ç¼ö°¡ ¾Æ´Ñ °æ¿ì
+	ERROR Aì˜ word lengthê°€ ì–‘ìˆ˜ê°€ ì•„ë‹Œ ê²½ìš°
  */
 int SQUC_Karatsuba(bigint** C, bigint* A)
 {
@@ -1792,13 +1792,13 @@ int SQUC_Karatsuba(bigint** C, bigint* A)
 	int len, A_Len;
 	int ret;
 
-	BI_Get_Word_Length(&A_Len, &A); // A_Len = AÀÇ ¿öµå¿­ ±æÀÌ
+	BI_Get_Word_Length(&A_Len, &A); // A_Len = Aì˜ ì›Œë“œì—´ ê¸¸ì´
 	if (A_Len <= 0)
 		return ERROR;
 
-	if (FLAG >= A_Len) // [line 2] AÀÇ ¿öµå¿­ÀÇ ±æÀÌ¿Í BÀÇ ¿öµå¿­ÀÇ ±æÀÌ Áß ´õ ÀÛÀº °ÍÀÌ flagº¸´Ù ÀÛÀ¸¸é
+	if (FLAG >= A_Len) // [line 2] Aì˜ ì›Œë“œì—´ì˜ ê¸¸ì´ì™€ Bì˜ ì›Œë“œì—´ì˜ ê¸¸ì´ ì¤‘ ë” ì‘ì€ ê²ƒì´ flagë³´ë‹¤ ì‘ìœ¼ë©´
 	{
-		ret = SQUC(C, A); // [line 3] textbook squaring ½ÇÇà
+		ret = SQUC(C, A); // [line 3] textbook squaring ì‹¤í–‰
 		if (ret == ERROR)
 			return ERROR;
 
@@ -1862,7 +1862,7 @@ int SQUC_Karatsuba(bigint** C, bigint* A)
 
 	bigint* T1_tmp = NULL;
 	BI_Assign(&T1_tmp, T1);
-	BI_Left_Shift(T1_tmp, 2 * WORD_BIT_LEN * len); // T1_tmp = T1À» 2 * len ¿öµå¸¸Å­ ¿À¸¥ÂÊÀ¸·Î ÀÌµ¿
+	BI_Left_Shift(T1_tmp, 2 * WORD_BIT_LEN * len); // T1_tmp = T1ì„ 2 * len ì›Œë“œë§Œí¼ ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™
 
 	// [line 8] R = T1 || T0
 	for (i = 0; i < T1->wordlen; i++)
@@ -1887,7 +1887,7 @@ int SQUC_Karatsuba(bigint** C, bigint* A)
 	}
 
 	BI_Refine(S);
-	BI_Left_Shift(S, len * WORD_BIT_LEN + 1); // [line 10] S << len * WORD_BIT_LEN + 1 ºñÆ®¸¸Å­ ¿ŞÂÊÀ¸·Î ÀÌµ¿
+	BI_Left_Shift(S, len * WORD_BIT_LEN + 1); // [line 10] S << len * WORD_BIT_LEN + 1 ë¹„íŠ¸ë§Œí¼ ì™¼ìª½ìœ¼ë¡œ ì´ë™
 	
 	ret = ADDC(C, &R, &S, R->sign); // [line 11] C = R + S
 	if (ret == ERROR)
@@ -1917,24 +1917,24 @@ int SQUC_Karatsuba(bigint** C, bigint* A)
 /**
  * @brief Division
  * @details
-	flag¿¡ µû¶ó ³ª´°¼À ¿¬»ê ¼öÇà(binary long division / multi-precision long division)
+	flagì— ë”°ë¼ ë‚˜ëˆ—ì…ˆ ì—°ì‚° ìˆ˜í–‰(binary long division / multi-precision long division)
 	Input  : A, B
 	Output : Q, R (A = B * Q + R)
- * @param bigint** Q ³ª´°¼À ¿¬»êÀ» ¼öÇàÇÑ °á°ú Áß ¸òÀ» ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint** R ³ª´°¼À ¿¬»êÀ» ¼öÇàÇÑ °á°ú Áß ³ª¸ÓÁö ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint* A ³ª´°¼À ¿¬»ê¿¡¼­ ³ª´©·Á´Â ¼öÀÎ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @param bigint* B ³ª´©´Â ¼öÀÎ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+ * @param bigint** Q ë‚˜ëˆ—ì…ˆ ì—°ì‚°ì„ ìˆ˜í–‰í•œ ê²°ê³¼ ì¤‘ ëª«ì„ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint** R ë‚˜ëˆ—ì…ˆ ì—°ì‚°ì„ ìˆ˜í–‰í•œ ê²°ê³¼ ì¤‘ ë‚˜ë¨¸ì§€ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* A ë‚˜ëˆ—ì…ˆ ì—°ì‚°ì—ì„œ ë‚˜ëˆ„ë ¤ëŠ” ìˆ˜ì¸ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* B ë‚˜ëˆ„ëŠ” ìˆ˜ì¸ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
  * @return SUCCESS
  * @throws
-	ERROR flag ¹ÌÁöÁ¤ ½Ã
-	ERROR B > AÀÏ °æ¿ì
+	ERROR flag ë¯¸ì§€ì • ì‹œ
+	ERROR B > Aì¼ ê²½ìš°
  */
 int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 {
 	int size = 0;
 	int ret;
 
-	size = BI_Compare(&A, &B); // A¿Í BÀÇ Å©±â ºñ±³
+	size = BI_Compare(&A, &B); // Aì™€ Bì˜ í¬ê¸° ë¹„êµ
 
 	if (size == ERROR)
 		return ERROR;
@@ -1946,12 +1946,12 @@ int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 		return SUCCESS;
 	}
 
-	if (BI_Is_Zero(&B) == 0) // ³ª´©´Â ¼ö°¡ 0 ÀÌ¹Ç·Î
+	if (BI_Is_Zero(&B) == 0) // ë‚˜ëˆ„ëŠ” ìˆ˜ê°€ 0 ì´ë¯€ë¡œ
 	{
 		return ERROR;
 	}
 
-	if (A->sign | B->sign) // A, B > 0 ÀÇ Á¶°ÇÀ» ¸¸Á·ÇÏÁö ¾ÊÀ» ¶§
+	if (A->sign | B->sign) // A, B > 0 ì˜ ì¡°ê±´ì„ ë§Œì¡±í•˜ì§€ ì•Šì„ ë•Œ
 	{
 		return ERROR;
 	}
@@ -1991,10 +1991,10 @@ int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 	8 :	end for
 	9 :	return (Q, R)
 
-* @param bigint** Q Binary Long Divsion ¿¬»êÀÇ ¸ò¿¡ ´ëÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºí Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* R Binary Long Divsion ¿¬»êÀÇ ³ª¸ÓÁö¿¡ ´ëÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºí Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* A Binary Long Divsion ¿¬»êÀÇ ³ª´©·Á´Â ¼öÀÎ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* B Binary Long Divsion ¿¬»êÀÇ ³ª´©´Â ¼öÀÎ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+* @param bigint** Q Binary Long Divsion ì—°ì‚°ì˜ ëª«ì— ëŒ€í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸” í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* R Binary Long Divsion ì—°ì‚°ì˜ ë‚˜ë¨¸ì§€ì— ëŒ€í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸” í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* A Binary Long Divsion ì—°ì‚°ì˜ ë‚˜ëˆ„ë ¤ëŠ” ìˆ˜ì¸ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* B Binary Long Divsion ì—°ì‚°ì˜ ë‚˜ëˆ„ëŠ” ìˆ˜ì¸ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
 */
 int Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 {
@@ -2013,16 +2013,16 @@ int Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 	BI_Set_Zero(R); // [line 1]
 
 	BI_Get_Word_Length(&size, &A); // size == bigint A's word length.
-	size = size * WORD_BIT_LEN; // º¯¼ö size ´Â AÀÇ ÃÑ ºñÆ® ±æÀÌ
+	size = size * WORD_BIT_LEN; // ë³€ìˆ˜ size ëŠ” Aì˜ ì´ ë¹„íŠ¸ ê¸¸ì´
 	
-	for (i = size - 1; i >= 0; i--) // [line 2] ÃÖ»óÀ§ ºñÆ®ºÎÅÍ
+	for (i = size - 1; i >= 0; i--) // [line 2] ìµœìƒìœ„ ë¹„íŠ¸ë¶€í„°
 	{
-		len = (int)(i / WORD_BIT_LEN); // len¿¡´Â Áö±İ Á¶»çÇÏ°í ÀÖ´Â ºñÆ®ÀÇ ¿öµå À§Ä¡
-		temp = A->a[len]; // ÇöÀç ¿¬»ê ÁßÀÎ ¿öµåÀÇ °ªÀ» temp¿¡ ´ëÀÔ
-		len = i % WORD_BIT_LEN; // ÇØ´ç ¿öµå¿¡ ¸î ¹øÂ° ºñÆ®ÀÎÁö
-		temp = temp >> len; // ÇØ´ç ºñÆ®¸¦ BI_Left shiftÇØ¼­ Ã¹¹øÂ° ºñÆ®¿¡ ³õÀÌµµ·Ï
-		temp = temp & 1; // 1°ú & ÇØ¼­ 
-		T->a[0] = temp; // ÇØ´ç ºñÆ®ÀÇ °ªÀ» ´ëÀÔ // j_th_BI_Get_Bit_Length ¹Ù²ã¼­ ÇÏ±â
+		len = (int)(i / WORD_BIT_LEN); // lenì—ëŠ” ì§€ê¸ˆ ì¡°ì‚¬í•˜ê³  ìˆëŠ” ë¹„íŠ¸ì˜ ì›Œë“œ ìœ„ì¹˜
+		temp = A->a[len]; // í˜„ì¬ ì—°ì‚° ì¤‘ì¸ ì›Œë“œì˜ ê°’ì„ tempì— ëŒ€ì…
+		len = i % WORD_BIT_LEN; // í•´ë‹¹ ì›Œë“œì— ëª‡ ë²ˆì§¸ ë¹„íŠ¸ì¸ì§€
+		temp = temp >> len; // í•´ë‹¹ ë¹„íŠ¸ë¥¼ BI_Left shiftí•´ì„œ ì²«ë²ˆì§¸ ë¹„íŠ¸ì— ë†“ì´ë„ë¡
+		temp = temp & 1; // 1ê³¼ & í•´ì„œ 
+		T->a[0] = temp; // í•´ë‹¹ ë¹„íŠ¸ì˜ ê°’ì„ ëŒ€ì… // j_th_BI_Get_Bit_Length ë°”ê¿”ì„œ í•˜ê¸°
 
 		BI_Left_Shift(*R, 1); // [line 3] 2R
 		
@@ -2033,8 +2033,8 @@ int Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 			return ERROR;
 		}
 		
-		result = BI_Compare(&B, R); // R = B -> 0, R > B -> -1ÀÌ¹Ç·Î, result ¿¡´Â 0, -1ÀÌ µé¾î°¡¾ßÇÑ´Ù. 
-		if ((result == 0) | (result == 2)) // [line 3] R >= BÀÎÁö ºñ±³
+		result = BI_Compare(&B, R); // R = B -> 0, R > B -> -1ì´ë¯€ë¡œ, result ì—ëŠ” 0, -1ì´ ë“¤ì–´ê°€ì•¼í•œë‹¤. 
+		if ((result == 0) | (result == 2)) // [line 3] R >= Bì¸ì§€ ë¹„êµ
 		{
 			len = (int)(i / WORD_BIT_LEN) + 1;
 			BI_New(&U, len);
@@ -2059,12 +2059,12 @@ int Binary_Long_Div(bigint** Q, bigint** R, bigint* A, bigint* B)
 				return ERROR;
 			}
 			
-			BI_Delete(&U); // µ¡¼ÀÇØÁØ ºò³Ñ¹ö U(2 ^ j)´Â delete ÇØÁØ´Ù.
+			BI_Delete(&U); // ë§ì…ˆí•´ì¤€ ë¹…ë„˜ë²„ U(2 ^ j)ëŠ” delete í•´ì¤€ë‹¤.
 		}
 	}
 	
-	BI_Refine(*Q); // Q¸¦ refine ½ÃÄÑÁÖ±â
-	BI_Delete(&T); // ÇÒ´çÇÑ ºò³Ñ¹ö T delete.
+	BI_Refine(*Q); // Që¥¼ refine ì‹œì¼œì£¼ê¸°
+	BI_Delete(&T); // í• ë‹¹í•œ ë¹…ë„˜ë²„ T delete.
 	
 	return SUCCESS;
 }
@@ -2124,7 +2124,7 @@ int ADD_DIV(bigint** C, bigint** A, bigint** B)
 	if (BI_Is_Zero(A) == 0) // A is zero
 	{
 		if (A == C)
-			BI_New(C, B_Len); // Binary Long Divison¿¡¼­ ÇÊ¿ä
+			BI_New(C, B_Len); // Binary Long Divisonì—ì„œ í•„ìš”
 
 		(*C)->sign = (*B)->sign;
 		(*C)->wordlen = (*B)->wordlen;
@@ -2153,7 +2153,7 @@ int ADD_DIV(bigint** C, bigint** A, bigint** B)
 		BI_Assign(&temp, *B);
 
 		BI_Flip_Sign(temp);
-		ret = SUB(C, *A, temp); // SUB ÇÔ¼ö
+		ret = SUB(C, *A, temp); // SUB í•¨ìˆ˜
 		if (ret == -1)
 			return ERROR;
 
@@ -2169,7 +2169,7 @@ int ADD_DIV(bigint** C, bigint** A, bigint** B)
 		BI_Assign(&temp, *A);
 
 		BI_Flip_Sign(temp);
-		ret = SUB(C, *B, temp); // SUB ÇÔ¼ö
+		ret = SUB(C, *B, temp); // SUB í•¨ìˆ˜
 		if (ret == -1)
 			return ERROR;
 
@@ -2178,7 +2178,7 @@ int ADD_DIV(bigint** C, bigint** A, bigint** B)
 		return SUCCESS;
 	}
 
-	// A, B°¡ µ¿ÀÏÇÑ ºÎÈ£ÀÏ ¶§
+	// A, Bê°€ ë™ì¼í•œ ë¶€í˜¸ì¼ ë•Œ
 	if (A_Len >= B_Len)
 	{
 		ret = ADDC_DIV(C, A, B, A_sign);
@@ -2216,21 +2216,21 @@ int ADD_DIV(bigint** C, bigint** A, bigint** B)
 	10:		(Q_{i}, R) <- DIVC(R, B)
 	11: end for
 
-* @param bigint** Q Multi Long Divsion ¿¬»êÀÇ ¸ò¿¡ ´ëÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºí Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* R Multi Long Divsion ¿¬»êÀÇ ³ª¸ÓÁö¿¡ ´ëÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºí Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* A Multi Long Divsion ¿¬»êÀÇ ³ª´©·Á´Â ¼öÀÎ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* B Multi Long Divsion ¿¬»êÀÇ ³ª´©´Â ¼öÀÎ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+* @param bigint** Q Multi Long Divsion ì—°ì‚°ì˜ ëª«ì— ëŒ€í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸” í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* R Multi Long Divsion ì—°ì‚°ì˜ ë‚˜ë¨¸ì§€ì— ëŒ€í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸” í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* A Multi Long Divsion ì—°ì‚°ì˜ ë‚˜ëˆ„ë ¤ëŠ” ìˆ˜ì¸ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* B Multi Long Divsion ì—°ì‚°ì˜ ë‚˜ëˆ„ëŠ” ìˆ˜ì¸ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
 */
-int DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorithm(Multi-precision version)¿¡¼­ DIV(A, B) fucntion.
+int DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorithm(Multi-precision version)ì—ì„œ DIV(A, B) fucntion.
 {
-	int i = 0; // for ¹İº¹¹®¿¡¼­ »ç¿ëÇÒ º¯¼ö i.
-	int len = 0; // º¯¼ö lenÀº ºò³Ñ¹ö AÀÇ size¸¦ ´ãÀ» º¯¼ö
-	int result = 0; // BI_Compare(&A, &B)ÀÇ °á°ú¸¦ ´ãÀ» º¯¼ö
+	int i = 0; // for ë°˜ë³µë¬¸ì—ì„œ ì‚¬ìš©í•  ë³€ìˆ˜ i.
+	int len = 0; // ë³€ìˆ˜ lenì€ ë¹…ë„˜ë²„ Aì˜ sizeë¥¼ ë‹´ì„ ë³€ìˆ˜
+	int result = 0; // BI_Compare(&A, &B)ì˜ ê²°ê³¼ë¥¼ ë‹´ì„ ë³€ìˆ˜
 	
-	bigint* Temp = NULL; // AÀÇ j¹øÂ° ¿öµå( A_{j} )¸¦ ´ãÀ» ºò³Ñ¹ö Temp ÃÊ±âÈ­
-	bigint* Word = NULL; // QÀÇ i¹øÂ° ¿öµå( Q_{i} )¸¦ ´ãÀ» ºò³Ñ¹ö Word ÃÊ±âÈ­
+	bigint* Temp = NULL; // Aì˜ jë²ˆì§¸ ì›Œë“œ( A_{j} )ë¥¼ ë‹´ì„ ë¹…ë„˜ë²„ Temp ì´ˆê¸°í™”
+	bigint* Word = NULL; // Qì˜ ië²ˆì§¸ ì›Œë“œ( Q_{i} )ë¥¼ ë‹´ì„ ë¹…ë„˜ë²„ Word ì´ˆê¸°í™”
 
-	BI_Set_Zero(R); // ±æÀÌ°¡ 1ÀÌ°í °ªÀÌ 0ÀÎ ºò³Ñ¹ö *R »ı¼º
+	BI_Set_Zero(R); // ê¸¸ì´ê°€ 1ì´ê³  ê°’ì´ 0ì¸ ë¹…ë„˜ë²„ *R ìƒì„±
 	BI_Get_Word_Length(&len, &A);
 	BI_New(Q, len);
 	
@@ -2238,7 +2238,7 @@ int DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorithm
 		return ERROR; // return INVALID.
 	
 	result = BI_Compare(&A, &B);
-	if (result == 2) // [line 4] B > A ÀÏ °æ¿ì, Compare(&A, &B)ÀÇ return : 2
+	if (result == 2) // [line 4] B > A ì¼ ê²½ìš°, Compare(&A, &B)ì˜ return : 2
 	{
 		BI_Assign(R, A);
 		return SUCCESS;
@@ -2246,18 +2246,18 @@ int DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorithm
 
 	for (i = len - 1; i >= 0; i--) // line 8.
 	{
-		BI_Set_Zero(&Word); // ±æÀÌ°¡ 1ÀÌ°í °ªÀÌ 0ÀÎ ºò³Ñ¹ö Word »ı¼º. BI_New(&Word, 1)µµ °¡´É.
-		BI_New(&Temp, 1); // AÀÇ j¹øÂ° ¿öµå(A_{j})¸¦ ´ã´Â ºò³Ñ¹ö Temp¸¦ ¿öµå ±æÀÌ°¡ 1·Î »ı¼º. 
+		BI_Set_Zero(&Word); // ê¸¸ì´ê°€ 1ì´ê³  ê°’ì´ 0ì¸ ë¹…ë„˜ë²„ Word ìƒì„±. BI_New(&Word, 1)ë„ ê°€ëŠ¥.
+		BI_New(&Temp, 1); // Aì˜ jë²ˆì§¸ ì›Œë“œ(A_{j})ë¥¼ ë‹´ëŠ” ë¹…ë„˜ë²„ Tempë¥¼ ì›Œë“œ ê¸¸ì´ê°€ 1ë¡œ ìƒì„±. 
 		
-		Temp->a[0] = A->a[i]; // Temp¿¡ A_{j}¸¦ ´ëÀÔ.
-		BI_Left_Shift(*R, WORD_BIT_LEN); // RÀ» ¿ŞÂÊÀ¸·Î W¸¸Å­ shift ==> R * W
+		Temp->a[0] = A->a[i]; // Tempì— A_{j}ë¥¼ ëŒ€ì….
+		BI_Left_Shift(*R, WORD_BIT_LEN); // Rì„ ì™¼ìª½ìœ¼ë¡œ Wë§Œí¼ shift ==> R * W
 		
-		ADD_DIV(R, R, &Temp); // [line 9] R * W¿¡ A_{j}¸¦ µ¡¼À ¿¬»ê ¼öÇà. 
-		DIVC(&Word, R, *R, B); //ºò³Ñ¹ö Word´Â Q_{i}¸¦ ÀúÀåÇÏ´Â º¯¼ö. 
-		BI_Delete(&Temp); // ¹İº¹¹® ³»¿¡¼­ »ı¼ºÇÑ ºò³Ñ¹ö Temp delete.
+		ADD_DIV(R, R, &Temp); // [line 9] R * Wì— A_{j}ë¥¼ ë§ì…ˆ ì—°ì‚° ìˆ˜í–‰. 
+		DIVC(&Word, R, *R, B); //ë¹…ë„˜ë²„ WordëŠ” Q_{i}ë¥¼ ì €ì¥í•˜ëŠ” ë³€ìˆ˜. 
+		BI_Delete(&Temp); // ë°˜ë³µë¬¸ ë‚´ì—ì„œ ìƒì„±í•œ ë¹…ë„˜ë²„ Temp delete.
 		
-		(*Q)->a[i] = Word->a[0]; // [line 10] Q¿¡ Q_{i}¸¦ ´ëÀÔ. 
-		BI_Delete(&Word); // ºò³Ñ¹ö Word delete
+		(*Q)->a[i] = Word->a[0]; // [line 10] Qì— Q_{i}ë¥¼ ëŒ€ì…. 
+		BI_Delete(&Word); // ë¹…ë„˜ë²„ Word delete
 	}
 
 	BI_Refine(*Q);
@@ -2274,48 +2274,48 @@ int DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorithm
 	1 : if A < B then
 	2 :		return (0, A)
 	3 :	end if
-	4 :	Compute k¡ôZ+ such that 2^k B_{m-1}¡ô[2^(w-1), 2^w)
+	4 :	Compute kâˆˆZ+ such that 2^k B_{m-1}âˆˆ[2^(w-1), 2^w)
 	5 :	A', B' <- 2^k * A, 2^k * B
 	6 :	Q', R' <- DIVCC(A', B')
 	7 : Q, R <- Q', 2^(-k) * R'
 	8 : return (Q, R)
 
-* @param bigint** Q DIV( )ÀÇ ¸ò¿¡ ´ëÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºí Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* R DIV( )ÀÇ ³ª¸ÓÁö¿¡ ´ëÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºí Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* A DIV( )ÀÇ ³ª´©·Á´Â ¼öÀÎ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* B DIV( )ÀÇ ³ª´©´Â ¼öÀÎ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+* @param bigint** Q DIV( )ì˜ ëª«ì— ëŒ€í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸” í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* R DIV( )ì˜ ë‚˜ë¨¸ì§€ì— ëŒ€í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸” í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* A DIV( )ì˜ ë‚˜ëˆ„ë ¤ëŠ” ìˆ˜ì¸ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* B DIV( )ì˜ ë‚˜ëˆ„ëŠ” ìˆ˜ì¸ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
 
 */
 int DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
 {
-	int result = 0; // A, B ´ë¼Òºñ±³°ªÀ» ´ãÀ» º¯¼ö result
-	int k = 0; // line 4¿Í °ü·ÃµÈ º¯¼ö k
-	int len = 0; // BÀÇ wordlenÀ» ÀúÀåÇØÁÙ º¯¼ö len
+	int result = 0; // A, B ëŒ€ì†Œë¹„êµê°’ì„ ë‹´ì„ ë³€ìˆ˜ result
+	int k = 0; // line 4ì™€ ê´€ë ¨ëœ ë³€ìˆ˜ k
+	int len = 0; // Bì˜ wordlenì„ ì €ì¥í•´ì¤„ ë³€ìˆ˜ len
 	
-	bigint* AP = NULL; // A¸¦ BI_Left shift ÇØ¼­ º¸°üÇÒ ºò³Ñ¹ö A'(AP, A Prime)
-	bigint* BP = NULL; // B¸¦ BI_Left shift ÇØ¼­ º¸°üÇÒ ºò³Ñ¹ö B'(BP, B Prime)
+	bigint* AP = NULL; // Aë¥¼ BI_Left shift í•´ì„œ ë³´ê´€í•  ë¹…ë„˜ë²„ A'(AP, A Prime)
+	bigint* BP = NULL; // Bë¥¼ BI_Left shift í•´ì„œ ë³´ê´€í•  ë¹…ë„˜ë²„ B'(BP, B Prime)
 
 	result = BI_Compare(&A, &B);
-	if (result == 2) // A < B º¸´Ù Å¬ ¶§
+	if (result == 2) // A < B ë³´ë‹¤ í´ ë•Œ
 		return SUCCESS;
 
-	BI_Assign(&AP, A); // ºò³Ñ¹ö A' ¿¡ ºò³Ñ¹ö A assing
-	BI_Assign(&BP, B); // ºò³Ñ¹ö B' ¿¡ ºò³Ñ¹ö B assing
+	BI_Assign(&AP, A); // ë¹…ë„˜ë²„ A' ì— ë¹…ë„˜ë²„ A assing
+	BI_Assign(&BP, B); // ë¹…ë„˜ë²„ B' ì— ë¹…ë„˜ë²„ B assing
 
 	// line 4. Compute k.
 	BI_Get_Word_Length(&len, &B);
-	bigint* comp = NULL; // k¸¦ computeÇÏ±â À§ÇÑ ºò³Ñ¹ö comp ¼±¾ğ ¹× ÃÊ±âÈ­
-	BI_New(&comp, 1); // ºò³Ñ¹ö compÀÇ ±æÀÌ 1·Î »ı¼º
-	comp->a[0] = B->a[len - 1]; //comp¿¡ B_{m - 1} ´ëÀÔ
+	bigint* comp = NULL; // kë¥¼ computeí•˜ê¸° ìœ„í•œ ë¹…ë„˜ë²„ comp ì„ ì–¸ ë° ì´ˆê¸°í™”
+	BI_New(&comp, 1); // ë¹…ë„˜ë²„ compì˜ ê¸¸ì´ 1ë¡œ ìƒì„±
+	comp->a[0] = B->a[len - 1]; //compì— B_{m - 1} ëŒ€ì…
 
 	while (1)
 	{
-		BI_Left_Shift(comp, 1); // comp¸¦ BI_Left shift ==> comp * 2
-		k++; // comp * 2^k ÇÏµµ·Ï.
+		BI_Left_Shift(comp, 1); // compë¥¼ BI_Left shift ==> comp * 2
+		k++; // comp * 2^k í•˜ë„ë¡.
 		
-		if (comp->wordlen == 2) // 2^wÀ» ³Ñ¾î°¡¸é,
+		if (comp->wordlen == 2) // 2^wì„ ë„˜ì–´ê°€ë©´,
 		{
-			k--; // ³Ñ¾î°¬À¸´Ï ÇÏ³ª ÁÙ¿©ÁÖ°í
+			k--; // ë„˜ì–´ê°”ìœ¼ë‹ˆ í•˜ë‚˜ ì¤„ì—¬ì£¼ê³ 
 			break; // break;
 		}
 	}
@@ -2325,9 +2325,9 @@ int DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
 	DIVCC(Q, R, AP, BP); // [line 6]
 	BI_Right_Shift(*R, k); // [line 7] (Q' == Q)
 	
-	BI_Delete(&AP); // ¼±¾ğÇØÁØ ºò³Ñ¹ö AP delete.
-	BI_Delete(&BP); // ¼±¾ğÇØÁØ ºò³Ñ¹ö BP delete.
-	BI_Delete(&comp); // ¼±¾ğÇØÁØ ºò³Ñ¹ö comp delete.
+	BI_Delete(&AP); // ì„ ì–¸í•´ì¤€ ë¹…ë„˜ë²„ AP delete.
+	BI_Delete(&BP); // ì„ ì–¸í•´ì¤€ ë¹…ë„˜ë²„ BP delete.
+	BI_Delete(&comp); // ì„ ì–¸í•´ì¤€ ë¹…ë„˜ë²„ comp delete.
 
 	return SUCCESS;
 }
@@ -2354,52 +2354,52 @@ int DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
 	14:	end while
 	15:	return (Q, R)
 
-* @param bigint** Q DIVC( )ÀÇ ¸ò¿¡ ´ëÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºí Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* R DIVC( )ÀÇ ³ª¸ÓÁö¿¡ ´ëÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºí Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* A DIVC( )ÀÇ ³ª´©·Á´Â ¼öÀÎ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* B DIVC( )ÀÇ ³ª´©´Â ¼öÀÎ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+* @param bigint** Q DIVC( )ì˜ ëª«ì— ëŒ€í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸” í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* R DIVC( )ì˜ ë‚˜ë¨¸ì§€ì— ëŒ€í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸” í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* A DIVC( )ì˜ ë‚˜ëˆ„ë ¤ëŠ” ìˆ˜ì¸ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* B DIVC( )ì˜ ë‚˜ëˆ„ëŠ” ìˆ˜ì¸ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
 */
 int DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B) // 7.2.3 DIVCC(A, B)
 {
-	int n = 0; // º¯¼ö nÀº AÀÇ size
-	int m = 0; // º¯¼ö mÀº BÀÇ size
-	word A_msw = 0; // ºò³Ñ¹ö AÀÇ ÃÖ»óÀ§ ºñÆ®¸¦ ÀúÀåÇÒ ¿öµå´ÜÀ§ º¯¼ö
-	word B_msw = 0; // ºò³Ñ¹ö BÀÇ ÃÖ»óÀ§ ºñÆ®¸¦ ÀúÀåÇÒ ¿öµå´ÜÀ§ º¯¼ö
+	int n = 0; // ë³€ìˆ˜ nì€ Aì˜ size
+	int m = 0; // ë³€ìˆ˜ mì€ Bì˜ size
+	word A_msw = 0; // ë¹…ë„˜ë²„ Aì˜ ìµœìƒìœ„ ë¹„íŠ¸ë¥¼ ì €ì¥í•  ì›Œë“œë‹¨ìœ„ ë³€ìˆ˜
+	word B_msw = 0; // ë¹…ë„˜ë²„ Bì˜ ìµœìƒìœ„ ë¹„íŠ¸ë¥¼ ì €ì¥í•  ì›Œë“œë‹¨ìœ„ ë³€ìˆ˜
 	
 					// (msw == Most Significant Word)
-	bigint* BQ = NULL; // ºò³Ñ¹ö B¿Í ºò³Ñ¹ö Q¸¦ °öÇÑ °ªÀ» ÀúÀåÇÒ ºò³Ñ¹ö BQ¸¦ ¼±¾ğ ¹× ÃÊ±âÈ­.
-	bigint* one = NULL; // ¿öµå±æÀÌ°¡ 1ÀÌ°í °ªÀÌ 1·Î »ç¿ëÇÒ ºò³Ñ¹ö one¸¦ ¼±¾ğ ¹× ÃÊ±âÈ­.
+	bigint* BQ = NULL; // ë¹…ë„˜ë²„ Bì™€ ë¹…ë„˜ë²„ Që¥¼ ê³±í•œ ê°’ì„ ì €ì¥í•  ë¹…ë„˜ë²„ BQë¥¼ ì„ ì–¸ ë° ì´ˆê¸°í™”.
+	bigint* one = NULL; // ì›Œë“œê¸¸ì´ê°€ 1ì´ê³  ê°’ì´ 1ë¡œ ì‚¬ìš©í•  ë¹…ë„˜ë²„ oneë¥¼ ì„ ì–¸ ë° ì´ˆê¸°í™”.
 
-	BI_Set_One(&one); // °ªÀÌ 1ÀÌ°í ¿öµå±æÀÌ°¡ 1ÀÌ µÇµµ·Ï BI_Set_One() »ç¿ë
-	BI_Get_Word_Length(&n, &A); // º¯¼ö n¿¡ AÀÇ size ´ëÀÔ
-	BI_Get_Word_Length(&m, &B); // º¯¼ö m¿¡ BÀÇ size ´ëÀÔ
+	BI_Set_One(&one); // ê°’ì´ 1ì´ê³  ì›Œë“œê¸¸ì´ê°€ 1ì´ ë˜ë„ë¡ BI_Set_One() ì‚¬ìš©
+	BI_Get_Word_Length(&n, &A); // ë³€ìˆ˜ nì— Aì˜ size ëŒ€ì…
+	BI_Get_Word_Length(&m, &B); // ë³€ìˆ˜ mì— Bì˜ size ëŒ€ì…
 
-	A_msw = A->a[n - 1]; // ºò³Ñ¹ö AÀÇ ÃÖ»óÀ§ ¿öµå¸¦ A_msw¿¡ ´ëÀÔ
-	B_msw = B->a[m - 1]; // ºò³Ñ¹ö BÀÇ ÃÖ»óÀ§ ¿öµå¸¦ B_msw¿¡ ´ëÀÔ
+	A_msw = A->a[n - 1]; // ë¹…ë„˜ë²„ Aì˜ ìµœìƒìœ„ ì›Œë“œë¥¼ A_mswì— ëŒ€ì…
+	B_msw = B->a[m - 1]; // ë¹…ë„˜ë²„ Bì˜ ìµœìƒìœ„ ì›Œë“œë¥¼ B_mswì— ëŒ€ì…
 
-	if (n == m) // DIVCC ¿¡¼­ if(n == m) ÀÏ ¶§ // [line 1]
+	if (n == m) // DIVCC ì—ì„œ if(n == m) ì¼ ë•Œ // [line 1]
 		DIVCC_n_m(Q, A, B, m); // [line 2]
 
-	else if (n == m + 1) // [line 4] DIVCC ¿¡¼­ if(n == m + 1) ÀÏ ¶§ 
+	else if (n == m + 1) // [line 4] DIVCC ì—ì„œ if(n == m + 1) ì¼ ë•Œ 
 	{
 		if (A_msw == B_msw) // line 5.
-			(*Q)->a[0] = word_mask; // Q¿¡ W-1À» ´ëÀÔÇØ¾ßÇÏ¹Ç·Î word_mask ´ëÀÔ.
+			(*Q)->a[0] = word_mask; // Qì— W-1ì„ ëŒ€ì…í•´ì•¼í•˜ë¯€ë¡œ word_mask ëŒ€ì….
 		else // [line 7]
 			DIVCC_n_m1(Q, A, B, m); // [line 8]
 	}
 
-	BI_New(&BQ, n + m); // ºò³Ñ¹ö B¿Í ºò³Ñ¹ö Q¸¦ °öÇÑ °ªÀ» ÀúÀåÇÒ ºò³Ñ¹ö BQ¸¦ B¿Í QÀÇ °ö¼À¿¬»êÀÌ °¡´ÉÇÑ ±æÀÌÀÎ n + m ·Î »ı¼º.
-	MUL_Multi(&BQ, *Q, B); // B¿Í Q¸¦ °ö¼À ¿¬»êÇØ ºò³Ñ¹ö BQ¿¡ ´ëÀÔ (ÀÌ ¶§ Karatsuba·Î º¯°æµµ °¡´É --> ¼Óµµ ºñ±³ °¡´É!!)
+	BI_New(&BQ, n + m); // ë¹…ë„˜ë²„ Bì™€ ë¹…ë„˜ë²„ Që¥¼ ê³±í•œ ê°’ì„ ì €ì¥í•  ë¹…ë„˜ë²„ BQë¥¼ Bì™€ Qì˜ ê³±ì…ˆì—°ì‚°ì´ ê°€ëŠ¥í•œ ê¸¸ì´ì¸ n + m ë¡œ ìƒì„±.
+	MUL_Multi(&BQ, *Q, B); // Bì™€ Që¥¼ ê³±ì…ˆ ì—°ì‚°í•´ ë¹…ë„˜ë²„ BQì— ëŒ€ì… (ì´ ë•Œ Karatsubaë¡œ ë³€ê²½ë„ ê°€ëŠ¥ --> ì†ë„ ë¹„êµ ê°€ëŠ¥!!)
 	SUB(R, A, BQ);// R = A - B * Q // [line 11]
 
-	while ((*R)->sign & 1) // [line 12] RÀÇ ºÎÈ£°¡ À½¼öÀÏ ¶§ 1 & 1 = 1  ( Q, Q - 1, Q - 2)
+	while ((*R)->sign & 1) // [line 12] Rì˜ ë¶€í˜¸ê°€ ìŒìˆ˜ì¼ ë•Œ 1 & 1 = 1  ( Q, Q - 1, Q - 2)
 	{
 		SUB(Q, *Q, one); // Q = Q - 1.
-		ADD_AAB(R, R, &B); // R = R + B. 1st arg, 2nd arg°¡ °°À¸¹Ç·Î ADD_AAB ÇÔ¼ö »ç¿ë
+		ADD_AAB(R, R, &B); // R = R + B. 1st arg, 2nd argê°€ ê°™ìœ¼ë¯€ë¡œ ADD_AAB í•¨ìˆ˜ ì‚¬ìš©
 	}
 
-	BI_Delete(&one); // ¼±¾ğÇØÁØ ºò³Ñ¹ö one delete.
-	BI_Delete(&BQ); // ¼±¾ğÇØÁØ ºò³Ñ¹ö BQ delete.
+	BI_Delete(&one); // ì„ ì–¸í•´ì¤€ ë¹…ë„˜ë²„ one delete.
+	BI_Delete(&BQ); // ì„ ì–¸í•´ì¤€ ë¹…ë„˜ë²„ BQ delete.
 
 	return SUCCESS;
 }
@@ -2413,12 +2413,12 @@ int DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B) // 7.2.3 DIVCC(A, B)
 	1 : Q <- A_{m-1} / B_{m-1}
 	2 : Q <- LowerBound(Q)
 
-* @param bigint** Q DIVCC()¿¡¼­ Q hatÀÎ bigint Çü ´õºí Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* A DIVCC()¿¡¼­ ³ª´²Áö´Â ¼öÀÎ AÀÇ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* B DIVCC()¿¡¼­ ³ª´©·Á´Â ¼öÀÎ BÀÇ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
-* @param int m DIVCC()¿¡¼­ BÀÇ wordlenÀ» ³ªÅ¸³»´Â intÇü º¯¼ö
+* @param bigint** Q DIVCC()ì—ì„œ Q hatì¸ bigint í˜• ë”ë¸” í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* A DIVCC()ì—ì„œ ë‚˜ëˆ ì§€ëŠ” ìˆ˜ì¸ Aì˜ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* B DIVCC()ì—ì„œ ë‚˜ëˆ„ë ¤ëŠ” ìˆ˜ì¸ Bì˜ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+* @param int m DIVCC()ì—ì„œ Bì˜ wordlenì„ ë‚˜íƒ€ë‚´ëŠ” intí˜• ë³€ìˆ˜
 */
-int DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m) // DIVCC ¿¡¼­ if(n == m) ÀÏ ¶§
+int DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m) // DIVCC ì—ì„œ if(n == m) ì¼ ë•Œ
 {
 	bigint* Temp1 = NULL;
 	bigint* Temp2 = NULL;
@@ -2449,30 +2449,30 @@ int DIVCC_n_m(bigint** Q, bigint* A, bigint* B, int m) // DIVCC ¿¡¼­ if(n == m) 
 	1 : Q <- A_{m} * W + A_{m-1} / B_{m-1}
 	2 : Q <- LowerBound(Q)
 
-* @param bigint** Q DIVCC()¿¡¼­ Q hatÀÎ bigint Çü ´õºí Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* A DIVCC()¿¡¼­ ³ª´²Áö´Â ¼öÀÎ AÀÇ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
-* @param bigint* B DIVCC()¿¡¼­ ³ª´©·Á´Â ¼öÀÎ BÀÇ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
-* @param int m DIVCC()¿¡¼­ BÀÇ wordlenÀ» ³ªÅ¸³»´Â intÇü º¯¼ö
+* @param bigint** Q DIVCC()ì—ì„œ Q hatì¸ bigint í˜• ë”ë¸” í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* A DIVCC()ì—ì„œ ë‚˜ëˆ ì§€ëŠ” ìˆ˜ì¸ Aì˜ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+* @param bigint* B DIVCC()ì—ì„œ ë‚˜ëˆ„ë ¤ëŠ” ìˆ˜ì¸ Bì˜ bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+* @param int m DIVCC()ì—ì„œ Bì˜ wordlenì„ ë‚˜íƒ€ë‚´ëŠ” intí˜• ë³€ìˆ˜
 */
-int DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m) // DIVCC ¿¡¼­ if(n == m + 1) ÀÏ ¶§
+int DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m) // DIVCC ì—ì„œ if(n == m + 1) ì¼ ë•Œ
 {
-	bigint* Temp1 = NULL; // A_{m} * W + A_{m - 1}À» ´ëÀÔÇÒ ºò³Ñ¹ö Temp1 ¼±¾ğ ¹× ÃÊ±âÈ­
-	bigint* Temp2 = NULL; // B_{m}À» ´ëÀÔÇÒ ºò³Ñ¹ö Temp2 ¼±¾ğ ¹× ÃÊ±âÈ­
-	bigint* Trash = NULL; // ³ª´°¼À ÇÔ¼ö¿¡¼­ ³ª¸ÓÁö ¸Å°³º¯¼ö·Î ¾²ÀÏ ºò³Ñ¹ö Trash ¼±¾ğ ¹× ÃÊ±âÈ­
+	bigint* Temp1 = NULL; // A_{m} * W + A_{m - 1}ì„ ëŒ€ì…í•  ë¹…ë„˜ë²„ Temp1 ì„ ì–¸ ë° ì´ˆê¸°í™”
+	bigint* Temp2 = NULL; // B_{m}ì„ ëŒ€ì…í•  ë¹…ë„˜ë²„ Temp2 ì„ ì–¸ ë° ì´ˆê¸°í™”
+	bigint* Trash = NULL; // ë‚˜ëˆ—ì…ˆ í•¨ìˆ˜ì—ì„œ ë‚˜ë¨¸ì§€ ë§¤ê°œë³€ìˆ˜ë¡œ ì“°ì¼ ë¹…ë„˜ë²„ Trash ì„ ì–¸ ë° ì´ˆê¸°í™”
 
-	BI_New(&Temp1, 2); // ºò³Ñ¹ö Temp1ÀÇ ±æÀÌ´Â 2·Î »ı¼º
-	BI_New(&Temp2, 1); // ºò³Ñ¹ö Temp2ÀÇ ±æÀÌ´Â 1·Î »ı¼º
-	BI_New(&Trash, 1); // ºò³Ñ¹ö TrashÀÇ ±æÀÌ´Â 1·Î »ı¼º
+	BI_New(&Temp1, 2); // ë¹…ë„˜ë²„ Temp1ì˜ ê¸¸ì´ëŠ” 2ë¡œ ìƒì„±
+	BI_New(&Temp2, 1); // ë¹…ë„˜ë²„ Temp2ì˜ ê¸¸ì´ëŠ” 1ë¡œ ìƒì„±
+	BI_New(&Trash, 1); // ë¹…ë„˜ë²„ Trashì˜ ê¸¸ì´ëŠ” 1ë¡œ ìƒì„±
 
-	Temp1->a[1] = A->a[m]; // A_{m}À» ´ëÀÔ --> A_{m} * W
-	Temp1->a[0] = A->a[m - 1]; // A_{m - 1}À» ´ëÀÔ
-	Temp2->a[0] = B->a[m - 1]; // B_{m - 1}À» ´ëÀÔ
+	Temp1->a[1] = A->a[m]; // A_{m}ì„ ëŒ€ì… --> A_{m} * W
+	Temp1->a[0] = A->a[m - 1]; // A_{m - 1}ì„ ëŒ€ì…
+	Temp2->a[0] = B->a[m - 1]; // B_{m - 1}ì„ ëŒ€ì…
 
-	Binary_Long_Div(Q, &Trash, Temp1, Temp2); // DIVCC()ÀÇ line 8
+	Binary_Long_Div(Q, &Trash, Temp1, Temp2); // DIVCC()ì˜ line 8
 
-	BI_Delete(&Temp1); // ¼±¾ğÇØÁØ ºò³Ñ¹ö Temp1 delete.
-	BI_Delete(&Temp2); // ¼±¾ğÇØÁØ ºò³Ñ¹ö Temp2 delete.
-	BI_Delete(&Trash); // ¼±¾ğÇØÁØ ºò³Ñ¹ö Trash delete.
+	BI_Delete(&Temp1); // ì„ ì–¸í•´ì¤€ ë¹…ë„˜ë²„ Temp1 delete.
+	BI_Delete(&Temp2); // ì„ ì–¸í•´ì¤€ ë¹…ë„˜ë²„ Temp2 delete.
+	BI_Delete(&Trash); // ì„ ì–¸í•´ì¤€ ë¹…ë„˜ë²„ Trash delete.
 
 	return SUCCESS;
 }
@@ -2480,28 +2480,28 @@ int DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m) // DIVCC ¿¡¼­ if(n == m 
 /**
  * @brief Modular exponentiation of multiplication
  * @details
-	flag¿¡ µû¶ó ¸ğµâ·¯ Áö¼ö½Â ¿¬»ê ¼öÇà(BI_Left to BI_Right / BI_Right to BI_Left / Montgomery Ladder)
+	flagì— ë”°ë¼ ëª¨ë“ˆëŸ¬ ì§€ìˆ˜ìŠ¹ ì—°ì‚° ìˆ˜í–‰(BI_Left to BI_Right / BI_Right to BI_Left / Montgomery Ladder)
 	Input  : X, N, M
 	Output : T = X ^ N (mod M)
- * @param bigint** T ¸ğµâ·¯ Áö¼ö½Â ¿¬»êÀ» ¼öÇàÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint* X ¸ğµâ·¯ Áö¼ö½Â ¿¬»êÀ» ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @param bigint* N ¸ğµâ·¯ Áö¼ö½Â ¿¬»ê¿¡¼­ÀÇ Áö¼ö¸¦ °¡¸®Å°´Â bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @param bigint* M ¸ğµâ·¯ Áö¼ö½Â ¿¬»ê¿¡¼­ÀÇ ¸ğµâ·¯¸¦ ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+ * @param bigint** T ëª¨ë“ˆëŸ¬ ì§€ìˆ˜ìŠ¹ ì—°ì‚°ì„ ìˆ˜í–‰í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* X ëª¨ë“ˆëŸ¬ ì§€ìˆ˜ìŠ¹ ì—°ì‚°ì„ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* N ëª¨ë“ˆëŸ¬ ì§€ìˆ˜ìŠ¹ ì—°ì‚°ì—ì„œì˜ ì§€ìˆ˜ë¥¼ ê°€ë¦¬í‚¤ëŠ” bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* M ëª¨ë“ˆëŸ¬ ì§€ìˆ˜ìŠ¹ ì—°ì‚°ì—ì„œì˜ ëª¨ë“ˆëŸ¬ë¥¼ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
  * @return SUCCESS
  * @throws
-	ERROR flag ¹ÌÁöÁ¤ ½Ã
-	ERROR Áö¼ö°¡ À½¼öÀÎ °æ¿ì
-	ERROR ¸ğµâ·¯ ÃëÇÏ´Â ¼ö°¡ 0ÀÎ °æ¿ì
+	ERROR flag ë¯¸ì§€ì • ì‹œ
+	ERROR ì§€ìˆ˜ê°€ ìŒìˆ˜ì¸ ê²½ìš°
+	ERROR ëª¨ë“ˆëŸ¬ ì·¨í•˜ëŠ” ìˆ˜ê°€ 0ì¸ ê²½ìš°
  */
 int Modular_Exponentiation_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 {
-	if (N->sign == NEGATIVE) // ¿¹¿Ü Ã³¸® (Áö¼ö´Â ¾ç¼ö¸¸)
+	if (N->sign == NEGATIVE) // ì˜ˆì™¸ ì²˜ë¦¬ (ì§€ìˆ˜ëŠ” ì–‘ìˆ˜ë§Œ)
 		return ERROR;
 
-	if (BI_Is_Zero(&M) == 0) // mod 0ÀÏ ¶§
+	if (BI_Is_Zero(&M) == 0) // mod 0ì¼ ë•Œ
 		return ERROR;
 
-	if (BI_Is_One(&M) == 0) // mod 1 ÀÏ ¶§
+	if (BI_Is_One(&M) == 0) // mod 1 ì¼ ë•Œ
 	{
 		BI_Set_Zero(T);
 		return SUCCESS;
@@ -2546,18 +2546,18 @@ int Modular_Exponentiation_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 /**
  * @brief Modular exponentiation of addition
  * @details
-	flag¿¡ µû¶ó ¸ğµâ·¯ exponentiation µ¡¼À ¿¬»ê ¼öÇà(BI_Left to BI_Right / BI_Right to BI_Left / Montgomery Ladder)
+	flagì— ë”°ë¼ ëª¨ë“ˆëŸ¬ exponentiation ë§ì…ˆ ì—°ì‚° ìˆ˜í–‰(BI_Left to BI_Right / BI_Right to BI_Left / Montgomery Ladder)
 	Input  : X, N, M
 	Output : T = X * N (mod M)
- * @param bigint** T ¸ğµâ·¯ exponentiation µ¡¼À ¿¬»êÀ» ¼öÇàÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint* X ¸ğµâ·¯ exponentiation µ¡¼À ¿¬»êÀ» ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @param bigint* N ¸ğµâ·¯ exponentiation µ¡¼À ¿¬»ê¿¡¼­ÀÇ Áö¼ö(µ¡¼ÀÇÒ È½¼ö)¸¦ °¡¸®Å°´Â bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @param bigint* M ¸ğµâ·¯ exponentiation µ¡¼À ¿¬»ê¿¡¼­ÀÇ ¸ğµâ·¯¸¦ ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+ * @param bigint** T ëª¨ë“ˆëŸ¬ exponentiation ë§ì…ˆ ì—°ì‚°ì„ ìˆ˜í–‰í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* X ëª¨ë“ˆëŸ¬ exponentiation ë§ì…ˆ ì—°ì‚°ì„ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* N ëª¨ë“ˆëŸ¬ exponentiation ë§ì…ˆ ì—°ì‚°ì—ì„œì˜ ì§€ìˆ˜(ë§ì…ˆí•  íšŸìˆ˜)ë¥¼ ê°€ë¦¬í‚¤ëŠ” bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* M ëª¨ë“ˆëŸ¬ exponentiation ë§ì…ˆ ì—°ì‚°ì—ì„œì˜ ëª¨ë“ˆëŸ¬ë¥¼ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
  * @return SUCCESS
  * @throws
-	ERROR flag ¹ÌÁöÁ¤ ½Ã
-	ERROR µ¡¼ÀÇÏ´Â È½¼ö°¡ À½¼öÀÎ °æ¿ì (N < 0)
-	ERROR ¸ğµâ·¯ ÃëÇÏ´Â ¼ö°¡ 0ÀÎ °æ¿ì
+	ERROR flag ë¯¸ì§€ì • ì‹œ
+	ERROR ë§ì…ˆí•˜ëŠ” íšŸìˆ˜ê°€ ìŒìˆ˜ì¸ ê²½ìš° (N < 0)
+	ERROR ëª¨ë“ˆëŸ¬ ì·¨í•˜ëŠ” ìˆ˜ê°€ 0ì¸ ê²½ìš°
  */
 int Modular_Exponentiation_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 {
@@ -2566,10 +2566,10 @@ int Modular_Exponentiation_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 	if (N->sign == NEGATIVE)
 		return ERROR;
 
-	if (BI_Is_Zero(&M) == 0) // mod 0ÀÏ ¶§
+	if (BI_Is_Zero(&M) == 0) // mod 0ì¼ ë•Œ
 		return ERROR;
 
-	if (BI_Is_One(&M) == 0) // mod 1 ÀÏ ¶§
+	if (BI_Is_One(&M) == 0) // mod 1 ì¼ ë•Œ
 	{
 		BI_Set_Zero(T);
 		return SUCCESS;
@@ -2621,13 +2621,13 @@ int Modular_Exponentiation_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 	5 :	end for
 	6  T <- t0
 
- * @param bigint** T Áö¼ö½Â ¿¬»êÀ» ¼öÇàÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint* X Áö¼ö½Â ¿¬»êÀ» ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @param bigint* N Áö¼ö½Â ¿¬»ê¿¡¼­ÀÇ Áö¼ö¸¦ °¡¸®Å°´Â bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+ * @param bigint** T ì§€ìˆ˜ìŠ¹ ì—°ì‚°ì„ ìˆ˜í–‰í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* X ì§€ìˆ˜ìŠ¹ ì—°ì‚°ì„ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* N ì§€ìˆ˜ìŠ¹ ì—°ì‚°ì—ì„œì˜ ì§€ìˆ˜ë¥¼ ê°€ë¦¬í‚¤ëŠ” bigint í˜• í¬ì¸í„° ë³€ìˆ˜
  * @return SUCCESS
  * @throws
-	ERROR Áö¼ö°¡ À½¼öÀÎ °æ¿ì
-	ERROR NÀÇ i¹øÂ° ºñÆ®°¡ 1µµ 0µµ ¾Æ´Ñ °æ¿ì
+	ERROR ì§€ìˆ˜ê°€ ìŒìˆ˜ì¸ ê²½ìš°
+	ERROR Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ë„ 0ë„ ì•„ë‹Œ ê²½ìš°
  */
 int EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N)
 {
@@ -2637,22 +2637,22 @@ int EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N)
 
 	bigint* t0 = NULL;
 	bigint* t1 = NULL;
-	bigint* temp0 = NULL; // t0¸¦ ÀúÀåÇÒ ÀÓ½Ã º¯¼ö
-	bigint* temp1 = NULL; // t1À» ÀúÀåÇÒ ÀÓ½Ã º¯¼ö
+	bigint* temp0 = NULL; // t0ë¥¼ ì €ì¥í•  ì„ì‹œ ë³€ìˆ˜
+	bigint* temp1 = NULL; // t1ì„ ì €ì¥í•  ì„ì‹œ ë³€ìˆ˜
 
-	if (N->sign == NEGATIVE) // ¿¹¿Ü Ã³¸® (Áö¼ö´Â ¾ç¼ö¸¸)
+	if (N->sign == NEGATIVE) // ì˜ˆì™¸ ì²˜ë¦¬ (ì§€ìˆ˜ëŠ” ì–‘ìˆ˜ë§Œ)
 		return ERROR;
 
-	BI_Get_Bit_Length(&N_bit_len, N); // NÀÇ ºñÆ®¿­ ±æÀÌ -> N_bit_len
+	BI_Get_Bit_Length(&N_bit_len, N); // Nì˜ ë¹„íŠ¸ì—´ ê¸¸ì´ -> N_bit_len
 
 	BI_Set_One(&t0); // [line 1] t0 = 1
 	BI_Assign(&t1, X); // [line 1] t1 = A
 
 	for (i = N_bit_len - 1; i >= 0; i--) // [line 2]
 	{
-		bit = BI_Get_j_th_Bit_of_BI(i, N); // NÀÇ i¹øÂ° ºñÆ®°¡ 1ÀÎÁö 0ÀÎÁö ÆÇº°
+		bit = BI_Get_j_th_Bit_of_BI(i, N); // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ì¸ì§€ 0ì¸ì§€ íŒë³„
 
-		if (bit == 1) // NÀÇ i¹øÂ° ºñÆ®°¡ 1ÀÏ °æ¿ì
+		if (bit == 1) // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ì¼ ê²½ìš°
 		{
 			// [line 3]
 			ret = Multiplication(&temp0, t0, t1); // temp0 = t0 * t1
@@ -2665,7 +2665,7 @@ int EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N)
 			}
 			
 			BI_Delete(&t0);
-			BI_Assign(&t0, temp0); // t0 = temp0 (t0 °»½Å)
+			BI_Assign(&t0, temp0); // t0 = temp0 (t0 ê°±ì‹ )
 			BI_Delete(&temp0);
 
 			// [line 4]
@@ -2679,12 +2679,12 @@ int EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N)
 			}
 			
 			BI_Delete(&t1);
-			BI_Assign(&t1, temp1); // t1 = temp1 (t1 °»½Å)
+			BI_Assign(&t1, temp1); // t1 = temp1 (t1 ê°±ì‹ )
 			BI_Delete(&temp1);
 
 		}
 
-		else if (bit == 0) // NÀÇ i¹øÂ° ºñÆ®°¡ 0ÀÏ °æ¿ì
+		else if (bit == 0) // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 0ì¼ ê²½ìš°
 		{
 			// [line 3]
 			ret = Multiplication(&temp1, t0, t1); // temp1 = t0 * t1
@@ -2697,7 +2697,7 @@ int EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N)
 			}
 			
 			BI_Delete(&t1);
-			BI_Assign(&t1, temp1); // t1 = temp1 (t1 °»½Å)
+			BI_Assign(&t1, temp1); // t1 = temp1 (t1 ê°±ì‹ )
 			BI_Delete(&temp1);
 
 			// [line 4]
@@ -2711,20 +2711,20 @@ int EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N)
 			}
 			
 			BI_Delete(&t0);
-			BI_Assign(&t0, temp0); // t0 = temp0 (t0 °»½Å)
+			BI_Assign(&t0, temp0); // t0 = temp0 (t0 ê°±ì‹ )
 			BI_Delete(&temp0);
 		}
 
-		else // NÀÇ i¹øÂ° ºñÆ®°¡ 1µµ 0µµ ¾Æ´Ñ °æ¿ì
+		else // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ë„ 0ë„ ì•„ë‹Œ ê²½ìš°
 		{
 			BI_Delete(&t0);
 			BI_Delete(&t1);
 
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 	}
 
-	BI_Assign(T, t0); // ¸¶Áö¸· t0 °ª T¿¡ ÇÒ´ç
+	BI_Assign(T, t0); // ë§ˆì§€ë§‰ t0 ê°’ Tì— í• ë‹¹
 
 	BI_Delete(&t0);
 	BI_Delete(&t1);
@@ -2746,13 +2746,13 @@ int EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N)
 	5 :	end for
 	6  T <- t0
 
- * @param bigint** T exponentiation µ¡¼À ¿¬»êÀ» ¼öÇàÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint* X exponentiation µ¡¼À ¿¬»êÀ» ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @param bigint* N exponentiation µ¡¼À ¿¬»ê¿¡¼­ÀÇ Áö¼ö(µ¡¼ÀÇÒ È½¼ö)¸¦ °¡¸®Å°´Â bigint Çü Æ÷ÀÎÅÍ º¯¼ö
+ * @param bigint** T exponentiation ë§ì…ˆ ì—°ì‚°ì„ ìˆ˜í–‰í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* X exponentiation ë§ì…ˆ ì—°ì‚°ì„ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* N exponentiation ë§ì…ˆ ì—°ì‚°ì—ì„œì˜ ì§€ìˆ˜(ë§ì…ˆí•  íšŸìˆ˜)ë¥¼ ê°€ë¦¬í‚¤ëŠ” bigint í˜• í¬ì¸í„° ë³€ìˆ˜
  * @return SUCCESS
  * @throws
-	ERROR ´õÇÏ´Â È½¼ö°¡ À½¼öÀÎ °æ¿ì
-	ERROR NÀÇ i¹øÂ° ºñÆ®°¡ 1µµ 0µµ ¾Æ´Ñ °æ¿ì
+	ERROR ë”í•˜ëŠ” íšŸìˆ˜ê°€ ìŒìˆ˜ì¸ ê²½ìš°
+	ERROR Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ë„ 0ë„ ì•„ë‹Œ ê²½ìš°
  */
 int EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N)
 {
@@ -2764,13 +2764,13 @@ int EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N)
 
 	bigint* t0 = NULL;
 	bigint* t1 = NULL;
-	bigint* temp0 = NULL; // t0¸¦ ÀúÀåÇÒ ÀÓ½Ã º¯¼ö
-	bigint* temp1 = NULL; // t1À» ÀúÀåÇÒ ÀÓ½Ã º¯¼ö
+	bigint* temp0 = NULL; // t0ë¥¼ ì €ì¥í•  ì„ì‹œ ë³€ìˆ˜
+	bigint* temp1 = NULL; // t1ì„ ì €ì¥í•  ì„ì‹œ ë³€ìˆ˜
 
-	if (N->sign == NEGATIVE) // ¿¹¿Ü Ã³¸® (¾ç¼ö¸¸)
+	if (N->sign == NEGATIVE) // ì˜ˆì™¸ ì²˜ë¦¬ (ì–‘ìˆ˜ë§Œ)
 		return ERROR;
 
-	BI_Get_Bit_Length(&N_bit_len, N); // NÀÇ ºñÆ®¿­ ±æÀÌ -> N_bit_len
+	BI_Get_Bit_Length(&N_bit_len, N); // Nì˜ ë¹„íŠ¸ì—´ ê¸¸ì´ -> N_bit_len
 
 	// [line 1]
 	BI_Set_Zero(&t0); // t0 = 0
@@ -2778,14 +2778,14 @@ int EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N)
 
 	for (i = N_bit_len - 1; i >= 0; i--) // [line 2]
 	{
-		bit = BI_Get_j_th_Bit_of_BI(i, N); // NÀÇ i¹øÂ° ºñÆ®°¡ 1ÀÎÁö 0ÀÎÁö ÆÇº°
+		bit = BI_Get_j_th_Bit_of_BI(i, N); // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ì¸ì§€ 0ì¸ì§€ íŒë³„
 
-		if (bit == 1) // NÀÇ i¹øÂ° ºñÆ®°¡ 1ÀÏ °æ¿ì
+		if (bit == 1) // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ì¼ ê²½ìš°
 		{
-			BI_Get_Word_Length(&t0_len, &t0); // t0ÀÇ ¿öµå¿­ ±æÀÌ -> t0_len
-			BI_Get_Word_Length(&t1_len, &t1); // t1ÀÇ ¿öµå¿­ ±æÀÌ -> t1_len
+			BI_Get_Word_Length(&t0_len, &t0); // t0ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t0_len
+			BI_Get_Word_Length(&t1_len, &t1); // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t1_len
 
-			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 + t1À» ÀúÀåÇÏ±â À§ÇÑ bigint »ı¼º
+			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 + t1ì„ ì €ì¥í•˜ê¸° ìœ„í•œ bigint ìƒì„±
 
 			// [line 3]
 			ret = ADD(&temp0, &t0, &t1); // temp0 = t0 + t1
@@ -2795,21 +2795,21 @@ int EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N)
 				BI_Delete(&t1);
 				BI_Delete(&temp0);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
 			BI_Delete(&t0);
-			BI_Assign(&t0, temp0); // t0 = temp0 (t0 °»½Å)
+			BI_Assign(&t0, temp0); // t0 = temp0 (t0 ê°±ì‹ )
 			BI_Delete(&temp0);
 
 			BI_Left_Shift(t1, 1); // [line 4] t1 = t1 << 2
 		}
-		else if (bit == 0) // NÀÇ i¹øÂ° ºñÆ®°¡ 0ÀÏ °æ¿ì
+		else if (bit == 0) // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 0ì¼ ê²½ìš°
 		{
-			BI_Get_Word_Length(&t0_len, &t0); // t0ÀÇ ¿öµå¿­ ±æÀÌ -> t0_len
-			BI_Get_Word_Length(&t1_len, &t1); // t1ÀÇ ¿öµå¿­ ±æÀÌ -> t1_len
+			BI_Get_Word_Length(&t0_len, &t0); // t0ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t0_len
+			BI_Get_Word_Length(&t1_len, &t1); // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t1_len
 
-			BI_New(&temp1, MAX(t0_len, t1_len) + 1);  // temp1(t1) = t0 + t1À» ÀúÀåÇÏ±â À§ÇÑ bigint »ı¼º
+			BI_New(&temp1, MAX(t0_len, t1_len) + 1);  // temp1(t1) = t0 + t1ì„ ì €ì¥í•˜ê¸° ìœ„í•œ bigint ìƒì„±
 
 			// [line 3]
 			ret = ADD(&temp1, &t0, &t1); // temp1 = t0 + t1
@@ -2819,25 +2819,25 @@ int EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N)
 				BI_Delete(&t1);
 				BI_Delete(&temp1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
 			BI_Delete(&t1);
-			BI_Assign(&t1, temp1); // t1 = temp1 (t1 °»½Å)
+			BI_Assign(&t1, temp1); // t1 = temp1 (t1 ê°±ì‹ )
 			BI_Delete(&temp1);
 
 			BI_Left_Shift(t0, 1); // [line 4] t0 = t0 << 2
 		}
-		else // NÀÇ i¹øÂ° ºñÆ®°¡ 1µµ 0µµ ¾Æ´Ñ °æ¿ì
+		else // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ë„ 0ë„ ì•„ë‹Œ ê²½ìš°
 		{
 			BI_Delete(&t0);
 			BI_Delete(&t1);
 
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 	}
 
-	BI_Assign(T, t0); // ¸¶Áö¸· t0 °ª T¿¡ ÇÒ´ç
+	BI_Assign(T, t0); // ë§ˆì§€ë§‰ t0 ê°’ Tì— í• ë‹¹
 
 	BI_Delete(&t0);
 	BI_Delete(&t1);
@@ -2859,16 +2859,16 @@ int EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N)
 	5 :	end for
 	6  T <- t0
 
- * @param bigint** T ¸ğµâ·¯ Áö¼ö½Â ¿¬»êÀ» ¼öÇàÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint* X ¸ğµâ·¯ Áö¼ö½Â ¿¬»êÀ» ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @param bigint* N ¸ğµâ·¯ Áö¼ö½Â ¿¬»ê¿¡¼­ÀÇ Áö¼ö¸¦ °¡¸®Å°´Â bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @param bigint* M ¸ğµâ·¯ Áö¼ö½Â ¿¬»ê¿¡¼­ÀÇ ¸ğµâ·¯¸¦ ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @return SUCCESS ¼º°ø ½Ã
+ * @param bigint** T ëª¨ë“ˆëŸ¬ ì§€ìˆ˜ìŠ¹ ì—°ì‚°ì„ ìˆ˜í–‰í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* X ëª¨ë“ˆëŸ¬ ì§€ìˆ˜ìŠ¹ ì—°ì‚°ì„ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* N ëª¨ë“ˆëŸ¬ ì§€ìˆ˜ìŠ¹ ì—°ì‚°ì—ì„œì˜ ì§€ìˆ˜ë¥¼ ê°€ë¦¬í‚¤ëŠ” bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* M ëª¨ë“ˆëŸ¬ ì§€ìˆ˜ìŠ¹ ì—°ì‚°ì—ì„œì˜ ëª¨ë“ˆëŸ¬ë¥¼ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @return SUCCESS ì„±ê³µ ì‹œ
  * @throws
-	ERROR Áö¼ö°¡ À½¼öÀÎ °æ¿ì
-	ERROR ¹ØÀÌ À½¼öÀÎ °æ¿ì
-	ERROR ¸ğµâ·¯ ÃëÇÏ´Â ¼ö°¡ À½¼öÀÎ °æ¿ì
-	ERROR NÀÇ i¹øÂ° ºñÆ®°¡ 1µµ 0µµ ¾Æ´Ñ °æ¿ì
+	ERROR ì§€ìˆ˜ê°€ ìŒìˆ˜ì¸ ê²½ìš°
+	ERROR ë°‘ì´ ìŒìˆ˜ì¸ ê²½ìš°
+	ERROR ëª¨ë“ˆëŸ¬ ì·¨í•˜ëŠ” ìˆ˜ê°€ ìŒìˆ˜ì¸ ê²½ìš°
+	ERROR Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ë„ 0ë„ ì•„ë‹Œ ê²½ìš°
  */
 int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 {
@@ -2880,20 +2880,20 @@ int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 
 	bigint* t0 = NULL;
 	bigint* t1 = NULL;
-	bigint* temp0 = NULL; // t0¸¦ ÀúÀåÇÒ ÀÓ½Ã º¯¼ö
-	bigint* temp1 = NULL; // t1À» ÀúÀåÇÒ ÀÓ½Ã º¯¼ö
+	bigint* temp0 = NULL; // t0ë¥¼ ì €ì¥í•  ì„ì‹œ ë³€ìˆ˜
+	bigint* temp1 = NULL; // t1ì„ ì €ì¥í•  ì„ì‹œ ë³€ìˆ˜
 
 	bigint* Q = NULL;
 	bigint* R = NULL;
 
-	if (N->sign == NEGATIVE) // ¿¹¿Ü Ã³¸®
+	if (N->sign == NEGATIVE) // ì˜ˆì™¸ ì²˜ë¦¬
 		return ERROR;
 	if (M->sign == NEGATIVE)
 		return ERROR;
 	if (X->sign == NEGATIVE)
 		return ERROR;
 
-	BI_Get_Bit_Length(&N_bit_len, N); // NÀÇ ºñÆ®¿­ ±æÀÌ -> N_bit_len
+	BI_Get_Bit_Length(&N_bit_len, N); // Nì˜ ë¹„íŠ¸ì—´ ê¸¸ì´ -> N_bit_len
 
 	// [line 1]
 	BI_Set_One(&t0); // t0 = 1
@@ -2901,9 +2901,9 @@ int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 
 	for (i = N_bit_len - 1; i >= 0; i--) // [line 2]
 	{
-		bit = BI_Get_j_th_Bit_of_BI(i, N); // NÀÇ i¹øÂ° ºñÆ®°¡ 1ÀÎÁö 0ÀÎÁö ÆÇº°
+		bit = BI_Get_j_th_Bit_of_BI(i, N); // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ì¸ì§€ 0ì¸ì§€ íŒë³„
 
-		if (bit == 1) // NÀÇ i¹øÂ° ºñÆ®°¡ 1ÀÏ °æ¿ì
+		if (bit == 1) // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ì¼ ê²½ìš°
 		{
 			// [line 3]
 			ret = Multiplication(&temp0, t0, t1); // temp0 = t0 * t1
@@ -2912,7 +2912,7 @@ int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 				BI_Delete(&t0);
 				BI_Delete(&t1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
 			ret = Division(&Q, &R, temp0, M); // R = temp0 (mod M)
@@ -2922,11 +2922,11 @@ int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 				BI_Delete(&t1);
 				BI_Delete(&temp0);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
 			BI_Delete(&t0);
-			BI_Assign(&t0, R); // t0 = R (t0 °»½Å)
+			BI_Assign(&t0, R); // t0 = R (t0 ê°±ì‹ )
 			BI_Delete(&temp0);
 			BI_Delete(&Q);
 			BI_Delete(&R);
@@ -2938,7 +2938,7 @@ int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 				BI_Delete(&t0);
 				BI_Delete(&t1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
 			ret = Division(&Q, &R, temp1, M); // R = temp1 (mod M)
@@ -2948,20 +2948,20 @@ int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 				BI_Delete(&t1);
 				BI_Delete(&temp1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
 			BI_Delete(&t1);
-			BI_Assign(&t1, R); // t1 = R (t1 °»½Å)
+			BI_Assign(&t1, R); // t1 = R (t1 ê°±ì‹ )
 			BI_Delete(&temp1);
 			BI_Delete(&Q);
 			BI_Delete(&R);
 
 		}
-		else if (bit == 0) // NÀÇ i¹øÂ° ºñÆ®°¡ 0ÀÏ °æ¿ì
+		else if (bit == 0) // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 0ì¼ ê²½ìš°
 		{
-			BI_Get_Word_Length(&t0_len, &t0); // t0ÀÇ ¿öµå¿­ ±æÀÌ -> t0_len
-			BI_Get_Word_Length(&t1_len, &t1); // t1ÀÇ ¿öµå¿­ ±æÀÌ -> t1_len
+			BI_Get_Word_Length(&t0_len, &t0); // t0ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t0_len
+			BI_Get_Word_Length(&t1_len, &t1); // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t1_len
 
 			// [line 3]
 			ret = Multiplication(&temp1, t0, t1); // temp1 = t0 * t1
@@ -2970,7 +2970,7 @@ int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 				BI_Delete(&t0);
 				BI_Delete(&t1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 
 			ret = Division(&Q, &R, temp1, M); // R = temp1 (mod M)
@@ -2980,11 +2980,11 @@ int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 				BI_Delete(&t1);
 				BI_Delete(&temp1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 
 			BI_Delete(&t1);
-			BI_Assign(&t1, R); // t1 = R (t1 °»½Å)
+			BI_Assign(&t1, R); // t1 = R (t1 ê°±ì‹ )
 			BI_Delete(&temp1);
 			BI_Delete(&Q);
 			BI_Delete(&R);
@@ -2996,7 +2996,7 @@ int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 				BI_Delete(&t0);
 				BI_Delete(&t1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 
 			ret = Division(&Q, &R, temp0, M); // R = temp0 (mod M)
@@ -3006,25 +3006,25 @@ int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 				BI_Delete(&t1);
 				BI_Delete(&temp0);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 
 			BI_Delete(&t0);
-			BI_Assign(&t0, R); // t0 = R (t0 °»½Å)
+			BI_Assign(&t0, R); // t0 = R (t0 ê°±ì‹ )
 			BI_Delete(&temp0);
 			BI_Delete(&Q);
 			BI_Delete(&R);
 		}
-		else // NÀÇ i¹øÂ° ºñÆ®°¡ 1µµ 0µµ ¾Æ´Ñ °æ¿ì
+		else // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ë„ 0ë„ ì•„ë‹Œ ê²½ìš°
 		{
 			BI_Delete(&t0);
 			BI_Delete(&t1);
 
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 	}
 
-	BI_Assign(T, t0); // ¸¶Áö¸· t0 °ª T¿¡ ÇÒ´ç
+	BI_Assign(T, t0); // ë§ˆì§€ë§‰ t0 ê°’ Tì— í• ë‹¹
 
 	BI_Delete(&t0);
 	BI_Delete(&t1);
@@ -3047,16 +3047,16 @@ int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 	5 :	end for
 	6  T <- t0
 
- * @param bigint** T ¸ğµâ·¯ Áö¼ö µ¡¼À ¿¬»êÀ» ¼öÇàÇÑ °á°ú¸¦ ÀúÀåÇÒ bigint Çü ´õºíÆ÷ÀÎÅÍ º¯¼ö
- * @param bigint* X ¸ğµâ·¯ Áö¼ö µ¡¼À ¿¬»êÀ» ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @param bigint* N ¸ğµâ·¯ Áö¼ö µ¡¼À ¿¬»ê¿¡¼­ÀÇ Áö¼ö(µ¡¼ÀÇÒ È½¼ö)¸¦ °¡¸®Å°´Â bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @param bigint* M ¸ğµâ·¯ Áö¼ö ¿¬»ê¿¡¼­ÀÇ ¸ğµâ·¯¸¦ ¼öÇàÇÒ bigint Çü Æ÷ÀÎÅÍ º¯¼ö
- * @return SUCCESS ¼º°ø ½Ã
+ * @param bigint** T ëª¨ë“ˆëŸ¬ ì§€ìˆ˜ ë§ì…ˆ ì—°ì‚°ì„ ìˆ˜í–‰í•œ ê²°ê³¼ë¥¼ ì €ì¥í•  bigint í˜• ë”ë¸”í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* X ëª¨ë“ˆëŸ¬ ì§€ìˆ˜ ë§ì…ˆ ì—°ì‚°ì„ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* N ëª¨ë“ˆëŸ¬ ì§€ìˆ˜ ë§ì…ˆ ì—°ì‚°ì—ì„œì˜ ì§€ìˆ˜(ë§ì…ˆí•  íšŸìˆ˜)ë¥¼ ê°€ë¦¬í‚¤ëŠ” bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @param bigint* M ëª¨ë“ˆëŸ¬ ì§€ìˆ˜ ì—°ì‚°ì—ì„œì˜ ëª¨ë“ˆëŸ¬ë¥¼ ìˆ˜í–‰í•  bigint í˜• í¬ì¸í„° ë³€ìˆ˜
+ * @return SUCCESS ì„±ê³µ ì‹œ
  * @throws
-	ERROR ´õÇÏ´Â È½¼ö°¡ À½¼öÀÎ °æ¿ì
-	ERROR ´õÇÏ´Â ´ë»óÀÌ À½¼öÀÎ °æ¿ì
-	ERROR ¸ğµâ·¯ ÃëÇÏ´Â ¼ö°¡ À½¼öÀÎ °æ¿ì
-	ERROR NÀÇ i¹øÂ° ºñÆ®°¡ 1µµ 0µµ ¾Æ´Ñ °æ¿ì
+	ERROR ë”í•˜ëŠ” íšŸìˆ˜ê°€ ìŒìˆ˜ì¸ ê²½ìš°
+	ERROR ë”í•˜ëŠ” ëŒ€ìƒì´ ìŒìˆ˜ì¸ ê²½ìš°
+	ERROR ëª¨ë“ˆëŸ¬ ì·¨í•˜ëŠ” ìˆ˜ê°€ ìŒìˆ˜ì¸ ê²½ìš°
+	ERROR Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ë„ 0ë„ ì•„ë‹Œ ê²½ìš°
  */
 int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 {
@@ -3068,20 +3068,20 @@ int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 
 	bigint* t0 = NULL;
 	bigint* t1 = NULL;
-	bigint* temp0 = NULL; // t0¸¦ ÀúÀåÇÒ ÀÓ½Ã º¯¼ö
-	bigint* temp1 = NULL; // t1À» ÀúÀåÇÒ ÀÓ½Ã º¯¼ö
+	bigint* temp0 = NULL; // t0ë¥¼ ì €ì¥í•  ì„ì‹œ ë³€ìˆ˜
+	bigint* temp1 = NULL; // t1ì„ ì €ì¥í•  ì„ì‹œ ë³€ìˆ˜
 
 	bigint* Q = NULL;
 	bigint* R = NULL;
 
-	if (N->sign == NEGATIVE) // ¿¹¿Ü Ã³¸®
+	if (N->sign == NEGATIVE) // ì˜ˆì™¸ ì²˜ë¦¬
 		return ERROR;
 	if (M->sign == NEGATIVE)
 		return ERROR;
 	if (X->sign == NEGATIVE)
 		return ERROR;
 
-	BI_Get_Bit_Length(&N_bit_len, N); // NÀÇ ºñÆ®¿­ ±æÀÌ -> N_bit_len
+	BI_Get_Bit_Length(&N_bit_len, N); // Nì˜ ë¹„íŠ¸ì—´ ê¸¸ì´ -> N_bit_len
 
 	// [line 1]
 	BI_Set_Zero(&t0); // t0 = 0
@@ -3089,14 +3089,14 @@ int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 
 	for (i = N_bit_len - 1; i >= 0; i--) // [line 2]
 	{
-		bit = BI_Get_j_th_Bit_of_BI(i, N); // NÀÇ i¹øÂ° ºñÆ®°¡ 1ÀÎÁö 0ÀÎÁö ÆÇº°
+		bit = BI_Get_j_th_Bit_of_BI(i, N); // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ì¸ì§€ 0ì¸ì§€ íŒë³„
 
-		if (bit == 1) // NÀÇ i¹øÂ° ºñÆ®°¡ 1ÀÏ °æ¿ì
+		if (bit == 1) // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ì¼ ê²½ìš°
 		{
-			BI_Get_Word_Length(&t0_len, &t0); // t0ÀÇ ¿öµå¿­ ±æÀÌ -> t0_len
-			BI_Get_Word_Length(&t1_len, &t1); // t1ÀÇ ¿öµå¿­ ±æÀÌ -> t1_len
+			BI_Get_Word_Length(&t0_len, &t0); // t0ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t0_len
+			BI_Get_Word_Length(&t1_len, &t1); // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t1_len
 
-			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 + t1À» ÀúÀåÇÏ±â À§ÇÑ bigint »ı¼º
+			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 + t1ì„ ì €ì¥í•˜ê¸° ìœ„í•œ bigint ìƒì„±
 
 			// [line 3]
 			ret = ADD(&temp0, &t0, &t1); // temp0 = t0 + t1
@@ -3105,7 +3105,7 @@ int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 				BI_Delete(&t0);
 				BI_Delete(&t1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
 			ret = Division(&Q, &R, temp0, M); // R = temp0 (mod M)
@@ -3115,11 +3115,11 @@ int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 				BI_Delete(&t1);
 				BI_Delete(&temp0);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
 			BI_Delete(&t0);
-			BI_Assign(&t0, R); // t0 = R (t0 °»½Å)
+			BI_Assign(&t0, R); // t0 = R (t0 ê°±ì‹ )
 			BI_Delete(&temp0);
 			BI_Delete(&Q);
 			BI_Delete(&R);
@@ -3132,20 +3132,20 @@ int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 				BI_Delete(&t0);
 				BI_Delete(&t1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
 			BI_Delete(&t1);
-			BI_Assign(&t1, R); // t1 = R (t1 °»½Å)
+			BI_Assign(&t1, R); // t1 = R (t1 ê°±ì‹ )
 			BI_Delete(&Q);
 			BI_Delete(&R);
 		}
-		else if (bit == 0) // NÀÇ i¹øÂ° ºñÆ®°¡ 0ÀÏ °æ¿ì
+		else if (bit == 0) // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 0ì¼ ê²½ìš°
 		{
-			BI_Get_Word_Length(&t0_len, &t0); // t0ÀÇ ¿öµå¿­ ±æÀÌ -> t0_len
-			BI_Get_Word_Length(&t1_len, &t1); // t1ÀÇ ¿öµå¿­ ±æÀÌ -> t1_len
+			BI_Get_Word_Length(&t0_len, &t0); // t0ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t0_len
+			BI_Get_Word_Length(&t1_len, &t1); // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t1_len
 
-			BI_New(&temp1, MAX(t0_len, t1_len) + 1);  // temp1(t1) = t0 + t1À» ÀúÀåÇÏ±â À§ÇÑ bigint »ı¼º
+			BI_New(&temp1, MAX(t0_len, t1_len) + 1);  // temp1(t1) = t0 + t1ì„ ì €ì¥í•˜ê¸° ìœ„í•œ bigint ìƒì„±
 
 			// [line 3]
 			ret = ADD(&temp1, &t0, &t1); // temp1 = t0 + t1
@@ -3154,7 +3154,7 @@ int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 				BI_Delete(&t0);
 				BI_Delete(&t1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
 			ret = Division(&Q, &R, temp1, M); // R = temp1 (mod M)
@@ -3164,11 +3164,11 @@ int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 				BI_Delete(&t1);
 				BI_Delete(&temp1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
 			BI_Delete(&t1);
-			BI_Assign(&t1, R); // t1 = R (t1 °»½Å)
+			BI_Assign(&t1, R); // t1 = R (t1 ê°±ì‹ )
 			BI_Delete(&temp1);
 			BI_Delete(&Q);
 			BI_Delete(&R);
@@ -3181,24 +3181,24 @@ int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 				BI_Delete(&t0);
 				BI_Delete(&t1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
 			BI_Delete(&t0);
-			BI_Assign(&t0, R); // t0 = R (t0 °»½Å)
+			BI_Assign(&t0, R); // t0 = R (t0 ê°±ì‹ )
 			BI_Delete(&Q);
 			BI_Delete(&R);
 		}
-		else // NÀÇ i¹øÂ° ºñÆ®°¡ 1µµ 0µµ ¾Æ´Ñ °æ¿ì
+		else // Nì˜ ië²ˆì§¸ ë¹„íŠ¸ê°€ 1ë„ 0ë„ ì•„ë‹Œ ê²½ìš°
 		{
 			BI_Delete(&t0);
 			BI_Delete(&t1);
 
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 	}
 
-	BI_Assign(T, t0); // ¸¶Áö¸· t0 °ª T¿¡ ÇÒ´ç
+	BI_Assign(T, t0); // ë§ˆì§€ë§‰ t0 ê°’ Tì— í• ë‹¹
 
 	BI_Delete(&t0);
 	BI_Delete(&t1);
@@ -3220,61 +3220,61 @@ int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 	5 :	end for
 	6 : T <- t
 
-* @param bigint** T Modular Áö¼ö ¿¬»ê °á°ú¿¡ ÇØ´çÇÏ´Â bigint ´õºí Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* X Modular Áö¼ö ¿¬»ê¿¡¼­ ¹Ø¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* N Modular Áö¼ö ¿¬»ê¿¡¼­ Áö¼ö¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @return SUCCESS ¼º°ø ½Ã
+* @param bigint** T Modular ì§€ìˆ˜ ì—°ì‚° ê²°ê³¼ì— í•´ë‹¹í•˜ëŠ” bigint ë”ë¸” í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* X Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ë°‘ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* N Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ì§€ìˆ˜ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @return SUCCESS ì„±ê³µ ì‹œ
 */
 int EXP_LR_MUL(bigint** T, bigint* X, bigint* N)
 {
-	int i = 0; // ¹İº¹¹®¿¡ »ç¿ëµÉ intÇü º¯¼ö i
-	int len = 0; // Áö¼ö½Â NÀÇ ºñÆ® ±æÀÌ¸¦ ´ãÀ» intÇü º¯¼ö len
-	int result = 0; // ÇØ´ç ºñÆ® °ªÀÇ °á°ú¸¦ return ¹Ş´Â intÇü º¯¼ö result
-	int x_len = 0; // XÀÇ ¿öµå¿­ ±æÀÌ¸¦ ´ëÀÔÇÒ intÇü º¯¼ö x_len
-	int t0_len = 0; // t0ÀÇ ¿öµå¿­ ±æÀÌ¸¦ ´ëÀÔÇÒ intÇü º¯¼ö t0_len
+	int i = 0; // ë°˜ë³µë¬¸ì— ì‚¬ìš©ë  intí˜• ë³€ìˆ˜ i
+	int len = 0; // ì§€ìˆ˜ìŠ¹ Nì˜ ë¹„íŠ¸ ê¸¸ì´ë¥¼ ë‹´ì„ intí˜• ë³€ìˆ˜ len
+	int result = 0; // í•´ë‹¹ ë¹„íŠ¸ ê°’ì˜ ê²°ê³¼ë¥¼ return ë°›ëŠ” intí˜• ë³€ìˆ˜ result
+	int x_len = 0; // Xì˜ ì›Œë“œì—´ ê¸¸ì´ë¥¼ ëŒ€ì…í•  intí˜• ë³€ìˆ˜ x_len
+	int t0_len = 0; // t0ì˜ ì›Œë“œì—´ ê¸¸ì´ë¥¼ ëŒ€ì…í•  intí˜• ë³€ìˆ˜ t0_len
 	int ret;
 
 	bigint* t0 = NULL;
 	bigint* temp1 = NULL;
 
-	BI_Set_One(&t0);  // [line 1] t0¸¦ 1·Î ¼±¾ğ
+	BI_Set_One(&t0);  // [line 1] t0ë¥¼ 1ë¡œ ì„ ì–¸
 
-	BI_Get_Bit_Length(&len, N);  // Áö¼ö½Â(N)¿¡ ´ëÇÑ ºñÆ® ±æÀÌ -> len ´ëÀÔ
+	BI_Get_Bit_Length(&len, N);  // ì§€ìˆ˜ìŠ¹(N)ì— ëŒ€í•œ ë¹„íŠ¸ ê¸¸ì´ -> len ëŒ€ì…
 	BI_Get_Word_Length(&x_len, &X);
 
-	for (i = len - 1; i >= 0; i--)
+	for (i = len - 1; i >= 0; i--) // [line 2]
 	{
-		BI_Get_Word_Length(&t0_len, &t0); // t1ÀÇ ¿öµå¿­ ±æÀÌ -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t1_len
 		
-		ret = Squaring(&temp1, t0); // temp1 = t0^2 ¿¬»ê
+		ret = Squaring(&temp1, t0); // [line 3] temp1 = t0^2 ì—°ì‚°
 		if (ret == ERROR)
 		{
 			BI_Delete(&t0);
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 		
-		BI_Delete(&t0); // t0¸¦ Delete
-		result = BI_Get_j_th_Bit_of_BI(i, N); // ¹İº¹¹®¿¡¼­ »ç¿ë ÁßÀÎ º¯¼ö i¸¦ ÀÌ¿ëÇØ NÀÇ ÇØ´ç ºñÆ®°¡ 1ÀÎÁö 0ÀÎÁö Á¶»ç
+		BI_Delete(&t0); // t0ë¥¼ Delete
+		result = BI_Get_j_th_Bit_of_BI(i, N); // ë°˜ë³µë¬¸ì—ì„œ ì‚¬ìš© ì¤‘ì¸ ë³€ìˆ˜ ië¥¼ ì´ìš©í•´ Nì˜ í•´ë‹¹ ë¹„íŠ¸ê°€ 1ì¸ì§€ 0ì¸ì§€ ì¡°ì‚¬
 
-		if (result == 1) // ÇØ´ç ºñÆ®°¡ 1ÀÌ¸é,
+		if (result == 1) // í•´ë‹¹ ë¹„íŠ¸ê°€ 1ì´ë©´,
 		{
-			ret = Multiplication(&t0, temp1, X); //t1^2 * X (°ö¼À)¿¬»ê ÈÄ temp0¿¡ ´ëÀÔ
+			ret = Multiplication(&t0, temp1, X); // [line 4] t1^2 * X (ê³±ì…ˆ)ì—°ì‚° í›„ temp0ì— ëŒ€ì…
 			if (ret == ERROR)
 			{
 				BI_Delete(&t0);
 				BI_Delete(&temp1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 		}
-		else // ÇØ´ç ºñÆ®°¡ 0ÀÌ¸é, °ö¼ÀÀ» ÁøÇàÇÏÁö ¾Ê¾Æµµ µÇ¹Ç·Î
-			BI_Assign(&t0, temp1); // temp0¿¡ t0 assign --> ¹İº¹¹®¿¡¼­ t0·Î ¿¬»êÀ» ÁøÇàÇÒ ¼ö ÀÖµµ·Ï
+		else // í•´ë‹¹ ë¹„íŠ¸ê°€ 0ì´ë©´, ê³±ì…ˆì„ ì§„í–‰í•˜ì§€ ì•Šì•„ë„ ë˜ë¯€ë¡œ
+			BI_Assign(&t0, temp1); // [line 4] temp0ì— t0 assign --> ë°˜ë³µë¬¸ì—ì„œ t0ë¡œ ì—°ì‚°ì„ ì§„í–‰í•  ìˆ˜ ìˆë„ë¡
 
-		BI_Delete(&temp1); // temp1¸¦ delete.
-	}
+		BI_Delete(&temp1); // temp1ë¥¼ delete.
+	} // [line 5]
 
-	BI_Assign(T, t0); // ¹İº¹¹®ÀÌ ³¡³­ °á°úÀÎ t0¸¦ T¿¡ assign
-	BI_Delete(&t0); // t0¸¦ delete.
+	BI_Assign(T, t0); // [line 6] ë°˜ë³µë¬¸ì´ ëë‚œ ê²°ê³¼ì¸ t0ë¥¼ Tì— assign
+	BI_Delete(&t0); // t0ë¥¼ delete.
 
 	return SUCCESS;
 }
@@ -3293,15 +3293,15 @@ int EXP_LR_MUL(bigint** T, bigint* X, bigint* N)
 	5 :	end for
 	6 : T <- t
 
-* @param bigint** T Modular Áö¼ö ¿¬»ê °á°ú¿¡ ÇØ´çÇÏ´Â bigint ´õºí Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* X Modular Áö¼ö ¿¬»ê¿¡¼­ ¹Ø¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* N Modular Áö¼ö ¿¬»ê¿¡¼­ Áö¼ö¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @return SUCCESS ¼º°ø ½Ã
+* @param bigint** T Modular ì§€ìˆ˜ ì—°ì‚° ê²°ê³¼ì— í•´ë‹¹í•˜ëŠ” bigint ë”ë¸” í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* X Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ë°‘ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* N Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ì§€ìˆ˜ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @return SUCCESS ì„±ê³µ ì‹œ
  */
 int EXP_LR_ADD(bigint** T, bigint* X, bigint* N)
 {
-	int i = 0; // ¹İº¹¹®¿¡ »ç¿ëµÉ º¯¼ö i
-	int len = 0; // XÀÇ ºñÆ® ±æÀÌ¸¦ ´ãÀ» º¯¼ö len
+	int i = 0; // ë°˜ë³µë¬¸ì— ì‚¬ìš©ë  ë³€ìˆ˜ i
+	int len = 0; // Xì˜ ë¹„íŠ¸ ê¸¸ì´ë¥¼ ë‹´ì„ ë³€ìˆ˜ len
 	int result = 0;
 	int x_len = 0;
 	int t0_len = 0;
@@ -3310,35 +3310,35 @@ int EXP_LR_ADD(bigint** T, bigint* X, bigint* N)
 	bigint* t0 = NULL;
 	bigint* temp0 = NULL;
 
-	BI_Set_Zero(&t0);
+	BI_Set_Zero(&t0); // [line 1]
 	BI_Get_Bit_Length(&len, N);
 
-	for (i = len - 1; i >= 0; i--)
+	for (i = len - 1; i >= 0; i--) // [line 2]
 	{
-		BI_Left_Shift(t0, 1);
-		BI_Get_Word_Length(&t0_len, &t0); // t1ÀÇ ¿öµå¿­ ±æÀÌ -> t1_len
-		BI_Get_Word_Length(&x_len, &X); // t1ÀÇ ¿öµå¿­ ±æÀÌ -> t1_len
-		BI_New(&temp0, t0_len + x_len); // temp1(t1) = t1^2À» ÀúÀåÇÏ±â À§ÇÑ bigint »ı¼º
+		BI_Left_Shift(t0, 1); // [line 3]
+		BI_Get_Word_Length(&t0_len, &t0); // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t1_len
+		BI_Get_Word_Length(&x_len, &X); // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t1_len
+		BI_New(&temp0, t0_len + x_len); // temp1(t1) = t1^2ì„ ì €ì¥í•˜ê¸° ìœ„í•œ bigint ìƒì„±
 		
 		result = BI_Get_j_th_Bit_of_BI(i, N);
-		if (result == 1)
+		if (result == 1) // [line 4]
 		{
 			ret = ADD(&temp0, &t0, &X);
 			if (ret == ERROR)
 			{
 				BI_Delete(&t0);
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 		}
-		else
+		else // [line 4]
 			BI_Assign(&temp0, t0);
 
 		BI_Delete(&t0);
 		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
-	}
+	} // [line 5]
 
-	BI_Assign(T, t0);
+	BI_Assign(T, t0); // [line 6]
 	BI_Delete(&t0);
 
 	return SUCCESS;
@@ -3352,20 +3352,20 @@ int EXP_LR_ADD(bigint** T, bigint* X, bigint* N)
 	Input : T, X, N, M
 	1 : (t0, t1) <- (1, X)
 	2 :	for i <- 0 to l - 1 do
-	3 :		t0 <- t0 * t1^(N_{i}) ( * : MUL_Multi )
-	4 :		t1 <- t1 ^ 2( ^ : SQU )
+	3 :		t0 <- t0 * t1^(N_{i}) ( * : optional )
+	4 :		t1 <- t1 ^ 2( ^ 2 : optional )
 	5 :	end for
 	6 :	T <- t
 
-* @param bigint** T Modular Áö¼ö ¿¬»ê °á°ú¿¡ ÇØ´çÇÏ´Â bigint ´õºí Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* X Modular Áö¼ö ¿¬»ê¿¡¼­ ¹Ø¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* N Modular Áö¼ö ¿¬»ê¿¡¼­ Áö¼ö¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @return SUCCESS ¼º°ø ½Ã
+* @param bigint** T Modular ì§€ìˆ˜ ì—°ì‚° ê²°ê³¼ì— í•´ë‹¹í•˜ëŠ” bigint ë”ë¸” í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* X Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ë°‘ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* N Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ì§€ìˆ˜ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @return SUCCESS ì„±ê³µ ì‹œ
 */
 int EXP_RL_MUL(bigint** T, bigint* X, bigint* N)
 {
-	int i = 0; // ¹İº¹¹®¿¡ »ç¿ëµÉ º¯¼ö i
-	int len = 0; // XÀÇ ºñÆ® ±æÀÌ¸¦ ´ãÀ» º¯¼ö len
+	int i = 0; // ë°˜ë³µë¬¸ì— ì‚¬ìš©ë  ë³€ìˆ˜ i
+	int len = 0; // Xì˜ ë¹„íŠ¸ ê¸¸ì´ë¥¼ ë‹´ì„ ë³€ìˆ˜ len
 	int result = 0;
 	int t0_len = 0;
 	int t1_len = 0;
@@ -3376,7 +3376,7 @@ int EXP_RL_MUL(bigint** T, bigint* X, bigint* N)
 	bigint* temp0 = NULL;
 	bigint* temp1 = NULL;
 
-	BI_Set_One(&t0);
+	BI_Set_One(&t0); // [line 1]
 	BI_Assign(&t1, X); // [line 1]
 
 	BI_Get_Bit_Length(&len, N);
@@ -3390,24 +3390,24 @@ int EXP_RL_MUL(bigint** T, bigint* X, bigint* N)
 		return SUCCESS;
 	}
 
-	for (i = 0; i <= len - 1; i++)
+	for (i = 0; i <= len - 1; i++) // [line 2]
 	{
-		BI_Get_Word_Length(&t0_len, &t0); // t1ÀÇ ¿öµå¿­ ±æÀÌ -> t1_len
-		BI_Get_Word_Length(&t1_len, &t1); // t1ÀÇ ¿öµå¿­ ±æÀÌ -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t1_len
+		BI_Get_Word_Length(&t1_len, &t1); // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t1_len
 
-		BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2À» ÀúÀåÇÏ±â À§ÇÑ bigint »ı¼º
+		BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2ì„ ì €ì¥í•˜ê¸° ìœ„í•œ bigint ìƒì„±
 
 		result = BI_Get_j_th_Bit_of_BI(i, N);
 
 		if (result == 1)
 		{
-			ret = Multiplication(&temp0, t0, t1);
+			ret = Multiplication(&temp0, t0, t1); // [line 3]
 			if (ret == ERROR)
 			{
 				BI_Delete(&t0);
 				BI_Delete(&t1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 		}
 		else
@@ -3419,19 +3419,19 @@ int EXP_RL_MUL(bigint** T, bigint* X, bigint* N)
 		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
 
-		ret = Squaring(&temp1, t1);
+		ret = Squaring(&temp1, t1); //  [line 4]
 		if (ret == ERROR)
 		{
 			BI_Delete(&t0);
 			BI_Delete(&t1);
 
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 		
 		BI_Delete(&t1);
 		BI_Assign(&t1, temp1);
 		BI_Delete(&temp1);
-	}
+	} // [line 5]
 	
 	BI_Assign(T, t0);
 	BI_Delete(&t0);
@@ -3454,14 +3454,14 @@ int EXP_RL_MUL(bigint** T, bigint* X, bigint* N)
 	5 :	end for
 	6 :	T <- t
 
-* @param bigint** T Modular Áö¼ö ¿¬»ê °á°ú¿¡ ÇØ´çÇÏ´Â bigint ´õºí Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* X Modular Áö¼ö ¿¬»ê¿¡¼­ ¹Ø¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* N Modular Áö¼ö ¿¬»ê¿¡¼­ Áö¼ö¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
+* @param bigint** T Modular ì§€ìˆ˜ ì—°ì‚° ê²°ê³¼ì— í•´ë‹¹í•˜ëŠ” bigint ë”ë¸” í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* X Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ë°‘ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* N Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ì§€ìˆ˜ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
 */
 int EXP_RL_ADD(bigint** T, bigint* X, bigint* N)
 {
-	int i = 0; // ¹İº¹¹®¿¡ »ç¿ëµÉ º¯¼ö i
-	int len = 0; // XÀÇ ºñÆ® ±æÀÌ¸¦ ´ãÀ» º¯¼ö len
+	int i = 0; // ë°˜ë³µë¬¸ì— ì‚¬ìš©ë  ë³€ìˆ˜ i
+	int len = 0; // Xì˜ ë¹„íŠ¸ ê¸¸ì´ë¥¼ ë‹´ì„ ë³€ìˆ˜ len
 	int result = 0;
 	int t0_len = 0;
 	int t1_len = 0;
@@ -3471,7 +3471,7 @@ int EXP_RL_ADD(bigint** T, bigint* X, bigint* N)
 	bigint* t1 = NULL;
 	bigint* temp0 = NULL;
 
-	BI_Set_Zero(&t0);
+	BI_Set_Zero(&t0); // [line 1]
 	BI_Assign(&t1, X); // [line 1]
 
 	BI_Get_Bit_Length(&len, N);
@@ -3484,16 +3484,16 @@ int EXP_RL_ADD(bigint** T, bigint* X, bigint* N)
 		return SUCCESS;
 	}
 
-	for (i = 0; i <= len - 1; i++)
+	for (i = 0; i <= len - 1; i++) //  [line 2]
 	{
-		BI_Get_Word_Length(&t0_len, &t0); // t1ÀÇ ¿öµå¿­ ±æÀÌ -> t1_len
-		BI_Get_Word_Length(&t1_len, &t1); // t1ÀÇ ¿öµå¿­ ±æÀÌ -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t1_len
+		BI_Get_Word_Length(&t1_len, &t1); // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t1_len
 
 		result = BI_Get_j_th_Bit_of_BI(i, N);
 
-		if (result == 1)
+		if (result == 1) // [line 3] 
 		{
-			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 * t1À» ÀúÀåÇÏ±â À§ÇÑ bigint »ı¼º
+			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 * t1ì„ ì €ì¥í•˜ê¸° ìœ„í•œ bigint ìƒì„±
 			
 			ret = ADD(&temp0, &t0, &t1);
 			if (ret == ERROR)
@@ -3501,10 +3501,10 @@ int EXP_RL_ADD(bigint** T, bigint* X, bigint* N)
 				BI_Delete(&t0);
 				BI_Delete(&t1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 		}
-		else
+		else // [line 3]
 		{
 			BI_Assign(&temp0, t0);
 			BI_Delete(&t0);
@@ -3513,10 +3513,10 @@ int EXP_RL_ADD(bigint** T, bigint* X, bigint* N)
 		BI_Assign(&t0, temp0);
 		BI_Delete(&temp0);
 
-		BI_Left_Shift(t1, 1);
-	}
+		BI_Left_Shift(t1, 1); // [line 4]
+	} // [line 5]
 
-	BI_Assign(T, t0);
+	BI_Assign(T, t0); // [line 6]
 	BI_Delete(&t0);
 	BI_Delete(&t1);
 	BI_Refine(*T);
@@ -3538,90 +3538,90 @@ int EXP_RL_ADD(bigint** T, bigint* X, bigint* N)
 	5 :	end for
 	6 : T <- t
 
-* @param bigint** T Modular Áö¼ö ¿¬»ê °á°ú¿¡ ÇØ´çÇÏ´Â bigint ´õºí Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* X Modular Áö¼ö ¿¬»ê¿¡¼­ ¹Ø¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* N Modular Áö¼ö ¿¬»ê¿¡¼­ Áö¼ö¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* M Modular Áö¼ö ¿¬»ê¿¡¼­ X^N °ú T¸¦ ÇÕµ¿ÇØÁÖ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @return SUCCESS ¼º°ø ½Ã
+* @param bigint** T Modular ì§€ìˆ˜ ì—°ì‚° ê²°ê³¼ì— í•´ë‹¹í•˜ëŠ” bigint ë”ë¸” í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* X Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ë°‘ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* N Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ì§€ìˆ˜ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* M Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ X^N ê³¼ Të¥¼ í•©ë™í•´ì£¼ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @return SUCCESS ì„±ê³µ ì‹œ
 */
 int MOD_EXP_LR_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 {
-	int i = 0; // ¹İº¹¹®¿¡ »ç¿ëµÉ intÇü º¯¼ö i
-	int len = 0; // Áö¼ö½Â NÀÇ ºñÆ® ±æÀÌ¸¦ ´ãÀ» intÇü º¯¼ö len
-	int result = 0; // ÇØ´ç ºñÆ® °ªÀÇ °á°ú¸¦ return ¹Ş´Â intÇü º¯¼ö result
-	int x_len = 0; // XÀÇ ¿öµå¿­ ±æÀÌ¸¦ ´ëÀÔÇÒ intÇü º¯¼ö x_len
+	int i = 0; // ë°˜ë³µë¬¸ì— ì‚¬ìš©ë  intí˜• ë³€ìˆ˜ i
+	int len = 0; // ì§€ìˆ˜ìŠ¹ Nì˜ ë¹„íŠ¸ ê¸¸ì´ë¥¼ ë‹´ì„ intí˜• ë³€ìˆ˜ len
+	int result = 0; // í•´ë‹¹ ë¹„íŠ¸ ê°’ì˜ ê²°ê³¼ë¥¼ return ë°›ëŠ” intí˜• ë³€ìˆ˜ result
+	int x_len = 0; // Xì˜ ì›Œë“œì—´ ê¸¸ì´ë¥¼ ëŒ€ì…í•  intí˜• ë³€ìˆ˜ x_len
 	int ret;
 
 	bigint* t0 = NULL; // T0
 	bigint* temp0 = NULL; //
 	bigint* temp1 = NULL; //
-	bigint* trash_q = NULL; // Modular ¿¬»êÀ» À§ÇØ »ç¿ëµÇ´Â Binary_Long_Div()ÀÇ ¸ò ¸Å°³º¯¼ö·Î µé¾î°¥ bigint Æ÷ÀÎÅÍÇü º¯¼ö 
-	bigint* trash_r = NULL; // Modular ¿¬»êÀ» À§ÇØ »ç¿ëµÇ´Â Binary_Long_Div()ÀÇ ³ª¸ÓÁö ¸Å°³º¯¼ö·Î µé¾î°¥ bigint Æ÷ÀÎÅÍÇü º¯¼ö
+	bigint* trash_q = NULL; // Modular ì—°ì‚°ì„ ìœ„í•´ ì‚¬ìš©ë˜ëŠ” Binary_Long_Div()ì˜ ëª« ë§¤ê°œë³€ìˆ˜ë¡œ ë“¤ì–´ê°ˆ bigint í¬ì¸í„°í˜• ë³€ìˆ˜ 
+	bigint* trash_r = NULL; // Modular ì—°ì‚°ì„ ìœ„í•´ ì‚¬ìš©ë˜ëŠ” Binary_Long_Div()ì˜ ë‚˜ë¨¸ì§€ ë§¤ê°œë³€ìˆ˜ë¡œ ë“¤ì–´ê°ˆ bigint í¬ì¸í„°í˜• ë³€ìˆ˜
 
-	BI_Set_One(&t0); // t0¸¦ 1·Î ¼±¾ğ
-	BI_Get_Bit_Length(&len, N); // Áö¼ö½Â(N)¿¡ ´ëÇÑ ºñÆ® ±æÀÌ -> len ´ëÀÔ
+	BI_Set_One(&t0); //  [line 1] t0ë¥¼ 1ë¡œ ì„ ì–¸
+	BI_Get_Bit_Length(&len, N); // ì§€ìˆ˜ìŠ¹(N)ì— ëŒ€í•œ ë¹„íŠ¸ ê¸¸ì´ -> len ëŒ€ì…
 
-	for (i = len - 1; i >= 0; i--) // Áö¼ö½Â(N)ÀÇ ÃÖ»óÀ§ ºñÆ®ºÎÅÍ ÃÖÇÏÀ§ ºñÆ®±îÁö ¹İº¹¹®
+	for (i = len - 1; i >= 0; i--) //  [line 2] ì§€ìˆ˜ìŠ¹(N)ì˜ ìµœìƒìœ„ ë¹„íŠ¸ë¶€í„° ìµœí•˜ìœ„ ë¹„íŠ¸ê¹Œì§€ ë°˜ë³µë¬¸
 	{
-		ret = Squaring(&temp1, t0); // temp1 = t0^2 ¿¬»ê
+		ret = Squaring(&temp1, t0); //  [line 3] temp1 = t0^2 ì—°ì‚°
 		if (ret == ERROR)
 		{
 			BI_Delete(&t0);
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 		
-		BI_Delete(&t0); // t0¸¦ Delete
+		BI_Delete(&t0); // t0ë¥¼ Delete
 		
-		ret = Division(&trash_q, &trash_r, temp1, M); // temp1(=t0^2)¿¡ ´ëÇÏ¿© MÀ¸·Î ¸ğµâ·¯ ¿¬»ê
+		ret = Division(&trash_q, &trash_r, temp1, M); //  [line 3] temp1(=t0^2)ì— ëŒ€í•˜ì—¬ Mìœ¼ë¡œ ëª¨ë“ˆëŸ¬ ì—°ì‚°
 		if (ret == ERROR)
 		{
 			BI_Delete(&t0);
 			BI_Delete(&temp1);
 
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 		
-		BI_Assign(&temp1, trash_r); // ³ª¸ÓÁö¸¸ °ü½É ÀÖÀ¸¹Ç·Î ³ª¸ÓÁö¸¦ temp1¿¡ Assign
-		BI_Delete(&trash_r); // temp1¿¡ °°Àº °ªÀ» ´ëÀÔÇßÀ¸¹Ç·Î delete
-		BI_Delete(&trash_q); //trash_q·Î ¹Ù²Ü±î
+		BI_Assign(&temp1, trash_r); // ë‚˜ë¨¸ì§€ë§Œ ê´€ì‹¬ ìˆìœ¼ë¯€ë¡œ ë‚˜ë¨¸ì§€ë¥¼ temp1ì— Assign
+		BI_Delete(&trash_r); // temp1ì— ê°™ì€ ê°’ì„ ëŒ€ì…í–ˆìœ¼ë¯€ë¡œ delete
+		BI_Delete(&trash_q); //trash_që¡œ ë°”ê¿€ê¹Œ
 
-		BI_Get_Word_Length(&x_len, &X); // XÀÇ ¿öµå¿­ ±æÀÌ -> x_len
+		BI_Get_Word_Length(&x_len, &X); // Xì˜ ì›Œë“œì—´ ê¸¸ì´ -> x_len
 		
-		result = BI_Get_j_th_Bit_of_BI(i, N); // ¹İº¹¹®¿¡¼­ »ç¿ë ÁßÀÎ º¯¼ö i¸¦ ÀÌ¿ëÇØ NÀÇ ÇØ´ç ºñÆ®°¡ 1ÀÎÁö 0ÀÎÁö Á¶»ç
-		if (result == 1) // ÇØ´ç ºñÆ®°¡ 1ÀÌ¸é,
+		result = BI_Get_j_th_Bit_of_BI(i, N); // ë°˜ë³µë¬¸ì—ì„œ ì‚¬ìš© ì¤‘ì¸ ë³€ìˆ˜ ië¥¼ ì´ìš©í•´ Nì˜ í•´ë‹¹ ë¹„íŠ¸ê°€ 1ì¸ì§€ 0ì¸ì§€ ì¡°ì‚¬
+		if (result == 1) // [line 4] í•´ë‹¹ ë¹„íŠ¸ê°€ 1ì´ë©´,
 		{
-			ret = Multiplication(&temp0, temp1, X); //t1^2 * X (°ö¼À)¿¬»ê ÈÄ temp0¿¡ ´ëÀÔ
+			ret = Multiplication(&temp0, temp1, X); // [line 4] t1^2 * X (ê³±ì…ˆ)ì—°ì‚° í›„ temp0ì— ëŒ€ì…
 			if (ret == ERROR)
 			{
 				BI_Delete(&t0);
 				BI_Delete(&temp1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
-			ret = Division(&trash_q, &trash_r, temp0, M); // °ö¼À ¿¬»êÇÑ temp0¿¡ ´ëÇÏ¿© MÀ¸·Î ¸ğµâ·¯ ¿¬»ê ÁøÇà
+			ret = Division(&trash_q, &trash_r, temp0, M); // [line 4] ê³±ì…ˆ ì—°ì‚°í•œ temp0ì— ëŒ€í•˜ì—¬ Mìœ¼ë¡œ ëª¨ë“ˆëŸ¬ ì—°ì‚° ì§„í–‰
 			if (ret == ERROR)
 			{
 				BI_Delete(&temp0);
 				BI_Delete(&temp1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			};
 			
-			BI_Assign(&t0, trash_r); // ³ª¸ÓÁö¸¸ °ü½É ÀÖÀ¸¹Ç·Î ³ª¸ÓÁö¸¦ temp0¿¡ assign. --> ¹İº¹¹®¿¡¼­ t0·Î ¿¬»êÀ» ÁøÇàÇÒ ¼ö ÀÖµµ·Ï
-			BI_Delete(&trash_r); // temp0¿¡ °°Àº °ªÀ» ´ëÀÔÇßÀ¸¹Ç·Î delete
-			BI_Delete(&trash_q); // Binary Long_Div()¿¡¼­ »ç¿ëÇÑ ¸òµµ ÇÊ¿ä¾øÀ¸¹Ç·Î delete
+			BI_Assign(&t0, trash_r); // ë‚˜ë¨¸ì§€ë§Œ ê´€ì‹¬ ìˆìœ¼ë¯€ë¡œ ë‚˜ë¨¸ì§€ë¥¼ temp0ì— assign. --> ë°˜ë³µë¬¸ì—ì„œ t0ë¡œ ì—°ì‚°ì„ ì§„í–‰í•  ìˆ˜ ìˆë„ë¡
+			BI_Delete(&trash_r); // temp0ì— ê°™ì€ ê°’ì„ ëŒ€ì…í–ˆìœ¼ë¯€ë¡œ delete
+			BI_Delete(&trash_q); // Binary Long_Div()ì—ì„œ ì‚¬ìš©í•œ ëª«ë„ í•„ìš”ì—†ìœ¼ë¯€ë¡œ delete
 		}
 
-		else // ÇØ´ç ºñÆ®°¡ 0ÀÌ¸é, °ö¼ÀÀ» ÁøÇàÇÏÁö ¾Ê¾Æµµ µÇ¹Ç·Î
-			BI_Assign(&t0, temp1); // temp0¿¡ t0 assign --> ¹İº¹¹®¿¡¼­ t0·Î ¿¬»êÀ» ÁøÇàÇÒ ¼ö ÀÖµµ·Ï
+		else // í•´ë‹¹ ë¹„íŠ¸ê°€ 0ì´ë©´, ê³±ì…ˆì„ ì§„í–‰í•˜ì§€ ì•Šì•„ë„ ë˜ë¯€ë¡œ
+			BI_Assign(&t0, temp1); // temp0ì— t0 assign --> ë°˜ë³µë¬¸ì—ì„œ t0ë¡œ ì—°ì‚°ì„ ì§„í–‰í•  ìˆ˜ ìˆë„ë¡
 
-		BI_Delete(&temp1); // temp1¸¦ delete.
-		BI_Delete(&temp0); // temp0¸¦ delete.
-	}
+		BI_Delete(&temp1); // temp1ë¥¼ delete.
+		BI_Delete(&temp0); // temp0ë¥¼ delete.
+	} // [line 5]
 
-	BI_Assign(T, t0); // ¹İº¹¹®ÀÌ ³¡³­ °á°úÀÎ t0¸¦ T¿¡ assign
-	BI_Delete(&t0); // t0¸¦ delete.
+	BI_Assign(T, t0); // [line 6] ë°˜ë³µë¬¸ì´ ëë‚œ ê²°ê³¼ì¸ t0ë¥¼ Tì— assign
+	BI_Delete(&t0); // t0ë¥¼ delete.
 
 	return SUCCESS;
 }
@@ -3640,78 +3640,78 @@ int MOD_EXP_LR_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 	5 :	end for
 	6 : T <- t
 
-* @param bigint** T Modular Áö¼ö ¿¬»ê °á°ú¿¡ ÇØ´çÇÏ´Â bigint ´õºí Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* X Modular Áö¼ö ¿¬»ê¿¡¼­ ¹Ø¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* N Modular Áö¼ö ¿¬»ê¿¡¼­ Áö¼ö¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* M Modular Áö¼ö ¿¬»ê¿¡¼­ X^N °ú T¸¦ ÇÕµ¿ÇØÁÖ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @return SUCCESS ¼º°ø ½Ã
+* @param bigint** T Modular ì§€ìˆ˜ ì—°ì‚° ê²°ê³¼ì— í•´ë‹¹í•˜ëŠ” bigint ë”ë¸” í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* X Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ë°‘ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* N Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ì§€ìˆ˜ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* M Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ X^N ê³¼ Të¥¼ í•©ë™í•´ì£¼ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @return SUCCESS ì„±ê³µ ì‹œ
 */
 int MOD_EXP_LR_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 {
-	int i = 0; // ¹İº¹¹®¿¡ »ç¿ëµÉ intÇü º¯¼ö i
-	int len = 0; // Áö¼ö½Â NÀÇ ºñÆ® ±æÀÌ¸¦ ´ãÀ» intÇü º¯¼ö len
-	int result = 0; // ÇØ´ç ºñÆ® °ªÀÇ °á°ú¸¦ return ¹Ş´Â intÇü º¯¼ö result
-	int x_len = 0; // XÀÇ ¿öµå¿­ ±æÀÌ¸¦ ´ëÀÔÇÒ intÇü º¯¼ö x_len
-	int t0_len = 0; // ³ª¸ÓÁö ¿öµå¿­ ±æÀÌ¸¦ ´ëÀÔÇÒ intÇü º¯¼ö t0_len
+	int i = 0; // ë°˜ë³µë¬¸ì— ì‚¬ìš©ë  intí˜• ë³€ìˆ˜ i
+	int len = 0; // ì§€ìˆ˜ìŠ¹ Nì˜ ë¹„íŠ¸ ê¸¸ì´ë¥¼ ë‹´ì„ intí˜• ë³€ìˆ˜ len
+	int result = 0; // í•´ë‹¹ ë¹„íŠ¸ ê°’ì˜ ê²°ê³¼ë¥¼ return ë°›ëŠ” intí˜• ë³€ìˆ˜ result
+	int x_len = 0; // Xì˜ ì›Œë“œì—´ ê¸¸ì´ë¥¼ ëŒ€ì…í•  intí˜• ë³€ìˆ˜ x_len
+	int t0_len = 0; // ë‚˜ë¨¸ì§€ ì›Œë“œì—´ ê¸¸ì´ë¥¼ ëŒ€ì…í•  intí˜• ë³€ìˆ˜ t0_len
 	int ret;
 
 	bigint* t0 = NULL;
 	bigint* temp0 = NULL;
-	bigint* trash_q = NULL; // Modular ¿¬»êÀ» À§ÇØ »ç¿ëµÇ´Â Binary_Long_Div()ÀÇ ¸ò ¸Å°³º¯¼ö·Î µé¾î°¥ bigint Æ÷ÀÎÅÍÇü º¯¼ö
-	bigint* trash_r = NULL; // Modular ¿¬»êÀ» À§ÇØ »ç¿ëµÇ´Â Binary_Long_Div()ÀÇ ³ª¸ÓÁö ¸Å°³º¯¼ö·Î µé¾î°¥ bigint Æ÷ÀÎÅÍÇü º¯¼ö
+	bigint* trash_q = NULL; // Modular ì—°ì‚°ì„ ìœ„í•´ ì‚¬ìš©ë˜ëŠ” Binary_Long_Div()ì˜ ëª« ë§¤ê°œë³€ìˆ˜ë¡œ ë“¤ì–´ê°ˆ bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+	bigint* trash_r = NULL; // Modular ì—°ì‚°ì„ ìœ„í•´ ì‚¬ìš©ë˜ëŠ” Binary_Long_Div()ì˜ ë‚˜ë¨¸ì§€ ë§¤ê°œë³€ìˆ˜ë¡œ ë“¤ì–´ê°ˆ bigint í¬ì¸í„°í˜• ë³€ìˆ˜
 	
-	BI_Set_Zero(&t0); // t0¸¦ 0À¸·Î ¼±¾ğ
-	BI_Get_Bit_Length(&len, N); // Áö¼ö½Â(N)¿¡ ´ëÇÑ ºñÆ® ±æÀÌ -> len ´ëÀÔ
+	BI_Set_Zero(&t0); // [line 1] t0ë¥¼ 0ìœ¼ë¡œ ì„ ì–¸
+	BI_Get_Bit_Length(&len, N); // ì§€ìˆ˜ìŠ¹(N)ì— ëŒ€í•œ ë¹„íŠ¸ ê¸¸ì´ -> len ëŒ€ì…
 
-	for (i = len - 1; i >= 0; i--)
+	for (i = len - 1; i >= 0; i--) // [line 2] 
 	{
-		BI_Left_Shift(t0, 1); // t0 <- 2 * t0
+		BI_Left_Shift(t0, 1); // t0 <- 2 * t0 // [line 3]
 		
-		ret = Division(&trash_q, &trash_r, t0, M); // 2 * t0¿¡ ´ëÇØ Binary_Long_Div¿¡ ÀÇÇØ MOD ¿¬»êµÈ °ª -> 2 * t0 (mod M) == trash_r
+		ret = Division(&trash_q, &trash_r, t0, M); // [line 3] 2 * t0ì— ëŒ€í•´ Binary_Long_Divì— ì˜í•´ MOD ì—°ì‚°ëœ ê°’ -> 2 * t0 (mod M) == trash_r
 		if (ret == ERROR)
 		{
 			BI_Delete(&t0);
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 		
-		BI_Get_Word_Length(&t0_len, &trash_r); // ³ª¸ÓÁöÀÇ ¿öµå¿­ ±æÀÌ -> t0_len
-		BI_Get_Word_Length(&x_len, &X); // XÀÇ ¿öµå¿­ ±æÀÌ -> x_len
-		BI_New(&temp0, MAX(t0_len, x_len)); // trash_r(= 2 * t0 (mod M))°ú XÀÇ µ¡¼À°á°ú¸¦ ´ãÀ» bigint temp0 »ı¼º
+		BI_Get_Word_Length(&t0_len, &trash_r); // ë‚˜ë¨¸ì§€ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t0_len
+		BI_Get_Word_Length(&x_len, &X); // Xì˜ ì›Œë“œì—´ ê¸¸ì´ -> x_len
+		BI_New(&temp0, MAX(t0_len, x_len)); // trash_r(= 2 * t0 (mod M))ê³¼ Xì˜ ë§ì…ˆê²°ê³¼ë¥¼ ë‹´ì„ bigint temp0 ìƒì„±
 		
-		result = BI_Get_j_th_Bit_of_BI(i, N); // ¹İº¹¹®¿¡¼­ »ç¿ë ÁßÀÎ º¯¼ö i¸¦ ÀÌ¿ëÇØ NÀÇ ÇØ´ç ºñÆ®°¡ 1ÀÎÁö 0ÀÎÁö Á¶»ç
+		result = BI_Get_j_th_Bit_of_BI(i, N); // [line 4] ë°˜ë³µë¬¸ì—ì„œ ì‚¬ìš© ì¤‘ì¸ ë³€ìˆ˜ ië¥¼ ì´ìš©í•´ Nì˜ í•´ë‹¹ ë¹„íŠ¸ê°€ 1ì¸ì§€ 0ì¸ì§€ ì¡°ì‚¬
 
-		if (result == 1)// ÇØ´ç ºñÆ®°¡ 1ÀÌ¸é(If result is 1),
+		if (result == 1)// [line 4] í•´ë‹¹ ë¹„íŠ¸ê°€ 1ì´ë©´(If result is 1),
 		{
-			ret = ADD(&temp0, &trash_r, &X); // [line 4] trash_r + X ÀÇ °ªÀ» temp0¿¡ ´ëÀÔ 
+			ret = ADD(&temp0, &trash_r, &X); // [line 4] trash_r + X ì˜ ê°’ì„ temp0ì— ëŒ€ì… 
 			if (ret == ERROR)
 			{
 				BI_Delete(&t0);
 				BI_Delete(&temp0);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
-			ret = Division(&trash_q, &trash_r, temp0, M); // temp0ÀÇ modular °ªÀ» ±¸ÇØ¼­ trash_r¿¡ ´Ù½Ã ´ëÀÔ
+			ret = Division(&trash_q, &trash_r, temp0, M); // temp0ì˜ modular ê°’ì„ êµ¬í•´ì„œ trash_rì— ë‹¤ì‹œ ëŒ€ì…
 			if (ret == ERROR)
 			{
 				BI_Delete(&t0);
 				BI_Delete(&temp0);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 			
-			BI_Assign(&t0, trash_r);  // ³ª¸ÓÁö¸¸ °ü½É ÀÖÀ¸¹Ç·Î ³ª¸ÓÁö¸¦ temp0¿¡ assign. --> ¹İº¹¹®¿¡¼­ ´Ù½Ã µ¹ ¶§ t0·Î ¿¬»êÀ» ÁøÇàÇÒ ¼ö ÀÖµµ·Ï
+			BI_Assign(&t0, trash_r);  // ë‚˜ë¨¸ì§€ë§Œ ê´€ì‹¬ ìˆìœ¼ë¯€ë¡œ ë‚˜ë¨¸ì§€ë¥¼ temp0ì— assign. --> ë°˜ë³µë¬¸ì—ì„œ ë‹¤ì‹œ ëŒ ë•Œ t0ë¡œ ì—°ì‚°ì„ ì§„í–‰í•  ìˆ˜ ìˆë„ë¡
 		}
-		else // ÇØ´ç ºñÆ®°¡ 0ÀÌ¸é(If result is 0),
-			BI_Assign(&t0, trash_r); // ³ª¸ÓÁö¸¸ °ü½É ÀÖÀ¸¹Ç·Î ³ª¸ÓÁö¸¦ temp0¿¡ assign. --> ¹İº¹¹®¿¡¼­ ´Ù½Ã µ¹ ¶§ t0·Î ¿¬»êÀ» ÁøÇàÇÒ ¼ö ÀÖµµ·Ï 
+		else // [line 4] í•´ë‹¹ ë¹„íŠ¸ê°€ 0ì´ë©´(If result is 0),
+			BI_Assign(&t0, trash_r); // [line 4] ë‚˜ë¨¸ì§€ë§Œ ê´€ì‹¬ ìˆìœ¼ë¯€ë¡œ ë‚˜ë¨¸ì§€ë¥¼ temp0ì— assign. --> ë°˜ë³µë¬¸ì—ì„œ ë‹¤ì‹œ ëŒ ë•Œ t0ë¡œ ì—°ì‚°ì„ ì§„í–‰í•  ìˆ˜ ìˆë„ë¡ 
 
-		BI_Delete(&temp0); // temp0¸¦ delete.
-		BI_Delete(&trash_q); // trash_q¸¦ delete.
-		BI_Delete(&trash_r); // trash_r¸¦ delete.
-	}
+		BI_Delete(&temp0); // temp0ë¥¼ delete.
+		BI_Delete(&trash_q); // trash_që¥¼ delete.
+		BI_Delete(&trash_r); // trash_rë¥¼ delete.
+	} // [line 5]
 
-	BI_Assign(T, t0); // ¹İº¹¹®ÀÌ ³¡³­ ÃÖÁ¾ °á°úÀÎ t0¸¦ T¿¡ assign
-	BI_Delete(&t0); // t0¸¦ delete.
+	BI_Assign(T, t0); // [line 6] ë°˜ë³µë¬¸ì´ ëë‚œ ìµœì¢… ê²°ê³¼ì¸ t0ë¥¼ Tì— assign
+	BI_Delete(&t0); // t0ë¥¼ delete.
 
 	return SUCCESS;
 }
@@ -3729,122 +3729,122 @@ int MOD_EXP_LR_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 	5 :	end for
 	6 :	T <- t
 
-* @param bigint** T Modular Áö¼ö ¿¬»ê °á°ú¿¡ ÇØ´çÇÏ´Â bigint ´õºí Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* X Modular Áö¼ö ¿¬»ê¿¡¼­ ¹Ø¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* N Modular Áö¼ö ¿¬»ê¿¡¼­ Áö¼ö¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* M Modular Áö¼ö ¿¬»ê¿¡¼­ X^N °ú T¸¦ ÇÕµ¿ÇØÁÖ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @return SUCCESS ¼º°ø ½Ã
+* @param bigint** T Modular ì§€ìˆ˜ ì—°ì‚° ê²°ê³¼ì— í•´ë‹¹í•˜ëŠ” bigint ë”ë¸” í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* X Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ë°‘ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* N Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ì§€ìˆ˜ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* M Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ X^N ê³¼ Të¥¼ í•©ë™í•´ì£¼ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @return SUCCESS ì„±ê³µ ì‹œ
 */
 int MOD_EXP_RL_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 {
-	int i = 0; // ¹İº¹¹®¿¡ »ç¿ëµÉ intÇü º¯¼ö i
-	int len = 0; // Áö¼ö½Â NÀÇ ºñÆ® ±æÀÌ¸¦ ´ãÀ» intÇü º¯¼ö len
-	int result = 0; // ÇØ´ç ºñÆ® °ªÀÇ °á°ú¸¦ return ¹Ş´Â intÇü º¯¼ö result
-	int t0_len = 0; // t0ÀÇ ¿öµå¿­ ±æÀÌ¸¦ ´ëÀÔÇÒ intÇü º¯¼ö t0_len
-	int t1_len = 0; // t1ÀÇ ¿öµå¿­ ±æÀÌ¸¦ ´ëÀÔÇÒ intÇü º¯¼ö t1_len
+	int i = 0; // ë°˜ë³µë¬¸ì— ì‚¬ìš©ë  intí˜• ë³€ìˆ˜ i
+	int len = 0; // ì§€ìˆ˜ìŠ¹ Nì˜ ë¹„íŠ¸ ê¸¸ì´ë¥¼ ë‹´ì„ intí˜• ë³€ìˆ˜ len
+	int result = 0; // í•´ë‹¹ ë¹„íŠ¸ ê°’ì˜ ê²°ê³¼ë¥¼ return ë°›ëŠ” intí˜• ë³€ìˆ˜ result
+	int t0_len = 0; // t0ì˜ ì›Œë“œì—´ ê¸¸ì´ë¥¼ ëŒ€ì…í•  intí˜• ë³€ìˆ˜ t0_len
+	int t1_len = 0; // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ë¥¼ ëŒ€ì…í•  intí˜• ë³€ìˆ˜ t1_len
 	int ret;
 
 	bigint* t0 = NULL;
 	bigint* t1 = NULL;
 	bigint* temp0 = NULL;
 	bigint* temp1 = NULL;
-	bigint* trash_q = NULL; // Modular ¿¬»êÀ» À§ÇØ »ç¿ëµÇ´Â Binary_Long_Div()ÀÇ ¸ò ¸Å°³º¯¼ö·Î µé¾î°¥ bigint Æ÷ÀÎÅÍÇü º¯¼ö
-	bigint* trash_r = NULL; // Modular ¿¬»êÀ» À§ÇØ »ç¿ëµÇ´Â Binary_Long_Div()ÀÇ ³ª¸ÓÁö ¸Å°³º¯¼ö·Î µé¾î°¥ bigint Æ÷ÀÎÅÍÇü º¯¼ö
+	bigint* trash_q = NULL; // Modular ì—°ì‚°ì„ ìœ„í•´ ì‚¬ìš©ë˜ëŠ” Binary_Long_Div()ì˜ ëª« ë§¤ê°œë³€ìˆ˜ë¡œ ë“¤ì–´ê°ˆ bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+	bigint* trash_r = NULL; // Modular ì—°ì‚°ì„ ìœ„í•´ ì‚¬ìš©ë˜ëŠ” Binary_Long_Div()ì˜ ë‚˜ë¨¸ì§€ ë§¤ê°œë³€ìˆ˜ë¡œ ë“¤ì–´ê°ˆ bigint í¬ì¸í„°í˜• ë³€ìˆ˜
 
-	BI_Set_One(&t0); // t0¸¦ 1·Î ¼±¾ğ
-	BI_Assign(&t1, X); // t1¿¡ X¸¦ assign
+	BI_Set_One(&t0); // [line 1] t0ë¥¼ 1ë¡œ ì„ ì–¸
+	BI_Assign(&t1, X); // [line 1] t1ì— Xë¥¼ assign
 
-	BI_Get_Bit_Length(&len, N);  // Áö¼ö½Â(N)¿¡ ´ëÇÑ ºñÆ® ±æÀÌ -> len ´ëÀÔ
+	BI_Get_Bit_Length(&len, N);  // ì§€ìˆ˜ìŠ¹(N)ì— ëŒ€í•œ ë¹„íŠ¸ ê¸¸ì´ -> len ëŒ€ì…
 
-	if ((len == 1) & (N->a[0] == 1)) // X ^ 1ÀÏ ¶§
+	if ((len == 1) & (N->a[0] == 1)) // X ^ 1ì¼ ë•Œ
 	{
-		BI_Assign(T, X);  // ÀÌ °æ¿ì¿¡¼­´Â TÀÇ °ªÀÌ XÀÌ¹Ç·Î assign
+		BI_Assign(T, X);  // ì´ ê²½ìš°ì—ì„œëŠ” Tì˜ ê°’ì´ Xì´ë¯€ë¡œ assign
 		
-		ret = Division(&trash_q, &trash_r, *T, M); // X mod M ¿¬»ê ÈÄ trash_r¿¡ ´ëÀÔ
+		ret = Division(&trash_q, &trash_r, *T, M); // X mod M ì—°ì‚° í›„ trash_rì— ëŒ€ì…
 		if (ret == ERROR)
 		{
 			BI_Delete(&t0);
 			BI_Delete(&t1);
 
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 		
-		BI_Assign(T, trash_r); // X mod M °ªÀÎ trash_rÀ» T¿¡ assign
-		BI_Delete(&trash_q); // ÇÒ´çÇÑ trash_q delete
-		BI_Delete(&trash_r); // ÇÒ´çÇÑ trash_r delete
-		BI_Delete(&t0); // ÇÒ´çÇÑ t0 delete
-		BI_Delete(&t1); // ÇÒ´çÇÑ t1 delete
+		BI_Assign(T, trash_r); // X mod M ê°’ì¸ trash_rì„ Tì— assign
+		BI_Delete(&trash_q); // í• ë‹¹í•œ trash_q delete
+		BI_Delete(&trash_r); // í• ë‹¹í•œ trash_r delete
+		BI_Delete(&t0); // í• ë‹¹í•œ t0 delete
+		BI_Delete(&t1); // í• ë‹¹í•œ t1 delete
 		
 		return SUCCESS;
 	}
 
-	for (i = 0; i <= len - 1; i++) // Áö¼ö½Â(N)ÀÇ ÃÖÇÏÀ§ ºñÆ®ºÎÅÍ ÃÖ»óÀ§ ºñÆ®±îÁö ¹İº¹¹®
+	for (i = 0; i <= len - 1; i++) // [line 2] ì§€ìˆ˜ìŠ¹(N)ì˜ ìµœí•˜ìœ„ ë¹„íŠ¸ë¶€í„° ìµœìƒìœ„ ë¹„íŠ¸ê¹Œì§€ ë°˜ë³µë¬¸
 	{
-		BI_Get_Word_Length(&t0_len, &t0); // t0ÀÇ ¿öµå¿­ ±æÀÌ -> t0_len
-		BI_Get_Word_Length(&t1_len, &t1); // t1ÀÇ ¿öµå¿­ ±æÀÌ -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t0ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t0_len
+		BI_Get_Word_Length(&t1_len, &t1); // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t1_len
 
-		BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2À» ÀúÀåÇÏ±â À§ÇÑ bigint »ı¼º
+		BI_New(&temp1, t1_len * 2 + 1); // temp1(t1) = t1^2ì„ ì €ì¥í•˜ê¸° ìœ„í•œ bigint ìƒì„±
 
-		result = BI_Get_j_th_Bit_of_BI(i, N);  // ¹İº¹¹®¿¡¼­ »ç¿ë ÁßÀÎ º¯¼ö i¸¦ ÀÌ¿ëÇØ NÀÇ ÇØ´ç ºñÆ®°¡ 1ÀÎÁö 0ÀÎÁö Á¶»ç
+		result = BI_Get_j_th_Bit_of_BI(i, N);  // [line 3] ë°˜ë³µë¬¸ì—ì„œ ì‚¬ìš© ì¤‘ì¸ ë³€ìˆ˜ ië¥¼ ì´ìš©í•´ Nì˜ í•´ë‹¹ ë¹„íŠ¸ê°€ 1ì¸ì§€ 0ì¸ì§€ ì¡°ì‚¬
 
-		if (result == 1)// ÇØ´ç ºñÆ®°¡ 1ÀÌ¸é,
+		if (result == 1)// [line 3] í•´ë‹¹ ë¹„íŠ¸ê°€ 1ì´ë©´,
 		{
-			ret = Multiplication(&temp0, t0, t1); // temp0¿¡ t0 * t1 À» ¿¬»ê
+			ret = Multiplication(&temp0, t0, t1); // [line 3] temp0ì— t0 * t1 ì„ ì—°ì‚°
 			if (ret == ERROR)
 			{
 				BI_Delete(&t0);
 				BI_Delete(&t1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 		}
-		else // ÇØ´ç ºñÆ®°¡ 0ÀÌ¸é,
-			BI_Assign(&temp0, t0); // t0¿¡ 1À» °öÇÏ´Â °ÍÀÌ¹Ç·Î, temp0¿¡ t0À» assign --> ¹İº¹¹®¿¡¼­ t0·Î ¿¬»êÀ» ÁøÇàÇÒ ¼ö ÀÖµµ·Ï
+		else // [line 3] í•´ë‹¹ ë¹„íŠ¸ê°€ 0ì´ë©´,
+			BI_Assign(&temp0, t0); // [line 3] t0ì— 1ì„ ê³±í•˜ëŠ” ê²ƒì´ë¯€ë¡œ, temp0ì— t0ì„ assign --> ë°˜ë³µë¬¸ì—ì„œ t0ë¡œ ì—°ì‚°ì„ ì§„í–‰í•  ìˆ˜ ìˆë„ë¡
 
-		ret = Division(&trash_q, &trash_r, temp0, M); // ¿¬»êµÈ temp0(t0)¿¡ Binary_Long_Div()¸¦ ÀÌ¿ëÇØ modular M ¿¬»ê ÈÄ °á°ú°ªÀ» trash_r¿¡ ´ëÀÔ
+		ret = Division(&trash_q, &trash_r, temp0, M); // [line 3] ì—°ì‚°ëœ temp0(t0)ì— Binary_Long_Div()ë¥¼ ì´ìš©í•´ modular M ì—°ì‚° í›„ ê²°ê³¼ê°’ì„ trash_rì— ëŒ€ì…
 		if (ret == ERROR)
 		{
 			BI_Delete(&t0);
 			BI_Delete(&t1);
 			BI_Delete(&temp0);
 
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 
 		BI_Assign(&t0, trash_r);
-		BI_Delete(&temp0); // ÇÒ´çÇÑ temp0 delete
-		BI_Delete(&trash_q); // ¿¬»êÀ» ÅëÇØ ÇÒ´çÇÑ trash_q delete
-		BI_Delete(&trash_r); // ¿¬»êÀ» ÅëÇØ ÇÒ´çÇÑ trash_r delete
+		BI_Delete(&temp0); // í• ë‹¹í•œ temp0 delete
+		BI_Delete(&trash_q); // ì—°ì‚°ì„ í†µí•´ í• ë‹¹í•œ trash_q delete
+		BI_Delete(&trash_r); // ì—°ì‚°ì„ í†µí•´ í• ë‹¹í•œ trash_r delete
 
-		ret = Squaring(&temp1, t1);  // temp1(t1) <- t1 * t1
+		ret = Squaring(&temp1, t1);  // [line 4] temp1(t1) <- t1 * t1
 		if (ret == ERROR)
 		{
 			BI_Delete(&t0);
 			BI_Delete(&t1);
 
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 		
-		ret = Division(&trash_q, &trash_r, temp1, M); // temp1( = t1 * t1)¿¡ Binary_Long_Div()¸¦ ÀÌ¿ëÇØ modular M ¿¬»ê ÈÄ °á°ú°ªÀ» trash_r¿¡ ´ëÀÔ
+		ret = Division(&trash_q, &trash_r, temp1, M); // [line 4] temp1( = t1 * t1)ì— Binary_Long_Div()ë¥¼ ì´ìš©í•´ modular M ì—°ì‚° í›„ ê²°ê³¼ê°’ì„ trash_rì— ëŒ€ì…
 		if (ret == ERROR)
 		{
 			BI_Delete(&t0);
 			BI_Delete(&t1);
 			BI_Delete(&temp1);
 
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 		
-		BI_Assign(&t1, trash_r); // t1 * t1 (mod M) °ªÀÎ trash_rÀ» ´Ù½Ã t1¿¡ assign --> ¹İº¹¹®¿¡¼­ t1·Î ¿¬»êÀ» ÁøÇàÇÒ ¼ö ÀÖµµ·Ï
-		BI_Delete(&trash_q); // ¿¬»êÀ» ÅëÇØ ÇÒ´çÇÑ trash_q delete
-		BI_Delete(&trash_r); // ¿¬»êÀ» ÅëÇØ ÇÒ´çÇÑ trash_r delete
-		BI_Delete(&temp1); // ÇÒ´çÇÑ temp0 delete
-	}
+		BI_Assign(&t1, trash_r); // t1 * t1 (mod M) ê°’ì¸ trash_rì„ ë‹¤ì‹œ t1ì— assign --> ë°˜ë³µë¬¸ì—ì„œ t1ë¡œ ì—°ì‚°ì„ ì§„í–‰í•  ìˆ˜ ìˆë„ë¡
+		BI_Delete(&trash_q); // ì—°ì‚°ì„ í†µí•´ í• ë‹¹í•œ trash_q delete
+		BI_Delete(&trash_r); // ì—°ì‚°ì„ í†µí•´ í• ë‹¹í•œ trash_r delete
+		BI_Delete(&temp1); // í• ë‹¹í•œ temp0 delete
+	} // [line 5]
 
-	BI_Assign(T, t0); // ¹İº¹¹®ÀÌ ³¡³­ °á°úÀÎ t0¸¦ T¿¡ assign
-	BI_Delete(&t0); // ¿¬»êÀ» ÅëÇØ ÇÒ´çÇÑ t0 delete
-	BI_Delete(&t1); // ¿¬»êÀ» ÅëÇØ ÇÒ´çÇÑ t1 delete
-	BI_Refine(*T); // °á°ú°ªÀÎ T¸¦ refine ÇØÁÖ±â
+	BI_Assign(T, t0); // [line 6] ë°˜ë³µë¬¸ì´ ëë‚œ ê²°ê³¼ì¸ t0ë¥¼ Tì— assign
+	BI_Delete(&t0); // ì—°ì‚°ì„ í†µí•´ í• ë‹¹í•œ t0 delete
+	BI_Delete(&t1); // ì—°ì‚°ì„ í†µí•´ í• ë‹¹í•œ t1 delete
+	BI_Refine(*T); // ê²°ê³¼ê°’ì¸ Të¥¼ refine í•´ì£¼ê¸°
 
 	return SUCCESS;
 }
@@ -3862,113 +3862,113 @@ int MOD_EXP_RL_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 	5 :	end for
 	6 :	T <- t
 
-* @param bigint** T Modular Áö¼ö ¿¬»ê °á°ú¿¡ ÇØ´çÇÏ´Â bigint ´õºí Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* X Modular Áö¼ö ¿¬»ê¿¡¼­ ¹Ø¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* N Modular Áö¼ö ¿¬»ê¿¡¼­ Áö¼ö¿¡ ÇØ´çÇÏ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @param bigint* M Modular Áö¼ö ¿¬»ê¿¡¼­ X^N °ú T¸¦ ÇÕµ¿ÇØÁÖ´Â bigint Æ÷ÀÎÅÍÇü º¯¼ö
-* @return SUCCESS ¼º°ø ½Ã
+* @param bigint** T Modular ì§€ìˆ˜ ì—°ì‚° ê²°ê³¼ì— í•´ë‹¹í•˜ëŠ” bigint ë”ë¸” í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* X Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ë°‘ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* N Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ ì§€ìˆ˜ì— í•´ë‹¹í•˜ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @param bigint* M Modular ì§€ìˆ˜ ì—°ì‚°ì—ì„œ X^N ê³¼ Të¥¼ í•©ë™í•´ì£¼ëŠ” bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+* @return SUCCESS ì„±ê³µ ì‹œ
 */
 int MOD_EXP_RL_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 {
-	int i = 0; // ¹İº¹¹®¿¡ »ç¿ëµÉ intÇü º¯¼ö i
-	int len = 0; // Áö¼ö½Â NÀÇ ºñÆ® ±æÀÌ¸¦ ´ãÀ» intÇü º¯¼ö len
-	int result = 0; // ÇØ´ç ºñÆ® °ªÀÇ °á°ú¸¦ return ¹Ş´Â intÇü º¯¼ö result
-	int t0_len = 0; // t0ÀÇ ¿öµå¿­ ±æÀÌ¸¦ ´ëÀÔÇÒ intÇü º¯¼ö t0_len
-	int t1_len = 0; // t1ÀÇ ¿öµå¿­ ±æÀÌ¸¦ ´ëÀÔÇÒ intÇü º¯¼ö t1_len
+	int i = 0; // ë°˜ë³µë¬¸ì— ì‚¬ìš©ë  intí˜• ë³€ìˆ˜ i
+	int len = 0; // ì§€ìˆ˜ìŠ¹ Nì˜ ë¹„íŠ¸ ê¸¸ì´ë¥¼ ë‹´ì„ intí˜• ë³€ìˆ˜ len
+	int result = 0; // í•´ë‹¹ ë¹„íŠ¸ ê°’ì˜ ê²°ê³¼ë¥¼ return ë°›ëŠ” intí˜• ë³€ìˆ˜ result
+	int t0_len = 0; // t0ì˜ ì›Œë“œì—´ ê¸¸ì´ë¥¼ ëŒ€ì…í•  intí˜• ë³€ìˆ˜ t0_len
+	int t1_len = 0; // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ë¥¼ ëŒ€ì…í•  intí˜• ë³€ìˆ˜ t1_len
 	int ret;
 
 	bigint* t0 = NULL;
 	bigint* t1 = NULL;
 	bigint* temp0 = NULL;
 	bigint* temp1 = NULL;
-	bigint* trash_q = NULL; // Modular ¿¬»êÀ» À§ÇØ »ç¿ëµÇ´Â Binary_Long_Div()ÀÇ ¸ò ¸Å°³º¯¼ö·Î µé¾î°¥ bigint Æ÷ÀÎÅÍÇü º¯¼ö
-	bigint* trash_r = NULL; // Modular ¿¬»êÀ» À§ÇØ »ç¿ëµÇ´Â Binary_Long_Div()ÀÇ ³ª¸ÓÁö ¸Å°³º¯¼ö·Î µé¾î°¥ bigint Æ÷ÀÎÅÍÇü º¯¼ö
+	bigint* trash_q = NULL; // Modular ì—°ì‚°ì„ ìœ„í•´ ì‚¬ìš©ë˜ëŠ” Binary_Long_Div()ì˜ ëª« ë§¤ê°œë³€ìˆ˜ë¡œ ë“¤ì–´ê°ˆ bigint í¬ì¸í„°í˜• ë³€ìˆ˜
+	bigint* trash_r = NULL; // Modular ì—°ì‚°ì„ ìœ„í•´ ì‚¬ìš©ë˜ëŠ” Binary_Long_Div()ì˜ ë‚˜ë¨¸ì§€ ë§¤ê°œë³€ìˆ˜ë¡œ ë“¤ì–´ê°ˆ bigint í¬ì¸í„°í˜• ë³€ìˆ˜
 
-	BI_Set_Zero(&t0); // t0¸¦ 0À¸·Î ¼±¾ğ
-	BI_Assign(&t1, X); // t1¿¡ X¸¦ assign
+	BI_Set_Zero(&t0); // [line 1] t0ë¥¼ 0ìœ¼ë¡œ ì„ ì–¸
+	BI_Assign(&t1, X); // [line 1] t1ì— Xë¥¼ assign
 
-	BI_Get_Bit_Length(&len, N); // Áö¼ö½Â(N)¿¡ ´ëÇÑ ºñÆ® ±æÀÌ -> len ´ëÀÔ
+	BI_Get_Bit_Length(&len, N); // ì§€ìˆ˜ìŠ¹(N)ì— ëŒ€í•œ ë¹„íŠ¸ ê¸¸ì´ -> len ëŒ€ì…
 
-	if ((len == 1) & (N->a[0] == 1)) // 1 * XÀÏ ¶§
+	if ((len == 1) & (N->a[0] == 1)) // 1 * Xì¼ ë•Œ
 	{
-		BI_Assign(T, X);  // ÀÌ °æ¿ì¿¡¼­´Â TÀÇ °ªÀÌ XÀÌ¹Ç·Î assign
+		BI_Assign(T, X);  // ì´ ê²½ìš°ì—ì„œëŠ” Tì˜ ê°’ì´ Xì´ë¯€ë¡œ assign
 		
-		ret = Division(&trash_q, &trash_r, *T, M); // X mod M ¿¬»ê ÈÄ trash_r¿¡ ´ëÀÔ
+		ret = Division(&trash_q, &trash_r, *T, M); // X mod M ì—°ì‚° í›„ trash_rì— ëŒ€ì…
 		if (ret == ERROR)
 		{
 			BI_Delete(&t0);
 			BI_Delete(&t1);
 
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 
-		BI_Assign(T, trash_r); // X mod M °ªÀÎ trash_rÀ» T¿¡ assign
-		BI_Delete(&trash_q); // ÇÒ´çÇÑ trash_q delete
-		BI_Delete(&trash_r); // ÇÒ´çÇÑ trash_r delete
-		BI_Delete(&t0); // ÇÒ´çÇÑ t0 delete
-		BI_Delete(&t1); // ÇÒ´çÇÑ t1 delete
+		BI_Assign(T, trash_r); // X mod M ê°’ì¸ trash_rì„ Tì— assign
+		BI_Delete(&trash_q); // í• ë‹¹í•œ trash_q delete
+		BI_Delete(&trash_r); // í• ë‹¹í•œ trash_r delete
+		BI_Delete(&t0); // í• ë‹¹í•œ t0 delete
+		BI_Delete(&t1); // í• ë‹¹í•œ t1 delete
 		
 		return SUCCESS;
 	}
 
-	for (i = 0; i <= len - 1; i++) // Áö¼ö½Â(N)ÀÇ ÃÖÇÏÀ§ ºñÆ®ºÎÅÍ ÃÖ»óÀ§ ºñÆ®±îÁö ¹İº¹¹®
+	for (i = 0; i <= len - 1; i++) // [line 2] ì§€ìˆ˜ìŠ¹(N)ì˜ ìµœí•˜ìœ„ ë¹„íŠ¸ë¶€í„° ìµœìƒìœ„ ë¹„íŠ¸ê¹Œì§€ ë°˜ë³µë¬¸
 	{
-		BI_Get_Word_Length(&t0_len, &t0); // t0ÀÇ ¿öµå¿­ ±æÀÌ -> t0_len
-		BI_Get_Word_Length(&t1_len, &t1); // t1ÀÇ ¿öµå¿­ ±æÀÌ -> t1_len
+		BI_Get_Word_Length(&t0_len, &t0); // t0ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t0_len
+		BI_Get_Word_Length(&t1_len, &t1); // t1ì˜ ì›Œë“œì—´ ê¸¸ì´ -> t1_len
 
-		result = BI_Get_j_th_Bit_of_BI(i, N);  // ¹İº¹¹®¿¡¼­ »ç¿ë ÁßÀÎ º¯¼ö i¸¦ ÀÌ¿ëÇØ NÀÇ ÇØ´ç ºñÆ®°¡ 1ÀÎÁö 0ÀÎÁö Á¶»ç
+		result = BI_Get_j_th_Bit_of_BI(i, N);  // [line 3] ë°˜ë³µë¬¸ì—ì„œ ì‚¬ìš© ì¤‘ì¸ ë³€ìˆ˜ ië¥¼ ì´ìš©í•´ Nì˜ í•´ë‹¹ ë¹„íŠ¸ê°€ 1ì¸ì§€ 0ì¸ì§€ ì¡°ì‚¬
 
-		if (result == 1) // ÇØ´ç ºñÆ®°¡ 1ÀÌ¸é,
+		if (result == 1) // [line 3] í•´ë‹¹ ë¹„íŠ¸ê°€ 1ì´ë©´,
 		{
-			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 + t1À» ÀúÀåÇÏ±â À§ÇÑ bigint »ı¼º
+			BI_New(&temp0, MAX(t0_len, t1_len) + 1); // temp0(t0) = t0 + t1ì„ ì €ì¥í•˜ê¸° ìœ„í•œ bigint ìƒì„±
 			
-			ret = ADD(&temp0, &t0, &t1); // temp0¿¡ t0 + t1 ¿¬»ê
+			ret = ADD(&temp0, &t0, &t1); // [line 3] temp0ì— t0 + t1 ì—°ì‚°
 			if (ret == ERROR)
 			{
 				BI_Delete(&t0);
 				BI_Delete(&t1);
 
-				return ERROR; // ¿¹¿Ü Ã³¸®
+				return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 			}
 		}
-		else // ÇØ´ç ºñÆ®°¡ 0ÀÌ¸é,
-			BI_Assign(&temp0, t0); // t0¿¡ 0À» ´õÇÏ´Â °ÍÀÌ¹Ç·Î, temp0¿¡ t0À» assign.
+		else // [line 3] í•´ë‹¹ ë¹„íŠ¸ê°€ 0ì´ë©´,
+			BI_Assign(&temp0, t0); // [line 3] t0ì— 0ì„ ë”í•˜ëŠ” ê²ƒì´ë¯€ë¡œ, temp0ì— t0ì„ assign.
 		
-		ret = Division(&trash_q, &trash_r, temp0, M); // ¿¬»êµÈ temp0(t0)¿¡ modular M ¿¬»ê ÈÄ °á°ú°ªÀ» trash_r¿¡ ´ëÀÔ
+		ret = Division(&trash_q, &trash_r, temp0, M); // [line 3] ì—°ì‚°ëœ temp0(t0)ì— modular M ì—°ì‚° í›„ ê²°ê³¼ê°’ì„ trash_rì— ëŒ€ì…
 		if (ret == ERROR)
 		{
 			BI_Delete(&t0);
 			BI_Delete(&t1);
 			BI_Delete(&temp0);
 
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 		
-		BI_Delete(&temp0); // ÇÒ´çÇÑ temp0 delete
-		BI_Assign(&t0, trash_r); // t0 + result * t1 (mod M) °ªÀÎ trash_rÀ» t0¿¡ assign --> ¹İº¹¹®¿¡¼­ t0·Î ¿¬»êÀ» ÁøÇàÇÒ ¼ö ÀÖµµ·Ï
-		BI_Delete(&trash_q); // ¿¬»êÀ» ÅëÇØ ÇÒ´çÇÑ trash_q delete
-		BI_Delete(&trash_r); // ¿¬»êÀ» ÅëÇØ ÇÒ´çÇÑ trash_r delete
+		BI_Delete(&temp0); // í• ë‹¹í•œ temp0 delete
+		BI_Assign(&t0, trash_r); // t0 + result * t1 (mod M) ê°’ì¸ trash_rì„ t0ì— assign --> ë°˜ë³µë¬¸ì—ì„œ t0ë¡œ ì—°ì‚°ì„ ì§„í–‰í•  ìˆ˜ ìˆë„ë¡
+		BI_Delete(&trash_q); // ì—°ì‚°ì„ í†µí•´ í• ë‹¹í•œ trash_q delete
+		BI_Delete(&trash_r); // ì—°ì‚°ì„ í†µí•´ í• ë‹¹í•œ trash_r delete
 
-		BI_Left_Shift(t1, 1); // t1 <- 2 * t1
+		BI_Left_Shift(t1, 1); // [line 4] t1 <- 2 * t1
 		
-		ret = Division(&trash_q, &trash_r, t1, M); // 2 * t1¿¡ modular M ¿¬»ê ÈÄ °á°ú°ªÀ» trash_r¿¡ ´ëÀÔ
+		ret = Division(&trash_q, &trash_r, t1, M); // [line 4] 2 * t1ì— modular M ì—°ì‚° í›„ ê²°ê³¼ê°’ì„ trash_rì— ëŒ€ì…
 		if (ret == ERROR)
 		{
 			BI_Delete(&t0);
 			BI_Delete(&t1);
 
-			return ERROR; // ¿¹¿Ü Ã³¸®
+			return ERROR; // ì˜ˆì™¸ ì²˜ë¦¬
 		}
 		
-		BI_Assign(&t1, trash_r); // 2 * t1 (mod M) °ªÀÎ trash_rÀ» ´Ù½Ã t1¿¡ assign --> ¹İº¹¹®¿¡¼­ t1·Î ¿¬»êÀ» ÁøÇàÇÒ ¼ö ÀÖµµ·Ï
-		BI_Delete(&trash_q); // ¿¬»êÀ» ÅëÇØ ÇÒ´çÇÑ trash_q delete
-		BI_Delete(&trash_r); // ¿¬»êÀ» ÅëÇØ ÇÒ´çÇÑ trash_r delete
-	}
+		BI_Assign(&t1, trash_r); // 2 * t1 (mod M) ê°’ì¸ trash_rì„ ë‹¤ì‹œ t1ì— assign --> ë°˜ë³µë¬¸ì—ì„œ t1ë¡œ ì—°ì‚°ì„ ì§„í–‰í•  ìˆ˜ ìˆë„ë¡
+		BI_Delete(&trash_q); // ì—°ì‚°ì„ í†µí•´ í• ë‹¹í•œ trash_q delete
+		BI_Delete(&trash_r); // ì—°ì‚°ì„ í†µí•´ í• ë‹¹í•œ trash_r delete
+	} // [line 5]
 	
-	BI_Assign(T, t0); // ¹İº¹¹®ÀÌ ³¡³­ °á°úÀÎ t0¸¦ T¿¡ assign
-	BI_Delete(&t0); // ¿¬»êÀ» ÅëÇØ ÇÒ´çÇÑ t0 delete
-	BI_Delete(&t1); // ¿¬»êÀ» ÅëÇØ ÇÒ´çÇÑ t1 delete
-	BI_Refine(*T); // °á°ú°ªÀÎ T¸¦ refine ÇØÁÖ±â
+	BI_Assign(T, t0); // [line 6] ë°˜ë³µë¬¸ì´ ëë‚œ ê²°ê³¼ì¸ t0ë¥¼ Tì— assign
+	BI_Delete(&t0); // ì—°ì‚°ì„ í†µí•´ í• ë‹¹í•œ t0 delete
+	BI_Delete(&t1); // ì—°ì‚°ì„ í†µí•´ í• ë‹¹í•œ t1 delete
+	BI_Refine(*T); // ê²°ê³¼ê°’ì¸ Të¥¼ refine í•´ì£¼ê¸°
 
 	return SUCCESS;
 }
