@@ -28,8 +28,10 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 파일 | 의미 
 ---|:---:
 `main.c` | 빅넘버 연산 함수들을 테스트 해볼 수 있는 **테스트 벡터 생성** 및 **함수 연산 시간 측정** 
-`bigint.h` | 빅넘버 관련 연산 함수의 헤더 파일
-`bigint.c` | 빅넘버 관련 **연산 함수 구현**
+`BasicOperation.h` | 빅넘버 관련 기본연산 함수의 헤더 파일
+`BasicOperation.c` | 빅넘버 관련 **기본 연산 함수 구현**
+`Calculation.h` | 빅넘버 관련 덧셈, 뺄셈, 곱셈, 나눗셈, 제곱 그리고 모듈러 지수승 연산 함수의 헤더 파일
+`Calculation.c` | 빅넘버 관련 **덧셈, 뺄셈, 곱셈, 나눗셈, 제곱 그리고 모듈러 지수승 연산 함수 구현**
 `test.h` |빅넘버 관련 연산 함수들을 이용한 테스트 벡터 생성 및 시간 측정 함수의 헤더 파일
 `test.c` | 빅넘버 관련 연산 함수들을 이용한 **테스트 벡터 생성** 및 **시간 측정 함수 구현**
 `config.h` | 라이브러리의 특성을 반영한 헤더
@@ -93,6 +95,7 @@ Advanced Application Programming : Tory(cryp<u>to</u> libra<u>ry</u>)
 #define FLAG_EXP        // Modular exponentiation flag: LTOR, RTOL, MONTGOMERY
 ```
 ---
+## In BasicOperation.c
 #### Chapter 2.1
 ##### Create Big Integer function
 ```c
@@ -172,7 +175,7 @@ int BI_Show(bigint* x, int base) // Show Big_Integer
 #### Chapter 2.3
 ##### Re define Big Integer function
 ```c
-int bi_refine(bigint* x) // re define Big_Integer
+int BI_Refine(bigint* x) // re define Big_Integer
   
     bigint* x : 재정의해 줄 Big_Integer의 포인터
 
@@ -182,7 +185,7 @@ int bi_refine(bigint* x) // re define Big_Integer
 #### Chpater 2.4
 ##### Assign Big Integer function
 ```c
-int Assign_BI(bigint** y, bigint* x) // Assign Big_Integer
+int BI_Assign(bigint** y, bigint* x) // Assign Big_Integer
    
    bigint** y, bigint* x : 2nd arg의 Big_Integer와 같게 복사될 Big_Integer형 더블 포인터
    bigint** y, bigint* x : 복사할 Big_Integer형 포인터
@@ -193,7 +196,7 @@ int Assign_BI(bigint** y, bigint* x) // Assign Big_Integer
 #### Chpater 2.5
 ##### Generate Random number function
 ```c
-int bi_gen_rand(bigint** x, int sign, int wordlen) // generate random number
+int BI_Gen_Rand(bigint** x, int sign, int wordlen) // generate random number
    
     bigint** x, int sign, int wordlen : random number를 저장할 Big_Integer의 더블 포인터
     bigint** x, int sign, int wordlen : random number의 부호
@@ -204,7 +207,7 @@ int bi_gen_rand(bigint** x, int sign, int wordlen) // generate random number
 ***
 ##### Set Random Number function
 ```c
-int array_rand(word* dst, int wordlen) // set random number
+int Array_Rand(word* dst, int wordlen) // set random number
    
     word* dst : random number를 담을 워드열의 포인터
     int wordlen : random number의 워드 길이
@@ -246,7 +249,7 @@ int j_th_Bit_of_BI(int j, bigint* x) // j-th Bit of Big_Integer
 #### Chpater 2.7
 ##### Get Sign function
 ```c
-int Get_Sign(bigint* x) // Get Sign
+int BI_Get_Sign(bigint* x) // Get Sign
    
     bigint* x : 부호를 알아 올 Big_Integer의 포인터
    
@@ -255,7 +258,7 @@ int Get_Sign(bigint* x) // Get Sign
 ***
 ##### Flip Sign function
 ```c
-int Flip_Sign(bigint* x) // Flip Sign
+int BI_Flip_Sign(bigint* x) // Flip Sign
    
     bigint* x: 부호를 뒤집을 Big_Integer의 포인터
   
@@ -283,7 +286,7 @@ int BI_Set_Zero(bigint** x); //Set Big_Integer 0
 ***
 ##### Is 1 ?
 ```c
-int Is_One(bigint** x) // Determine if one or not
+int BI_Is_One(bigint** x) // Determine if one or not
 
     bigint** x : 1인지 아닌지 판단할 Big_Integer의 더블 포인터
    
@@ -292,7 +295,7 @@ int Is_One(bigint** x) // Determine if one or not
 ***
 ##### Is 0 ?
 ```c
-int Is_Zero(bigint** x) // Determine if zero or not
+int BI_Is_Zero(bigint** x) // Determine if zero or not
    
     bigint** x : 0인지 아닌지 판단할 Big_Integer의 더블 포인터
 
@@ -302,7 +305,7 @@ int Is_Zero(bigint** x) // Determine if zero or not
 #### Chpater 2.9
 ##### Compare Big Integer A with Big Integer B
 ```c
-int Compare_BI(bigint**x, bigint** y); //Compare Big_Integer
+int BI_Compare(bigint**x, bigint** y); //Compare Big_Integer
   
     bigint** x : y 와 비교 대상인 Big_Integer의 더블 포인터
     bigint** y : x 와 비교 대상인 Big_Integer의 더블 포인터
@@ -313,7 +316,7 @@ int Compare_BI(bigint**x, bigint** y); //Compare Big_Integer
 #### Chpater 2.10
 ##### Left Shift function
 ```c
-int Left_Shift(bigint* x, int len)
+int BI_Left_Shift(bigint* x, int len)
    
     bigint* x : shift 시킬 Big_Integer의 포인터
     int len : shift 시킬 비트의 길이
@@ -323,7 +326,7 @@ int Left_Shift(bigint* x, int len)
 ***
 ##### Right Shift function
 ```c
-int Right_Shift(bigint* x, int len)
+int BI_Right_Shift(bigint* x, int len)
    
     bigint* x : shift 시킬 Big_Integer의 포인터
     int len : shift 시킬 비트의 길이
@@ -342,6 +345,7 @@ int Reduction_BI(bigint **x, int r) //Reduction Integer
     return SUCCESS (성공 시) / ERROR(실패 시)
 ```
 ---
+## In calculation.h
 #### Chapter 3 Addition
 ##### Addition (A + B + carry) function
 ```c
@@ -440,7 +444,7 @@ int MUL_Word(word* C, word* A, word* B)
 ***
 ##### Multiplication Mutli Word
 ```c
-int MUL_Word(word* C, word* A, word* B)
+int MUL_Multi(word* C, word* A, word* B)
     
     bigint** C : 다중 워드 곱셈 연산의 결과를 저장할 bigint 형 더블 포인터 변수
     bigint* A : 다중 워드 곱셈 연산의 곱하는 수인 bigint 형 포인터 변수
