@@ -1,4 +1,4 @@
-﻿#ifndef _BIG_INT_
+#ifndef _BIG_INT_
 #define _BIG_INT_
 
 #include "config.h"
