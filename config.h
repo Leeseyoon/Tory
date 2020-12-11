@@ -1,4 +1,4 @@
-﻿#ifndef _CONFIG_
+#ifndef _CONFIG_
 #define _CONFIG_
 
 #define NON_NEGATIVE	0
