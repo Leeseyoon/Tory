@@ -1,4 +1,4 @@
-﻿#ifndef _TEST_
+#ifndef _TEST_
 #define _TEST
 
 /* Test Function */
