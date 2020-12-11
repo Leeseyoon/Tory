@@ -1,4 +1,4 @@
-﻿#ifndef _BASIC_OPERATION_
+#ifndef _BASIC_OPERATION_
 #define _BASIC_OPERATION_
 
 #include "config.h"
