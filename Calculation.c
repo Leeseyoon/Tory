@@ -33,19 +33,19 @@ int EXP_RL_ADD(bigint** T, bigint* X, bigint* N); // Only Exponentiation functio
  * @brief Addition (캐리를 포함한 단일 덧셈)
  * @details
 
-	 [pseudo code]
-	 Input  : C, A, B, c, i
-	 Output : carry (0 or 1)
-	 1 : carry <- 0
-	 2 : C <- A + B mod(2^word)
-	 3 : if C < A then
-	 4 :		carry <- 1
-	 5 :	end if
-	 6 : C <- C + c mod(2^word)
-	 7 : if C < c then
-	 8 :		carry = carry + 1
-	 9 : end if
-	10 : return carry
+	@n [pseudo code]
+	@n Input  : C, A, B, c, i
+	@n Output : carry (0 or 1)
+	@n 1 : carry <- 0
+	@n 2 : C <- A + B mod(2^word)
+	@n 3 : if C < A then
+	@n 4 :		carry <- 1
+	@n 5 :	end if
+	@n 6 : C <- C + c mod(2^word)
+	@n 7 : if C < c then
+	@n 8 :		carry = carry + 1
+	@n 9 : end if
+	@n 10 : return carry
 
  * @param bigint** C 덧셈 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint** A 덧셈을 수행할 bigint 형 더블포인터 변수
@@ -82,20 +82,20 @@ int ADD_ABc(bigint** C, bigint** A, bigint** B, int c, int i)
  * @brief Addition Core (WordLen(A) >= WordLen(B), Sign(A) = Sign(B))
  * @details
 
-	 [pseudo code]
-	 Input  : A, B, sign
-	 Output : C = A + B
-	 1 : B[j] <- 0 for j = m, m + 1, ... , n - 1
-	 2 : c <- 0
-	 3 : for j = 0 to n - 1 do
-	 4 :	c, C[j] <- ADD_ABc(A[j], B[j], c)
-	 5 : end for
-	 6 : C[n] <- c
-	 7 : if C[n] = 1 then
-	 8 :	C <- (-1)^sign * sum(C[j] * W^j) for j = 0 to n
-	 9 : else
-	10 :	C <- (-1)^sign * sum(C[j] * W^j) for j = 0 to n - 1
-	11 : end if
+	@n [pseudo code]
+	@n Input  : A, B, sign
+	@n Output : C = A + B
+	@n 1 : B[j] <- 0 for j = m, m + 1, ... , n - 1
+	@n 2 : c <- 0
+	@n 3 : for j = 0 to n - 1 do
+	@n 4 :	c, C[j] <- ADD_ABc(A[j], B[j], c)
+	@n 5 : end for
+	@n 6 : C[n] <- c
+	@n 7 : if C[n] = 1 then
+	@n 8 :	C <- (-1)^sign * sum(C[j] * W^j) for j = 0 to n
+	@n 9 : else
+	@n 10 :	C <- (-1)^sign * sum(C[j] * W^j) for j = 0 to n - 1
+	@n 11 : end if
 
  * @param bigint** C 덧셈 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint** A 덧셈을 수행할 bigint 형 더블포인터 변수
@@ -156,8 +156,8 @@ int ADDC(bigint** C, bigint** A, bigint** B, int sign)
 /**
  * @brief Addition Core (WordLen(A) >= WordLen(B), Sign(A) = Sign(B), A = A + B)
  * @details
-	ADDC 함수와 동일하게 동작
-	덧셈을 수행한 결과를 다시 A에 저장 (A <- A + B)
+	@n ADDC 함수와 동일하게 동작
+	@n 덧셈을 수행한 결과를 다시 A에 저장 (A <- A + B)
  * @param bigint** C 덧셈 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint** A 덧셈을 수행할 bigint 형 더블포인터 변수
  * @param bigint** B 덧셈을 수행할 bigint 형 더블포인터 변수
@@ -213,26 +213,26 @@ int ADDC_AAB(bigint** C, bigint** A, bigint** B, int sign)
  * @brief Addition
  * @details
 
-	 [pseudo code]
-	 Input  : A, B
-	 Output : C = A + B
-	 1 : if A = 0 then
-	 2 :	C <- B
-	 3 : end if
-	 4 : if B = 0 then
-	 5 :	C <- A
-	 6 : end if
-	 7 : if A > 0 and B < 0 then
-	 8 :	C <- SUB(A, |B|)
-	 9 : end if
-	10 : if A < 0 and B > 0 then
-	11 :	C <- SUB(B, |A|)
-	12 : end if
-	13 : if WordLen(A) >= WordLen(B) then
-	14 :	C <- ADDC(A, B)
-	15 : else
-	16 :	C <- ADDC(B, A)
-	17 : end if
+	 @n [pseudo code]
+	 @n Input  : A, B
+	 @n Output : C = A + B
+	 @n 1 : if A = 0 then
+	 @n 2 :	C <- B
+	 @n 3 : end if
+	 @n 4 : if B = 0 then
+	 @n 5 :	C <- A
+	 @n 6 : end if
+	 @n 7 : if A > 0 and B < 0 then
+	 @n 8 :	C <- SUB(A, |B|)
+	 @n 9 : end if
+	@n 10 : if A < 0 and B > 0 then
+	@n 11 :	C <- SUB(B, |A|)
+	@n 12 : end if
+	@n 13 : if WordLen(A) >= WordLen(B) then
+	@n 14 :	C <- ADDC(A, B)
+	@n 15 : else
+	@n 16 :	C <- ADDC(B, A)
+	@n 17 : end if
 
  * @param bigint** C 덧셈 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint** A 덧셈을 수행할 bigint 형 더블포인터 변수
@@ -343,8 +343,8 @@ int ADD(bigint** C, bigint** A, bigint** B)
 /**
  * @brief Addition (A = A + B)
  * @details
-	ADD 함수와 동일하게 동작
-	덧셈을 수행한 결과를 다시 A에 저장 (A <- A + B)
+	@n ADD 함수와 동일하게 동작
+	@n 덧셈을 수행한 결과를 다시 A에 저장 (A <- A + B)
  * @param bigint** C 덧셈 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint** A 덧셈을 수행할 bigint 형 더블포인터 변수
  * @param bigint** B 덧셈을 수행할 bigint 형 더블포인터 변수
@@ -450,31 +450,31 @@ int ADD_AAB(bigint** C, bigint** A, bigint** B) // A = A + B
 /**
 * @brief Subtraction
 * @details
-	[pseudo code]
-	Input  : C, A, B
-	Output : C = A - B
+	@n [pseudo code]
+	@n Input  : C, A, B
+	@n Output : C = A - B
 
-	1 : if A = 0 then
-	2 :		return -B
-	3 :	end if
-	4 :	if B = 0 then
-	5 :		return A
-	6 :	end if
-	7 :	if A >= B > 0 then
-	8 :		return SUBC(A, B)
-	9 :	else
-	10:		return -SUBC(B, A)
-	11:	end if
-	12:	if 0 > A >= B then
-	13:		return SUBC(|B|, |A|)
-	14:	else
-	15:		return -SUBC(|A|, |B|)
-	16:	end if
-	17: 	if A > 0 and B < 0 then
-	18:		return ADD(A, |B|)
-	19:	else
-	20:		return -ADD(|A|, B)
-	21:	end if
+	@n 1 : if A = 0 then
+	@n 2 :		return -B
+	@n 3 :	end if
+	@n 4 :	if B = 0 then
+	@n 5 :		return A
+	@n 6 :	end if
+	@n 7 :	if A >= B > 0 then
+	@n 8 :		return SUBC(A, B)
+	@n 9 :	else
+	@n 10:		return -SUBC(B, A)
+	@n 11:	end if
+	@n 12:	if 0 > A >= B then
+	@n 13:		return SUBC(|B|, |A|)
+	@n 14:	else
+	@n 15:		return -SUBC(|A|, |B|)
+	@n 16:	end if
+	@n 17: 	if A > 0 and B < 0 then
+	@n 18:		return ADD(A, |B|)
+	@n 19:	else
+	@n 20:		return -ADD(|A|, B)
+	@n 21:	end if
 
 * @param bigint** C 뺄셈 연산의(A - B) 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint** A 뺄셈 연산의(A - B) A에 해당하는 bigint 형 포인터 변수
@@ -625,26 +625,26 @@ int SUB(bigint** C, bigint* A, bigint* B)
 /**
 * @brief Subtraction Core
 * @details
-	[pseudo code]
-	Input  : C, A, B
-	Output : C = A - B
+	@n [pseudo code]
+	@n Input  : C, A, B
+	@n Output : C = A - B
 
-	1 : B_{j} <- 0 for j =  m downto n-1 do
-	2 :	b <- 0
-	3 :	for j = 0 to n - 1 do
-	4 :		C <- A - b (mod W)
-	5 :		if A < b then
-	6 :			b <- 1
-	7 :		else
-	8 :			b <- 0
-	9 :		end if
-	10:		if C < B then
-	11:			b <- b + 1
-	12:		end if
-	13:		C <- C - b
-	14:	end for
-	15: l <- min{j : C_{n-1} = C_{n-2} = ... = C_{j} = 0}
-	16: C <- len(l)
+	@n 1 : B_{j} <- 0 for j =  m downto n-1 do
+	@n 2 :	b <- 0
+	@n 3 :	for j = 0 to n - 1 do
+	@n 4 :		C <- A - b (mod W)
+	@n 5 :		if A < b then
+	@n 6 :			b <- 1
+	@n 7 :		else
+	@n 8 :			b <- 0
+	@n 9 :		end if
+	@n 10:		if C < B then
+	@n 11:			b <- b + 1
+	@n 12:		end if
+	@n 13:		C <- C - b
+	@n 14:	end for
+	@n 15: l <- min{j : C_{n-1} = C_{n-2} = ... = C_{j} = 0}
+	@n 16: C <- len(l)
 
 * @param bigint** C 단일 뺄셈 연산의(A - B) 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint** A 단일 뺄셈 연산의(A - B) A에 해당하는 bigint 형 포인터 변수
@@ -722,9 +722,9 @@ int SUBC(bigint** C, bigint** A, bigint** B)
 /**
  * @brief Multiplication
  * @details
-	flag에 따라 곱셈 연산 수행(Karatsuba multiplication / textbook multiplication)
-	Input  : A
-	Output : C = A * B
+	@n flag에 따라 곱셈 연산 수행(Karatsuba multiplication / textbook multiplication)
+	@n Input  : A
+	@n Output : C = A * B
  * @param bigint* C 곱셈 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint* A 곱셈 연산을 수행할 bigint 형 포인터 변수
  * @param bigint* B 곱셈 연산을 수행할 bigint 형 포인터 변수
@@ -810,23 +810,23 @@ int Multiplication(bigint** C, bigint* A, bigint* B)
 * @brief Multiplication in Word
 * @details
 
-	[pseudo code]
-	Input  : C, A, B
+	@n [pseudo code]
+	@n Input  : C, A, B
 
-	1 : A1, A0 <- A >> w/2, A mod 2^(w/2)
-	2 : A1, A0 <- A >> w/2, A mod 2^(w/2)
-	3 : MUL1, MUL0 <- A1 * B1, A0 * B0
-	4 : SUM0, SUM1 <- A1 * B0, A0 * B1
-	5 : SUM1 = SUM1 + SUM0 (mod W)
-	6 : if (SUM1 < SUM0) then
-	7 :		carry1 <- 1
-	8 : SUM2 <- SUM1 << (w/2)
-	9 : SUM1 <- SUM1 >> (w/2)
-	10: MUL0 <- MUL0 + SUM2 (mod W)
-	11: if (MUL0 < SUM2)
-	12:		carry0 <- 1
-	13: MUL1 <- MUL1 + SUM1 + carry0 + (carry1 << (w/2)) (mod W)
-	14: C = (00.. || MUL1 || MUL0 || ..00)
+	@n 1 : A1, A0 <- A >> w/2, A mod 2^(w/2)
+	@n 2 : A1, A0 <- A >> w/2, A mod 2^(w/2)
+	@n 3 : MUL1, MUL0 <- A1 * B1, A0 * B0
+	@n 4 : SUM0, SUM1 <- A1 * B0, A0 * B1
+	@n 5 : SUM1 = SUM1 + SUM0 (mod W)
+	@n 6 : if (SUM1 < SUM0) then
+	@n 7 :		carry1 <- 1
+	@n 8 : SUM2 <- SUM1 << (w/2)
+	@n 9 : SUM1 <- SUM1 >> (w/2)
+	@n 10: MUL0 <- MUL0 + SUM2 (mod W)
+	@n 11: if (MUL0 < SUM2)
+	@n 12:		carry0 <- 1
+	@n 13: MUL1 <- MUL1 + SUM1 + carry0 + (carry1 << (w/2)) (mod W)
+	@n 14: C = (00.. || MUL1 || MUL0 || ..00)
 
 * @param word* C 단일 워드 곱셈 연산의 결과를 저장할 word 형 포인터 변수
 * @param word* A 단일 워드 곱셈 연산의 곱하는 수인 word 형 포인터 변수
@@ -886,32 +886,32 @@ int MUL_Word(word* C, word* A, word* B) // 단일 워드 곱셈
 * @brief Multliplication in Multi Word
 * @details
 
-	[pseudo code]
-	Input  : C, A, B
+	@n [pseudo code]
+	@n Input  : C, A, B
 
-	1 : if A = 0 or B = 0 then
-	2 :		C <- 0;
-	3 : end if
-	4 : if A = 1
-	5 :		if Sign(A) is NON_NEGATIVE
-	6 :			return B
-	7 :		else
-	8 :			return -B
-	10: end if
-	11: if B = 1
-	12:		if sign(B) is NON_NEGATIVE
-	13:			return A
-	14:		else
-	15:			return -A
-	16: end if
-	17: for j = 0 to n - 1 do // MULC(|A|, |B|)
-	18:		for i = 0 to m - 1 do
-	19:			Temp <- A_{j} * B_{i}
-	20:			Temp <- Temp << w(i+j)
-	21:			C <- ADDC(C, Temp)
-	22:		end for
-	23: end for
-	24: Sign(C) = Sign(A) ^ Sign(B)
+	@n 1 : if A = 0 or B = 0 then
+	@n 2 :		C <- 0;
+	@n 3 : end if
+	@n 4 : if A = 1
+	@n 5 :		if Sign(A) is NON_NEGATIVE
+	@n 6 :			return B
+	@n 7 :		else
+	@n 8 :			return -B
+	@n 10: end if
+	@n 11: if B = 1
+	@n 12:		if sign(B) is NON_NEGATIVE
+	@n 13:			return A
+	@n 14:		else
+	@n 15:			return -A
+	@n 16: end if
+	@n 17: for j = 0 to n - 1 do // MULC(|A|, |B|)
+	@n 18:		for i = 0 to m - 1 do
+	@n 19:			Temp <- A_{j} * B_{i}
+	@n 20:			Temp <- Temp << w(i+j)
+	@n 21:			C <- ADDC(C, Temp)
+	@n 22:		end for
+	@n 23: end for
+	@n 24: Sign(C) = Sign(A) ^ Sign(B)
 
 * @param bigint** C 다중 워드 곱셈 연산의 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint* A 다중 워드 곱셈 연산의 곱하는 수인 bigint 형 포인터 변수
@@ -1013,26 +1013,26 @@ int MUL_Multi(bigint** C, bigint* A, bigint* B)
  * @brief Karatsuba Multiplication
  * @details
 
-	 [pseudo code]
-	 Input  : A, B
-	 Output : C = A * B
-	  1 : procedure MUL_Karatsuba(A, B)
-	  2 :	if flag >= min(WordLen(A), WordLen(B)) then
-	  3 :		C <- MUL(A, B)
-	  4 :	end if
-	  5 :	l <- (max(WordLen(A), WordLen(B)) + 1) >> 1
-	  6 :	A1, A0 <- A >> lw, A mod 2^lw
-	  7 :	B1, B0 <- B >> lw, B mod 2^lw
-	  8 :	T1, T0 <- MUL_Karatsuba(A1, B1), MUL_Karatsuba(A0, B0)
-	  9 :	R <- (T1 << 2lw) + T0
-	 10 :	S1, S0 <- SUB(A0, A1), SUB(B1, B0)
-	 11 :	S <- (-1)^(Sign(S1)^Sign(S2)) * MUL_Karatsuba(|S1|, |S0|)
-	 12 :	S <- ADD(S, T1)
-	 13 :	S <- ADD(S, T0)
-	 14 :	S << lw
-	 15 :	R <- ADD(R, S)
-	 16 :	C <- R
-	 17 : end procedure
+	 @n [pseudo code]
+	 @n Input  : A, B
+	 @n Output : C = A * B
+	  @n 1 : procedure MUL_Karatsuba(A, B)
+	  @n 2 :	if flag >= min(WordLen(A), WordLen(B)) then
+	  @n 3 :		C <- MUL(A, B)
+	  @n 4 :	end if
+	  @n 5 :	l <- (max(WordLen(A), WordLen(B)) + 1) >> 1
+	  @n 6 :	A1, A0 <- A >> lw, A mod 2^lw
+	  @n 7 :	B1, B0 <- B >> lw, B mod 2^lw
+	  @n 8 :	T1, T0 <- MUL_Karatsuba(A1, B1), MUL_Karatsuba(A0, B0)
+	  @n 9 :	R <- (T1 << 2lw) + T0
+	 @n 10 :	S1, S0 <- SUB(A0, A1), SUB(B1, B0)
+	 @n 11 :	S <- (-1)^(Sign(S1)^Sign(S2)) * MUL_Karatsuba(|S1|, |S0|)
+	 @n 12 :	S <- ADD(S, T1)
+	 @n 13 :	S <- ADD(S, T0)
+	 @n 14 :	S << lw
+	 @n 15 :	R <- ADD(R, S)
+	 @n 16 :	C <- R
+	 @n 17 : end procedure
 
  * @param bigint** C 카라추바 곱셈 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint** A 카라추바 곱셈을 수행할 bigint 형 더블포인터 변수
@@ -1357,9 +1357,9 @@ int MUL_Karatsuba(bigint** C, bigint* A, bigint* B)
 /**
  * @brief Squaring
  * @details
-	flag에 따라 제곱 연산 수행(Karatsuba sqauring / textbook sqauring)
-	Input  : A
-	Output : C = A ^ 2
+	@n flag에 따라 제곱 연산 수행(Karatsuba sqauring / textbook sqauring)
+	@n Input  : A
+	@n Output : C = A ^ 2
  * @param bigint** C 제곱 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint* A 제곱 연산을 수행할 bigint 형 포인터 변수
  * @return SUCCESS
@@ -1417,15 +1417,15 @@ int Squaring(bigint** C, bigint* A)
  * @brief Single Squaring
  * @details
 
-	 [pseudo code]
-	 Input  : A
-	 Output : C = A ^ 2
-	  1 : A1, A0 <- |A| >> w/2, |A| mod 2^(w/2)
-	  2 : C1, C0 <- A1^2, A0^2
-	  3 : C <- (C1 << w) + C0
-	  4 : T <- A0 * A1
-	  5 : T <- T << (w/2 + 1)
-	  6 : C <- C + T
+	 @n [pseudo code]
+	 @n Input  : A
+	 @n Output : C = A ^ 2
+	  @n 1 : A1, A0 <- |A| >> w/2, |A| mod 2^(w/2)
+	  @n 2 : C1, C0 <- A1^2, A0^2
+	  @n 3 : C <- (C1 << w) + C0
+	  @n 4 : T <- A0 * A1
+	  @n 5 : T <- T << (w/2 + 1)
+	  @n 6 : C <- C + T
 
  * @param bigint* C 제곱 연산을 수행한 결과를 저장할 bigint 형 포인터 변수
  * @param bigint* A 제곱 연산을 수행할 bigint 형 포인터 변수
@@ -1512,22 +1512,22 @@ int Single_Squaring(bigint* C, bigint* A)
  * @brief Squaring Core
  * @details
 
-	 [pseudo code]
-	 Input  : A
-	 Output : C = A ^ 2
-	  1 : C1, C2 <- 0
-	  2 : for j = 0 to WordLen(A) - 1 do
-	  3 :	T1 <- A[j] * A[j]
-	  4 :	T1 <- T1 << 2jw
-	  5 :	C1 <- T1 + C1
-	  6 :	 for i = j + 1 to WordLen(A) - 1 do
-	  7 :		T2 = A[j] * A[i]
-	  8 :		T2 <- T2 << (i + j)w
-	  9 :		C2 <- ADD(C2, T2)
-	 10 :	end for
-	 11 : end for
-	 12 : C2 <- C2 << 1
-	 13 : C <- ADD(C1, C2)
+	 @n [pseudo code]
+	 @n Input  : A
+	 @n Output : C = A ^ 2
+	  @n 1 : C1, C2 <- 0
+	  @n 2 : for j = 0 to WordLen(A) - 1 do
+	  @n 3 :	T1 <- A[j] * A[j]
+	  @n 4 :	T1 <- T1 << 2jw
+	  @n 5 :	C1 <- T1 + C1
+	  @n 6 :	 for i = j + 1 to WordLen(A) - 1 do
+	  @n 7 :		T2 = A[j] * A[i]
+	  @n 8 :		T2 <- T2 << (i + j)w
+	  @n 9 :		C2 <- ADD(C2, T2)
+	 @n 10 :	end for
+	 @n 11 : end for
+	@n  12 : C2 <- C2 << 1
+	@n  13 : C <- ADD(C1, C2)
 
  * @param bigint** C 제곱 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint* A 제곱 연산을 수행할 bigint 형 포인터 변수
@@ -1696,13 +1696,13 @@ int SQUC(bigint** C, bigint* A)
  * @brief Squaring
  * @details
 
-	 [pseudo code]
-	 Input  : A
-	 Output : C = A ^ 2
-	  1 : if A = 0 or A = 1 or A = -1 then
-	  2 :	C <- |A|
-	  3 : end if
-	  4 : C <- SQUC(A)
+	 @n [pseudo code]
+	 @n Input  : A
+	 @n Output : C = A ^ 2
+	 @n  1 : if A = 0 or A = 1 or A = -1 then
+	 @n  2 :	C <- |A|
+	 @n  3 : end if
+	 @n  4 : C <- SQUC(A)
 
  * @param bigint** C 제곱 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint* A 제곱 연산을 수행할 bigint 형 포인터 변수
@@ -1775,22 +1775,22 @@ int SQU(bigint** C, bigint* A)
  * @brief Karatsuba Squaring
  * @details
 
-	 [pseudo code]
-	 Input  : A
-	 Output : C = A ^ 2
-	  1 : procedure SQUC_Karatsuba(A, B)
-	  2 :	if flag >= WordLen(A) then
-	  3 :		C <- SQUC(A)
-	  4 :	end if
-	  5 :	l <- (WordLen(A) + 1) >> 1
-	  6 :	A1, A0 <- |A| >> lw, |A| mod 2^lw
-	  7 :	T1, T0 <- SQUC_Karatsuba(A1), SQUC_Karatsuba(A0)
-	  8 :	R <- (T1 << 2lw) + T0
-	  9 :	S1 <- MUL_Karatsuba(A1, A0)
-	 10 :	S <- S << (lw + 1)
-	 11 :	R <- ADDC(R, S)
-	 12 :	C <- R
-	 13 : end procedure
+	 @n [pseudo code]
+	 @n Input  : A
+	 @n Output : C = A ^ 2
+	 @n  1 : procedure SQUC_Karatsuba(A, B)
+	 @n  2 :	if flag >= WordLen(A) then
+	 @n  3 :		C <- SQUC(A)
+	  @n 4 :	end if
+	  @n 5 :	l <- (WordLen(A) + 1) >> 1
+	  @n 6 :	A1, A0 <- |A| >> lw, |A| mod 2^lw
+	  @n 7 :	T1, T0 <- SQUC_Karatsuba(A1), SQUC_Karatsuba(A0)
+	  @n 8 :	R <- (T1 << 2lw) + T0
+	  @n 9 :	S1 <- MUL_Karatsuba(A1, A0)
+	 @n 10 :	S <- S << (lw + 1)
+	 @n 11 :	R <- ADDC(R, S)
+	 @n 12 :	C <- R
+	 @n 13 : end procedure
 
  * @param bigint** C 제곱 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint* A 제곱 연산을 수행할 bigint 형 포인터 변수
@@ -1930,9 +1930,9 @@ int SQUC_Karatsuba(bigint** C, bigint* A)
 /**
  * @brief Division
  * @details
-	flag에 따라 나눗셈 연산 수행(binary long division / multi-precision long division)
-	Input  : A, B
-	Output : Q, R (A = B * Q + R)
+	@n flag에 따라 나눗셈 연산 수행(binary long division / multi-precision long division)
+	@n Input  : A, B
+	@n Output : Q, R (A = B * Q + R)
  * @param bigint** Q 나눗셈 연산을 수행한 결과 중 몫을 저장할 bigint 형 더블포인터 변수
  * @param bigint** R 나눗셈 연산을 수행한 결과 중 나머지 저장할 bigint 형 더블포인터 변수
  * @param bigint* A 나눗셈 연산에서 나누려는 수인 bigint 형 포인터 변수
@@ -2000,18 +2000,18 @@ int Division(bigint** Q, bigint** R, bigint* A, bigint* B)
 /**
 * @brief Binary_Long_Division Algorithm
 * @details
-	[pseudo code]
-	Input  : Q, R, A, B
+	@n [pseudo code]
+	@n Input  : Q, R, A, B
 
-	1 : (Q, R) <- (0, 0)
-	2 : for j = n -1 downto 0 do
-	3 :		R <- 2 * R + a_{j}
-	4 :		if R >= B then
-	5 :			Q <- Q + 2^j
-	6 :			R <- R - B
-	7 :		end if
-	8 :	end for
-	9 :	return (Q, R)
+	@n 1 : (Q, R) <- (0, 0)
+	@n 2 : for j = n -1 downto 0 do
+	@n 3 :		R <- 2 * R + a_{j}
+	@n 4 :		if R >= B then
+	@n 5 :			Q <- Q + 2^j
+	@n 6 :			R <- R - B
+	@n 7 :		end if
+	@n 8 :	end for
+	@n 9 :	return (Q, R)
 
 * @param bigint** Q Binary Long Divsion 연산의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint* R Binary Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
@@ -2223,20 +2223,20 @@ int ADD_DIV(bigint** C, bigint** A, bigint** B)
 * @brief Long Division Algorithm (Multi-precision version)
 * @details
 
-	[pseudo code]
-	Input  : Q, R, A, B
+	@n [pseudo code]
+	@n Input  : Q, R, A, B
 
-	1 : if B <= 0 then
-	2 :		return INVAILD
-	3 : end if
-	4 : if A < B then
-	5 :		return (0, A)
-	6 : end if
-	7 : (Q, R) <- (0, 0)
-	8 : for n-1 downtown 0 to
-	9 :		R <- RW + A_{i}
-	10:		(Q_{i}, R) <- DIVC(R, B)
-	11: end for
+	@n 1 : if B <= 0 then
+	@n 2 :		return INVAILD
+	@n 3 : end if
+	@n 4 : if A < B then
+	@n 5 :		return (0, A)
+	@n 6 : end if
+	@n 7 : (Q, R) <- (0, 0)
+	@n 8 : for n-1 downtown 0 to
+	@n 9 :		R <- RW + A_{i}
+	@n 10:		(Q_{i}, R) <- DIVC(R, B)
+	@n 11: end for
 
 * @param bigint** Q Multi Long Divsion 연산의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint* R Multi Long Divsion 연산의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
@@ -2288,19 +2288,19 @@ int DIV(bigint** Q, bigint** R, bigint* A, bigint* B) // Long Division Algorithm
 }
 
 /*
-	Long Division Algorithm Core function (Multi-precision version)
+* @breif Long Division Algorithm Core function (Multi-precision version)
+* @details
+	@n [pseudo code]
+	@n Input  : Q, R, A, B
 
-	[pseudo code]
-	Input  : Q, R, A, B
-
-	1 : if A < B then
-	2 :		return (0, A)
-	3 :	end if
-	4 :	Compute k∈Z+ such that 2^k B_{m-1}∈[2^(w-1), 2^w)
-	5 :	A', B' <- 2^k * A, 2^k * B
-	6 :	Q', R' <- DIVCC(A', B')
-	7 : Q, R <- Q', 2^(-k) * R'
-	8 : return (Q, R)
+	@n 1 : if A < B then
+	@n 2 :		return (0, A)
+	@n 3 :	end if
+	@n 4 :	Compute k∈Z+ such that 2^k B_{m-1}∈[2^(w-1), 2^w)
+	@n 5 :	A', B' <- 2^k * A, 2^k * B
+	@n 6 :	Q', R' <- DIVCC(A', B')
+	@n 7 : Q, R <- Q', 2^(-k) * R'
+	@n 8 : return (Q, R)
 
 * @param bigint** Q DIV( )의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint* R DIV( )의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
@@ -2355,26 +2355,26 @@ int DIVC(bigint** Q, bigint** R, bigint* A, bigint* B)
 }
 
 /*
-	Long Division Algorithm Core's Core function (Multi-precision version)
+* @brief Long Division Algorithm Core's Core function (Multi-precision version)
+* @details
+	@n [pseudo code]
+	@n Input  : Q, R, A, B
 
-	[pseudo code]
-	Input  : Q, R, A, B
-
-	1 : if n == m then    <-- DIVCC_n_m( )
-	2 :		Q <- Lower Bound(A_{m-1} / B_{m-1})
-	3 : end if
-	4 : if n == m + 1 then <-- DIVCC_n_m1( )
-	5 :		if A_{m} = B_{m-1} then
-	6 :			Q <- W - 1
-	7 :		else
-	8 :			Q <- Lower Bound(A_{m} * W + A_{m-1} / B_{m-1})
-	9 :		end if
-	10:	end if
-	11: R <- A - BQ
-	12:	while R < 0 do
-	13:		(Q, R) <- (Q - 1, R + B)
-	14:	end while
-	15:	return (Q, R)
+	@n 1 : if n == m then    <-- DIVCC_n_m( )
+	@n 2 :		Q <- Lower Bound(A_{m-1} / B_{m-1})
+	@n 3 : end if
+	@n 4 : if n == m + 1 then <-- DIVCC_n_m1( )
+	@n 5 :		if A_{m} = B_{m-1} then
+	@n 6 :			Q <- W - 1
+	@n 7 :		else
+	@n 8 :			Q <- Lower Bound(A_{m} * W + A_{m-1} / B_{m-1})
+	@n 9 :		end if
+	@n 10:	end if
+	@n 11: R <- A - BQ
+	@n 12:	while R < 0 do
+	@n 13:		(Q, R) <- (Q - 1, R + B)
+	@n 14:	end while
+	@n 15:	return (Q, R)
 
 * @param bigint** Q DIVC( )의 몫에 대한 결과를 저장할 bigint 형 더블 포인터 변수
 * @param bigint* R DIVC( )의 나머지에 대한 결과를 저장할 bigint 형 더블 포인터 변수
@@ -2427,13 +2427,14 @@ int DIVCC(bigint** Q, bigint** R, bigint* A, bigint* B) // 7.2.3 DIVCC(A, B)
 }
 
 /*
-	Long Division Algorithm Core's Core's condition (if n == m) (Multi-precision version)
+* @brief Long Division Algorithm Core's Core's condition (if n == m) (Multi-precision version)
+* @details
 
-	[pseudo code]
-	Input  : Q, A, B, m
+	@n [pseudo code]
+	@n Input  : Q, A, B, m
 
-	1 : Q <- A_{m-1} / B_{m-1}
-	2 : Q <- LowerBound(Q)
+	@n 1 : Q <- A_{m-1} / B_{m-1}
+	@n 2 : Q <- LowerBound(Q)
 
 * @param bigint** Q DIVCC()에서 Q hat인 bigint 형 더블 포인터 변수
 * @param bigint* A DIVCC()에서 나눠지는 수인 A의 bigint 형 포인터 변수
@@ -2502,9 +2503,9 @@ int DIVCC_n_m1(bigint** Q, bigint* A, bigint* B, int m) // DIVCC 에서 if(n == 
 /**
  * @brief Modular exponentiation of multiplication
  * @details
-	flag에 따라 모듈러 지수승 연산 수행(BI_Left to BI_Right / BI_Right to BI_Left / Montgomery Ladder)
-	Input  : X, N, M
-	Output : T = X ^ N (mod M)
+	@n flag에 따라 모듈러 지수승 연산 수행(BI_Left to BI_Right / BI_Right to BI_Left / Montgomery Ladder)
+	@n Input  : X, N, M
+	@n Output : T = X ^ N (mod M)
  * @param bigint** T 모듈러 지수승 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint* X 모듈러 지수승 연산을 수행할 bigint 형 포인터 변수
  * @param bigint* N 모듈러 지수승 연산에서의 지수를 가리키는 bigint 형 포인터 변수
@@ -2579,9 +2580,9 @@ int Modular_Exponentiation_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 /**
  * @brief Modular exponentiation of addition
  * @details
-	flag에 따라 모듈러 exponentiation 덧셈 연산 수행(BI_Left to BI_Right / BI_Right to BI_Left / Montgomery Ladder)
-	Input  : X, N, M
-	Output : T = X * N (mod M)
+	@n flag에 따라 모듈러 exponentiation 덧셈 연산 수행(BI_Left to BI_Right / BI_Right to BI_Left / Montgomery Ladder)
+	@n Input  : X, N, M
+	@n Output : T = X * N (mod M)
  * @param bigint** T 모듈러 exponentiation 덧셈 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint* X 모듈러 exponentiation 덧셈 연산을 수행할 bigint 형 포인터 변수
  * @param bigint* N 모듈러 exponentiation 덧셈 연산에서의 지수(덧셈할 횟수)를 가리키는 bigint 형 포인터 변수
@@ -2654,9 +2655,9 @@ int Modular_Exponentiation_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 /**
  * @brief Exponentiation of multiplication used Montgomery Ladder
  * @details
-	[pseudo code]
-	Input  : X, N
-	Output : T = X ^ N
+	@n [pseudo code]
+	@n Input  : X, N
+	@n Output : T = X ^ N
 
 	1 : t0, t1 <- 1, X
 	2 : for i <- BitLen(N) - 1 downto 0 do
@@ -2779,16 +2780,16 @@ int EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N)
 /**
  * @brief Exponentiation of addition used Montgomery Ladder
  * @details
-	[pseudo code]
-	Input  : X, N
-	Output : T = X ^ N
+	@n [pseudo code]
+	@n Input  : X, N
+	@n Output : T = X ^ N
 
-	1 : t0, t1 <- 0, X
-	2 : for i <- BitLen(N) - 1 downto 0 do
-	3 :		t(1-(N_i)) <- t0 + t1
-	4 :		t(N_i) <- 2 * t(N_i)
-	5 :	end for
-	6  T <- t0
+	@n 1 : t0, t1 <- 0, X
+	@n 2 : for i <- BitLen(N) - 1 downto 0 do
+	@n 3 :		t(1-(N_i)) <- t0 + t1
+	@n 4 :		t(N_i) <- 2 * t(N_i)
+	@n 5 :	end for
+	@n 6  T <- t0
 
  * @param bigint** T exponentiation 덧셈 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint* X exponentiation 덧셈 연산을 수행할 bigint 형 포인터 변수
@@ -2892,16 +2893,16 @@ int EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N)
 /**
  * @brief Modular Exponentiation of multiplication used Montgomery Ladder
  * @details
-	[pseudo code]
-	Input  : X, N
-	Output : T = X ^ N (mod M)
+	@n [pseudo code]
+	@n Input  : X, N
+	@n Output : T = X ^ N (mod M)
 
-	1 : t0, t1 <- 1, X
-	2 : for i <- BitLen(N) - 1 downto 0 do
-	3 :		t(1-(N_i)) <- t0 * t1 (mod M)
-	4 :		t(N_i) <- t(N_i) ^ 2 (mod M)
-	5 :	end for
-	6  T <- t0
+	@n 1 : t0, t1 <- 1, X
+	@n 2 : for i <- BitLen(N) - 1 downto 0 do
+	@n 3 :		t(1-(N_i)) <- t0 * t1 (mod M)
+	@n 4 :		t(N_i) <- t(N_i) ^ 2 (mod M)
+	@n 5 :	end for
+	@n 6  T <- t0
 
  * @param bigint** T 모듈러 지수승 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint* X 모듈러 지수승 연산을 수행할 bigint 형 포인터 변수
@@ -3080,16 +3081,16 @@ int MOD_EXP_Montgomery_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 /**
  * @brief Modular Exponentiation of addition used Montgomery Ladder
  * @details
-	[pseudo code]
-	Input  : X, N
-	Output : T = X ^ N (mod M)
+	@n [pseudo code]
+	@n Input  : X, N
+	@n Output : T = X ^ N (mod M)
 
-	1 : t0, t1 <- 0, X
-	2 : for i <- BitLen(N) - 1 downto 0 do
-	3 :		t(1-(N_i)) <- t0 + t1 (mod M)
-	4 :		t(N_i) <- 2 * t(N_i) (mod M)
-	5 :	end for
-	6  T <- t0
+	@n 1 : t0, t1 <- 0, X
+	@n 2 : for i <- BitLen(N) - 1 downto 0 do
+	@n 3 :		t(1-(N_i)) <- t0 + t1 (mod M)
+	@n 4 :		t(N_i) <- 2 * t(N_i) (mod M)
+	@n 5 :	end for
+	@n 6  T <- t0
 
  * @param bigint** T 모듈러 지수 덧셈 연산을 수행한 결과를 저장할 bigint 형 더블포인터 변수
  * @param bigint* X 모듈러 지수 덧셈 연산을 수행할 bigint 형 포인터 변수
@@ -3254,15 +3255,15 @@ int MOD_EXP_Montgomery_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 * @brief [Exponentiation] BI_Left to BI_Right MUL function
 * @details
 
-	[pseudo code]
-	Input  : T, X, N, M
+	@n [pseudo code]
+	@n Input  : T, X, N, M
 
-	1 : t <- 1
-	2 : for i <- l - 1 downto 0 do
-	3 :		t <- t^2 ( ^ 2 : SQU )
-	4 :		t <- t * X^(N_{i}) ( * : MUL_Multi() )
-	5 :	end for
-	6 : T <- t
+	@n 1 : t <- 1
+	@n 2 : for i <- l - 1 downto 0 do
+	@n 3 :		t <- t^2 ( ^ 2 : SQU )
+	@n 4 :		t <- t * X^(N_{i}) ( * : MUL_Multi() )
+	@n 5 :	end for
+	@n 6 : T <- t
 
 * @param bigint** T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
 * @param bigint* X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
@@ -3327,15 +3328,15 @@ int EXP_LR_MUL(bigint** T, bigint* X, bigint* N)
 * @brief [Exponentiation] BI_Left to BI_Right ADD function
 * @details
 
-	[pseudo code]
-	Input  : T, X, N, M
+	@n [pseudo code]
+	@n Input  : T, X, N, M
 
-	1 : t <- 0
-	2 : for i <- l - 1 downto 0 do
-	3 :		t <-  2 * t
-	4 :		t <- t + N_{i} * X
-	5 :	end for
-	6 : T <- t
+	@n 1 : t <- 0
+	@n 2 : for i <- l - 1 downto 0 do
+	@n 3 :		t <-  2 * t
+	@n 4 :		t <- t + N_{i} * X
+	@n 5 :	end for
+	@n 6 : T <- t
 
 * @param bigint** T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
 * @param bigint* X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
@@ -3392,14 +3393,14 @@ int EXP_LR_ADD(bigint** T, bigint* X, bigint* N)
 * @brief [Exponentiation] BI_Right to BI_Left MUL function
 * details
 
-	[pseudo code]
-	Input : T, X, N, M
-	1 : (t0, t1) <- (1, X)
-	2 :	for i <- 0 to l - 1 do
-	3 :		t0 <- t0 * t1^(N_{i}) ( * : optional )
-	4 :		t1 <- t1 ^ 2( ^ 2 : optional )
-	5 :	end for
-	6 :	T <- t
+	@n [pseudo code]
+	@n Input : T, X, N, M
+	@n 1 : (t0, t1) <- (1, X)
+	@n 2 :	for i <- 0 to l - 1 do
+	@n 3 :		t0 <- t0 * t1^(N_{i}) ( * : optional )
+	@n 4 :		t1 <- t1 ^ 2( ^ 2 : optional )
+	@n 5 :	end for
+	@n 6 :	T <- t
 
 * @param bigint** T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
 * @param bigint* X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
@@ -3489,14 +3490,14 @@ int EXP_RL_MUL(bigint** T, bigint* X, bigint* N)
 * @brief [Exponentiation] BI_Right to BI_Left ADD function
 * @details
 
-	[pseudo code]
-	Input : T, X, N, M
-	1 : (t0, t1) <- (0, X)
-	2 :	for i <- 0 to l - 1 do
-	3 :		t0 <- t0 + N_{i} * t1
-	4 :		t1 <- 2 * t1
-	5 :	end for
-	6 :	T <- t
+	@n [pseudo code]
+	@n Input : T, X, N, M
+	@n 1 : (t0, t1) <- (0, X)
+	@n 2 :	for i <- 0 to l - 1 do
+	@n 3 :		t0 <- t0 + N_{i} * t1
+	@n 4 :		t1 <- 2 * t1
+	@n 5 :	end for
+	@n 6 :	T <- t
 
 * @param bigint** T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
 * @param bigint* X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
@@ -3572,15 +3573,15 @@ int EXP_RL_ADD(bigint** T, bigint* X, bigint* N)
 * @brief [Modular Exponentiation] BI_Left to BI_Right MUL function
 * @details
 
-	[pseudo code]
-	Input  : T, X, N, M
+	@n [pseudo code]
+	@n Input  : T, X, N, M
 
-	1 : t <- 1
-	2 : for i <- l - 1 downto 0 do
-	3 :		t <- t^2 mod M ( ^ 2 : optional , mod : optional)
-	4 :		t <- t * X^(N_{i}) mod M ( * : option, mod : optional)
-	5 :	end for
-	6 : T <- t
+	@n 1 : t <- 1
+	@n 2 : for i <- l - 1 downto 0 do
+	@n 3 :		t <- t^2 mod M ( ^ 2 : optional , mod : optional)
+	@n 4 :		t <- t * X^(N_{i}) mod M ( * : option, mod : optional)
+	@n 5 :	end for
+	@n 6 : T <- t
 
 * @param bigint** T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
 * @param bigint* X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
@@ -3674,15 +3675,15 @@ int MOD_EXP_LR_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 * @brief [Modular Exponentiation] BI_Left to BI_Right ADD function
 * @details
 
-	[pseudo code]
-	Input  : T, X, N, M
+	@n [pseudo code]
+	@n Input  : T, X, N, M
 
-	1 : t <- 0
-	2 : for i <- l - 1 downto 0 do
-	3 :		t <-  2 * t mod M ( mod : optional )
-	4 :		t <- t + N_{i} * X mod M ( mod : optional )
-	5 :	end for
-	6 : T <- t
+	@n 1 : t <- 0
+	@n 2 : for i <- l - 1 downto 0 do
+	@n 3 :		t <-  2 * t mod M ( mod : optional )
+	@n 4 :		t <- t + N_{i} * X mod M ( mod : optional )
+	@n 5 :	end for
+	@n 6 : T <- t
 
 * @param bigint** T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
 * @param bigint* X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
@@ -3764,14 +3765,14 @@ int MOD_EXP_LR_ADD(bigint** T, bigint* X, bigint* N, bigint* M)
 * @brief [Modular Exponentiation] BI_Right to BI_Left MUL function
 * details
 
-	[pseudo code]
-	Input : T, X, N, M
-	1 : (t0, t1) <- (1, X)
-	2 :	for i <- 0 to l - 1 do
-	3 :		t0 <- t0 * t1^(N_{i}) mod M ( * :optional, mod : optional )
-	4 :		t1 <- t1 ^ 2 mod M ( ^ : optional, mod :optional )
-	5 :	end for
-	6 :	T <- t
+	@n [pseudo code]
+	@n Input : T, X, N, M
+	@n 1 : (t0, t1) <- (1, X)
+	@n 2 :	for i <- 0 to l - 1 do
+	@n 3 :		t0 <- t0 * t1^(N_{i}) mod M ( * :optional, mod : optional )
+	@n 4 :		t1 <- t1 ^ 2 mod M ( ^ : optional, mod :optional )
+	@n 5 :	end for
+	@n 6 :	T <- t
 
 * @param bigint** T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
 * @param bigint* X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
@@ -3896,14 +3897,14 @@ int MOD_EXP_RL_MUL(bigint** T, bigint* X, bigint* N, bigint* M)
 * @brief [Modular Exponentiation] BI_Right to BI_Left ADD function (used Binary Long Division)
 * @details
 
-	[pseudo code]
-	Input : T, X, N, M
-	1 : (t0, t1) <- (0, X)
-	2 :	for i <- 0 to l - 1 do
-	3 :		t0 <- t0 + N_{i} * t1 mod M ( mod : optional )
-	4 :		t1 <- 2 * t1 mod M ( mod : optional )
-	5 :	end for
-	6 :	T <- t
+	@n [pseudo code]
+	@n Input : T, X, N, M
+	@n 1 : (t0, t1) <- (0, X)
+	@n 2 :	for i <- 0 to l - 1 do
+	@n 3 :		t0 <- t0 + N_{i} * t1 mod M ( mod : optional )
+	@n 4 :		t1 <- 2 * t1 mod M ( mod : optional )
+	@n 5 :	end for
+	@n 6 :	T <- t
 
 * @param bigint** T Modular 지수 연산 결과에 해당하는 bigint 더블 포인터형 변수
 * @param bigint* X Modular 지수 연산에서 밑에 해당하는 bigint 포인터형 변수
