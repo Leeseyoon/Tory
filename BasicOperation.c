@@ -1,4 +1,4 @@
-﻿#include "config.h"
+#include "config.h"
 #include "BasicOperation.h"
 #include <stdio.h>
 #include <string.h>
