@@ -1,4 +1,4 @@
-#include "config.h"
+﻿#include "config.h"
 #include "BasicOperation.h"
 #include <stdio.h>
 #include <string.h>
@@ -241,14 +241,14 @@ int BI_Show(bigint* x, int base)
 	{
 #if WORD_BIT_LEN == 64
 		printf("%lld", x->a[0]);
-#elif
+#else
 		printf("%d", x->a[0]);
 #endif
 		for (i = 1; i < x->wordlen; i++)
 		{
 #if WORD_BIT_LEN == 64
 			printf("%lld * 2^%d", x->a[i], i * WORD_BIT_LEN);
-#elif
+#else
 			printf("%d * 2^%d", x->a[i], i * WORD_BIT_LEN); 
 #endif
 		}
@@ -266,7 +266,7 @@ int BI_Show(bigint* x, int base)
 				{
 #if WORD_BIT_LEN == 64
 					printf("%02llx", ((x->a[i]) >> (32 - (j + 1) * 8)) & 255); // 한 바이트씩 찍도록 0xff(255)로 마스킹
-#elif
+#else
 					printf("%02x", ((x->a[i]) >> (32 - (j + 1) * 8)) & 255); // 한 바이트씩 찍도록 0xff(255)로 마스킹
 #endif
 				}	
@@ -276,7 +276,7 @@ int BI_Show(bigint* x, int base)
 				{
 #if WORD_BIT_LEN == 64
 					printf("%02llx", (x->a[i]) >> (64 - (j + 1) * 8) & 255); // 한 바이트씩 찍도록 0xff(255)로 마스킹
-#elif
+#else
 					printf("%02x", (x->a[i]) >> (64 - (j + 1) * 8) & 255); // 한 바이트씩 찍도록 0xff(255)로 마스킹
 #endif
 				}
@@ -285,7 +285,7 @@ int BI_Show(bigint* x, int base)
 			{
 #if WORD_BIT_LEN == 64
 				printf("%02llx", (x->a[i]));
-#elif
+#else
 				printf("%02x", (x->a[i]));
 #endif
 
@@ -303,7 +303,7 @@ int BI_Show(bigint* x, int base)
 				k = k << j;
 #if WORD_BIT_LEN == 64
 				printf("%lld", (x->a[i] & k) >> j);
-#elif
+#else
 				printf("%d", (x->a[i] & k) >> j);
 #endif
 				
@@ -763,7 +763,7 @@ int BI_Left_Shift(bigint* x, int len) // len: 이동할 비트 수
 
 #if OS == LINUX
 	temp = (word*)realloc(x->a, sizeof(word) * new_wordlen); // new_wordlen만큼 bigint 구조체 재할당
-#elif OS == WINDOW
+#else OS == WINDOW
 	temp = (word*)_recalloc(x->a, new_wordlen, sizeof(word));
 	// _recalloc은 window에서만 돌아가는 함수 (visual studio에서 realloc 쓰면 warning이 뜸)
 #endif
